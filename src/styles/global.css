@@ -1,42 +1,54 @@
 @import "tailwindcss";
 
 /*
-  Design tokens — "warm & natural" direction locked in the Board & Train
-  pre-build interview (2026-06-12): earthy greens/creams, soft countryside
-  light, premium but approachable. DRAFT palette — refined in the design pass.
+  Design system — "Countryside editorial" (design pass 2026-06-12).
+  Warm & natural direction locked in the Board & Train pre-build interview:
+  earthy greens / warm cream paper / honey accents, premium but approachable.
+  Display: Fraunces Variable (warm, characterful serif).
+  Body: Karla Variable (humanist, slightly rounded warmth).
 */
 @theme {
-  /* Creams — page backgrounds */
-  --color-cream-50: #fbf8f2;
-  --color-cream-100: #f6f0e4;
-  --color-cream-200: #ede3cf;
-  --color-cream-300: #e0d2b4;
+  /* Creams — warm paper backgrounds */
+  --color-cream-50: #fbf7ed;
+  --color-cream-100: #f5eedd;
+  --color-cream-200: #eadfc4;
+  --color-cream-300: #dcc9a3;
 
   /* Moss greens — primary brand */
-  --color-moss-100: #e4ebdd;
-  --color-moss-200: #c8d6bb;
-  --color-moss-300: #a8bc96;
-  --color-moss-400: #87a071;
-  --color-moss-500: #6b8459;
-  --color-moss-600: #556c46;
-  --color-moss-700: #445839;
-  --color-moss-800: #36462e;
-  --color-moss-900: #293622;
+  --color-moss-100: #e6ecdb;
+  --color-moss-200: #cdd9b9;
+  --color-moss-300: #aebf93;
+  --color-moss-400: #8da272;
+  --color-moss-500: #708757;
+  --color-moss-600: #596f44;
+  --color-moss-700: #475a37;
+  --color-moss-800: #39482d;
+  --color-moss-900: #2c3823;
+
+  /* Pines — deep green darks for full-bleed sections */
+  --color-pine-800: #243023;
+  --color-pine-900: #1a241a;
+  --color-pine-950: #121a12;
 
   /* Barks — warm text neutrals */
-  --color-bark-500: #6f6253;
+  --color-bark-400: #8a7b66;
+  --color-bark-500: #6f6250;
   --color-bark-700: #4a4036;
-  --color-bark-900: #2c2620;
+  --color-bark-900: #2b251e;
 
   /* Honey — accent / CTA highlight */
-  --color-honey-300: #e7c08a;
-  --color-honey-400: #d9a45b;
-  --color-honey-500: #c98f43;
-  --color-honey-600: #b07a33;
+  --color-honey-200: #f3dcae;
+  --color-honey-300: #ecc27c;
+  --color-honey-400: #dfa854;
+  --color-honey-500: #cf9038;
+  --color-honey-600: #b27628;
+  --color-honey-700: #8f5d1d;
 
-  /* Typography — system stacks for the content pass; real faces chosen in the design pass */
-  --font-display: ui-serif, Georgia, 'Times New Roman', serif;
-  --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-body: 'Karla Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-lift: 0 1px 2px rgb(43 37 30 / 0.06), 0 8px 24px -8px rgb(43 37 30 / 0.18);
+  --shadow-polaroid: 0 2px 4px rgb(43 37 30 / 0.08), 0 16px 32px -12px rgb(43 37 30 / 0.25);
 }
 
 html {
@@ -50,5 +62,162 @@ html {
 }
 
 body {
-  @apply bg-cream-50 text-bark-900 font-body antialiased;
+  @apply bg-cream-50 font-body text-bark-900 antialiased;
+  font-variation-settings: 'wght' 440;
+}
+
+strong, b {
+  font-variation-settings: 'wght' 700;
+}
+
+/* Fraunces: lean into the soft, slightly wonky optical character */
+.font-display {
+  font-variation-settings: 'SOFT' 60, 'WONK' 1, 'opsz' 72;
+  letter-spacing: -0.015em;
+}
+
+::selection {
+  background: var(--color-honey-300);
+  color: var(--color-bark-900);
+}
+
+@layer components {
+  /* ---------- Buttons ---------- */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-7 py-3.5 text-base font-bold;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+  .btn:active {
+    transform: translateY(0) scale(0.98);
+  }
+  .btn .btn-arrow {
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .btn:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+  .btn-honey {
+    @apply bg-honey-400 text-bark-900;
+  }
+  .btn-honey:hover {
+    @apply bg-honey-300;
+  }
+  .btn-moss {
+    @apply bg-moss-700 text-cream-50;
+  }
+  .btn-moss:hover {
+    @apply bg-moss-600;
+  }
+  .btn-ghost-light {
+    @apply border border-cream-100/50 text-cream-50;
+  }
+  .btn-ghost-light:hover {
+    @apply border-cream-100 bg-cream-50/10;
+  }
+
+  /* ---------- Editorial helpers ---------- */
+  .eyebrow {
+    @apply text-[0.8rem] font-bold uppercase tracking-[0.22em];
+  }
+
+  /* Hand-drawn squiggle underline for accent words */
+  .squiggle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8.5C20 3.5 38 3 60 6.5S102 9 118 4.5' fill='none' stroke='%23dfa854' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% 0.32em;
+    padding-bottom: 0.18em;
+  }
+
+  /* Polaroid photo card */
+  .polaroid {
+    @apply rounded-sm bg-cream-50 p-3 pb-4;
+    box-shadow: var(--shadow-polaroid);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .polaroid:hover {
+    transform: rotate(0deg) translateY(-6px) scale(1.02) !important;
+  }
+
+  /* Subtle paper grain overlay (decorative) */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Paw bullet */
+  .paw-bullet::before {
+    content: '';
+    display: inline-block;
+    width: 0.85em;
+    height: 0.85em;
+    margin-right: 0.55em;
+    flex-shrink: 0;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' transform='rotate(-18 32 30)'/%3E%3Cellipse cx='68' cy='30' rx='11' ry='14' transform='rotate(18 68 30)'/%3E%3Cellipse cx='14' cy='52' rx='10' ry='12' transform='rotate(-38 14 52)'/%3E%3Cellipse cx='86' cy='52' rx='10' ry='12' transform='rotate(38 86 52)'/%3E%3Cpath d='M50 48c14 0 25 12 25 24 0 9-7 15-15 15-4 0-7-2-10-2s-6 2-10 2c-8 0-15-6-15-15 0-12 11-24 25-24z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='32' cy='30' rx='11' ry='14' transform='rotate(-18 32 30)'/%3E%3Cellipse cx='68' cy='30' rx='11' ry='14' transform='rotate(18 68 30)'/%3E%3Cellipse cx='14' cy='52' rx='10' ry='12' transform='rotate(-38 14 52)'/%3E%3Cellipse cx='86' cy='52' rx='10' ry='12' transform='rotate(38 86 52)'/%3E%3Cpath d='M50 48c14 0 25 12 25 24 0 9-7 15-15 15-4 0-7-2-10-2s-6 2-10 2c-8 0-15-6-15-15 0-12 11-24 25-24z'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  /* Form fields */
+  .field {
+    @apply w-full rounded-xl border-2 border-cream-200 bg-white px-4 py-3 text-bark-900;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .field:focus {
+    @apply border-moss-500 outline-none;
+    box-shadow: 0 0 0 4px rgb(112 135 87 / 0.15);
+  }
+  .field-label {
+    @apply mb-1.5 block text-sm font-bold text-bark-700;
+  }
+
+  /* Animated accordion */
+  .accordion-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  details[open] .accordion-body {
+    grid-template-rows: 1fr;
+  }
+  .accordion-chevron {
+    transition: transform 0.3s ease;
+  }
+  details[open] .accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Carousel drag affordance */
+  .drag-track {
+    cursor: grab;
+    scrollbar-width: none;
+  }
+  .drag-track::-webkit-scrollbar {
+    display: none;
+  }
+  .drag-track.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn .btn-arrow,
+  .polaroid,
+  .accordion-body,
+  .accordion-chevron {
+    transition: none;
+  }
 }

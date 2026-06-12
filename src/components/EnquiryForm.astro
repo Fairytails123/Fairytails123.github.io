@@ -38,9 +38,8 @@ const concerns = [
   'Something else',
 ];
 
-const inputClass =
-  'w-full rounded-md border border-cream-300 bg-white px-3 py-2 text-bark-900 focus:border-moss-500 focus:outline-none focus:ring-2 focus:ring-moss-300';
-const labelClass = 'block text-sm font-semibold text-bark-700 mb-1';
+const inputClass = 'field';
+const labelClass = 'field-label';
 ---
 
 <form
@@ -135,11 +134,8 @@ const labelClass = 'block text-sm font-semibold text-bark-700 mb-1';
     <input id="ef-website" name="website" type="text" tabindex="-1" autocomplete="off" />
   </div>
 
-  <button
-    type="submit"
-    class="w-full rounded-md bg-moss-700 px-6 py-3 text-base font-semibold text-cream-50 transition hover:bg-moss-800 sm:w-auto"
-  >
-    Send enquiry
+  <button type="submit" class="btn btn-moss w-full sm:w-auto">
+    Send enquiry <span class="btn-arrow" aria-hidden="true">→</span>
   </button>
 
   <p id="ef-status" role="status" aria-live="polite" class="text-sm font-medium"></p>
@@ -191,6 +187,7 @@ const labelClass = 'block text-sm font-semibold text-bark-700 mb-1';
         elapsedMs,
       };
 
+      const buttonHtml = button.innerHTML;
       button.disabled = true;
       button.textContent = 'Sending…';
       status.textContent = '';
@@ -207,7 +204,7 @@ const labelClass = 'block text-sm font-semibold text-bark-700 mb-1';
         showSuccess();
       } catch {
         button.disabled = false;
-        button.textContent = 'Send enquiry';
+        button.innerHTML = buttonHtml;
         status.className = 'text-sm font-medium text-red-700';
         status.textContent =
           "Sorry — that didn't send. Please try again, or call/WhatsApp us on 07842 116216.";

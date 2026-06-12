@@ -17,16 +17,13 @@ import Base from '../layouts/Base.astro';
       }
     })();
   </script>
-  <section class="mx-auto max-w-3xl px-4 py-24 text-center">
-    <h1 class="font-display text-4xl font-bold text-moss-800">Whoops — wrong path!</h1>
+  <section class="mx-auto max-w-3xl px-4 pb-24 pt-40 text-center">
+    <h1 class="font-display text-4xl font-bold text-moss-800 sm:text-5xl">Whoops — wrong path!</h1>
     <p class="mt-4 text-lg text-bark-700">
       This page doesn't exist (or has moved). Even the best-trained noses take a wrong turn.
     </p>
-    <a
-      href="/"
-      class="mt-8 inline-block rounded-md bg-moss-700 px-6 py-3 font-semibold text-cream-50 hover:bg-moss-800"
-    >
-      Back to the homepage
+    <a href="/" class="btn btn-moss mt-8">
+      Back to the homepage <span class="btn-arrow" aria-hidden="true">→</span>
     </a>
   </section>
 </Base>

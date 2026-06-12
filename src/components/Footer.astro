@@ -3,53 +3,80 @@ import { business } from '../data/business';
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-16 border-t border-cream-200 bg-moss-900 text-cream-100">
-  <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 sm:grid-cols-3">
+<footer class="relative mt-24 bg-pine-950 text-cream-200">
+  <!-- Rolling-hill divider -->
+  <svg
+    class="absolute -top-px left-0 w-full -translate-y-full text-pine-950"
+    viewBox="0 0 1440 70"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+    style="height: 70px;"
+  >
+    <path
+      d="M0 70 L0 48 C240 8 420 4 720 28 C1020 52 1240 18 1440 38 L1440 70 Z"
+      fill="currentColor"></path>
+  </svg>
+
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 pb-12 pt-16 sm:grid-cols-3">
     <div>
-      <p class="font-display text-lg font-bold text-cream-50">The Fairy Tails K9 Centre</p>
-      <address class="mt-2 text-sm not-italic leading-relaxed text-cream-200">
+      <p class="font-display text-xl font-bold text-cream-50">The Fairy Tails K9 Centre</p>
+      <address class="mt-3 text-sm not-italic leading-relaxed">
         {business.address.line1}<br />
         {business.address.line2}<br />
         {business.address.town} {business.address.postcode}
       </address>
-      <a href={business.mapsUrl} class="mt-2 inline-block text-sm underline hover:text-honey-300">
+      <a
+        href={business.mapsUrl}
+        class="mt-3 inline-block text-sm font-bold text-honey-300 underline decoration-honey-600 underline-offset-4 hover:text-honey-200"
+      >
         Find us on Google Maps
       </a>
-      <p class="mt-3 text-sm text-cream-200">{business.hours.display}</p>
+      <p class="mt-4 text-sm">{business.hours.display}</p>
     </div>
     <div>
-      <p class="font-semibold text-cream-50">Talk to us</p>
-      <ul class="mt-2 space-y-1 text-sm">
+      <p class="eyebrow text-honey-400">Talk to us</p>
+      <ul class="mt-4 space-y-2.5 text-sm">
         <li>
-          <a href={business.phones.main.tel} class="hover:text-honey-300">
-            {business.phones.main.label}: {business.phones.main.display}
+          <a href={business.phones.main.tel} class="transition-colors hover:text-honey-300">
+            {business.phones.main.label}: <strong>{business.phones.main.display}</strong>
           </a>
         </li>
         <li>
-          <a href={business.phones.textLine.whatsapp} class="hover:text-honey-300">
-            WhatsApp: {business.phones.textLine.display}
+          <a href={business.phones.textLine.whatsapp} class="transition-colors hover:text-honey-300">
+            WhatsApp: <strong>{business.phones.textLine.display}</strong>
           </a>
         </li>
         <li>
-          <a href={`mailto:${business.emails.info}`} class="hover:text-honey-300">
+          <a href={`mailto:${business.emails.info}`} class="transition-colors hover:text-honey-300">
             {business.emails.info}
           </a>
         </li>
       </ul>
-      <ul class="mt-3 flex gap-4 text-sm">
-        <li><a href={business.socials.facebook} class="underline hover:text-honey-300">Facebook</a></li>
-        <li><a href={business.socials.instagram} class="underline hover:text-honey-300">Instagram</a></li>
+      <ul class="mt-5 flex gap-5 text-sm font-bold">
+        <li>
+          <a href={business.socials.facebook} class="transition-colors hover:text-honey-300">Facebook</a>
+        </li>
+        <li>
+          <a href={business.socials.instagram} class="transition-colors hover:text-honey-300">Instagram</a>
+        </li>
       </ul>
     </div>
     <div>
-      <p class="font-semibold text-cream-50">Explore</p>
-      <ul class="mt-2 space-y-1 text-sm">
-        <li><a href="/dog-boarding-school" class="hover:text-honey-300">Board & Train</a></li>
-        <li><a href={business.groomingSite} class="hover:text-honey-300">Dog Grooming (sister site)</a></li>
+      <p class="eyebrow text-honey-400">Explore</p>
+      <ul class="mt-4 space-y-2.5 text-sm">
+        <li>
+          <a href="/dog-boarding-school" class="transition-colors hover:text-honey-300">Board &amp; Train</a>
+        </li>
+        <li>
+          <a href={business.groomingSite} class="transition-colors hover:text-honey-300">
+            Dog Grooming (sister site)
+          </a>
+        </li>
       </ul>
     </div>
   </div>
-  <div class="border-t border-moss-800 py-4 text-center text-xs text-cream-200">
-    © {year} The Fairy Tails K9 Centre
+
+  <div class="border-t border-pine-800 py-5 text-center text-xs text-cream-200/70">
+    <span class="paw-bullet inline-flex items-center">© {year} The Fairy Tails K9 Centre</span>
   </div>
 </footer>
