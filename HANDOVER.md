@@ -1,6 +1,18 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-**Last updated:** 2026-06-12 (later) · **Status: BUILDING — Stage 0 + Stage 1 done; Page 1 (Board & Train) content + design + animation passes built, awaiting owner review before the polish pass.**
+**Last updated:** 2026-06-12 (session end) · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c (content + design + animation) are LIVE on the preview. Next session starts with refining this page from the owner's review, then the polish pass (d).**
+
+## Pick-up point for the next session
+
+1. Ask the owner for their review of https://fairytails123.github.io/dog-boarding-school (desktop
+   + phone): animation intensity, palette/typography (Fraunces/Karla), hero clip choice, plus the
+   standing content checks below. They paused specifically **to refine this page next session**.
+2. Apply refinements → then the polish pass (d): Lighthouse ≥ 90, reduced-motion audit, mobile
+   review, per-page SEO/JSON-LD → owner sign-off → tick tracker → page 2 pre-build interview.
+3. Owner feedback already incorporated this session: the bare content pass "didn't feel premium" —
+   design + GSAP animation layers were added in response (see §5). Future pages: **never present
+   a bare structure pass for review; fold design + motion in before showing, or set expectations
+   explicitly.**
 
 ## Where things stand (2026-06-12 session)
 
@@ -51,12 +63,14 @@
    - Placeholder slots still marked for: owner's final hero clip, body-cam clips, testimonials,
      before/after pairs.
 
-## Next actions (in order)
+## Next actions (detail)
 
-1. **Owner review of design+animation on the live preview** (https://fairytails123.github.io/dog-boarding-school)
-   — plus the standing content checks: drafted week-by-week regime (incl. mid-course home-break
-   copy) and the Archie "proof, not promises" framing.
-2. **Polish pass** — Lighthouse ≥ 90 (watch the 2.45 MB hero video + 114 KB GSAP chunk),
+1. **Owner review checks** for the preview: animation feel/intensity · Fraunces/Karla typography ·
+   moss/pine/honey palette · hero clip (current = 10 s cut of the live site's own film; owner may
+   supply a better one) · drafted week-by-week regime copy (incl. mid-course home-break wording) ·
+   the Archie "proof, not promises" framing · the four placeholder slots (body-cam clips,
+   testimonials, before/after pairs, final hero video).
+2. **Polish pass (d)** — Lighthouse ≥ 90 (watch the 2.45 MB hero video + 114 KB GSAP chunk),
    reduced-motion check, mobile review, per-page SEO/JSON-LD, then owner sign-off + tick tracker.
    Note: GTM page_view fires once per full load — add a History Change trigger in GTM at Stage 4
    for ClientRouter navigations.

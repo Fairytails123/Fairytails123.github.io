@@ -39,7 +39,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 
 | # | Page | Pre-build interview | Built | Signed off |
 |---|------|---------------------|-------|------------|
-| 1 | `/dog-boarding-school` (Board & Train) — design-system proving ground | ☑ 2026-06-12 → **`docs/page-specs/01-dog-boarding-school.md`** | ☐ | ☐ |
+| 1 | `/dog-boarding-school` (Board & Train) — design-system proving ground | ☑ 2026-06-12 → **`docs/page-specs/01-dog-boarding-school.md`** | ◐ passes a–c live on preview; polish (d) pending | ☐ |
 | 2 | `/intensive-dog-training` | ☐ | ☐ | ☐ |
 | 3 | `/dog-day-school` | ☐ | ☐ | ☐ |
 | 4 | `/puppy-training-classes` | ☐ | ☐ | ☐ |

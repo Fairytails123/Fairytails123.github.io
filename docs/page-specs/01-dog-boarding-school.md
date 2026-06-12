@@ -51,3 +51,30 @@ Header/footer (site-wide fixes baked in: `wa.me/447842116216` / `wa.me/441424300
 ## Sign-off gates (from WEBSITE-PLAN.md)
 
 Owner sign-off on live preview · `verify-urls --dist` · Lighthouse ≥ 90 (perf/SEO/a11y) · reduced-motion check · n8n enquiry live-tested end-to-end with the execution read (CORS from a real browser).
+
+---
+
+## BUILD STATE (2026-06-12, session end — passes a–c live on preview, PAUSED for owner refinement)
+
+**Live at:** https://fairytails123.github.io/dog-boarding-school · source `src/pages/dog-boarding-school.astro`
+
+**What's implemented vs this spec:**
+- Full arc as specified (§Page structure 1–12), all content from the Stage 0 harvest verbatim copy.
+  Real regime table facts folded in: the "mandatory break" is **"Dogs must have a week off"** +
+  weekends home where logistics allow (drafted as mid-course home break — owner to confirm wording);
+  the kit list is the live site's verbatim list (19 lines on the live page incl. a duplicate
+  "Dog food" entry → rendered as **18 items**; the audit's "22-item" count was wrong).
+- Archie is framed as **"Proof, not promises"** (the post is a cautionary tale about guarantees /
+  owner follow-through, NOT a transformation brag — don't reframe it as one).
+- Design system ("countryside editorial"): Fraunces Variable + Karla Variable, moss/pine/cream/honey,
+  grain, rolling-hill dividers, polaroids, squiggle accents, paw bullets. Lives in `src/styles/global.css`.
+- Animation: hero entrance + parallax **video hero** (10 s / 960 px / 2.45 MB cut from the live
+  site's own film — see `..\fairytails-image-archive\dog-boarding-school\videos\`), scroll reveals +
+  staggers, **signature week-by-week walk trail** (honey fill + scrubbed paw marker + step
+  highlighting), drag-to-scroll polaroid rail, animated mobile menu, kit-list accordion,
+  ClientRouter page transitions. All reduced-motion-gated and no-JS-safe.
+- Enquiry form live against n8n `qVpPqijvyEqWiPwy` (email + data-table log; Telegram deferred).
+
+**Still open before sign-off (unchanged):** the four owner-input slots (hero clip, body-cam clips,
+testimonials, before/after pairs), regime-copy corrections, owner review of design/animation feel,
+then the polish pass (Lighthouse/reduced-motion/SEO/JSON-LD).

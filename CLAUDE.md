@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Rebuild of **www.thefairytails.co.uk** (Fairy Tails K9 Centre, a dog-training business) — replacing a rented Duda-builder site with an owner-controlled static **Astro 6** site on **GitHub Pages**, with premium GSAP animation and one Three.js homepage showpiece.
 
-**Current state: building (started 2026-06-12).** Astro 6 + Tailwind v4 (PostCSS) + GSAP scaffold is live; page 1 (Board & Train) is mid-build. Check `HANDOVER.md` first in every session — it tracks status and next actions, and should be updated when a session ends.
+**Current state: building (started 2026-06-12), PAUSED mid-page-1.** Foundation is live; Board & Train has content + design + animation passes deployed to the preview, with refinement + polish pass next. Check `HANDOVER.md` first in every session — it tracks status, the exact pick-up point, and next actions, and should be updated when a session ends.
 
 ## Commands
 
