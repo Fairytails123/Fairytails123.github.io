@@ -1,6 +1,6 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-**Last updated:** 2026-06-12 · **Status: BUILDING — Stage 0 + Stage 1 done; Page 1 (Board & Train) content pass built, awaiting owner review.**
+**Last updated:** 2026-06-12 (later) · **Status: BUILDING — Stage 0 + Stage 1 done; Page 1 (Board & Train) content + design + animation passes built, awaiting owner review before the polish pass.**
 
 ## Where things stand (2026-06-12 session)
 
@@ -32,22 +32,35 @@
    (Fairytails)" with Reply-To submitter. **Live-tested end-to-end 2026-06-12: legit POST ran all
    6 nodes (SMTP accepted, exec 14236), spam POST silently 200'd with no row/email (exec 14237).**
    Telegram alert node deliberately NOT added yet (owner deferred choosing a destination).
-5. **Page 1 — content pass (pass a of 4) BUILT** at `src/pages/dog-boarding-school.astro` from the
-   harvested verbatim copy, restructured into the interview arc. Placeholder slots marked for:
-   hero video loop, body-cam clips, testimonials, before/after pairs.
+5. **Page 1 — passes a–c of 4 BUILT** at `src/pages/dog-boarding-school.astro` (content from the
+   harvested verbatim copy per the interview arc; then design + animation after owner feedback
+   "doesn't feel premium" on the bare content pass).
+   - **Design system ("countryside editorial", `src/styles/global.css`):** Fraunces Variable
+     (display) + Karla Variable (body) self-hosted via @fontsource; moss/pine/cream/honey palette;
+     grain texture; rolling-hill `HillDivider.astro`; polaroid photo cards; squiggle underline
+     accents; paw-bullet motif; `.btn`/`.field` component classes.
+   - **Animation (GSAP+ScrollTrigger, per-page chunk ~114 KB raw):** hero entrance timeline;
+     parallax video hero — `public/media/board-train-hero.mp4` (10 s, 960 px, 2.45 MB, cut via
+     ffmpeg-static from the harvested live-site film `a8DP...web3+(Original)-v.mp4`; poster jpg
+     fallback; `preload=none`, plays only without reduced-motion/data-saver); scroll reveals
+     (`data-reveal`) + staggers (`data-stagger`); **signature: week-by-week walk — honey trail
+     fills + paw marker scrubs down the regime timeline, steps highlight as you pass**;
+     drag-to-scroll polaroid rail; animated mobile slide-in menu + scrolled header; animated
+     kit accordion; Astro **ClientRouter** view transitions. All animation is reduced-motion
+     gated (`gsap.matchMedia`) and progressive (initial states set by JS, never CSS).
+   - Placeholder slots still marked for: owner's final hero clip, body-cam clips, testimonials,
+     before/after pairs.
 
 ## Next actions (in order)
 
-1. **Owner review of the content pass on the live preview** (https://fairytails123.github.io/dog-boarding-school)
-   — especially the drafted week-by-week regime (incl. mid-course home-break copy) and the
-   Archie framing ("proof, not promises").
-2. **Design pass** (frontend-design skill; warm & natural tokens already drafted in
-   `src/styles/global.css` — pick real typefaces, refine palette/art direction).
-3. **GSAP animation pass** — signature: regime week-by-week pinned scroll story; reduced-motion
-   fallback = plain stacked timeline.
-4. **Polish pass** — Lighthouse ≥ 90, reduced-motion check, per-page SEO/JSON-LD, then owner
-   sign-off + tick tracker.
-5. Page 2 (`/intensive-dog-training`): run its pre-build interview first.
+1. **Owner review of design+animation on the live preview** (https://fairytails123.github.io/dog-boarding-school)
+   — plus the standing content checks: drafted week-by-week regime (incl. mid-course home-break
+   copy) and the Archie "proof, not promises" framing.
+2. **Polish pass** — Lighthouse ≥ 90 (watch the 2.45 MB hero video + 114 KB GSAP chunk),
+   reduced-motion check, mobile review, per-page SEO/JSON-LD, then owner sign-off + tick tracker.
+   Note: GTM page_view fires once per full load — add a History Change trigger in GTM at Stage 4
+   for ClientRouter navigations.
+3. Page 2 (`/intensive-dog-training`): run its pre-build interview first.
 
 ## Owner inputs still open
 
