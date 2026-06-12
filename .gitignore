@@ -1,0 +1,11 @@
+# dependencies (junctioned outside OneDrive — see CLAUDE.md)
+node_modules/
+
+# build output
+dist/
+.astro/
+
+# misc
+*.log
+.DS_Store
+Thumbs.db

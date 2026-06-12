@@ -1,0 +1,447 @@
+{
+  "summary": "Inventory the 7 pages not covered in the first sweep of thefairytails.co.uk",
+  "agentCount": 7,
+  "logs": [],
+  "result": {
+    "pages": [
+      {
+        "url": "https://www.thefairytails.co.uk/intensive-dog-training",
+        "exists": true,
+        "title": "Intensive Dog and Puppy Training (meta title) / H1: \"Intensive dog training with dog board and train\"",
+        "sections": [
+          {
+            "heading": "Intensive Training (hero carousel)",
+            "summary": "Intro hero with image carousel/slider featuring training imagery. Slides include 'For adult dogs and puppies' (promotes puppy and adult dog programs) and 'TAR Training (Train – Adjust – Repeat)' introducing the methodology."
+          },
+          {
+            "heading": "Our Intensive Training plans use the TAR training method",
+            "summary": "Overview explaining TAR is repetition-based training performed at a suitable distance/duration with controlled distractions."
+          },
+          {
+            "heading": "TAR training (Train – Adjust – Repeat)",
+            "summary": "Detailed explanation of the TAR method: repeat-treat-adjust cycle, linked to conditioned emotional response (with in-page anchor link to the CER section). Notes the approach is suitable for a maximum of 2 behavioural issues."
+          },
+          {
+            "heading": "How our Intensive Training plans work",
+            "summary": "Four-step process: 1) Contact, 2) Approve estimate, 3) Training begins, 4) Training ends."
+          },
+          {
+            "heading": "How does it help?",
+            "summary": "Five subsections covering: session length, consistency, environmental exposure, gradual increase of distractions, and reward consistency."
+          },
+          {
+            "heading": "Pricing",
+            "summary": "Two pricing tiers — Intensive Puppy Training (£1200/1 month) and Intensive Dog Training (£1800/2 months, +£300 large dogs) — each with a Contact us button."
+          },
+          {
+            "heading": "Some of our doggy clients in training",
+            "summary": "Gallery carousel of client dogs with short testimonial-style captions: New experiences, Learning development, Developing skill set, Keeping focused. Has a 'View more' carousel control (no URL)."
+          },
+          {
+            "heading": "Conditioned Emotional Response (CER)",
+            "summary": "Educational/science section (anchor id ConditionedEmotionalResponse) explaining CER: classical conditioning, brain mechanisms (neurons, amygdala), and counterconditioning."
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Intensive Puppy Training",
+            "price": "£1200",
+            "details": "1 month's training; New puppy learning; Half day school included; Available to local puppies aged 2 months and over"
+          },
+          {
+            "item": "Intensive Dog Training",
+            "price": "£1800",
+            "details": "2 months' training; Counter-conditioning; Full day school included; Available to local dogs"
+          },
+          {
+            "item": "Large dog surcharge (on Intensive Dog Training)",
+            "price": "+£300",
+            "details": "Add-on for large dogs on the £1800 Intensive Dog Training plan"
+          }
+        ],
+        "ctas": [
+          "Book Appointment -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling; appears twice on page)",
+          "Contact us (text link in TAR/intro copy) -> /contact",
+          "Contact us (button under each Pricing tier) -> /contact",
+          "In-page link to CER section -> /intensive-dog-training#ConditionedEmotionalResponse",
+          "Nav: Home -> /",
+          "Nav: Training Plans -> /#Trainingplans (homepage anchor)",
+          "Nav: Board & Train -> /dog-boarding-school",
+          "Nav: Dog Day School -> /dog-day-school",
+          "Nav: Membership Plans -> /#MembershipPlans (homepage anchor)",
+          "Nav: Dog Grooming -> https://fairytailsdoggrooming.co.uk/ (external sister site)",
+          "Header phone -> tel:07842 116216",
+          "Header/footer email -> mailto:info@thefairytails.co.uk",
+          "WhatsApp (header/footer) -> https://wa.me/4407842116216",
+          "Footer phone -> tel:01424 300668",
+          "Footer: Blog -> /blog",
+          "Footer: Terms and conditions -> /terms-and-conditions",
+          "Footer: Gallery -> /gallery",
+          "Footer: Employee Login -> /staff-resources",
+          "Footer: Facebook -> https://facebook.com/thefairytails",
+          "Footer: Instagram -> https://www.instagram.com/fairytails_dogschool/",
+          "Footer: Google Maps -> https://google.com/maps/place/ (location link)",
+          "View more (client gallery carousel control) -> no URL, interactive carousel"
+        ],
+        "integrations": [
+          "Acuity Scheduling — booking via link (not an embedded iframe on this page): https://app.acuityscheduling.com/schedule.php?owner=13914499 (owner ID 13914499)",
+          "WhatsApp click-to-chat: https://wa.me/4407842116216",
+          "Social links: Facebook (facebook.com/thefairytails), Instagram (instagram.com/fairytails_dogschool), Google Maps place link",
+          "External sister site in main nav: fairytailsdoggrooming.co.uk"
+        ],
+        "internalLinks": [
+          "/staff-resources (footer 'Employee Login' — not in the known nav list)"
+        ],
+        "notes": "Page is live with full content (verified with two WebFetch passes; both consistent). No downloadable files (no PDF/doc/zip), no embedded videos (YouTube/Vimeo), no Jotform/Typeform forms, no online checkout/cart, and nothing gated for sale on this page — the only conversion paths are the Acuity booking link and /contact. The Acuity scheduler appears as a plain link/button, not an embedded iframe. Homepage anchor targets referenced from nav: /#Trainingplans and /#MembershipPlans (the rebuild homepage must keep those anchor IDs); this page itself must keep anchor id #ConditionedEmotionalResponse (linked from TAR copy). /staff-resources is the one same-site link outside the known list — an Employee Login page worth inventorying separately. Two distinct phone numbers are published: header mobile 07842 116216 (also the WhatsApp number, +44 7842 116216) vs footer landline 01424 300668 — confirm which is canonical for the rebuild. Pricing nuance: both plans are restricted to 'local' dogs/puppies; puppy plan includes HALF day school, adult plan includes FULL day school; large-dog +£300 applies only to the £1800 adult plan."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/puppy-training-classes",
+        "exists": true,
+        "title": "The Fairy Tails Dog Day School (page covers Puppy Training Classes)",
+        "sections": [
+          {
+            "heading": "Small group evening classes for you and your puppy",
+            "summary": "Intro section: group puppy training classes held at Concordia Hall, St. Leonards on Thursday evenings at 6pm, covering basic commands, socialisation, and owner-puppy bonding. Contains the (stale) line: \"For 2024, classes will be held at Concordia Hall, St. Leonards on Thursday evenings at 6pm.\""
+          },
+          {
+            "heading": "Why choose group puppy training classes?",
+            "summary": "Five subsections: 'Start training early' (recommends starting before 6 months old); 'Two dog trainers' (at least two trainers, positive reinforcement); 'What you will learn' (sit, stay, come, nutrition, advanced commands, long lead training, day school sessions, hand signals, dog law, body language); 'What's included' (states \"four sessions spread over one month plus two intro sessions to The Fairy Tails dog day school\"); 'Socialisation' (exposure to environments, people, other dogs)."
+          },
+          {
+            "heading": "How will your pup benefit?",
+            "summary": "Benefit subsections with icons: 'Enjoyable classes' (short puppy attention spans need positive experiences); 'Building confidence' (variety of stimuli); 'Professional trainers' (structured guided training); 'A strong foundation' (early obedience); plus paragraphs on 'Building a bond', 'Understanding your pup', and 'A positive experience' about positive reinforcement and mutual understanding."
+          },
+          {
+            "heading": "How to book your place",
+            "summary": "Pricing and booking section. Exact copy: \"Puppy training classes are £175 per course and include four evening sessions spread over one month, plus three intro sessions to The Fairy Tails dog day school.\" Offers online booking via Acuity or contacting the business; also cross-sells the DIY puppy course."
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Puppy Training Classes (group course)",
+            "price": "£175 per course",
+            "details": "Four evening sessions spread over one month, plus intro sessions to The Fairy Tails dog day school. NOTE: page contradicts itself — 'What's included' says TWO intro sessions, the pricing sentence says THREE intro sessions."
+          }
+        ],
+        "ctas": [
+          "\"Contact us\" -> /contact (internal)",
+          "\"Book Appointment\" -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity general scheduler)",
+          "\"Book Appointment\" (second instance) -> https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469464 (Acuity direct add-to-cart for this course, product id 1469464)",
+          "\"PUPPY COURSE - DO IT YOURSELF (DIY COURSE)\" -> /puppycourse (internal cross-sell to the DIY/self-serve course)"
+        ],
+        "integrations": [
+          "Acuity Scheduling (owner=13914499) — two booking links: generic schedule.php and catalog.php addCart with id=1469464. These appear as links/buttons, not confirmed as embedded iframes.",
+          "Footer social links: Facebook, Instagram, WhatsApp (URLs not exposed in fetched markup)"
+        ],
+        "internalLinks": [
+          "/staff-resources (footer 'Employee Login' — not in known nav list)",
+          "/#Trainingplans (nav anchor link into homepage section — anchor target must exist in rebuilt homepage)",
+          "/#MembershipPlans (nav anchor link into homepage section — anchor target must exist in rebuilt homepage)"
+        ],
+        "notes": "Page is live with full real content. Key rebuild facts: class venue Concordia Hall, St. Leonards; Thursday evenings 6pm; aimed at puppies under 6 months; copy still says 'For 2024' (stale — should be updated in rebuild). Contact info on page: phone 07842 116216 (header) and 01424 300668 (footer), email info@thefairytails.co.uk. Content contradiction to resolve: 'two intro sessions' (What's included) vs 'three intro sessions' (pricing sentence) to dog day school. Downloads/videos/forms/gated content: NONE found — no PDFs, no YouTube/Vimeo embeds, no Jotform/other form embeds, no iframes or checkout elements other than the Acuity booking links (verified with a second targeted fetch). External link: 'Dog Grooming' points to separate domain https://fairytailsdoggrooming.co.uk/. The Acuity add-to-cart URL (id=1469464) is the closest thing to a for-sale element — it is the £175 course purchase path. Nav also links to known pages: /, /dog-boarding-school, /dog-day-school, /contact, /blog, /gallery, /terms-and-conditions, /puppycourse."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/puppycourse",
+        "exists": true,
+        "title": "Puppy Course - DIY (H1 hero: \"Puppy Course DIY\")",
+        "sections": [
+          {
+            "heading": "Puppy Course DIY (hero/H1)",
+            "summary": "Page intro for a free do-it-yourself puppy training course resource."
+          },
+          {
+            "heading": "Aims",
+            "summary": "Lists the course goals: socialisation exercises, toilet training, separation (anxiety) training, sleep training, enrichment, and obedience skills including walks and socialisation outings."
+          },
+          {
+            "heading": "Methods",
+            "summary": "Explains the positive-reinforcement training philosophy as scientifically effective, using treats, toys, and praise to encourage desired behaviours while building puppy confidence."
+          },
+          {
+            "heading": "Management Methods in Training?",
+            "summary": "Covers environmental controls (crates, gates, leashes) to set puppies up for success and prevent unwanted behaviours without punishment."
+          },
+          {
+            "heading": "Use of Punishment",
+            "summary": "Warns punishment may give quick results but risks creating anxiety, fears, phobias, and lack of confidence, potentially producing reactive dogs instead of confident learners."
+          },
+          {
+            "heading": "Training Schedule Suggestion",
+            "summary": "Recommends six daily training touchpoints integrated with feeding and toilet breaks, plus a detailed hour-by-hour daily schedule running roughly 5-7am ('Wake up and Toilet Time'), 7am breakfast, 7.15 toilet break, through to 8pm 'Relaxation and wind down'."
+          },
+          {
+            "heading": "Toilet Training",
+            "summary": "Recommends toilet breaks every 15 minutes initially, with frequency decreasing as the puppy matures and becomes more reliable. Links to a separate Puppy Toilet Schedule page."
+          },
+          {
+            "heading": "Week One - Week Four modules (H3s)",
+            "summary": "A progressive 4-week curriculum with one linked sub-page per week: Week 1 'Skills & Exposure', Week 2 'Build Confidence', Week 3 'Socialisation', Week 4 'Fine Tuning'."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "\"Book Appointment\" -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "\"Contact Us\" (phone button) -> tel:07842116216",
+          "\"Puppy Toilet Schedule\" -> /puppy-toilet-schdule (note: slug is misspelled on the live site)",
+          "\"Skills & Exposure\" (Week 1) -> /puppy-week-1",
+          "\"Build Confidence\" (Week 2) -> /week-2-puppy",
+          "\"Socialisation\" (Week 3) -> /puppy-week-3",
+          "\"Fine Tuning\" (Week 4) -> /puppy-week-4",
+          "\"Employee Login\" (footer) -> /staff-resources"
+        ],
+        "integrations": [
+          "Acuity Scheduling - booking iframe/link, owner=13914499 (https://app.acuityscheduling.com/schedule.php?owner=13914499)",
+          "Duda site builder (platform the page is built on)"
+        ],
+        "internalLinks": [
+          "/puppy-toilet-schdule",
+          "/puppy-week-1",
+          "/week-2-puppy",
+          "/puppy-week-3",
+          "/puppy-week-4",
+          "/staff-resources",
+          "/#Trainingplans (homepage anchor in nav)",
+          "/#MembershipPlans (homepage anchor in nav)"
+        ],
+        "notes": "Page is a real, free DIY puppy-training course hub - no prices, no checkout, no gated content (the only login-ish link is the footer 'Employee Login' -> /staff-resources). No videos, PDFs, or downloadable course materials detected on this page; content is plain text/images plus links out to five sub-pages that ARE the course materials and are NOT in the known nav list: /puppy-toilet-schdule (slug contains a typo - 'schdule' - rebuild should decide whether to fix with a redirect), /puppy-week-1, /week-2-puppy (note inconsistent slug pattern vs the other weeks), /puppy-week-3, /puppy-week-4. Those five sub-pages plus /staff-resources need their own inventory passes for a complete rebuild. The only third-party widget is the Acuity Scheduling booking embed (owner 13914499), which also appears as the 'Book Appointment' CTA. Nav also references homepage anchors #Trainingplans and #MembershipPlans, implying those sections exist on the home page. Inventory based on two WebFetch passes (rendered-to-markdown), which agreed with each other; raw script-injected embeds, if any, could be missed by markdown conversion."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/resources-collection",
+        "exists": true,
+        "title": "Dog Training Resources (free training-resources/education page for The Fairy Tails K9 Centre)",
+        "sections": [
+          {
+            "heading": "Hero carousel (3 cards): 'Free Training Resources' / 'For adult dogs and puppies' / 'Dog Training & Puppy Training Resources'",
+            "summary": "Three rotating hero cards introducing the free training resources offering; third card has a 'Start Today' label. All carousel buttons are non-functional placeholders with no href — caption text is also placeholder in places."
+          },
+          {
+            "heading": "Empowering Dog Owners Through Education and Data",
+            "summary": "Intro copy: successful dog ownership requires knowing how to train effectively and communicate with your dog, with the whole family involved in consistent training."
+          },
+          {
+            "heading": "Training the Whole Family",
+            "summary": "Dog parents must educate the entire household on setting rules and encouraging positive behaviour, avoiding teasing or inconsistent approaches."
+          },
+          {
+            "heading": "Using Data to Train Effectively",
+            "summary": "Research-backed reinforcement methods and correct reward timing build trust between owner and dog."
+          },
+          {
+            "heading": "Creating Positive Change Through Knowledge",
+            "summary": "Educating yourself about dog training improves the relationship and helps navigate common ownership challenges."
+          },
+          {
+            "heading": "The Importance of Puppy Classes",
+            "summary": "Puppy classes provide 'fun, off-leash experiences' for socialisation across different environments and situations."
+          },
+          {
+            "heading": "Why Dog Training Is Different Today",
+            "summary": "Contrasts modern, flexible pet-dog training with traditional working-dog methods; focus on real-life behavioural situations rather than rigid commands."
+          },
+          {
+            "heading": "Building a Strong Relationship with Your Dog",
+            "summary": "Frames training as relationship-building centred on 'communication, trust, and making sure your dog is a well-adjusted, happy part of your family.'"
+          },
+          {
+            "heading": "Lets Get a Head Start (Puppy Training Resources — 4-step process)",
+            "summary": "Step process: 1) Before Getting Puppy — contact via phone/email/contact form; 2) On Puppy Arrival — plan preparation and approval; 3) Training DIY Home Course — implementation; 4) Training - Maintain it — handoff once satisfied."
+          },
+          {
+            "heading": "Dog Training Resources (4-step process)",
+            "summary": "An identical 4-step process block mirroring the puppy version with the same steps — duplicate content a rebuild could consolidate."
+          },
+          {
+            "heading": "Some of our doggy clients in training (gallery)",
+            "summary": "Four gallery items: New experiences, Learning development, Developing skill set, Keeping focused. Includes a 'View more' button with no href (placeholder/JS-only)."
+          },
+          {
+            "heading": "Conditioned Emotional Response (CER)",
+            "summary": "Long-form educational deep dive on CER: dogs forming emotional associations with stimuli, Pavlovian conditioning, neurological detail (amygdala), and counterconditioning that 'changes past connections between neurons.'"
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "Book Appointment -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Contact us (phone) -> tel:01424300668",
+          "Contact us (email) -> mailto:info@thefairytails.co.uk",
+          "WhatsApp -> https://wa.me/4407842116216",
+          "contact form (2 instances in the 4-step process copy) -> /contact",
+          "Hero carousel buttons incl. 'Start Today' -> NO href (placeholder, non-functional)",
+          "View more (gallery) -> NO href (placeholder/JS-only)",
+          "Dog Grooming (nav) -> https://fairytailsdoggrooming.co.uk/ (external sister site)",
+          "Employee Login (footer) -> /staff-resources",
+          "Training Plans (nav) -> /#Trainingplans (homepage anchor)",
+          "Membership Plans (nav) -> /#MembershipPlans (homepage anchor)"
+        ],
+        "integrations": [
+          "Acuity Scheduling booking link (owner=13914499) — link/button, page-level iframe not confirmed",
+          "WhatsApp click-to-chat (wa.me/4407842116216)",
+          "External sister site: fairytailsdoggrooming.co.uk"
+        ],
+        "internalLinks": [
+          "/staff-resources (Employee Login, footer)"
+        ],
+        "notes": "Page is live and content-rich despite being a 'resources' page: it contains NO downloadable files (no PDFs/course materials), NO embedded videos, NO Jotform/other forms, and NOTHING gated or for sale — the 'Training DIY Home Course' is mentioned only as a step in the contact-first process, with no link, download, or checkout. No prices anywhere on the page. Rebuild flags: (1) the hero carousel and gallery 'View more' buttons are unlinked placeholders ('Button' labels, placeholder captions) — they need real destinations or removal; (2) the 4-step process block appears twice verbatim (puppy + dog versions); (3) typo in heading 'Lets Get a Head Start' (missing apostrophe); (4) nav references homepage anchors /#Trainingplans and /#MembershipPlans — preserve those anchor IDs on the rebuilt homepage; (5) only off-list internal link is /staff-resources. Contact details surfaced here: tel 01424 300668, info@thefairytails.co.uk, WhatsApp +44 7842 116216."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/training-stages",
+        "exists": true,
+        "title": "The Fairy Tails — Staged Dog Training (training stages page)",
+        "sections": [
+          {
+            "heading": "Staged Dog Training / Our Dog Training Course: A Three-Stage Approach",
+            "summary": "Intro framing the training programme as a three-stage approach: integration, basic training in a quiet setting, then real-world environment exposure."
+          },
+          {
+            "heading": "Stage 1",
+            "summary": "Integration phase, roughly one week long, focused on gently introducing the dog to the daycare environment and acclimating it to the facility."
+          },
+          {
+            "heading": "Stage 2",
+            "summary": "About a week of basic training in a quiet, distraction-free setting around the barn, giving the dog space and tranquillity to master essential commands and behaviours."
+          },
+          {
+            "heading": "Stage 3",
+            "summary": "Final stage trains in busier real-world environments: on-lead at local dog parks and off-lead areas (dog stays on-lead for training), the seafront promenade, and bustling high streets."
+          },
+          {
+            "heading": "Parent Training",
+            "summary": "From the fourth week onwards, parent (owner) training sessions are included as part of the third phase, typically on Fridays for boarding and intensive-training dogs, with pickup between 11 AM and 2 PM; mid-course and end-of-course sessions are recommended."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "\"Book Appointment\" (primary) -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling, link-out, not an embedded iframe)",
+          "\"Book Appointment\" (secondary) -> mailto:mymail@mailservice.com (UNREPLACED Duda template placeholder email — broken CTA)",
+          "Phone CTA -> tel:01424300668",
+          "WhatsApp CTA -> https://wa.me/4407842116216 (number has a suspect extra 0 after the 44 country code; correct form would be wa.me/447842116216)",
+          "Footer email -> mailto:info@thefairytails.co.uk",
+          "Footer WhatsApp -> https://wa.me/01424300668 (malformed — landline number without country code in a wa.me link)",
+          "Footer Facebook -> https://facebook.com/thefairytails",
+          "Footer Instagram -> https://www.instagram.com/fairytails_dogschool/",
+          "Footer Google Maps -> https://google.com/maps/place/ (appears truncated/incomplete place URL)"
+        ],
+        "integrations": [
+          "Acuity Scheduling (owner=13914499) — booking via external link only; no iframe embed on this page",
+          "WhatsApp deep links (wa.me)",
+          "No embedded forms (no Jotform), no video embeds, no downloadable files/PDFs, no payment or gated content on this page"
+        ],
+        "internalLinks": [
+          "/staff-resources (anchor text: \"Employee Login\") — not in the known page list",
+          "/#Trainingplans (nav item \"Training Plans\" — anchor section on homepage, implies pricing/plans live on /)",
+          "/#MembershipPlans (nav item \"Membership Plans\" — anchor section on homepage)"
+        ],
+        "notes": "Page is live with real but thin content: one intro plus four short copy blocks (Stage 1/2/3, Parent Training) describing the 3-stage board-and-train methodology. NO prices, NO embedded widgets, NO downloads, NO videos, NOTHING gated or for sale on this page — pricing is evidently delegated to the homepage anchors /#Trainingplans and /#MembershipPlans. Rebuild action items found: (1) secondary Book Appointment button still points to the Duda default placeholder mailto:mymail@mailservice.com — must be replaced; (2) two suspect WhatsApp links — wa.me/4407842116216 (extra 0 after country code) and footer wa.me/01424300668 (landline, no country code); (3) footer Google Maps link looks truncated (https://google.com/maps/place/ with no place); (4) hidden /staff-resources page exists (Employee Login) and is not in the known-nav list — inventory it separately; (5) external sister site link: https://fairytailsdoggrooming.co.uk/ (Dog Grooming nav item). Only notable image alt text: \\\"The Fairy Tails K9 Centre logo\\\". Header nav also carries Home, Board & Train, Dog Day School, Contact, Blog, Gallery, Terms and conditions — all already in the known list. Footer contact: 01424 300668, info@thefairytails.co.uk."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/admission-process",
+        "exists": true,
+        "title": "The Fairy Tails (SEO title) / H1: \"Admission Process\"",
+        "sections": [
+          {
+            "heading": "Header / Navigation",
+            "summary": "Top nav: Home, Board & Train, Training Plans, Dog Day School, Membership Plans, Dog Grooming (external sister site), Contact, Book Appointment (Acuity). Header contact strip shows phone 07842 116216 and info@thefairytails.co.uk with email and WhatsApp icons. Logo appears twice with a repeated secondary nav (Training Plans, Board & Train, Dog Day School, Dog Grooming)."
+          },
+          {
+            "heading": "Admission Process (main content, H1)",
+            "summary": "Introductory programme: every dog must attend three introductory sessions, each requiring a collar, harness, and ID tags — session 1 is one hour, session 2 is two hours, session 3 is three hours. Staff review progress after each session; the copy warns not all dogs suit their open-roaming pack environment and recommends consulting a professional trainer if a dog isn't suitable."
+          },
+          {
+            "heading": "Call-to-action block",
+            "summary": "Single CTA after the main copy: 'Call us for more details' linking to /contact."
+          },
+          {
+            "heading": "Footer",
+            "summary": "Footer nav: Blog, Terms and Conditions, Gallery, Employee Login (/staff-resources), Contact us. Footer contact details: phone 01424 300668 (different from header number), info@thefairytails.co.uk, social icons for Facebook, WhatsApp, Instagram, phone, and Google Maps."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "Call us for more details -> /contact (primary in-page CTA)",
+          "Book Appointment (header) -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling, link not iframe)",
+          "Book Appointment (second variant in markup) -> mailto:mymail@mailservice.com (placeholder mailto — appears to be an unconfigured Duda button)",
+          "Home -> /",
+          "Board & Train -> /dog-boarding-school",
+          "Training Plans -> /#Trainingplans (homepage anchor)",
+          "Dog Day School -> /dog-day-school",
+          "Membership Plans -> /#MembershipPlans (homepage anchor)",
+          "Dog Grooming -> https://fairytailsdoggrooming.co.uk/ (external sister site)",
+          "Contact -> /contact",
+          "Blog -> /blog",
+          "Terms and conditions -> /terms-and-conditions",
+          "Gallery -> /gallery",
+          "Employee Login -> /staff-resources",
+          "Contact us (footer) -> /contact",
+          "Social icons (footer) -> Facebook, Instagram, WhatsApp, Google Maps profile links"
+        ],
+        "integrations": [
+          "Acuity Scheduling — booking link https://app.acuityscheduling.com/schedule.php?owner=13914499 (button link only, no embedded iframe on this page)",
+          "WhatsApp contact link (header and footer icons)",
+          "Google Maps link (footer icon, link only — no embedded map)",
+          "Facebook and Instagram profile links (footer)",
+          "External sister site: https://fairytailsdoggrooming.co.uk/ (Dog Grooming nav item)",
+          "No embedded videos, no Jotform/other forms, no PDF/file downloads, no chat widgets detected"
+        ],
+        "internalLinks": [
+          "/staff-resources (anchor text: 'Employee Login', footer) — only same-site page found that is NOT in the known list",
+          "/#Trainingplans and /#MembershipPlans — anchors into homepage sections (page '/' is known, but the rebuild needs these named section anchors 'Trainingplans' and 'MembershipPlans' on the new homepage)"
+        ],
+        "notes": "Page exists with real content; short single-section service page. Key rebuild facts: (1) Core copy = 3 mandatory introductory sessions (1hr / 2hr / 3hr), dogs must wear collar + harness + ID tags, staff progress review after each session, disclaimer that the open-roaming pack environment doesn't suit all dogs. (2) NO pricing anywhere on the page. (3) No downloads, videos, forms, or gated/for-sale content. (4) Data inconsistencies to resolve in rebuild: two different phone numbers (header 07842 116216 vs footer 01424 300668) and a placeholder 'Book Appointment' button pointing to mailto:mymail@mailservice.com (default Duda placeholder address) alongside the real Acuity link. (5) Live nav differs from the known-list page set: it includes Membership Plans and Training Plans homepage anchors and an external Dog Grooming site, and does NOT surface /intensive-dog-training, /puppy-training-classes, /puppycourse, /resources-collection, /training-stages, /boarding-information, or /resources-collection in this page's nav. (6) /staff-resources (Employee Login) is a same-site page missing from the known list and should be inventoried separately — likely gated staff content."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/boarding-information",
+        "exists": true,
+        "title": "The Fairy Tails — Drop-Off and Pick-Up Information for Dog Boarding",
+        "sections": [
+          {
+            "heading": "Drop-Off and Pick-Up Information for Dog Boarding",
+            "summary": "Sole body section (H1 + image). Copy: 'We're excited to welcome your dog to stay with us!' — drop-off/pick-up service is available on weekdays; on weekends owners must bring and collect dogs themselves. Boarding drop-off/pick-up windows are 8:00am-11:00am weekdays and 8:30am-11:00am weekends; later pick-ups must be arranged in advance or an additional day of boarding charges applies; bookings must be paid at time of reservation. Closes with 'We look forward to making your dog's stay as comfortable and enjoyable as possible!' Accompanied by one hero-style photo (filename 'WhatsApp Image 2025-08-07 at 11.11.00.jpeg' on Duda CDN, no caption)."
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Late pick-up without advance notice",
+            "price": "1 additional day of boarding charges",
+            "details": "No monetary amount stated anywhere on the page; only this penalty rule plus 'Bookings must be paid at the time of reservation.'"
+          }
+        ],
+        "ctas": [
+          "Book Appointment (header button, x2 desktop/mobile) -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (plain link, NOT an embedded iframe)",
+          "Phone: Contact us 07842 116216 (header) -> tel/WhatsApp https://wa.me/4407842116216",
+          "Phone: 01424 300668 (footer) -> tel:01424300668 and https://wa.me/01424300668 (note: this wa.me link is malformed — missing +44 country code)",
+          "Email: info@thefairytails.co.uk -> mailto:info@thefairytails.co.uk (x4)",
+          "Nav: Home -> /",
+          "Nav: Board & Train -> /dog-boarding-school",
+          "Nav: Training Plans -> /#Trainingplans (home-page anchor)",
+          "Nav: Dog Day School -> /dog-day-school",
+          "Nav: Membership Plans -> /#MembershipPlans (home-page anchor)",
+          "Nav: Dog Grooming -> https://fairytailsdoggrooming.co.uk/ (external sister site, x2)",
+          "Nav: Contact -> /contact",
+          "Footer: Blog -> /blog",
+          "Footer: Terms and conditions -> /terms-and-conditions",
+          "Footer: Gallery -> /gallery",
+          "Footer: Employee Login -> /staff-resources",
+          "Social: Facebook -> https://facebook.com/thefairytails",
+          "Social: Instagram -> https://www.instagram.com/fairytails_dogschool/",
+          "Footer map icon -> https://google.com/maps/place/ (empty/unconfigured Maps link — no place specified)",
+          "Stray placeholder: mailto:mymail@mailservice.com (Duda template artifact, should be removed in rebuild)"
+        ],
+        "integrations": [
+          "Acuity Scheduling — booking link https://app.acuityscheduling.com/schedule.php?owner=13914499 (link only; no booking iframe embedded on this page)",
+          "Google Tag Manager — container GTM-W93L9XK5 (only iframe on the page is the GTM noscript frame)",
+          "Duda site builder — assets served from cdn.website-editor.net / static-cdn.website-editor.net",
+          "Duda cookie-consent banner ('this website uses cookies...')",
+          "WhatsApp click-to-chat (wa.me links x2)",
+          "RSS/Atom feeds — /feed/rss2 and /feed/atom"
+        ],
+        "internalLinks": [
+          "/staff-resources (footer 'Employee Login' — NOT in the known nav list)",
+          "/#Trainingplans (home-page section anchor used as a nav item)",
+          "/#MembershipPlans (home-page section anchor used as a nav item)",
+          "/feed/rss2 and /feed/atom (feed endpoints in <head>)"
+        ],
+        "notes": "Page is live (HTTP 200, no redirect) but very thin: a single info section (one H1, ~3 short paragraphs, one photo) plus the standard site header/footer. No downloadable files (no PDFs/docs), no embedded videos, no forms, no payment widgets, and nothing gated or for sale on this page — verified against raw HTML (grep for .pdf/.doc/iframe/youtube/vimeo/£ all empty). No monetary prices anywhere. Key facts for rebuild: boarding drop-off/pick-up 8:00-11:00am weekdays, 8:30-11:00am weekends; weekday-only transport service (weekend self drop-off/pick-up); late pick-up without notice = extra day charged; payment due at reservation. Contact: 07842 116216, 01424 300668, info@thefairytails.co.uk. Defects to fix in rebuild: wa.me/01424300668 lacks the 44 country code so it won't resolve; footer Google Maps link points to bare google.com/maps/place/ with no place; a placeholder mailto:mymail@mailservice.com remains from the Duda template. Note the first WebFetch summary claimed an 'Acuity Scheduling iframe' — raw HTML shows Acuity appears only as plain links; the sole iframe is GTM noscript."
+      }
+    ]
+  }
+}

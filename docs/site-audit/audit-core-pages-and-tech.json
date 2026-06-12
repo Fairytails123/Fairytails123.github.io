@@ -1,0 +1,922 @@
+{
+  "summary": "Inventory every page of the current thefairytails.co.uk site + SEO baseline via Ahrefs",
+  "agentCount": 10,
+  "logs": [],
+  "result": {
+    "pages": [
+      {
+        "url": "https://www.thefairytails.co.uk/",
+        "exists": true,
+        "title": "The Fairy Tails K9 Centre",
+        "sections": [
+          {
+            "heading": "Welcome",
+            "summary": "Introductory hero message inviting visitors to experience dog care and training services in a safe environment."
+          },
+          {
+            "heading": "Our Services",
+            "summary": "Overview listing the primary service categories: Dog Day School, Dog Training, and related programs."
+          },
+          {
+            "heading": "Dog Day School",
+            "summary": "'Doggy day care with a difference' — a safe environment for dogs to stay, learn, play and socialise, with structured activities and monthly membership options. Links to /dog-day-school."
+          },
+          {
+            "heading": "Dog Training",
+            "summary": "Range of training programs from intensive training to boarding-school options, plus new puppy group classes. CTA to call 01424 300668."
+          },
+          {
+            "heading": "Training Plans — Comprehensive Puppy Training",
+            "summary": "One-month intensive program for puppies up to 20 weeks including boarding, full-day school and structured socialisation. £1,200."
+          },
+          {
+            "heading": "Training Plans — Intensive Dog Training",
+            "summary": "Eight-week TAR (Train, Adjust, Repeat) program addressing behavioural issues, with parent (owner) training included from week five. £2,000."
+          },
+          {
+            "heading": "Training Plans — Dog Boarding School",
+            "summary": "Eight-week residential 'Board and Train' program with initial assessment, in-home training and owner participation. £2,500."
+          },
+          {
+            "heading": "Training Plans — Holiday Board & Train",
+            "summary": "Four-week program combining boarding, training and structured day care, with daily training sessions and video reports. £1,500."
+          },
+          {
+            "heading": "Training Plans — Puppy Training Classes",
+            "summary": "Group classes for puppies under six months, held Thursday evenings; four sessions spread over one month. £175 per course."
+          },
+          {
+            "heading": "Training Plans — Dog Social Walks",
+            "summary": "Small group walks (maximum five dogs per group), exclusive to existing clients, held weekends with an enrichment focus. £20 per walk."
+          },
+          {
+            "heading": "Training Plans — One to One Dog Training",
+            "summary": "Private sessions addressing anxiety and behavioural problems at the dog's individual pace. £49.99 per session."
+          },
+          {
+            "heading": "Training Plans — Free Phone Consult Service Advice",
+            "summary": "'Complimentary Phone Consultation' to help owners select the appropriate training program; bookable via Acuity."
+          },
+          {
+            "heading": "Membership Plans — Membership Half Days",
+            "summary": "AM or PM half-day options for registered school dogs, including hot towel wash and monthly grooming. £275/month (+£25 large dogs)."
+          },
+          {
+            "heading": "Membership Plans — Membership Full Days Tier 1",
+            "summary": "Invoiced monthly bookings with free pickups, grooming, and one free training session per month. £375/month (+£25 large dogs)."
+          },
+          {
+            "heading": "Membership Plans — Membership Full Days Tier 2",
+            "summary": "Bi-monthly option with free full grooming and four free training sessions per cycle. £750 bi-monthly, no large-dog surcharge."
+          },
+          {
+            "heading": "Membership Plans — Dog Grooming Subscription",
+            "summary": "Monthly subscription including one maintenance or full groom plus free nail clipping. £25/month; booked via the grooming Acuity site."
+          },
+          {
+            "heading": "Canine Education Philosophy",
+            "summary": "Metaphorical explanation that lasting training results require both professional instruction and owner consistency."
+          },
+          {
+            "heading": "Dog Grooming",
+            "summary": "Full grooms, massage and teeth cleaning tailored to individual breeds; prices start at £25. Points to the separate grooming site fairytailsdoggrooming.co.uk."
+          },
+          {
+            "heading": "Dog Boarding",
+            "summary": "'Home from home' overnight stays with day-school activities, available to existing clients. Links to /boarding-information."
+          },
+          {
+            "heading": "Dog Shop",
+            "summary": "Adventure Dog retail partnership offering leads, harnesses, toys and grooming products with free local same-day delivery."
+          },
+          {
+            "heading": "Additional Services — Training Resources",
+            "summary": "'Puppy Course - DIY' available for download (links to /puppycourse), with more materials coming soon."
+          },
+          {
+            "heading": "Additional Services — Doggy Events",
+            "summary": "Summer barbecues and Christmas parties for day-school clients and their families."
+          },
+          {
+            "heading": "Additional Services — Help and Advice",
+            "summary": "Open invitation to contact the business about any dog-related problems (phone CTA 07842 116216)."
+          },
+          {
+            "heading": "About Us",
+            "summary": "Located in Hastings Country Park with ample parking and free local pickup/drop-off services."
+          },
+          {
+            "heading": "The Fairy Tails Club",
+            "summary": "Comprehensive 'A to Z care service' with daily activity updates, a contact helpline and a commitment to customer satisfaction."
+          },
+          {
+            "heading": "Industry Commitments",
+            "summary": "Membership commitments to 'pain-free dog care' and improving industry standards."
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Comprehensive Puppy Training",
+            "price": "£1,200",
+            "details": "1 month's training, puppies up to 20 weeks; includes boarding, full-day school, socialisation"
+          },
+          {
+            "item": "Intensive Dog Training",
+            "price": "£2,000",
+            "details": "8-week TAR program; +£300 for large dogs"
+          },
+          {
+            "item": "Dog Boarding School (Board & Train)",
+            "price": "£2,500",
+            "details": "8 weeks residential; +£300 for large dogs"
+          },
+          {
+            "item": "Holiday Board & Train",
+            "price": "£1,500",
+            "details": "4 weeks; +£300 for large dogs"
+          },
+          {
+            "item": "Pick up / drop off",
+            "price": "£1/mile",
+            "details": "From London"
+          },
+          {
+            "item": "Puppy Training Classes",
+            "price": "£175",
+            "details": "Per course — 4 sessions over 1 month, Thursday evenings, puppies under 6 months"
+          },
+          {
+            "item": "Dog Social Walks",
+            "price": "£20",
+            "details": "Per walk; max 5 dogs per group; existing clients only, weekends"
+          },
+          {
+            "item": "One to One Dog Training",
+            "price": "£49.99",
+            "details": "Per session"
+          },
+          {
+            "item": "Free Phone Consult",
+            "price": "Free",
+            "details": "Complimentary phone consultation to choose a training program"
+          },
+          {
+            "item": "Membership Half Days",
+            "price": "£275/month",
+            "details": "AM or PM; +£25 for large dogs; includes hot towel wash and monthly grooming"
+          },
+          {
+            "item": "Membership Full Days — Tier 1",
+            "price": "£375/month",
+            "details": "+£25 for large dogs; free pickups, grooming, 1 free training session monthly"
+          },
+          {
+            "item": "Membership Full Days — Tier 2",
+            "price": "£750 bi-monthly",
+            "details": "No large-dog surcharge; free full grooming and 4 free training sessions per cycle"
+          },
+          {
+            "item": "Dog Grooming Subscription",
+            "price": "£25/month",
+            "details": "One maintenance or full groom monthly plus free nail clipping"
+          },
+          {
+            "item": "Dog Grooming",
+            "price": "From £25",
+            "details": "Full grooms, massage, teeth cleaning; starting price"
+          }
+        ],
+        "ctas": [
+          "Book Appointment (header) -> https://app.acuityscheduling.com/schedule.php?owner=13914499",
+          "Book Appointment (Dog Day School section) -> https://app.acuityscheduling.com/schedule.php?owner=13914499",
+          "Call Us Now (Dog Training) -> tel:01424300668",
+          "Find out more (Comprehensive Puppy Training) -> /intensive-dog-training",
+          "Find out more (Intensive Dog Training) -> /intensive-dog-training",
+          "Find out more (Board & Train) -> /dog-boarding-school",
+          "Find out more (Dog Day School) -> /dog-day-school",
+          "Find out more (Puppy Training Classes) -> /puppy-training-classes",
+          "Find out more (Dog Grooming) -> https://fairytailsdoggrooming.co.uk/",
+          "Find out more (Dog Boarding) -> /boarding-information",
+          "Book Puppy Classes -> https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469464",
+          "Book Dog Training Classes -> https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469467",
+          "Book 1to1 Training -> https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=51989230",
+          "Book a Consult (free phone consult) -> https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=56694430",
+          "Book Appointment (Grooming Subscription) -> https://thefairytailsdoggrooming.as.me/schedule.php",
+          "Book Appointment (Dog Grooming) -> https://thefairytailsdoggrooming.as.me/schedule.php",
+          "Book Appointment (Dog Boarding) -> https://app.acuityscheduling.com/schedule.php?owner=13914499",
+          "Contact us (repeated across nearly every service/membership card) -> /contact",
+          "Contact Us (Help and Advice) -> tel:07842116216",
+          "Puppy Course - DIY download -> /puppycourse",
+          "WhatsApp -> https://wa.me/4407842116216",
+          "WhatsApp (footer) -> https://wa.me/01424300668 (note: malformed number — missing country code, likely a bug to fix in rebuild)",
+          "Phone -> 07842 116216",
+          "Phone (footer) -> 01424 300668",
+          "Email -> info@thefairytails.co.uk",
+          "Employee Login -> /staff-resources"
+        ],
+        "integrations": [
+          "Acuity Scheduling — main booking (app.acuityscheduling.com/schedule.php?owner=13914499, with appointmentType variants 51989230 and 56694430)",
+          "Acuity Scheduling — catalog/cart links for class purchases (catalog.php?owner=13914499&action=addCart, ids 1469464 and 1469467)",
+          "Acuity Scheduling — separate grooming-business scheduler (thefairytailsdoggrooming.as.me/schedule.php)",
+          "WhatsApp click-to-chat links (wa.me)"
+        ],
+        "internalLinks": [
+          "/intensive-dog-training",
+          "/puppy-training-classes",
+          "/boarding-information",
+          "/puppycourse",
+          "/staff-resources"
+        ],
+        "notes": "Homepage is live (no 404/redirect). It is a long single-page layout: nav items 'Training Plans' and 'Membership Plans' are same-page anchors (/#Trainingplans, /#MembershipPlans), so the rebuild needs those anchor IDs preserved or redirected. Five internal pages were found that are NOT in the known nav list: /intensive-dog-training, /puppy-training-classes, /boarding-information, /puppycourse, /staff-resources (employee login). 'Dog Grooming' in the nav points to a separate external site (fairytailsdoggrooming.co.uk) with its own Acuity scheduler (thefairytailsdoggrooming.as.me). Two phone numbers in use: 07842 116216 (mobile/WhatsApp/help line) and 01424 300668 (landline, footer + training CTA). The footer WhatsApp link https://wa.me/01424300668 is malformed (lacks the 44 country code and uses the landline) — flag for fixing in the rebuild. Large-dog surcharges are a recurring pricing pattern (+£300 on training programs, +£25 on monthly memberships). The 'Dog Shop' section mentions an Adventure Dog retail partnership with free local same-day delivery but no shop URL was captured. Location copy: Hastings Country Park, ample parking, free local pickup/drop-off."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/dog-boarding-school",
+        "exists": true,
+        "title": "The Fairy Tails Dog Boarding School (Residential Dog Training / Board & Train)",
+        "sections": [
+          {
+            "heading": "Residential Dog Training",
+            "summary": "Intro to the intensive board-and-train programme: dogs live with staff for several weeks of behaviour modification, positioned as a 'boot camp' style residential service."
+          },
+          {
+            "heading": "A boarding school for dogs and puppies",
+            "summary": "Frames the service as a boarding school suitable for both puppies and adult dogs needing training."
+          },
+          {
+            "heading": "Why choose The Fairy Tails?",
+            "summary": "Three selling points: positive-reinforcement environment (no aversive tools), staff expertise, and a no-kennels home-based care model."
+          },
+          {
+            "heading": "Is it suitable for all dogs?",
+            "summary": "Eligibility breakdown: puppies from 12-16 weeks need ~4 weeks; adult dogs 16+ weeks need 8 weeks minimum; rescue dogs assessed case-by-case."
+          },
+          {
+            "heading": "Our Limitations!",
+            "summary": "Honest expectations-setting: fundamental character traits (e.g. anxious/shy temperament) cannot be completely altered by training."
+          },
+          {
+            "heading": "Issues we routinely deal with",
+            "summary": "List of ~12 behavioural problems handled, including lead pulling, reactivity, biting, crate training, and hyperactivity."
+          },
+          {
+            "heading": "Training Regime",
+            "summary": "Week-by-week programme outline: settling in (week 1), basics (week 2), specialisation (weeks 5-7), transition (weeks 8-9), plus a mandatory break."
+          },
+          {
+            "heading": "Just some of our lovely doggy clients!",
+            "summary": "Testimonial/client showcase carousel with four items featuring past doggy clients."
+          },
+          {
+            "heading": "Boarding Dog Training Cycles",
+            "summary": "Two infographic images depicting the in-facility and outdoor training environments/cycles."
+          },
+          {
+            "heading": "Please note - your involvement in dog training is the most important part",
+            "summary": "Emphasises that owner follow-through after the programme is essential for lasting results."
+          },
+          {
+            "heading": "How to book your dog into the boarding school",
+            "summary": "Four-step booking workflow: contact, prioritise issues to work on, contract, then agreement and payment."
+          },
+          {
+            "heading": "List of items required for Boarding School",
+            "summary": "Detailed 22-item equipment checklist owners must supply, from crates to medications/supplements (Adaptil, Fortiflora, Nutri Calm)."
+          },
+          {
+            "heading": "Pricing",
+            "summary": "Two-tier pricing: puppy programme and adult behaviour programme, with a large-dog surcharge (exact figures in pricing field)."
+          },
+          {
+            "heading": "You are welcome to visit your dogs whenever you like",
+            "summary": "Open visit policy — owners may visit their dogs at any time during the stay."
+          },
+          {
+            "heading": "Training feedback",
+            "summary": "Daily reports plus body-cam recordings of every training session, stored on OneDrive with a shared access link for the owner. Exact copy: 'All our training sessions are recorded on the body cam; therefore, you will also receive the recording of the training sessions with your daily reports each day. Videos are stored and transferred onto one drive, and you will have access to the link.'"
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Boarding School for Puppies (Junior)",
+            "price": "£1,200",
+            "details": "Verbatim: '£1200 for 4 weeks'. Covers toilet training, obedience, prevention, socialisation. Puppies 12-16 weeks old."
+          },
+          {
+            "item": "Boarding School for Dogs (behaviour issues)",
+            "price": "£2,500",
+            "details": "Verbatim: '£2500 for 8 to 10 weeks'. Coaching and strategy-based behaviour-modification training for adult dogs (16+ weeks)."
+          },
+          {
+            "item": "Large dog surcharge",
+            "price": "+£300",
+            "details": "Verbatim: '+£300 for large dogs'. Applies to the 8-10 week adult programme."
+          }
+        ],
+        "ctas": [
+          "Book Appointment (nav) -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Contact Us (multiple placements) -> /contact",
+          "More Information (Training Regime section) -> /training-stages",
+          "Phone (header banner) -> 07842 116216",
+          "Phone (footer) -> 01424 300668",
+          "Email -> info@thefairytails.co.uk",
+          "WhatsApp -> https://wa.me/4407842116216 (note: malformed - has both 44 and leading 0)",
+          "WhatsApp (footer) -> https://wa.me/01424300668 (note: malformed - UK landline in national format, wa.me requires international format; likely broken link)",
+          "Dog Day School -> /dog-day-school",
+          "Dog Grooming -> https://fairytailsdoggrooming.co.uk/ (external sister site)"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking link to app.acuityscheduling.com/schedule.php?owner=13914499 - appears as a nav 'Book Appointment' link rather than an embedded iframe on this page)",
+          "Duda site builder (all images served from le-cdn.website-editor.net with signed URLs - the Duda CDN; indicates the current site platform)",
+          "OneDrive (referenced in copy as the delivery mechanism for body-cam training videos, not an embedded widget)"
+        ],
+        "internalLinks": [
+          "/training-stages (anchor text: 'More Information')",
+          "/staff-resources (anchor text: 'Employee Login', in footer)",
+          "/#Trainingplans (nav anchor link: 'Training Plans')",
+          "/#MembershipPlans (nav anchor link: 'Membership Plans')"
+        ],
+        "notes": "Page is live (no 404/redirect). No explicit H1; primary heading is the site name 'The Fairy Tails Dog Boarding School'. Verified pricing verbatim in a second fetch pass: '£1200 for 4 weeks' (puppies), '£2500 for 8 to 10 weeks' '+£300 for large dogs' (adults). Two phone numbers in use (07842 116216 mobile in banner, 01424 300668 landline in footer); both WhatsApp links are malformed for international format and should be fixed in the rebuild (correct forms: wa.me/447842116216 and wa.me/441424300668). No embedded booking iframe, map, chat widget, or form on this page - booking goes out via the Acuity link and /contact. Nav contains two home-page anchor links (/#Trainingplans, /#MembershipPlans) implying the homepage has Training Plans and Membership Plans sections the rebuild must preserve as anchor targets. Two internal pages NOT in the known list exist and must be inventoried separately: /training-stages and /staff-resources. Content-heavy page: ~15 sections, 22-item required-equipment checklist, week-by-week training regime, testimonial carousel, two infographic images, ~11+ photos all hosted on Duda CDN (le-cdn.website-editor.net) which will need re-hosting. Address and opening hours are NOT on this page. Training philosophy copy emphasises positive reinforcement / 'no aversive tools'."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/dog-day-school",
+        "exists": true,
+        "title": "The Fairy Tails Dog Day School",
+        "sections": [
+          {
+            "heading": "Navigation / Header",
+            "summary": "Logo plus main menu: Home, Board & Train, Training Plans, Dog Day School, Membership Plans, Dog Grooming (external domain), Contact, and a Book Appointment button (Acuity)."
+          },
+          {
+            "heading": "Hero Carousel",
+            "summary": "Five image slides with captions: Doggy Day School; love/care/happiness; friendship and fun; beautiful surroundings; located in Hastings Country Park."
+          },
+          {
+            "heading": "Where Dogs Learn That Learning Is Fun",
+            "summary": "Introductory pitch positioning the day school as a safe place for dogs to stay, play and learn, with emphasis on socialization and enrichment."
+          },
+          {
+            "heading": "Enrichment",
+            "summary": "Explains canine enrichment needs — feral dogs spend ~70% of the day hunting, so domestic dogs need structured stimulation; the school uses positive behaviour-modification methods."
+          },
+          {
+            "heading": "A Typical Day at Dog School",
+            "summary": "Full daily timetable: 7:30-9:00 pick-ups; 9:00-9:30 welcome; 10:30-12:30 walking/enrichment; 12:30-2:00 lunch; 2:00-3:00 rest; 3:00-3:30 obedience and reports; 3:30-4:30 end-of-day procedures; 4:45-7:00 drop-offs."
+          },
+          {
+            "heading": "Admission Criteria",
+            "summary": "Requires an introductory assessment plus 3 taster sessions; no intact males over 6 months (except training programs), no banned breeds, no dogs with allergies/medication/medical issues or risky behaviour; cannot accept dogs before 8am (HBC planning restriction); muzzling/isolation policy for at-risk dogs under H&S and Dangerous Dogs Act compliance."
+          },
+          {
+            "heading": "Why People Choose Us",
+            "summary": "Four icon-based reasons: regular buddies, local pick-ups/drop-offs, strict entrance criteria, and staff who love dogs."
+          },
+          {
+            "heading": "Getting Ready for Doggy Day School",
+            "summary": "Checklist of required items: collar with ID tag, appropriate collar, non-retractable lead, fitted harness, vaccination card, microchip, flea-treatment declaration, lunch box, blanket, plain boiled chicken treats only, signed registration form."
+          },
+          {
+            "heading": "Treatment Philosophy (How We Treat Your Dog)",
+            "summary": "Three subsections: dogs treated as family; calm and positive atmosphere; structured day combining play, lunch, nap, obedience work and trainer involvement."
+          },
+          {
+            "heading": "Day School Plans (Pricing)",
+            "summary": "Pricing table covering Full Day, Half Day AM, Half Day PM with large-dog surcharges and weekly-booking discounts, plus pick-up/drop-off and walking add-ons, and two monthly membership tiers."
+          },
+          {
+            "heading": "Confidence Building Sessions (CBS)",
+            "summary": "£15 per ~30-minute session with a recorded video provided; addresses lead pulling, focus, recall, obedience and town walks; availability dependent."
+          },
+          {
+            "heading": "CBS Image Gallery",
+            "summary": "Six-slide carousel showing CBS training scenarios: confidence building, beach training, focus work, bus travel, Day School Report and CBS Report examples."
+          },
+          {
+            "heading": "View Our Gallery",
+            "summary": "Short section linking to the site's /gallery page."
+          },
+          {
+            "heading": "Footer",
+            "summary": "Logo, links to Blog, Terms & Conditions, Gallery, Employee Login (/staff-resources), contact details (phone 01424 300668, email, WhatsApp), Facebook and Instagram links, and a Google Maps link."
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Full Day (8:00am-5:30pm)",
+            "price": "£24.99",
+            "details": "+£10 for large dogs; includes pick-up/drop-off, activities, commands, socialization; walking is a £2 add-on; £5 discount when booked weekly = £19.99/day"
+          },
+          {
+            "item": "Half Day AM",
+            "price": "£19.99",
+            "details": "+£5 for large dogs; includes pick-up/drop-off, walking, activities, socialization; £5 weekly-booking discount = £14.99"
+          },
+          {
+            "item": "Half Day PM",
+            "price": "£17.99",
+            "details": "+£5 for large dogs; includes pick-up/drop-off, walking, activities, socialization; £5 weekly-booking discount = £12.99"
+          },
+          {
+            "item": "Pick-up / Drop-off service",
+            "price": "£1 each way",
+            "details": "Optional local collection/return service"
+          },
+          {
+            "item": "Dog walking add-on",
+            "price": "£2",
+            "details": "Optional walk during the day-school day"
+          },
+          {
+            "item": "Membership — Full Days (Tier 1)",
+            "price": "£375/month",
+            "details": "+£25 large dogs; invoiced bookings, free walks, free bus, hot towel wash, monthly bath/brush/trim, priority boarding, half-price grooming, 1 free training session per month"
+          },
+          {
+            "item": "Membership — Half Days",
+            "price": "£275/month",
+            "details": "+£25 large dogs; invoiced bookings, free walks, free bus, hot towel wash, monthly bath/brush/trim, priority boarding, half-price grooming"
+          },
+          {
+            "item": "Confidence Building Session (CBS)",
+            "price": "£15/session",
+            "details": "~30 minutes, recorded video provided, availability dependent"
+          }
+        ],
+        "ctas": [
+          "Book Appointment (appears ~5x, header + in-page) -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Contact us (nav) -> /contact",
+          "Contact us (Admission Criteria section) -> / (links to home, possibly a mistake worth fixing in rebuild)",
+          "Admission Process -> /admission-process",
+          "View Gallery -> /gallery",
+          "Dog Grooming (nav) -> https://fairytailsdoggrooming.co.uk/ (separate external domain)",
+          "Phone (header) -> tel: 07842 116216",
+          "Phone (footer) -> tel: 01424 300668 (different number from header)",
+          "Email (appears ~3x) -> mailto:info@thefairytails.co.uk",
+          "WhatsApp -> https://wa.me/4407842116216",
+          "Facebook (footer) -> https://facebook.com/thefairytails",
+          "Instagram (footer) -> https://www.instagram.com/fairytails_dogschool/",
+          "Google Maps (footer) -> https://google.com/maps/place/ (placeholder — no location appended, broken/incomplete link)",
+          "Employee Login (footer) -> /staff-resources",
+          "Blog (footer) -> /blog",
+          "Terms and Conditions (footer) -> /terms-and-conditions"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking link/redirect, owner=13914499 — same Acuity account used elsewhere in the business)",
+          "WhatsApp click-to-chat (wa.me link)",
+          "Google Maps link (placeholder URL with no place appended)",
+          "Facebook page link",
+          "Instagram profile link"
+        ],
+        "internalLinks": [
+          "/admission-process",
+          "/staff-resources",
+          "/#Trainingplans (homepage anchor, nav item 'Training Plans')",
+          "/#MembershipPlans (homepage anchor, nav item 'Membership Plans')"
+        ],
+        "notes": "Page is live and content-rich; this is a service page, not a blog index. Items needing attention in a rebuild: (1) Two different phone numbers — 07842 116216 in header vs 01424 300668 in footer; WhatsApp uses the mobile (wa.me/4407842116216). (2) The Google Maps footer link is an empty placeholder (https://google.com/maps/place/ with nothing appended). (3) The 'Contact us' link inside the Admission Criteria section points to / instead of /contact. (4) Nav includes two homepage anchors (#Trainingplans, #MembershipPlans) and an external grooming domain (fairytailsdoggrooming.co.uk). (5) Two internal pages NOT in the known list were found: /admission-process and /staff-resources (employee login). (6) Booking runs entirely through Acuity Scheduling owner ID 13914499. (7) Operating constraint baked into copy: cannot accept dogs before 8am due to HBC planning restrictions; visits by appointment after 4pm weekdays without dogs. (8) Imagery: 5-slide hero carousel, 3-slide enrichment carousel, 6-slide CBS carousel (includes Day School Report / CBS Report screenshots), plus logo. No testimonials/reviews block on this page. Note: extraction was via a single WebFetch summarisation pass; exact wording of headings may differ slightly from the live DOM."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/contact",
+        "exists": true,
+        "title": "Contact The Fairy Tails K9 Centre",
+        "sections": [
+          {
+            "heading": "Contact intro / header",
+            "summary": "Invitation to get in touch for more information or to book a visit to the K9 Centre."
+          },
+          {
+            "heading": "Address",
+            "summary": "Physical location: 'Near the Milking Parlour, The Barn, Fairlight Place, Barley Lane, Hastings TN35 5DT', with a 'Find Us' Google Maps link."
+          },
+          {
+            "heading": "Opening Hours",
+            "summary": "'Mon to Fri 8.00 am - 5.30 pm', 'Sat to Sun CLOSED', plus a note that they close on Bank Holidays."
+          },
+          {
+            "heading": "Contact Details",
+            "summary": "Channel-by-channel contact directory: main phone/WhatsApp 01424 300668, text line 07842 116216, emergency 07517 405466, plus department-specific numbers (Ops Manager 07719 739556, Dog Grooming 07355 878680, Dog Training 07719 563524, Pick-up Enquiries 07803 357262) and two emails (info@ and opsmanager@thefairytails.co.uk) with a stated response time of 24 hours to 1 week."
+          },
+          {
+            "heading": "Meet some of The Fairy Tails team!",
+            "summary": "Photo gallery of staff — three images with no names, captions, or alt text identifying individuals."
+          },
+          {
+            "heading": "Send us a message",
+            "summary": "Native platform contact form (Duda/Website Editor built-in, not a third-party service) with Name, Email, Phone and Message fields; submission endpoint not exposed in markup."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "Book Appointment button -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Phone (main line) -> tel:01424300668",
+          "Email -> mailto:info@thefairytails.co.uk (also rendered as mailto:Info@thefairytails.co.uk)",
+          "Email (Ops Manager) -> mailto:Opsmanager@thefairytails.co.uk",
+          "WhatsApp -> https://wa.me/01424300668 (note: malformed — landline, not E.164 format)",
+          "WhatsApp (text line) -> https://wa.me/4407842116216 (note: malformed — has extra 0 after country code 44)",
+          "Text/SMS: 07842 116216 (displayed number, no explicit sms: href seen)",
+          "Emergency phone: 07517 405466 (displayed, no explicit tel: href seen)",
+          "Ops Manager phone: 07719 739556 (displayed)",
+          "Dog Grooming phone: 07355 878680 (displayed)",
+          "Dog Training phone: 07719 563524 (displayed)",
+          "Pick-up Enquiries phone: 07803 357262 (displayed)",
+          "Find Us -> https://maps.google.com/maps?q=The+Fairy+Tails+%28The+Barn%29%2C+Fairlight+Place+Hastings+Hastings+TN35+5DT+United+Kingdom (link only, no embedded map iframe)",
+          "'Send us a message' contact form submit (native platform form, Name/Email/Phone/Message)",
+          "Nav: Dog Grooming -> https://fairytailsdoggrooming.co.uk/ (external sister site)",
+          "Footer/social: Facebook -> https://facebook.com/thefairytails",
+          "Footer/social: Instagram -> https://www.instagram.com/fairytails_dogschool/"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking link, owner=13914499 — link out, not an iframe on this page)",
+          "Native Duda/Website Editor contact form (site hosted on Duda — assets served from le-cdn.website-editor.net, site ID e64cb898a4f84235bf192060ea474fc6)",
+          "Google Maps (plain link only, no embedded iframe)",
+          "WhatsApp wa.me deep links",
+          "No chat widget, cookie banner, or visible analytics scripts detected"
+        ],
+        "internalLinks": [
+          "/staff-resources (labelled 'Employee Login')",
+          "/#Trainingplans (nav anchor 'Training Plans' — section on homepage)",
+          "/#MembershipPlans (nav anchor 'Membership Plans' — section on homepage)"
+        ],
+        "notes": "Page is live and is the site's main contact hub. Site platform identified as Duda (le-cdn.website-editor.net asset CDN) — relevant for the rebuild since the contact form is a native Duda form whose submissions go to the platform, and will need replacing. Key data for rebuild: full address, hours incl. bank-holiday note, 8 distinct phone/text numbers split by department, 2 email addresses with stated response time, Acuity Scheduling owner ID 13914499. Both wa.me links look malformed (https://wa.me/01424300668 uses the landline with leading 0 and no country code; https://wa.me/4407842116216 keeps the 0 after +44 — correct form would be wa.me/447842116216), so WhatsApp CTAs may be broken on the live site — verify and fix in rebuild. No pricing on this page. New pages discovered beyond the known nav: /staff-resources, plus homepage anchors #Trainingplans and #MembershipPlans implying Training Plans and Membership Plans sections/offerings on the homepage. External sister site: fairytailsdoggrooming.co.uk (Dog Grooming nav item). Team section images have no alt text — capture names/roles from the client for the rebuild. This is not a blog index."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/blog",
+        "exists": true,
+        "title": "Dog Training Blogs and Dog Training Tips",
+        "sections": [
+          {
+            "heading": "Navigation header",
+            "summary": "Site-wide nav with links to Board & Train (/dog-boarding-school), Training Plans (/#Trainingplans), Dog Day School (/dog-day-school), Membership Plans (/#MembershipPlans), Dog Grooming (external site), Contact, and a Book Appointment button (Acuity Scheduling)."
+          },
+          {
+            "heading": "Contact strip",
+            "summary": "Displays phone 07842 116216, email info@thefairytails.co.uk, and a WhatsApp contact option. Footer additionally shows a second phone number 01424 300668 with its own WhatsApp link."
+          },
+          {
+            "heading": "Logo / branding",
+            "summary": "The Fairy Tails K9 Centre logo, linked to the homepage (/)."
+          },
+          {
+            "heading": "Blog posts index",
+            "summary": "Chronological list of blog post entries (19 distinct posts found, dated Apr 2020 to Aug 2025), each with a featured image, title, publication date, and short description/excerpt, linking to individual post pages at root-level slugs (not under /blog/)."
+          },
+          {
+            "heading": "Footer",
+            "summary": "Links to Blog, Terms and conditions, Gallery, and an Employee Login link pointing to /staff-resources, plus the secondary phone/WhatsApp contact details."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "Book Appointment -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Contact us -> /contact",
+          "Phone (primary, clickable tel link) -> 07842 116216",
+          "Phone (footer, clickable tel link) -> 01424 300668",
+          "Email -> mailto:info@thefairytails.co.uk",
+          "WhatsApp (primary) -> https://wa.me/4407842116216",
+          "WhatsApp (footer) -> https://wa.me/01424300668 (note: malformed wa.me number - not in international format)",
+          "Dog Grooming -> https://fairytailsdoggrooming.co.uk/ (external sister site)",
+          "Employee Login -> /staff-resources"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking iframe/link, owner=13914499)",
+          "WhatsApp click-to-chat links (wa.me)"
+        ],
+        "internalLinks": [
+          "/staff-resources (Employee Login)",
+          "/#Trainingplans (homepage anchor - Training Plans nav item)",
+          "/#MembershipPlans (homepage anchor - Membership Plans nav item)",
+          "/archiestory — post: Why Dog Training Guarantees Can Be a Red Flag – The Truth About Quick Fixes and Archie's Story (Aug 10, 2025)",
+          "/training-is-not-working — post: Training is not working? (Oct 16, 2024)",
+          "/board-and-train-intensive-dog-training-program — post: Board and Train (Intensive Dog Training) Program (Oct 12, 2024)",
+          "/dog-parks-in-london-a-dog-s-guide-to-the-city-s-green-spaces — post: Dog Parks in London: A Dog's Guide to the City's Green Spaces (Dec 17, 2023)",
+          "/puppy-daycare-benefits-shaping-happy-confident-canines — post: Puppy Daycare Benefits: Shaping Happy, Confident Canines (Nov 22, 2023)",
+          "/building-a-relationship-with-your-dog — post: Building a relationship with your dog (Feb 11, 2023)",
+          "/certified-dog-trainer — post: Certified Dog Trainer? (Feb 8, 2023)",
+          "/dogs-reacting-to-the-noises-and-activities-that-occur-by-the-door — post: Dogs reacting to the noises and activities that occur by the door (Dec 13, 2022)",
+          "/frustration-in-dogs-dog-training — post: Frustration in dogs - dog training (Nov 6, 2022)",
+          "/fear-and-anxiety-in-dogs — post: Fear and anxiety in dogs (Oct 20, 2022)",
+          "/force-free-trainers-v-balanced-dog-trainers — post: Force-free trainers v Balanced dog trainers (Sep 10, 2022)",
+          "/how-to-crate-train-your-dog — post: How to crate train your dog (Apr 11, 2022)",
+          "/fear-anxiety-humans-and-dogs-with-cer — post: Fear anxiety - humans and dogs with CER (Apr 3, 2022)",
+          "/dog-barking — post: Dog Barking (Mar 20, 2022)",
+          "/the-importance-of-toys-in-your-dog-s-life — post: The importance of toys in your dog's life (Jan 20, 2022)",
+          "/how-to-desensitise-your-pet-to-fireworks — post: How to desensitise your pet to fireworks (Dec 27, 2021)",
+          "/why-dog-grooming-is-important — post: Why dog grooming is important (Apr 17, 2020)",
+          "/why-your-dog-is-pulling-on-the-leash — post: Why your dog is pulling on the leash (Apr 16, 2020)",
+          "/15-food-items-to-avoid — post: 15 Food items to avoid (Apr 15, 2020)"
+        ],
+        "notes": "Page exists and is the blog index (\"Dog Training Blogs and Dog Training Tips\") for The Fairy Tails K9 Centre. Key rebuild facts: (1) Blog post URLs live at the site ROOT (e.g. /archiestory, /dog-barking), NOT under /blog/ — a rebuild must preserve or 301-redirect these root-level slugs to protect SEO. (2) The page body itself contains no pricing; nav references Training Plans and Membership Plans as homepage anchors (/#Trainingplans, /#MembershipPlans), implying pricing lives on the homepage. (3) Booking is via Acuity Scheduling (owner=13914499). (4) Two contact identities exist: 07842 116216 (primary, with correctly formed wa.me link https://wa.me/4407842116216 — though even this has a stray leading 0 after 44) and 01424 300668 (footer) whose WhatsApp link https://wa.me/01424300668 is malformed (UK local format, not international 44...) and likely broken — flag for fix in rebuild. (5) \"Dog Grooming\" nav item points to a separate external domain fairytailsdoggrooming.co.uk. (6) Hidden page discovered: /staff-resources (Employee Login) — not in the known nav list. (7) The fetched summary said \"20 blog post entries\" but only 19 distinct posts/URLs were enumerated; count discrepancy may be a summarization artifact or one post may have been missed (possibly a duplicate-styled entry). All 19 enumerated post URLs are listed in internalLinks with titles and dates."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/gallery",
+        "exists": true,
+        "title": "The Fairy Tails K9 Centre Gallery",
+        "sections": [
+          {
+            "heading": "Gallery Introduction",
+            "summary": "Single intro line: \"Here are some lovely pictures of just some of our doggy clients living their best life!\" followed by the photo gallery grid."
+          },
+          {
+            "heading": "Gallery grid (8 placeholder items)",
+            "summary": "Eight gallery cards still showing the site-builder template text \"Add a title\" / \"Write a short description\" — none have real captions. Only 2 actual images are present (one WhatsApp-sourced photo and one ChatGPT-generated image); the rest are unfilled placeholders. A \"View more\" button exists but its destination is unclear/not set. The page is clearly unfinished."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "Book Appointment (header) -> https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Book Appointment (footer) -> mailto:mymail@mailservice.com — BROKEN template placeholder email, never updated; should point to Acuity or real email in rebuild",
+          "Phone -> 07842 116216 (mobile) and 01424 300668 (landline)",
+          "Email -> info@thefairytails.co.uk",
+          "WhatsApp -> https://wa.me/4407842116216 (note: number format includes a stray 0 after 44 — wa.me expects 447842116216) and a second malformed link https://wa.me/01424300668 (landline in non-international format; almost certainly broken)",
+          "View more (gallery button) -> destination not set/unclear",
+          "Footer social icons -> Facebook, Instagram, WhatsApp, Google Maps (full URLs not exposed in fetched markdown)"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking link to app.acuityscheduling.com, owner=13914499 — link-out, not confirmed as an embedded iframe on this page)",
+          "WhatsApp click-to-chat links (wa.me)",
+          "Google Maps link (footer social icon)",
+          "Facebook and Instagram social icons"
+        ],
+        "internalLinks": [
+          "/staff-resources (footer \"Employee Login\" — NOT in the known nav list)",
+          "/#Trainingplans (nav \"Training Plans\" — anchor on the home page, not a separate page)",
+          "/#MembershipPlans (nav \"Membership Plans\" — anchor on the home page, not a separate page)"
+        ],
+        "notes": "Page exists (no 404/redirect) but is effectively unfinished: 8 gallery cards still carry the website-builder default text \"Add a title\" / \"Write a short description\", with only 2 real images (one a WhatsApp photo, one ChatGPT-generated). No prices anywhere on the page. Key rebuild defects to fix: (1) footer Book Appointment points at the template placeholder mailto:mymail@mailservice.com; (2) both WhatsApp links are malformed (wa.me/4407842116216 has an extra 0; wa.me/01424300668 uses a landline in national format); (3) the View more gallery button has no clear destination. Known nav pages all present (Home /, Board & Train /dog-boarding-school, Dog Day School /dog-day-school, Contact /contact, Blog /blog, Gallery /gallery, Terms /terms-and-conditions) plus the extra /staff-resources Employee Login page and two home-page anchors (#Trainingplans, #MembershipPlans). No cookie banner, chat widget, or visible analytics detected in the fetched content. For the rebuild, this page needs real photo content sourced (or the page dropped) since current content is ~90% placeholder."
+      },
+      {
+        "url": "https://www.thefairytails.co.uk/terms-and-conditions",
+        "exists": true,
+        "title": "The Fairy Tails K9 Centre Terms and Conditions",
+        "sections": [
+          {
+            "heading": "Terms and conditions (intro) / Our quality policy",
+            "summary": "Opening statement of commitment to animal welfare and service quality, delivered through staff training, veterinary partnerships, ongoing knowledge development and continuous improvement."
+          },
+          {
+            "heading": "For Dog Grooming terms and conditions please click below",
+            "summary": "Short pointer section directing grooming clients to the separate grooming site's T&Cs at fairytailsdoggrooming.co.uk/terms-and-conditions/."
+          },
+          {
+            "heading": "Our dog care policy",
+            "summary": "Framing copy introducing the terms that govern daycare enrolment, client responsibilities, liability limits and service conditions."
+          },
+          {
+            "heading": "DOG DAYCARE TERMS & CONDITIONS (the Agreement)",
+            "summary": "The core legal document: a ~36-clause agreement covering enrolment acceptance, guardian authority, financial responsibility, liability exemptions and cap, transportation, health/vaccination requirements and dispute resolution."
+          },
+          {
+            "heading": "OPENING HOURS",
+            "summary": "States normal opening hours: 8am to 5.30pm Monday to Friday, excluding Bank Holidays and Public Holidays."
+          },
+          {
+            "heading": "FEES",
+            "summary": "Fees are as displayed on the website; outside-hours services available by prior arrangement at rates agreed in advance; late collection charges apply (clause 18)."
+          },
+          {
+            "heading": "COLLECTED DOGS",
+            "summary": "Procedure for dogs not collected by closing time: contact attempts to the client/emergency contacts, with possible relocation of the dog to overnight care."
+          },
+          {
+            "heading": "FORCE MAJEURE",
+            "summary": "Neither party is liable for delay or failure caused by circumstances beyond reasonable control."
+          },
+          {
+            "heading": "ENTIRE AGREEMENT",
+            "summary": "The agreement constitutes the entire agreement between the parties and supersedes all previous agreements."
+          },
+          {
+            "heading": "VARIATION",
+            "summary": "Standard boilerplate: changes to the agreement must be agreed/made per the stated variation procedure."
+          },
+          {
+            "heading": "WAIVER",
+            "summary": "Failure to enforce a right is not a waiver of that right."
+          },
+          {
+            "heading": "SEVERANCE",
+            "summary": "If a clause is found invalid, the remainder of the agreement stays in force."
+          },
+          {
+            "heading": "NOTICES",
+            "summary": "How formal notices between the parties must be given."
+          },
+          {
+            "heading": "THIRD PARTIES",
+            "summary": "No third-party rights under the agreement."
+          },
+          {
+            "heading": "INTERPRETATION",
+            "summary": "Definitions/construction rules for reading the agreement."
+          },
+          {
+            "heading": "GOVERNING LAW & JURISDICTION",
+            "summary": "Agreement governed by the law of England & Wales with that jurisdiction for disputes."
+          },
+          {
+            "heading": "Why sometimes training a dog takes time at The Fairy Tails",
+            "summary": "Educational copy explaining that training duration varies and complex cases require patience from staff and owners."
+          },
+          {
+            "heading": "Stages of learning and behaviour development in a dog (Acquisition / Fluency-Maintenance / Generalisation / Adaptation)",
+            "summary": "Four sub-sections each describing one stage of canine learning: acquiring a new behaviour, building fluency and maintaining it, generalising it to new environments, and adapting it to real-world situations."
+          }
+        ],
+        "pricing": [
+          {
+            "item": "Late Collection Fee",
+            "price": "£5 per 30 minutes (or part thereof)",
+            "details": "Charged when a dog is not collected within normal opening hours (clause 18). Verbatim: 'a Late Collection Fee of £5 will be incurred by the client for every 30 minutes, or part thereof'."
+          },
+          {
+            "item": "Late Payment administration charge",
+            "price": "£25",
+            "details": "Verbatim: 'Late payment of fees may result in an administration charge of £25...' (clause 19)."
+          },
+          {
+            "item": "Late Payment interest",
+            "price": "5% above Bank of England Base Rate",
+            "details": "Interest on outstanding amounts, in addition to the £25 admin charge (clause 19)."
+          },
+          {
+            "item": "Liability cap",
+            "price": "£1,000 or total fees paid, whichever is lower",
+            "details": "Verbatim: 'overall liability to the Client...shall be capped at either £1,000 or the total fees paid under the Agreement, whichever amount is lower' (clause 3.3)."
+          },
+          {
+            "item": "Outside-hours services",
+            "price": "By prior arrangement (no rate stated)",
+            "details": "Rates to be agreed in advance (clause 16). Daycare fees themselves are 'as displayed on the website' — no service price list on this page."
+          }
+        ],
+        "ctas": [
+          "Phone (header/main): 07842 116216 -> tel:07842116216",
+          "Phone (footer): 01424 300668 -> tel:01424300668",
+          "Email: info@thefairytails.co.uk -> mailto:info@thefairytails.co.uk",
+          "WhatsApp icon (main): https://wa.me/4407842116216 (note: number malformed — includes leading 0 after 44; should be wa.me/447842116216)",
+          "WhatsApp icon (footer): https://wa.me/01424300668 (malformed — landline with no country code; almost certainly broken)",
+          "Book Appointment: https://app.acuityscheduling.com/schedule.php?owner=13914499 (Acuity Scheduling)",
+          "Grooming terms and conditions button: https://fairytailsdoggrooming.co.uk/terms-and-conditions/ (external grooming site)",
+          "Nav - Dog Grooming: https://fairytailsdoggrooming.co.uk/ (external)",
+          "Nav - Training Plans: /#Trainingplans (home-page anchor)",
+          "Nav - Membership Plans: /#MembershipPlans (home-page anchor)",
+          "Footer - Facebook: https://facebook.com/thefairytails",
+          "Footer - Instagram: https://www.instagram.com/fairytails_dogschool/",
+          "Footer - Google Maps icon: google.com/maps/place/ link to location",
+          "Footer - Employee Login: /staff-resources"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking link to app.acuityscheduling.com/schedule.php?owner=13914499 — appears as a link/button on this page rather than an embedded iframe)",
+          "WhatsApp click-to-chat links (wa.me)",
+          "Google Maps (icon link to place listing; no embedded map iframe detected on this page)",
+          "Facebook / Instagram (icon links only, no embedded feeds detected)"
+        ],
+        "internalLinks": [
+          "/staff-resources (footer 'Employee Login' — NOT in the known page list; a rebuild must account for this page)",
+          "/#Trainingplans (nav anchor into a home-page section — implies the homepage has a Training Plans section/anchor)",
+          "/#MembershipPlans (nav anchor into a home-page section — implies the homepage has a Membership Plans section/anchor)"
+        ],
+        "notes": "Page is live, not a 404. It is a long legal/T&C page, not a blog index. Key rebuild facts: (1) Grooming is run on a SEPARATE domain (fairytailsdoggrooming.co.uk) with its own T&Cs — this page explicitly delegates grooming terms there, so the rebuild must keep daycare and grooming terms separated. (2) One unknown internal page discovered: /staff-resources (Employee Login). (3) Nav contains two homepage anchor targets (#Trainingplans, #MembershipPlans) the new homepage must preserve or redirect. (4) Both WhatsApp links are malformed (wa.me/4407842116216 keeps the leading 0; wa.me/01424300668 is a landline with no country code) — fix in rebuild to wa.me/447842116216. (5) Business data embedded in copy worth carrying over: opening hours 8am-5.30pm Mon-Fri excl. bank/public holidays; £5/30min late collection; £25 late-payment admin + 5% over BoE base rate; £1,000 liability cap; England & Wales governing law; Acuity owner ID 13914499. (6) No prices for the actual services are on this page ('fees as displayed on the website'), so pricing lives on other pages. (7) The 'Why training takes time' section (four learning stages) is marketing/educational copy oddly placed on a legal page — consider relocating it in the rebuild."
+      },
+      {
+        "url": "https://fairytailsdoggrooming.co.uk/",
+        "exists": true,
+        "title": "Home - The Fairy Tails Dog Grooming",
+        "sections": [
+          {
+            "heading": "Hero carousel (Hastings Dog Groomers / Caring for your best friend)",
+            "summary": "Two-slide hero with headlines 'Hastings Dog Groomers', 'Caring for your best friend' and 'Dog Grooming to suit your needs', promoting grooming tailored to each dog. Buttons: 'Book Appointment' (Acuity) and 'Know More' (/who-we-are/)."
+          },
+          {
+            "heading": "Who We Are",
+            "summary": "Intro to the business philosophy: happy dogs first, professional grooming matched to the owner's preferences. Links to /who-we-are/ via 'Know More'."
+          },
+          {
+            "heading": "Door to door service",
+            "summary": "Describes a complimentary local pick-up and drop-off service at times convenient to customers."
+          },
+          {
+            "heading": "Some of our specialist services at a glance",
+            "summary": "Overview block directing readers to the full service menu (/services/) and noting they accommodate specific requests."
+          },
+          {
+            "heading": "Teeth cleaning",
+            "summary": "Vibration- and sound-free ultrasonic teeth cleaning for canine dental hygiene."
+          },
+          {
+            "heading": "Doggy massage",
+            "summary": "Massage benefits including coat improvement and reduced matting/itchiness."
+          },
+          {
+            "heading": "Puppy introduction",
+            "summary": "A familiarisation visit introducing puppies to the grooming routine."
+          },
+          {
+            "heading": "Dematting",
+            "summary": "Service addressing matted coats to restore the dog's comfort."
+          },
+          {
+            "heading": "Hand Stripping",
+            "summary": "Traditional technique for wire-coated breeds, revealing the coat's natural texture and colour."
+          },
+          {
+            "heading": "Satisfied customers",
+            "summary": "Three site testimonials: Sarah, Hastings (dogs returned happy and smelling lovely); Kadi, Hastings (only person trusted with Boo); Laura, Hastings (great job on Hugo, will return)."
+          },
+          {
+            "heading": "Google Reviews",
+            "summary": "Embedded Google reviews widget showing a 4.9-star rating from 61 reviews, with four featured reviews (Tonita Shale, Tammy, Heather Wareham, Caroline Lawrence)."
+          },
+          {
+            "heading": "Review us",
+            "summary": "Block linking out to review platforms, primarily 'See our Reviews on Google' pointing to the Google Local reviews page."
+          },
+          {
+            "heading": "Footer / contact strip",
+            "summary": "Contact details (phone 01424 300668, email info@thefairytails.co.uk, address 15 Mount Pleasant Rd, Hastings), WhatsApp link, social icons (Facebook, Instagram, TikTok), nav links, and copyright (c) 2026 The Fairy Tails Dog Grooming."
+          }
+        ],
+        "pricing": [],
+        "ctas": [
+          "Book Appointment -> https://thefairytailsdoggrooming.as.me/schedule.php (Acuity Scheduling)",
+          "Know More -> https://fairytailsdoggrooming.co.uk/who-we-are/",
+          "See our full range of services here -> https://fairytailsdoggrooming.co.uk/services/",
+          "See our Reviews on Google -> https://search.google.com/local/reviews?placeid=ChIJV3P8-VAb30cRHoBgRmxCYIM",
+          "Get in touch -> https://fairytailsdoggrooming.co.uk/contact/",
+          "Phone: 01424 300668",
+          "Email: info@thefairytails.co.uk",
+          "WhatsApp -> https://api.whatsapp.com/send?phone=4407842116216",
+          "Facebook -> https://www.facebook.com/thefairytailsdoggrooming",
+          "Instagram -> https://www.instagram.com/thefairytailsgroomers/",
+          "TikTok -> https://www.tiktok.com/@thefairytailsdoggrooming"
+        ],
+        "integrations": [
+          "Acuity Scheduling (booking, thefairytailsdoggrooming.as.me/schedule.php — linked/embedded as the Book Appointment flow)",
+          "Google Reviews embed (4.9 stars, 61 reviews, place ID ChIJV3P8-VAb30cRHoBgRmxCYIM)",
+          "WhatsApp click-to-chat link (api.whatsapp.com, phone 4407842116216)",
+          "WordPress (wp-content asset paths indicate a WordPress build)",
+          "Social embeds/links: Facebook, Instagram, TikTok"
+        ],
+        "internalLinks": [
+          "/who-we-are/",
+          "/services/"
+        ],
+        "notes": "Page loads fine (no 404/redirect). This is the marketing homepage of the GROOMING site (fairytailsdoggrooming.co.uk), not a blog index. Its nav differs from the known list: it uses /who-we-are/ (About) and /services/ instead of /dog-boarding-school and /dog-day-school — those two known paths do not appear on this page, suggesting the known nav belongs to a sibling/newer site. No prices and no opening hours anywhere on the page; pricing presumably lives on /services/ or inside the Acuity scheduler. Contact: 01424 300668, info@thefairytails.co.uk, 15 Mount Pleasant Rd, Hastings; WhatsApp number in link is 4407842116216 (note the malformed leading 44+0 — worth fixing to 447842116216 in the rebuild). Footer copyright: 2026. Key rebuild assets: Acuity booking URL, Google place ID for reviews, three on-site testimonials plus four Google reviews quoted above."
+      }
+    ],
+    "seo": {
+      "topKeywords": [],
+      "topPages": [],
+      "domainRating": 0.4,
+      "notes": "AHREFS DATA LARGELY UNAVAILABLE. The Ahrefs MCP server is connected, but the linked Ahrefs subscription has no API v3 access: all Site Explorer endpoints (site-explorer-domain-rating, site-explorer-backlinks-stats, site-explorer-metrics, site-explorer-organic-keywords, site-explorer-top-pages) and even subscription-info-limits-and-usage returned MCP error -32001 \"Insufficient plan\". These endpoints require an Ahrefs plan with API units (Enterprise / API add-on). topKeywords and topPages are therefore empty, and organic traffic and referring-domain counts could not be retrieved. The ONLY datapoint obtainable was the free public domain-rating endpoint: thefairytails.co.uk DR = 0.4 as of 2026-06-11 (effectively DR 0). IMPLICATIONS FOR THE REBUILD: a DR of ~0 means the domain carries almost no backlink equity, so the ranking value (if any) is overwhelmingly from on-page content, local relevance, and branded searches rather than links — but this could not be confirmed with keyword/page data. RECOMMENDED NEXT STEPS to build the redirect map without Ahrefs: (1) pull Google Search Console performance data (queries + pages, last 12-16 months) for the property — that is ground truth for which URLs and keywords actually earn impressions/clicks and is free; (2) crawl the current live site (e.g. sitemap.xml + a simple crawler) to inventory every indexed URL so each one gets a 301 to its new equivalent; (3) check Google Business Profile, since for a local dog-care business most discovery traffic is likely Maps/local pack rather than organic web. If Ahrefs data is genuinely needed, upgrade the Ahrefs plan to one with API access or export keyword/top-pages reports manually from the Ahrefs web UI."
+    },
+    "tech": {
+      "platform": "Duda website builder, white-labelled/hosted through IONOS (\"IONOS MyWebsite Now / Website Builder\", which is Duda under the hood). Evidence: sole external runtime script https://static-cdn.website-editor.net/mnlt/production/6507/_dm/s/rt/dist/scripts/d-js-one-runtime-unified-desktop.min.js; 64 references to website-editor.net (static-cdn + le-cdn asset CDNs); Duda runtime globals window.rtCommonProps and dmAPI; productId: 'DM_DIRECT'; Duda site ID e64cb898a4f84235bf192060ea474fc6 in all asset paths; response headers Server: nginx with X-WS-* rate-limit headers, Speculation-Rules from static-cdn.website-editor.net, and CSP frame-ancestors allowing *.ionos.* / *.website-editor.net / *.mywebsite-editor.com (the IONOS/Duda editor domains). One reference to app.multiscreenstore.com (Duda's native store module).",
+      "scripts": [
+        "Google Tag Manager — container GTM-W93L9XK5 (inline snippet + noscript iframe on every page)",
+        "Inside GTM container: Google Ads conversion tracking AW-822632954 with 3 conversion labels (PiIkCLqj_6YaEPrDoYgD, ZEZfCLSj_6YaEPrDoYgD, qzL5CLej_6YaEPrDoYgD) plus a conversion linker (__gclidw). NO GA4 tag exists in the container",
+        "Meta/Facebook Pixel — fbq('init','612955530110673') + PageView, with noscript fallback img to facebook.com/tr (site-wide)",
+        "NO standalone GA4 (no G-XXXX measurement ID anywhere on-page or in the GTM container; only a Duda feature flag 'sites.google.analytics.gtag' = true). Traffic stats are presumably Duda/IONOS built-in only",
+        "Acuity Scheduling — NOT an iframe embed; plain links/buttons to app.acuityscheduling.com, owner=13914499. Direct booking: schedule.php?appointmentType=51989230 and 56694430; cart links: catalog.php?action=addCart&id=1469464 and 1469467. Referenced on every page (8 refs on home, 6 on dog-day-school)",
+        "WhatsApp click-to-chat links: wa.me/447842116216 (valid) plus two MALFORMED ones — wa.me/01424300668 (landline with leading 0) and wa.me/4407842116216 (44+0) — these will not open a chat",
+        "Duda platform runtime: d-js-one-runtime-unified-desktop.min.js (the only external <script src> on the page)",
+        "No chat widget scripts (no tawk.to/Crisp/Intercom), no Hotjar, no Microsoft Clarity, no Calendly/Jotform embeds found on any sampled page"
+      ],
+      "seoMeta": "Generally well-maintained for a builder site. Homepage: <title>The Fairy Tails K9 Centre</title>; meta description (\"A team of qualified dog trainers, dog behaviourists, dog nutritionists, and dog groomers is based in Hastings, East Sussex.\"); legacy meta keywords tag; canonical https://www.thefairytails.co.uk/; full og: set (type/url/title/description/image) and twitter:card/title/description/image. CAVEAT: og:image and twitter:image point to a SIGNED, EXPIRING le-cdn.website-editor.net URL (Expires≈July 2026) — link previews will break on rebuild/expiry. Schema.org JSON-LD on homepage only: (1) WebSite and (2) LocalBusiness {name \"The Fairy Tails\", addressLocality Hastings, postalCode TN35 5DT, geo 50.8708/0.62896, tel 01424300668, email info@thefairytails.co.uk, sameAs WhatsApp + facebook.com/thefairytails} — but streetAddress is junk (\"The Fairy Tails\") and no openingHours/priceRange; subpages have NO JSON-LD. Subpages each have unique titles + meta descriptions (verified on contact, dog-day-school, dog-boarding-school, intensive-dog-training, gallery, blog). sitemap.xml present (32 URLs, with lastmod/priority). robots.txt present, fully permissive (User-agent: * with no Disallow) and declares the sitemap.",
+      "allUrls": [
+        "https://www.thefairytails.co.uk/resources-collection",
+        "https://www.thefairytails.co.uk/terms-and-conditions",
+        "https://www.thefairytails.co.uk/puppy-training-classes",
+        "https://www.thefairytails.co.uk/puppy-classes",
+        "https://www.thefairytails.co.uk/internal-management-resources",
+        "https://www.thefairytails.co.uk/intensive-dog-training",
+        "https://www.thefairytails.co.uk/blog",
+        "https://www.thefairytails.co.uk/dog-boarding-school",
+        "https://www.thefairytails.co.uk/puppycourse",
+        "https://www.thefairytails.co.uk/gallery",
+        "https://www.thefairytails.co.uk",
+        "https://www.thefairytails.co.uk/contact",
+        "https://www.thefairytails.co.uk/dog-day-school",
+        "https://www.thefairytails.co.uk/archiestory",
+        "https://www.thefairytails.co.uk/training-is-not-working",
+        "https://www.thefairytails.co.uk/board-and-train-intensive-dog-training-program",
+        "https://www.thefairytails.co.uk/dog-parks-in-london-a-dog-s-guide-to-the-city-s-green-spaces",
+        "https://www.thefairytails.co.uk/puppy-daycare-benefits-shaping-happy-confident-canines",
+        "https://www.thefairytails.co.uk/15-food-items-to-avoid",
+        "https://www.thefairytails.co.uk/why-your-dog-is-pulling-on-the-leash",
+        "https://www.thefairytails.co.uk/why-dog-grooming-is-important",
+        "https://www.thefairytails.co.uk/how-to-desensitise-your-pet-to-fireworks",
+        "https://www.thefairytails.co.uk/the-importance-of-toys-in-your-dog-s-life",
+        "https://www.thefairytails.co.uk/dog-barking",
+        "https://www.thefairytails.co.uk/fear-anxiety-humans-and-dogs-with-cer",
+        "https://www.thefairytails.co.uk/how-to-crate-train-your-dog",
+        "https://www.thefairytails.co.uk/force-free-trainers-v-balanced-dog-trainers",
+        "https://www.thefairytails.co.uk/fear-and-anxiety-in-dogs",
+        "https://www.thefairytails.co.uk/frustration-in-dogs-dog-training",
+        "https://www.thefairytails.co.uk/dogs-reacting-to-the-noises-and-activities-that-occur-by-the-door",
+        "https://www.thefairytails.co.uk/certified-dog-trainer",
+        "https://www.thefairytails.co.uk/building-a-relationship-with-your-dog"
+      ],
+      "notes": "Rebuild-relevant findings: (1) 32 URLs total — 13 core pages (priority 1.0) + 19 blog posts (priority 0.8); all must get 301s or recreations to preserve SEO. (2) /puppy-classes is PASSWORD-PROTECTED (Duda page lock, 8.8 KB stub) yet listed in the sitemap; /internal-management-resources is a back-office page also publicly listed in the sitemap — both should be excluded/noindexed in the rebuild. (3) Booking is pure Acuity deep-links (owner 13914499, appointment types 51989230 & 56694430, cart product IDs 1469464 & 1469467) — no embed code to migrate, just preserve the URLs. (4) Tracking to carry over: GTM-W93L9XK5 (Google Ads AW-822632954 conversions only) and Meta Pixel 612955530110673; there is NO GA4 — adding one is a quick win during rebuild. (5) Two of the three WhatsApp links are malformed (wa.me/01424300668, wa.me/4407842116216) — fix to wa.me/447842116216 format. (6) All images live on Duda's le-cdn/cdn.website-editor.net with signed expiring URLs — every asset must be downloaded and re-hosted before the Duda/IONOS subscription lapses. (7) Heavy cross-linking to sister site fairytailsdoggrooming.co.uk (8 links on home) and one to adventure-dog.co.uk; socials: facebook.com/thefairytails, Instagram. (8) Homepage HTML is ~189 KB single document with inline Duda runtime config; lastmod dates show the home page (2025-12-26) and dog-boarding-school (2025-12-18) are the most recently edited pages. Fetched files for reference: C:\\Users\\FT Manager\\AppData\\Local\\Temp\\ft_home.html and ft_<page>.html, plus gtm.js (the GTM container)."
+    }
+  }
+}

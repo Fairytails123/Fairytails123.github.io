@@ -1,0 +1,235 @@
+{
+  "offerings": [
+    {
+      "id": "board-train-puppy",
+      "category": "board-train",
+      "name": "Boarding School for Puppies",
+      "price": 1200,
+      "unit": "for 4 weeks",
+      "largeDogSurcharge": null,
+      "eligibility": "Puppies 12–16 weeks old",
+      "features": [
+        "Toilet training",
+        "Obedience foundations",
+        "Problem prevention",
+        "Structured socialisation",
+        "Daily reports + body-cam session videos"
+      ],
+      "acuityUrl": null,
+      "order": 1
+    },
+    {
+      "id": "board-train-adult",
+      "category": "board-train",
+      "name": "Boarding School for Dogs",
+      "price": 2500,
+      "unit": "for 8–10 weeks",
+      "largeDogSurcharge": 300,
+      "eligibility": "Adult dogs 16 weeks and over; rescue dogs assessed case-by-case",
+      "features": [
+        "Behaviour-modification coaching and strategy",
+        "Real-world environment training",
+        "Parent training Fridays from week 4",
+        "Daily reports + body-cam session videos",
+        "Open visits welcome anytime"
+      ],
+      "acuityUrl": null,
+      "order": 2
+    },
+    {
+      "id": "board-train-holiday",
+      "category": "board-train",
+      "name": "Holiday Board & Train",
+      "price": 1500,
+      "unit": "for 4 weeks",
+      "largeDogSurcharge": 300,
+      "eligibility": "Dogs boarding while you're away",
+      "features": [
+        "Boarding + training + structured day care",
+        "Daily training sessions",
+        "Daily video reports"
+      ],
+      "acuityUrl": null,
+      "order": 3
+    },
+    {
+      "id": "intensive-dog-training",
+      "category": "training",
+      "name": "Intensive Dog Training",
+      "price": 2000,
+      "unit": "for 2 months",
+      "largeDogSurcharge": 300,
+      "eligibility": "Dogs with behavioural issues",
+      "features": [
+        "TAR method (Train, Adjust, Repeat)",
+        "Full day school included",
+        "Parent training from week 5"
+      ],
+      "acuityUrl": null,
+      "order": 4
+    },
+    {
+      "id": "puppy-intensive",
+      "category": "training",
+      "name": "Comprehensive Puppy Training",
+      "price": 1200,
+      "unit": "for 1 month",
+      "largeDogSurcharge": null,
+      "eligibility": "Puppies up to 20 weeks",
+      "features": ["Boarding included", "Full-day school", "Structured socialisation"],
+      "acuityUrl": null,
+      "order": 5
+    },
+    {
+      "id": "puppy-classes",
+      "category": "training",
+      "name": "Puppy Training Classes",
+      "price": 175,
+      "unit": "per course",
+      "largeDogSurcharge": null,
+      "eligibility": "Puppies under 6 months",
+      "features": [
+        "4 Thursday-evening sessions over 1 month",
+        "Concordia Hall, St Leonards",
+        "Three day-school intro sessions included"
+      ],
+      "acuityUrl": "https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469464",
+      "order": 6
+    },
+    {
+      "id": "one-to-one",
+      "category": "training",
+      "name": "One to One Dog Training",
+      "price": 49.99,
+      "unit": "per session",
+      "largeDogSurcharge": null,
+      "eligibility": null,
+      "features": ["Private sessions at your dog's pace", "Anxiety and behavioural problems"],
+      "acuityUrl": "https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=51989230",
+      "order": 7
+    },
+    {
+      "id": "social-walks",
+      "category": "training",
+      "name": "Dog Social Walks",
+      "price": 20,
+      "unit": "per walk",
+      "largeDogSurcharge": null,
+      "eligibility": "Existing clients only; weekends",
+      "features": ["Max 5 dogs per group", "Enrichment focus"],
+      "acuityUrl": null,
+      "order": 8
+    },
+    {
+      "id": "free-consult",
+      "category": "training",
+      "name": "Free Phone Consultation",
+      "price": 0,
+      "unit": "free",
+      "largeDogSurcharge": null,
+      "eligibility": null,
+      "features": ["Helps you pick the right training programme"],
+      "acuityUrl": "https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=56694430",
+      "order": 9
+    },
+    {
+      "id": "day-full",
+      "category": "day-school",
+      "name": "Full Day (8:00am–5:30pm)",
+      "price": 24.99,
+      "unit": "per day",
+      "largeDogSurcharge": 10,
+      "weeklyDiscountPrice": 19.99,
+      "eligibility": null,
+      "features": ["Pick-up/drop-off included", "Activities, commands, socialisation", "Walking £2 add-on"],
+      "acuityUrl": null,
+      "order": 10
+    },
+    {
+      "id": "day-half-am",
+      "category": "day-school",
+      "name": "Half Day AM",
+      "price": 19.99,
+      "unit": "per day",
+      "largeDogSurcharge": 5,
+      "weeklyDiscountPrice": 14.99,
+      "eligibility": null,
+      "features": ["Pick-up/drop-off, walking, activities, socialisation"],
+      "acuityUrl": null,
+      "order": 11
+    },
+    {
+      "id": "day-half-pm",
+      "category": "day-school",
+      "name": "Half Day PM",
+      "price": 17.99,
+      "unit": "per day",
+      "largeDogSurcharge": 5,
+      "weeklyDiscountPrice": 12.99,
+      "eligibility": null,
+      "features": ["Pick-up/drop-off, walking, activities, socialisation"],
+      "acuityUrl": null,
+      "order": 12
+    },
+    {
+      "id": "cbs",
+      "category": "day-school",
+      "name": "Confidence Building Session (CBS)",
+      "price": 15,
+      "unit": "per session (~30 min)",
+      "largeDogSurcharge": null,
+      "eligibility": "Availability dependent",
+      "features": ["Recorded video provided", "Lead pulling, focus, recall, obedience, town walks"],
+      "acuityUrl": null,
+      "order": 13
+    },
+    {
+      "id": "membership-half",
+      "category": "membership",
+      "name": "Membership Half Days",
+      "price": 275,
+      "unit": "per month",
+      "largeDogSurcharge": 25,
+      "eligibility": "Registered school dogs",
+      "features": ["AM or PM half days", "Hot towel wash", "Monthly grooming"],
+      "acuityUrl": null,
+      "order": 14
+    },
+    {
+      "id": "membership-full-t1",
+      "category": "membership",
+      "name": "Membership Full Days — Tier 1",
+      "price": 375,
+      "unit": "per month",
+      "largeDogSurcharge": 25,
+      "eligibility": "Registered school dogs",
+      "features": ["Invoiced monthly bookings", "Free pickups", "Free grooming", "1 free training session per month"],
+      "acuityUrl": null,
+      "order": 15
+    },
+    {
+      "id": "membership-full-t2",
+      "category": "membership",
+      "name": "Membership Full Days — Tier 2",
+      "price": 750,
+      "unit": "bi-monthly",
+      "largeDogSurcharge": null,
+      "eligibility": "Registered school dogs",
+      "features": ["Free full grooming", "4 free training sessions per cycle", "No large-dog surcharge"],
+      "acuityUrl": null,
+      "order": 16
+    },
+    {
+      "id": "grooming-subscription",
+      "category": "membership",
+      "name": "Dog Grooming Subscription",
+      "price": 25,
+      "unit": "per month",
+      "largeDogSurcharge": null,
+      "eligibility": null,
+      "features": ["One maintenance or full groom monthly", "Free nail clipping"],
+      "acuityUrl": "https://thefairytailsdoggrooming.as.me/schedule.php",
+      "order": 17
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+---
+import { Image } from 'astro:assets';
+import { business } from '../data/business';
+import logo from '../assets/brand/logo.png';
+
+// Inside-out build: nav links are added as pages go live on the preview
+// (WEBSITE-PLAN.md risk #8). Currently live: Board & Train.
+const nav = [{ label: 'Board & Train', href: '/dog-boarding-school' }];
+---
+
+<header class="sticky top-0 z-40 border-b border-cream-200 bg-cream-50/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
+    <a href="/" class="flex items-center gap-2">
+      <Image src={logo} alt="The Fairy Tails K9 Centre" class="h-12 w-auto" densities={[1, 2]} height={48} />
+      <span class="sr-only">The Fairy Tails K9 Centre — home</span>
+    </a>
+    <nav aria-label="Main">
+      <ul class="flex items-center gap-5">
+        {
+          nav.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm font-medium text-bark-700 hover:text-moss-700">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="hidden sm:block">
+          <a href={business.phones.textLine.tel} class="text-sm font-medium text-bark-700 hover:text-moss-700">
+            {business.phones.textLine.display}
+          </a>
+        </li>
+        <li>
+          <a
+            href={business.acuity.main}
+            class="rounded-md bg-moss-700 px-4 py-2 text-sm font-semibold text-cream-50 hover:bg-moss-800"
+          >
+            Book Appointment
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

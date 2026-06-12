@@ -1,0 +1,598 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+import heroPoster from '../assets/pages/dog-boarding-school/Happy-dogs-1920w.webp';
+import atTheBarn from '../assets/pages/dog-boarding-school/At-The-Barn-2880w.webp';
+import puppyTraining from '../assets/pages/dog-boarding-school/Puppy-Training-1920w.webp';
+import puppySquare from '../assets/pages/dog-boarding-school/Puppy-Training-square-2880w.webp';
+import busLab from '../assets/pages/dog-boarding-school/Black-Lab-on-the-bus-square-2-2880w.webp';
+import shepherd from '../assets/pages/dog-boarding-school/German-Shepherd-Training-1920w.webp';
+import dogWalk from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
+import cycleIndoor from '../assets/pages/dog-boarding-school/Training-Cycle-Graphic-2-1920w.webp';
+import cycleOutdoor from '../assets/pages/dog-boarding-school/Training-Cycle-Graphic-Outside-Areas-1920w.webp';
+import trainingReport from '../assets/pages/dog-boarding-school/Training-Report-2880w.webp';
+
+const boardTrain = pricing.offerings
+  .filter((o) => o.category === 'board-train')
+  .sort((a, b) => a.order - b.order);
+
+const issues = [
+  'Pulling on the lead',
+  'Toilet training',
+  'Social skills',
+  'Reactivity',
+  'Barking at the door',
+  'General or trigger based anxiety',
+  'Excessive play biting',
+  'Growling or biting',
+  'Crate training',
+  'Prey drive',
+  'Hyperactivity',
+  'Other forms of issues',
+];
+
+const kitList = [
+  'Puppy crate/dog crate – if your dog is trained to sleep in it or if required for training',
+  'Puppy toys/dog toys (which can be destroyed by the dog) – chew toys',
+  'Yaks Milk Chew',
+  "Pizzle sticks or other chews – such as cows' ear, pigs ear, beef tendon, chicken necks, etc.",
+  'Puppy food/dog food – with instructions',
+  'Puppy/dog bedding',
+  'Puppy/dog harness – Perfect Fit or any snug, comfortable Y-shaped harness with a front loop plus a handle on top (Ancol, Truedog, Rabbitgoo, Hurtta). Hurtta is our favourite',
+  'Walking lead – Halti lead with double clips (a normal lead with clips at either end)',
+  '3-inch carabiner pack',
+  '20 ft training lead',
+  'Vet bed',
+  'High cartilage-based chew',
+  'Prebiotic: Purina Fortiflora',
+  'Multivitamin tablets (Purina only)',
+  'Nutri Calm tablets or a prescription from your vet if your dog is nervous',
+  'Adaptil plug-in',
+  'Dog snood – for nervous dogs',
+  'Jumper – for cold weather',
+];
+
+const regime = [
+  {
+    label: 'Week 1',
+    title: 'Settling in',
+    body: 'Your dog moves in, meets the household and our daycare crew, and builds a routine. Integration comes first — a relaxed dog is a dog who can learn.',
+  },
+  {
+    label: 'Week 2',
+    title: 'Back to basics',
+    body: 'Essential commands and calm behaviours, taught in the quiet around the barn — space and tranquillity, no distractions.',
+  },
+  {
+    label: 'Weeks 3–4',
+    title: 'Building up — and parent training begins',
+    body: 'Skills get stronger and real-life situations are layered in. From week 4, parent training starts: Friday sessions where you learn to speak your dog’s new language (pick-up between 11am and 2pm).',
+  },
+  {
+    label: 'Mid-course',
+    title: 'A week off at home',
+    body: 'Dogs must have a week off — rest is part of learning. Your dog comes home, practises living with you, and you see the progress first-hand. Where logistics allow, dogs also benefit from weekends at home.',
+  },
+  {
+    label: 'Weeks 5–7',
+    title: 'Specialised training',
+    body: 'Out into the real world: on-lead at local dog parks, along the seafront promenade and through busy high streets — wherever your dog’s plan needs us to be.',
+  },
+  {
+    label: 'Weeks 8–9',
+    title: 'Individual training & handover',
+    body: 'The last pieces are tightened up one-to-one, and we transition your dog back to you — with mid-course and end-of-course parent sessions so you’re confident carrying it on.',
+  },
+];
+
+const bookingSteps = [
+  {
+    title: 'Contact us',
+    body: 'Send us the list of issues you’re facing — or the single biggest one you’d like us to focus on.',
+  },
+  {
+    title: 'Prioritise',
+    body: 'We put your list into priority order and send it back so we can agree what matters most, together.',
+  },
+  {
+    title: 'Contract',
+    body: 'A service contract sets out our obligations to you, and yours to us. Your dog’s issues are trained holistically and at the same time — training can’t work in isolation — while keeping the main issue in focus.',
+  },
+  {
+    title: 'Agreement',
+    body: 'You return the signed contract with the fees and registration form, and training starts on our mutually agreed date.',
+  },
+];
+
+const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+---
+
+<Base
+  title="Dog Boarding School — Board & Train | The Fairy Tails K9 Centre"
+  description="Residential dog training for dogs and puppies in the heart of the Sussex countryside. Let us do the hard work and you enjoy the benefits of our training."
+  path="/dog-boarding-school"
+>
+  <!-- ============ HERO ============ -->
+  <!-- TODO(owner): hero video loop goes here — muted autoplay, this photo stays
+       as the poster + reduced-motion fallback. Awaiting clip (see page spec). -->
+  <section class="relative isolate min-h-[70vh] overflow-hidden" data-hero>
+    <Image
+      src={heroPoster}
+      alt="Happy dogs together in the countryside at The Fairy Tails"
+      class="absolute inset-0 -z-10 h-full w-full object-cover"
+      loading="eager"
+      fetchpriority="high"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+    />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-bark-900/80 via-bark-900/40 to-bark-900/20"></div>
+    <div class="mx-auto flex min-h-[70vh] max-w-6xl flex-col justify-end px-4 pb-14 pt-28">
+      <p class="text-sm font-semibold uppercase tracking-widest text-honey-300">
+        Residential dog training · Hastings, East Sussex
+      </p>
+      <h1 class="mt-3 max-w-3xl font-display text-4xl font-bold text-cream-50 sm:text-5xl">
+        Your dog boards and trains with us
+      </h1>
+      <p class="mt-4 max-w-2xl text-lg text-cream-100">
+        We do the hard work in the heart of the Sussex countryside — and you get back a dog you
+        can take anywhere, and the calm, joyful walks you've been dreaming of.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href="#enquire"
+          class="rounded-md bg-honey-500 px-6 py-3 font-semibold text-bark-900 transition hover:bg-honey-400"
+        >
+          Send an enquiry
+        </a>
+        <a
+          href={business.acuity.freeConsult}
+          class="rounded-md border border-cream-100/60 px-6 py-3 font-semibold text-cream-50 transition hover:bg-cream-50/10"
+        >
+          Book a free phone consult
+        </a>
+      </div>
+      <ul class="mt-10 flex flex-wrap gap-x-8 gap-y-2 text-sm font-medium text-cream-100">
+        <li>✓ Visit your dog anytime</li>
+        <li>✓ Daily reports + body-cam video of every session</li>
+        <li>✓ No kennels — your dog lives with us</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ THE PROBLEM ============ -->
+  <section class="mx-auto max-w-6xl px-4 py-16" data-section="problem">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <div>
+        <h2 class="font-display text-3xl font-bold text-moss-800">Does this sound like your dog?</h2>
+        <p class="mt-4 text-lg text-bark-700">
+          You love them to bits — but the pulling, the barking, the lunging at other dogs… it's
+          exhausting. You're not a bad owner, and your dog isn't a bad dog. These are the issues we
+          deal with day in, day out:
+        </p>
+        <ul class="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {
+            issues.map((issue) => (
+              <li class="flex items-start gap-2 text-bark-700">
+                <span class="mt-1 text-moss-600" aria-hidden="true">
+                  ●
+                </span>
+                {issue}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-6 text-bark-700">
+          If your dog's problem isn't listed here, <a href="#enquire" class="font-semibold text-moss-700 underline">please ask us</a> — we may well be able to help.
+        </p>
+      </div>
+      <Image
+        src={puppyTraining}
+        alt="Puppy in training at The Fairy Tails"
+        class="rounded-lg object-cover"
+        widths={[640, 1024, 1920]}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+      />
+    </div>
+  </section>
+
+  <!-- ============ THE PROGRAMME ============ -->
+  <section class="bg-cream-100 py-16" data-section="programme">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="font-display text-3xl font-bold text-moss-800">
+        A boarding school for dogs and puppies
+      </h2>
+      <p class="mt-4 max-w-3xl text-lg text-bark-700">
+        At The Fairy Tails we offer intensive dog training in the form of a training boot camp:
+        your dog boards and trains with us for assured results. We take the stress out of training
+        by doing it for you — giving your dog the greatest possible start, then handing you a
+        simple training schedule so you can spend more time enjoying your dog, comfortable taking
+        them wherever you go.
+      </p>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        <article class="rounded-lg bg-cream-50 p-6 shadow-sm">
+          <h3 class="font-display text-xl font-bold text-moss-700">A positive environment</h3>
+          <p class="mt-3 text-bark-700">
+            Your dog lives with us in our house and at our daycare while undergoing daily training
+            — a totally customised routine that can greatly impact behaviour in as little as three
+            to four weeks. It's hard to choose who to trust with your cherished family dog: our
+            knowledgeable trainers use positive techniques in a loving, safe and secure
+            environment.
+          </p>
+        </article>
+        <article class="rounded-lg bg-cream-50 p-6 shadow-sm">
+          <h3 class="font-display text-xl font-bold text-moss-700">We do the hard work</h3>
+          <p class="mt-3 text-bark-700">
+            The key to dog training is consistency, regularity, and a controlled, supervised
+            environment — difficult for busy families. If your schedule doesn't allow for
+            training, if past attempts or other trainers haven't worked, or if you simply don't
+            want to do it yourself, this is your programme.
+          </p>
+        </article>
+        <article class="rounded-lg bg-cream-50 p-6 shadow-sm">
+          <h3 class="font-display text-xl font-bold text-moss-700">Your dog stays with us</h3>
+          <p class="mt-3 text-bark-700">
+            There are no kennels at our house. Your dog is evaluated, given time to adjust, and
+            lives here with us — becoming our pet for a period agreed between you and the trainer,
+            based on your dog's issues and your wishes. Our clients come from all over the UK and
+            trust us with their fur children.
+          </p>
+        </article>
+      </div>
+      <p class="mt-8 max-w-3xl text-bark-700">
+        All breeds are welcome, and we train pups from as young as twelve weeks — as long as
+        they've had their second set of vaccinations. There is never a wrong time!
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ PROOF ============ -->
+  <section class="mx-auto max-w-6xl px-4 py-16" data-section="proof">
+    <h2 class="font-display text-3xl font-bold text-moss-800">Proof, not promises</h2>
+    <p class="mt-4 max-w-3xl text-lg text-bark-700">
+      We'll never sell you a "guaranteed fix" — no honest trainer can. What we can show you is how
+      we actually work, every single day.
+    </p>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      <article class="rounded-lg border border-cream-300 bg-cream-100 p-6">
+        <p class="text-sm font-semibold uppercase tracking-wide text-honey-600">Archie's story</p>
+        <h3 class="mt-2 font-display text-xl font-bold text-moss-800">
+          Why we'll never promise you a quick fix
+        </h3>
+        <p class="mt-3 text-bark-700">
+          Archie, a young Labradoodle with severe separation anxiety and big feelings around other
+          dogs, responded beautifully to positive reinforcement training. His story is also an
+          honest lesson in why a family's follow-through matters as much as ours — and why
+          "guaranteed results" from any trainer should be a red flag. Read it before choosing a
+          trainer. Including us.
+        </p>
+        <a href="/archiestory" class="mt-4 inline-block font-semibold text-moss-700 underline">
+          Read Archie's full story
+        </a>
+      </article>
+
+      <!-- TODO(owner): body-cam proof clips slot — every session is filmed; the
+           best clips go here. Awaiting picks (see page spec open items). -->
+      <article class="flex flex-col justify-center rounded-lg border-2 border-dashed border-moss-300 bg-cream-50 p-6 text-center">
+        <h3 class="font-display text-xl font-bold text-moss-700">Watch us work</h3>
+        <p class="mt-3 text-bark-700">
+          Every training session is recorded on body-cam — it's how we report progress to parents
+          daily. A selection of real session clips is coming to this spot.
+        </p>
+      </article>
+    </div>
+
+    <div class="mt-10">
+      <h3 class="font-display text-xl font-bold text-moss-800">
+        Just some of our lovely doggy clients
+      </h3>
+      <div class="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {
+          [
+            { img: puppySquare, caption: 'Residential Puppy Training' },
+            { img: busLab, caption: 'In town training' },
+            { img: shepherd, caption: 'All breeds welcome' },
+            { img: dogWalk, caption: "It's not all hard work!" },
+          ].map(({ img, caption }) => (
+            <figure>
+              <Image
+                src={img}
+                alt={caption}
+                class="aspect-square rounded-lg object-cover"
+                widths={[480, 960]}
+                sizes="(min-width: 1024px) 25vw, 50vw"
+              />
+              <figcaption class="mt-2 text-sm font-medium text-bark-700">{caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- TODO(owner): testimonials + before/after photo pairs — slots below await
+         your picks (see page spec open items). -->
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      <article class="rounded-lg border-2 border-dashed border-moss-300 bg-cream-50 p-6 text-center">
+        <h3 class="font-display text-lg font-bold text-moss-700">What our families say</h3>
+        <p class="mt-2 text-bark-700">
+          Real words from board-and-train families are coming here.
+        </p>
+      </article>
+      <article class="rounded-lg border-2 border-dashed border-moss-300 bg-cream-50 p-6 text-center">
+        <h3 class="font-display text-lg font-bold text-moss-700">Before &amp; after</h3>
+        <p class="mt-2 text-bark-700">
+          Side-by-side transformations — reactive on lead to calm in town — are coming here.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ TRAINING REGIME (signature scroll story in the animation pass) ============ -->
+  <section class="bg-moss-900 py-16 text-cream-100" data-section="regime">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="font-display text-3xl font-bold text-cream-50">What the weeks look like</h2>
+      <p class="mt-4 max-w-3xl text-lg text-cream-200">
+        Every dog's plan is tailored with you before they arrive — but here's the typical shape of
+        a full course for an adult dog.
+      </p>
+      <ol class="mt-10 space-y-8">
+        {
+          regime.map((step, i) => (
+            <li class="regime-step grid gap-2 sm:grid-cols-[140px_1fr] sm:gap-6" data-step={i + 1}>
+              <p class="text-sm font-bold uppercase tracking-wide text-honey-400">{step.label}</p>
+              <div>
+                <h3 class="font-display text-xl font-bold text-cream-50">{step.title}</h3>
+                <p class="mt-2 max-w-2xl text-cream-200">{step.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="mt-10 max-w-3xl rounded-lg bg-moss-800 p-4 text-cream-100">
+        <strong class="text-honey-300">Puppies are different:</strong> pups aged 12–16 weeks run a
+        shorter 4-week course (with a transition week after) — at that age they're a blank canvas,
+        and four weeks sets a great foundation.
+      </p>
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        <figure>
+          <Image
+            src={cycleIndoor}
+            alt="The Fairy Tails boarding dog training cycle — in-facility environments"
+            class="rounded-lg bg-cream-50"
+            widths={[640, 1280]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+          <figcaption class="mt-2 text-sm text-cream-200">The boarding training cycle</figcaption>
+        </figure>
+        <figure>
+          <Image
+            src={cycleOutdoor}
+            alt="The Fairy Tails boarding dog training cycle — outside areas and real-world environments"
+            class="rounded-lg bg-cream-50"
+            widths={[640, 1280]}
+            sizes="(min-width: 768px) 50vw, 100vw"
+          />
+          <figcaption class="mt-2 text-sm text-cream-200">Outside-areas training cycle</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ OWNER INVOLVEMENT ============ -->
+  <section class="mx-auto max-w-6xl px-4 py-16" data-section="involvement">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <Image
+        src={atTheBarn}
+        alt="Dogs at the barn at The Fairy Tails K9 Centre"
+        class="rounded-lg object-cover"
+        widths={[640, 1024, 1920]}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+      />
+      <div>
+        <h2 class="font-display text-3xl font-bold text-moss-800">
+          Please note — your involvement is the most important part
+        </h2>
+        <p class="mt-4 text-lg text-bark-700">
+          We can lay the strongest possible foundation, but lasting change is a partnership. Your
+          dog comes home with new skills and a simple schedule to keep them — and the families who
+          follow through are the ones whose dogs keep blossoming.
+        </p>
+        <p class="mt-4 text-bark-700">
+          It's why parent training is built into the course from week 4, why we recommend the
+          mid-course and end-of-course sessions, and why we published Archie's story for every
+          prospective client to read.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="bg-cream-100 py-16" data-section="pricing">
+    <div class="mx-auto max-w-6xl px-4">
+      <h2 class="font-display text-3xl font-bold text-moss-800">Programmes &amp; pricing</h2>
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {
+          boardTrain.map((plan) => (
+            <article class="flex flex-col rounded-lg bg-cream-50 p-6 shadow-sm">
+              <h3 class="font-display text-xl font-bold text-moss-800">{plan.name}</h3>
+              <p class="mt-3">
+                <span class="text-3xl font-bold text-moss-700">{gbp(plan.price)}</span>
+                <span class="text-bark-500"> {plan.unit}</span>
+              </p>
+              {plan.largeDogSurcharge && (
+                <p class="mt-1 text-sm font-semibold text-honey-600">
+                  +{gbp(plan.largeDogSurcharge)} for large dogs
+                </p>
+              )}
+              {plan.eligibility && <p class="mt-2 text-sm text-bark-500">{plan.eligibility}</p>}
+              <ul class="mt-4 flex-1 space-y-2 text-sm text-bark-700">
+                {plan.features.map((f) => (
+                  <li class="flex items-start gap-2">
+                    <span class="mt-0.5 text-moss-600" aria-hidden="true">
+                      ✓
+                    </span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href="#enquire"
+                class="mt-6 rounded-md bg-moss-700 px-4 py-2 text-center font-semibold text-cream-50 transition hover:bg-moss-800"
+              >
+                Enquire about this programme
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LIMITATIONS & ELIGIBILITY ============ -->
+  <section class="mx-auto max-w-6xl px-4 py-16" data-section="limitations">
+    <h2 class="font-display text-3xl font-bold text-moss-800">
+      Our limitations — we'll always be straight with you
+    </h2>
+    <p class="mt-4 max-w-3xl text-lg text-bark-700">
+      We cannot change your dog's character. When it comes to learning, dogs are similar to human
+      children: we can teach anxious dogs numerous coping skills and resilience techniques, but a
+      naturally reserved or shy dog will always be naturally reserved or shy. It's impossible to
+      transform a frightened dog into a joyful, bouncy one in eight weeks — promising that would
+      be unrealistic, so we won't. What we <em>can</em> do is help with the long list of
+      behavioural issues above, and be honest with you about everything else.
+    </p>
+
+    <h3 class="mt-10 font-display text-2xl font-bold text-moss-800">Is it suitable for all dogs? Almost!</h3>
+    <div class="mt-6 grid gap-6 md:grid-cols-3">
+      <article class="rounded-lg border border-cream-300 p-6">
+        <h4 class="font-display text-lg font-bold text-moss-700">Puppies</h4>
+        <p class="mt-2 text-bark-700">
+          Puppies between twelve and sixteen weeks can do less than eight weeks — they're a blank
+          canvas for learning. A four-week course is plenty to set a great foundation.
+        </p>
+      </article>
+      <article class="rounded-lg border border-cream-300 p-6">
+        <h4 class="font-display text-lg font-bold text-moss-700">Adult dogs</h4>
+        <p class="mt-2 text-bark-700">
+          Dogs older than sixteen weeks must do the full eight-week course, with one week's break.
+          We can't train in less than eight weeks due to latent inhibition. We only use positive
+          training and never use aversive tools.
+        </p>
+      </article>
+      <article class="rounded-lg border border-cream-300 p-6">
+        <h4 class="font-display text-lg font-bold text-moss-700">Rescue dogs</h4>
+        <p class="mt-2 text-bark-700">
+          Due to complex histories and often deeply ingrained survival behaviours, boarding
+          training is only suitable in limited cases. Please call us to confirm.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ VISITS, FEEDBACK & KIT LIST ============ -->
+  <section class="bg-cream-100 py-16" data-section="visits">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="grid items-center gap-10 lg:grid-cols-2">
+        <div>
+          <h2 class="font-display text-3xl font-bold text-moss-800">
+            An open door — and proof of progress every day
+          </h2>
+          <p class="mt-4 text-lg text-bark-700">
+            <strong>You are welcome to visit your dog whenever you like.</strong> No appointments,
+            no awkwardness — they're your family.
+          </p>
+          <p class="mt-4 text-bark-700">
+            Each dog's parent receives daily training feedback to ensure the plan is working. All
+            our training sessions are recorded on the body cam, so you'll also receive the
+            recordings of each session with your daily reports. Videos are stored on OneDrive and
+            you'll have access to the link throughout.
+          </p>
+        </div>
+        <figure>
+          <Image
+            src={trainingReport}
+            alt="Example of a daily training report sent to parents"
+            class="rounded-lg shadow-sm"
+            widths={[640, 1280]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
+          <figcaption class="mt-2 text-sm text-bark-500">
+            A real daily training report, exactly as parents receive it
+          </figcaption>
+        </figure>
+      </div>
+
+      <details class="group mt-10 rounded-lg bg-cream-50 p-6 shadow-sm">
+        <summary class="cursor-pointer font-display text-xl font-bold text-moss-800">
+          What your dog needs to bring — the kit list
+        </summary>
+        <p class="mt-4 text-bark-700">
+          Here are the items your dog will need when he or she starts at the boarding school:
+        </p>
+        <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+          {
+            kitList.map((item) => (
+              <li class="flex items-start gap-2 text-sm text-bark-700">
+                <span class="mt-0.5 text-moss-600" aria-hidden="true">
+                  ●
+                </span>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 text-sm font-semibold text-bark-700">
+          Any exception to the kit list must be agreed in advance with the school.
+        </p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ HOW TO BOOK ============ -->
+  <section class="mx-auto max-w-6xl px-4 py-16" data-section="booking">
+    <h2 class="font-display text-3xl font-bold text-moss-800">
+      How to book your dog in — four simple steps
+    </h2>
+    <ol class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      {
+        bookingSteps.map((step, i) => (
+          <li class="rounded-lg border border-cream-300 p-6">
+            <p class="font-display text-3xl font-bold text-honey-500">{i + 1}</p>
+            <h3 class="mt-2 font-display text-lg font-bold text-moss-800">{step.title}</h3>
+            <p class="mt-2 text-sm text-bark-700">{step.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- ============ ENQUIRY FORM ============ -->
+  <section id="enquire" class="bg-moss-900 py-16" data-section="enquire">
+    <div class="mx-auto max-w-6xl px-4">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="font-display text-3xl font-bold text-cream-50">Tell us about your dog</h2>
+        <p class="mt-4 text-lg text-cream-200">
+          Send us the issues you're facing — or the one big thing you'd most like us to crack —
+          and we'll come back to you with an honest plan.
+        </p>
+      </div>
+      <div class="mt-10 rounded-lg bg-cream-50 p-6 sm:p-10">
+        <EnquiryForm service="Board & Train" page="/dog-boarding-school" />
+      </div>
+      <p class="mt-6 text-center text-cream-200">
+        Prefer to talk it through first?
+        <a href={business.acuity.freeConsult} class="font-semibold text-honey-300 underline">
+          Book a free phone consultation
+        </a>
+        or WhatsApp us on
+        <a href={business.phones.textLine.whatsapp} class="font-semibold text-honey-300 underline">
+          {business.phones.textLine.display}
+        </a>
+      </p>
+    </div>
+  </section>
+</Base>

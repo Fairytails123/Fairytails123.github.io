@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/*
+  Design tokens — "warm & natural" direction locked in the Board & Train
+  pre-build interview (2026-06-12): earthy greens/creams, soft countryside
+  light, premium but approachable. DRAFT palette — refined in the design pass.
+*/
+@theme {
+  /* Creams — page backgrounds */
+  --color-cream-50: #fbf8f2;
+  --color-cream-100: #f6f0e4;
+  --color-cream-200: #ede3cf;
+  --color-cream-300: #e0d2b4;
+
+  /* Moss greens — primary brand */
+  --color-moss-100: #e4ebdd;
+  --color-moss-200: #c8d6bb;
+  --color-moss-300: #a8bc96;
+  --color-moss-400: #87a071;
+  --color-moss-500: #6b8459;
+  --color-moss-600: #556c46;
+  --color-moss-700: #445839;
+  --color-moss-800: #36462e;
+  --color-moss-900: #293622;
+
+  /* Barks — warm text neutrals */
+  --color-bark-500: #6f6253;
+  --color-bark-700: #4a4036;
+  --color-bark-900: #2c2620;
+
+  /* Honey — accent / CTA highlight */
+  --color-honey-300: #e7c08a;
+  --color-honey-400: #d9a45b;
+  --color-honey-500: #c98f43;
+  --color-honey-600: #b07a33;
+
+  /* Typography — system stacks for the content pass; real faces chosen in the design pass */
+  --font-display: ui-serif, Georgia, 'Times New Roman', serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  @apply bg-cream-50 text-bark-900 font-body antialiased;
+}

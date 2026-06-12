@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Page not found — The Fairy Tails K9 Centre"
+  description="That page doesn't exist. Head back to The Fairy Tails K9 Centre."
+  path="/404"
+>
+  <!-- Trailing-slash rescue: GH Pages serves extensionless files, so legacy
+       links with a trailing slash land here — strip and retry once. -->
+  <script is:inline>
+    (function () {
+      var p = location.pathname;
+      if (p.length > 1 && /\/+$/.test(p)) {
+        location.replace(p.replace(/\/+$/, '') + location.search + location.hash);
+      }
+    })();
+  </script>
+  <section class="mx-auto max-w-3xl px-4 py-24 text-center">
+    <h1 class="font-display text-4xl font-bold text-moss-800">Whoops — wrong path!</h1>
+    <p class="mt-4 text-lg text-bark-700">
+      This page doesn't exist (or has moved). Even the best-trained noses take a wrong turn.
+    </p>
+    <a
+      href="/"
+      class="mt-8 inline-block rounded-md bg-moss-700 px-6 py-3 font-semibold text-cream-50 hover:bg-moss-800"
+    >
+      Back to the homepage
+    </a>
+  </section>
+</Base>

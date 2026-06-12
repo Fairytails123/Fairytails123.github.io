@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+// Inside-out build: the real homepage is built LAST (WEBSITE-PLAN.md).
+// This is a temporary holding page so / resolves on the preview.
+---
+
+<Base
+  title="The Fairy Tails K9 Centre"
+  description="Dog training, day school and board & train in Hastings Country Park."
+  path="/"
+>
+  <section class="mx-auto max-w-3xl px-4 py-24 text-center">
+    <h1 class="font-display text-4xl font-bold text-moss-800">The Fairy Tails K9 Centre</h1>
+    <p class="mt-4 text-lg text-bark-700">
+      New site preview — pages go live here one at a time as they're finished.
+    </p>
+    <a
+      href="/dog-boarding-school"
+      class="mt-8 inline-block rounded-md bg-moss-700 px-6 py-3 font-semibold text-cream-50 hover:bg-moss-800"
+    >
+      See Board & Train
+    </a>
+  </section>
+</Base>
