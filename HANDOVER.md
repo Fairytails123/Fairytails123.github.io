@@ -4,11 +4,15 @@
 
 ## Where things stand (2026-06-12 session)
 
-1. **Stage 0 harvest — RUN 2026-06-12.** All ~39 live URLs + sitemap extras crawled into
-   `..\fairytails-image-archive\<slug>\` (verbatim `copy.md`, `links.json`, raw `page.html`,
-   full-res images, `_site\` has sitemap/robots/tracking snippets). `HARVEST-MANIFEST.md` at the
-   archive root records per-page results. **The harvest `copy.md` files are the content source
-   for every page build** (the audit JSONs are only summaries).
+1. **Stage 0 harvest — RUN & VERIFIED 2026-06-12.** All 40 live URLs (39 known + sitemap extra
+   `/internal-management-resources`) crawled into `..\fairytails-image-archive\<slug>\` (verbatim
+   `copy.md`, `links.json`, raw `page.html`, 502 validated full-res images ~124 MB, **plus all 11
+   live-site MP4 videos ~535 MB in `<slug>\videos\`** — incl. the homepage opening film and 4
+   Board & Train clips, candidate hero-loop material). `_site\` has sitemap/robots/GTM+pixel
+   snippets; `HARVEST-MANIFEST.md` records per-page results. `/puppy-classes` and
+   `/internal-management-resources` are password-locked Duda stubs on the live site (documented,
+   nothing to harvest). **The harvest `copy.md` files are the content source for every page
+   build** (the audit JSONs are only summaries).
 2. **Page 1 pre-build interview — DONE.** Final spec: **`docs/page-specs/01-dog-boarding-school.md`**
    (arc confirmed; Holiday B&T = 3rd pricing tier; proof = Archie + body-cam + testimonials +
    before/after; merged week-by-week regime drafted for owner correction; warm parent-to-parent
