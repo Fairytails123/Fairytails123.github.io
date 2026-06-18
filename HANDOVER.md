@@ -8,12 +8,15 @@
 
 ## ▶ START HERE NEXT SESSION — owner is adding photos/videos to Board & Train
 
-**On 2026-06-17 the owner paused to add their OWN media into Page 1's four placeholder slots, and
-asked to be re-walked through these exact steps first thing.** Re-explain them to the owner, then do
-the wiring (step 6) once the files are in. The owner said "let me try and see what happens" — so they
-may already have dropped some files in; check the two folders below before re-explaining.
+**On 2026-06-17 the owner paused to add their OWN media into Page 1's four placeholder slots.**
+**UPDATE 2026-06-18 — the HERO video is now DONE + DEPLOYED LIVE** (built from the owner's own raw
+clips; see the ✅ section just below). The remaining THREE slots (body-cam clips, testimonials,
+before/after pairs) are still to come — the media drop-in steps further below apply to those; when
+the owner sends files, do the wiring (step 6). NOTE: the owner had already dropped a **405 MB raw**
+`board-train-hero.mp4` straight into `public/media` (over GitHub's 100 MB file limit — would break the
+push); it's been replaced by the edited hero and the raws are preserved in `Videos\_owner-dropins\`.
 
-### ✅ HERO video — DONE 2026-06-18 (awaiting owner review)
+### ✅ HERO video — DONE + DEPLOYED LIVE 2026-06-18
 
 Built the real hero from the owner's **25 raw iPhone clips in `Videos\` (HEVC 10-bit, HLG HDR
 bt2020, 1080p30, Cinematic mode; 19/25 carry −180° rotation → ffmpeg autorotate)**. Pipeline (all
@@ -40,10 +43,10 @@ build has zscale/tonemap/vidstab/xfade):
 - **Videos (+ a poster .jpg)** → `public/media/` — served verbatim, referenced as `/media/<name>`.
 
 **The four slots awaiting media** (file:line in `src/pages/dog-boarding-school.astro`):
-1. **Hero video** (`<video>` ≈ lines 137–148) — *true drop-in*: replace `public/media/board-train-hero.mp4`
-   + `public/media/board-train-poster.jpg` with the same filenames and it just works (else update the
-   one `<source>` line). ⚠️ Compress first — current clip is 2.45 MB (Lighthouse watch item;
-   `ffmpeg-static` is already installed for this).
+1. **Hero video** (`<video>` ≈ lines 137–148) — ✅ **DONE + LIVE 2026-06-18**: `board-train-hero.mp4`
+   (12.3 s / 720p / 1.9 MB) + `board-train-poster.jpg` (Weimaraner-sit, 255 KB), edited from the owner's
+   own clips. Drop-in mechanics for any future swap still apply: replace the two files (same names) and
+   it just works (else update the one `<source>` line). Recipe: `docs/video-hero-pipeline.md`.
 2. **Body-cam clips** — "Watch us work" dashed placeholder (≈ lines 316–324). Empty box → needs wiring;
    clips go in `public/media/`.
 3. **Testimonials** — "What our families say" dashed placeholder (≈ lines 363–367). Text (+ optional
@@ -73,10 +76,11 @@ not a failure. Local preview alternative: `npm run dev` → http://localhost:432
 
 ## Pick-up point for the next session
 
-1. **First:** the media drop-in above (▶ START HERE). After that media pass, ask the owner for their
-   review of https://fairytails123.github.io/dog-boarding-school (desktop
-   + phone): animation intensity, palette/typography (Fraunces/Karla), hero clip choice, plus the
-   standing content checks below. They paused specifically **to refine this page next session**.
+1. **Hero video is DONE + LIVE** (▶ START HERE). Ask the owner to review it on
+   https://fairytails123.github.io/dog-boarding-school (desktop + phone) alongside animation
+   intensity, palette/typography (Fraunces/Karla), plus the standing content checks below. Then the
+   remaining THREE media slots (body-cam clips, testimonials, before/after pairs) once the owner sends
+   files. They paused specifically **to refine this page**.
 2. Apply refinements → then the polish pass (d): Lighthouse ≥ 90, reduced-motion audit, mobile
    review, per-page SEO/JSON-LD → owner sign-off → tick tracker → page 2 pre-build interview.
 3. Owner feedback already incorporated this session: the bare content pass "didn't feel premium" —
@@ -130,17 +134,16 @@ not a failure. Local preview alternative: `npm run dev` → http://localhost:432
      drag-to-scroll polaroid rail; animated mobile slide-in menu + scrolled header; animated
      kit accordion; Astro **ClientRouter** view transitions. All animation is reduced-motion
      gated (`gsap.matchMedia`) and progressive (initial states set by JS, never CSS).
-   - Placeholder slots still marked for: owner's final hero clip, body-cam clips, testimonials,
-     before/after pairs.
+   - Hero clip: ✅ DONE + LIVE (2026-06-18). Placeholder slots still marked for: body-cam clips,
+     testimonials, before/after pairs.
 
 ## Next actions (detail)
 
 1. **Owner review checks** for the preview: animation feel/intensity · Fraunces/Karla typography ·
-   moss/pine/honey palette · hero clip (current = 10 s cut of the live site's own film; owner may
-   supply a better one) · drafted week-by-week regime copy (incl. mid-course home-break wording) ·
-   the Archie "proof, not promises" framing · the four placeholder slots (body-cam clips,
-   testimonials, before/after pairs, final hero video).
-2. **Polish pass (d)** — Lighthouse ≥ 90 (watch the 2.45 MB hero video + 114 KB GSAP chunk),
+   moss/pine/honey palette · **the new hero video (DONE + LIVE — owner's own clips)** · drafted
+   week-by-week regime copy (incl. mid-course home-break wording) · the Archie "proof, not promises"
+   framing · the three remaining placeholder slots (body-cam clips, testimonials, before/after pairs).
+2. **Polish pass (d)** — Lighthouse ≥ 90 (hero now 1.9 MB / 720p; watch the 114 KB GSAP chunk),
    reduced-motion check, mobile review, per-page SEO/JSON-LD, then owner sign-off + tick tracker.
    Note: GTM page_view fires once per full load — add a History Change trigger in GTM at Stage 4
    for ClientRouter navigations.
@@ -148,8 +151,8 @@ not a failure. Local preview alternative: `npm run dev` → http://localhost:432
 
 ## Owner inputs still open
 
-- Page 1 (before sign-off): hero video clip · regime-timeline corrections · testimonial picks ·
-  before/after photos + body-cam clips.
+- Page 1 (before sign-off): regime-timeline corrections · testimonial picks · before/after photos +
+  body-cam clips. (Hero video clip: ✅ DONE + LIVE 2026-06-18 — edited from the owner's own clips.)
 - Deferred: Telegram destination for enquiry alerts (workflow ready for the node).
 - Page 9: ImgBB access · Page 10: team names/roles · Stage 4: GA4/GTM login session ·
   Stage 5: IONOS DNS login.

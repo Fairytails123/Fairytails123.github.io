@@ -15,7 +15,7 @@
 | Voice (site-wide) | **Warm, parent-to-parent** — empathetic friend-who's-an-expert; keeps the honest "Our Limitations!" candour. |
 | Design system (site-wide) | **Warm & natural** — earthy greens/creams, soft countryside light, premium but approachable. Logo kept. |
 | Signature animation | **Week-by-week scroll story** — the regime timeline is a pinned, scroll-driven GSAP sequence (the page's centrepiece). Reduced-motion fallback: plain stacked timeline. |
-| Hero | **Short looping video** (muted autoplay) behind headline — built with a placeholder/photo poster until owner supplies a clip; static photo is the reduced-motion + fallback state. |
+| Hero | **Short looping video** (muted autoplay) behind headline. ✅ **DONE 2026-06-18** — 12.3 s / 720p / 1.9 MB cut from the owner's own clips (HLG-HDR tonemapped → SDR, warm grade, 5-shot crossfade, seamless loop); poster = Weimaraner-sit still (also the reduced-motion + fallback state). Recipe: `docs/video-hero-pipeline.md`. |
 | Telegram alerts | **Email only for now** — n8n workflow ships with email (to info@) + log; Telegram node wired later when owner picks a destination. |
 | Media assets | **Build with placeholders** — best harvested live-site photos now; video/before-after slots clearly marked; owner drops real clips/photos before sign-off. |
 | Content add/cut | **Carry everything over** from the live page, restructured into the arc. Nothing added, nothing cut. |
@@ -23,7 +23,7 @@
 
 ## Page structure (build order top → bottom)
 
-1. **Hero** — looping muted video slot (placeholder photo poster for now), warm transformation-promise headline, sub-line, primary CTA "Send an enquiry" (anchors to form), secondary CTA = free phone consult (Acuity `appointmentType=56694430`, byte-for-byte). Trust strip: open visits anytime · body-cam daily reports · no kennels, home-based.
+1. **Hero** — looping muted video (✅ live 2026-06-18, owner's own clips; poster = Weimaraner-sit still), warm transformation-promise headline, sub-line, primary CTA "Send an enquiry" (anchors to form), secondary CTA = free phone consult (Acuity `appointmentType=56694430`, byte-for-byte). Trust strip: open visits anytime · body-cam daily reports · no kennels, home-based.
 2. **The problem** — empathetic parent-to-parent framing; the live "~12 issues we routinely deal with" list woven in as recognisable pain points (lead pulling, reactivity, biting, crate training, hyperactivity…).
 3. **The programme & why it works** — residential board-and-train model; why-us 3 points (positive reinforcement/no aversive tools, staff expertise, no-kennels home-based care); eligibility teaser (puppies 12–16wk → ~4wk programme; adults 16wk+ → 8wk min; rescues case-by-case).
 4. **Proof** — Archie flagship case-study block (on-page summary + link to `/archiestory`); body-cam clip slots (placeholders); testimonial carousel; before/after photo pairs (placeholder pairs until owner supplies).
@@ -42,7 +42,7 @@ Header/footer (site-wide fixes baked in: `wa.me/447842116216` / `wa.me/441424300
 
 ## Owner inputs still open for this page (needed before sign-off, not before build)
 
-- [ ] Hero video clip (muted loop; body-cam or training footage)
+- [x] Hero video clip — ✅ DONE + LIVE 2026-06-18 (12.3 s / 720p / 1.9 MB, edited from the owner's own clips)
 - [ ] Corrections to the drafted week-by-week timeline incl. mid-stay home break details
 - [ ] Which testimonials to feature (or approve the live carousel four)
 - [ ] Before/after photo pairs + body-cam proof clips
@@ -68,13 +68,14 @@ Owner sign-off on live preview · `verify-urls --dist` · Lighthouse ≥ 90 (per
   owner follow-through, NOT a transformation brag — don't reframe it as one).
 - Design system ("countryside editorial"): Fraunces Variable + Karla Variable, moss/pine/cream/honey,
   grain, rolling-hill dividers, polaroids, squiggle accents, paw bullets. Lives in `src/styles/global.css`.
-- Animation: hero entrance + parallax **video hero** (10 s / 960 px / 2.45 MB cut from the live
-  site's own film — see `..\fairytails-image-archive\dog-boarding-school\videos\`), scroll reveals +
+- Animation: hero entrance + parallax **video hero** — **2026-06-18 now the owner's real hero**
+  (12.3 s / 720p / 1.9 MB, 5-shot crossfade cut from the 25 raw HLG-HDR clips in `Videos\`, seamless
+  loop; replaced the 2.45 MB live-site-film placeholder — see `docs/video-hero-pipeline.md`), scroll reveals +
   staggers, **signature week-by-week walk trail** (honey fill + scrubbed paw marker + step
   highlighting), drag-to-scroll polaroid rail, animated mobile menu, kit-list accordion,
   ClientRouter page transitions. All reduced-motion-gated and no-JS-safe.
 - Enquiry form live against n8n `qVpPqijvyEqWiPwy` (email + data-table log; Telegram deferred).
 
-**Still open before sign-off (unchanged):** the four owner-input slots (hero clip, body-cam clips,
-testimonials, before/after pairs), regime-copy corrections, owner review of design/animation feel,
-then the polish pass (Lighthouse/reduced-motion/SEO/JSON-LD).
+**Still open before sign-off:** hero clip ✅ DONE + LIVE (2026-06-18); the three remaining owner-input
+slots (body-cam clips, testimonials, before/after pairs), regime-copy corrections, owner review of
+design/animation feel, then the polish pass (Lighthouse/reduced-motion/SEO/JSON-LD).
