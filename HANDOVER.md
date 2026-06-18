@@ -1,6 +1,6 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-**Last updated:** 2026-06-18 · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c LIVE. 2026-06-18: the owner's real HERO video is now BUILT, graded, compressed & installed (`public/media/board-train-hero.mp4` 1.9 MB + new poster) from their own raw clips, build + verify-urls green locally — AWAITING OWNER REVIEW/sign-off before commit+push (not yet pushed). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
+**Last updated:** 2026-06-18 · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c LIVE. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
 
 > **2026-06-18 — Hero video produced (see "▶ START HERE" §, "Hero DONE" note).** The owner had dropped a **405 MB / 3:57 raw** `board-train-hero.mp4` straight into `public/media` (over GitHub's 100 MB file limit → would break the push). It was a concat of the same training session as the 25 raw HLG clips in `Videos\`. Replaced with a polished 12 s cut; the owner's oversized raws are **preserved** in `Videos\_owner-dropins\`.
 
@@ -30,7 +30,9 @@ build has zscale/tonemap/vidstab/xfade):
   survives mobile centre-crop. (Video opens on the seafront; the Weimaraner returns ~3 s in.)
 - Working files in `Videos\_work\` (segments/out/frames); final masters in `Videos\_work\out\`.
 - Installed to `public/media\` (exact drop-in names); `npm run build` + `verify-urls` → 0 failures.
-- **NOT committed/pushed** — owner reviews first (`npm run dev` locally, or push to preview on request).
+- **Committed (70ee6fc) + pushed to `main` 2026-06-18; Pages deploy succeeded; verified live** —
+  hero mp4 (1,913,946 B) + poster (254,931 B) serve 200 at https://fairytails123.github.io/media/.
+- **Reusable runbook:** `docs/video-hero-pipeline.md` (FFmpeg via bundled `ffmpeg-static`).
 
 **Where media lives — the two folders (this is the durable rule):**
 - **Photos** → `src/assets/pages/dog-boarding-school/` — any format (jpg/png/webp); the build
