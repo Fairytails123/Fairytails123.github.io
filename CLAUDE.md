@@ -11,8 +11,9 @@ Rebuild of **www.thefairytails.co.uk** (Fairy Tails K9 Centre, a dog-training bu
 ## Commands
 
 - `npm run dev` — dev server (localhost:4321)
-- `npm run build` — static build to `dist/`
-- `npm run verify-urls` — URL-manifest gate against `dist/` (`node scripts/verify-urls.mjs --live` for the live domain)
+- `npm run build` — static build to `dist/` (`format:'file'` → `dist/<slug>.html`, served extensionless)
+- `npm run preview` — serve the built `dist/` locally
+- `npm run verify-urls` — URL-manifest gate against `dist/`; `node scripts/verify-urls.mjs --live` checks the live domain. Manifest entries are `built` (FAIL if missing) or `planned` (WARN only) — flip planned→built as each page ships
 - `node_modules` is a **junction** to `C:\dev\main-website-node_modules` (outside OneDrive — don't break it; recreate with `New-Item -ItemType Junction` after a fresh clone)
 - Deploy: push to `main` → GitHub Actions → GitHub Pages (repo `Fairytails123/Fairytails123.github.io`, preview at https://fairytails123.github.io/)
 
@@ -38,7 +39,7 @@ This folder is used from more than one Windows machine via OneDrive. Claude's pe
 
 **Stage 0 harvest before anything else:** the live site's images are on signed Duda CDN URLs **expiring ~July 2026**. The first build session must download every image full-res from all ~39 live URLs into `..\fairytails-image-archive\<page>\` (outside this repo) and save each page's copy + every Acuity href byte-for-byte. Spec in `WEBSITE-PLAN.md` Stage 0.
 
-## Hard technical constraints (once building starts)
+## Hard technical constraints
 
 - **Stack:** Astro 6 (Node ≥ 22.12) + Tailwind v4 via **`@tailwindcss/postcss`** — NOT `astro add tailwind` / the Vite plugin (Astro 6 bug, withastro/astro#16542). GSAP + ScrollTrigger loaded per-page; Three.js **homepage hero only**, lazy-loaded after LCP; `prefers-reduced-motion` fallbacks everywhere.
 - **URL preservation IS the SEO migration:** `build.format:'file'` + `trailingSlash:'never'`; blog markdown filename = legacy root-level slug; never rename a slug without a meta-refresh stub. `scripts/verify-urls.mjs` (~40-URL manifest, `--dist` / `--live` modes) gates every page sign-off and the DNS cutover.
@@ -49,6 +50,26 @@ This folder is used from more than one Windows machine via OneDrive. Claude's pe
 - **n8n enquiry workflow:** always live-test end-to-end and read the actual execution — validation output is not proof. Test CORS from a real browser, not curl.
 - **OneDrive friction:** pause sync during `npm install` / junction `node_modules` if needed.
 
-## Single sources of data (planned)
+## Code architecture
 
-All pricing/plan grids render from `src/data/pricing.json`; NAP, hours, phone directory, analytics IDs, and the n8n webhook URL live in `src/data/business.ts`. Fix prices in data, never in page copy.
+The foundation is built. **`src/pages/dog-boarding-school.astro` is the reference implementation** for every later page — mirror its conventions rather than inventing new ones.
+
+**Page model.** Every page is a `<Base title description path ogImage?>` wrapper. `src/layouts/Base.astro` owns the whole `<head>` (title/description/`canonical`/OG/Twitter, with `canonical = business.domain + path`), Consent Mode v2 (defaults **denied** in an inline script *before* GTM loads — UK PECR), the GTM container (`business.tracking.gtm`), Astro `<ClientRouter />` (view transitions), and the `Header` / `<slot/>` / `Footer` / `ConsentBanner` shell. Pages supply only their `<main>` content + the four `<Base>` props.
+
+**Data-driven rendering — single source of truth.** Never hard-code facts that live in data:
+- `src/data/business.ts` (`business` const, `as const`) — NAP, the full **phone directory** (each entry `{label, display, tel}`, plus `whatsapp` on the lines that have it), emails, socials, **Acuity booking URLs (byte-for-byte — never normalise)**, the grooming sister-site URL, tracking IDs, and the n8n `enquiryWebhook`. Every contact/booking link reads from here.
+- `src/data/pricing.json` — `offerings[]`, each `{id, category, name, price, unit, largeDogSurcharge, eligibility, features[], acuityUrl, order, weeklyDiscountPrice?}`. Pages **filter by `category`** (`board-train` | `training` | `day-school` | `membership`) and **sort by `order`**; format money with a local `gbp()` (`£` + `toLocaleString('en-GB')`). Fix prices/facts in data, never in page copy.
+
+**Components** (`src/components/`): `Header` (fixed; `.is-scrolled` toggled on scroll; mobile slide-in drawer; nav grows **inside-out** — links added only as pages ship, currently just Board & Train), `Footer` (contacts/NAP from `business`), `ConsentBanner` (self-hosted CMP — no third-party — that only ever *upgrades* consent and persists to `localStorage.ft-consent`), `EnquiryForm` (**site-wide primary CTA**; props `{service, page}`; POSTs JSON to `business.enquiryWebhook`; spam gate = honeypot `website` field **+** `elapsedMs < 4000` → silent client-side fake-success; pushes `enquiry_submitted` to `dataLayer` on success), `HillDivider` (rolling-hill SVG between section colours — `class` sets the fill via a `text-*` colour, `flip` mirrors it).
+
+**Design system** (`src/styles/global.css`, Tailwind v4 `@theme`): "countryside editorial" — palettes `cream` / `moss` / `pine` / `bark` / `honey`; `--font-display` Fraunces Variable + `--font-body` Karla Variable (self-hosted via `@fontsource-variable/*`, imported in `Base`). Reuse the component classes instead of re-styling: `.btn` + `.btn-honey`/`.btn-moss`/`.btn-ghost-light` (with `.btn-arrow`), `.eyebrow`, `.squiggle` (accent underline), `.polaroid`, `.grain`, `.paw-bullet`, `.field`/`.field-label`, the `<details>` accordion (`.accordion-body`/`.accordion-chevron`), and `.drag-track`.
+
+**Per-page assets.** Page images live in `src/assets/pages/<slug>/` (full-res from the harvest), are `import`ed and rendered with the astro:assets `<Image widths sizes>` component (not raw `<img>`). Body copy is lifted **verbatim from the harvest `copy.md`** into frontmatter arrays.
+
+**Animation contract** (GSAP + ScrollTrigger in a per-page `<script>`):
+- Register the plugin; run an **idempotent** `init()` guarded by a `data-…Init` flag; wrap motion in `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`. **Reduced-motion returns early → the page is fully visible and static.**
+- Set initial hidden states in **JS, never CSS**, so a no-JS / pre-hydration page still shows all content. Standard hooks: `data-reveal` (fade-up on scroll), `data-stagger` (stagger a group's children), `data-hero-*` (hero entrance timeline).
+- ClientRouter lifecycle: re-run `init()` on `astro:page-load`, and **kill all ScrollTriggers on `astro:before-swap`** or they leak across navigations.
+- Hero video: `preload="none"`, lazy `.load()/.play()` after first paint, **skipped for reduced-motion or `navigator.connection.saveData`**; the `poster` is the fallback frame.
+
+**URL-preservation mechanics** (the SEO migration). In `astro.config.mjs`, `site` is the **final custom domain**, so canonical/OG/sitemap URLs point there *even on the preview* — which is why `public/robots.txt` is Disallow-all until cutover. `format:'file'` + `trailingSlash:'never'` serve every legacy URL extensionless; `redirects` are the 10 consolidated legacy slugs (emitted as meta-refresh stubs); the sitemap integration strips the `.html`. `src/pages/404.astro` strips a stray trailing slash and retries once. Keep `scripts/verify-urls.mjs` green before every sign-off.
