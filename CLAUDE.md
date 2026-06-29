@@ -14,6 +14,7 @@ Rebuild of **www.thefairytails.co.uk** (Fairy Tails K9 Centre, a dog-training bu
 - `npm run build` — static build to `dist/` (`format:'file'` → `dist/<slug>.html`, served extensionless)
 - `npm run preview` — serve the built `dist/` locally
 - `npm run verify-urls` — URL-manifest gate against `dist/`; `node scripts/verify-urls.mjs --live` checks the live domain. Manifest entries are `built` (FAIL if missing) or `planned` (WARN only) — flip planned→built as each page ships
+- `npm run test:breed-matcher` — node regression harness for the Breed Matcher tool's scoring engine (see **Value-added tools** below); run after any edit to that tool's engine/data
 - `node_modules` is a **junction** to `C:\dev\main-website-node_modules` (outside OneDrive — don't break it; recreate with `New-Item -ItemType Junction` after a fresh clone)
 - Deploy: push to `main` → GitHub Actions → GitHub Pages (repo `Fairytails123/Fairytails123.github.io`, preview at https://fairytails123.github.io/)
 
@@ -73,3 +74,15 @@ The foundation is built. **`src/pages/dog-boarding-school.astro` is the referenc
 - Hero video: `preload="none"`, lazy `.load()/.play()` after first paint, **skipped for reduced-motion or `navigator.connection.saveData`**; the `poster` is the fallback frame.
 
 **URL-preservation mechanics** (the SEO migration). In `astro.config.mjs`, `site` is the **final custom domain**, so canonical/OG/sitemap URLs point there *even on the preview* — which is why `public/robots.txt` is Disallow-all until cutover. `format:'file'` + `trailingSlash:'never'` serve every legacy URL extensionless; `redirects` are the 10 consolidated legacy slugs (emitted as meta-refresh stubs); the sitemap integration strips the `.html`. `src/pages/404.astro` strips a stray trailing slash and retries once. Keep `scripts/verify-urls.mjs` green before every sign-off.
+
+## Value-added tools (standalone mini-apps)
+
+Customer-facing interactive tools that are **not** Astro pages — self-contained single-file web apps the owner wants to iterate on **in isolation** and ship with the site.
+
+- **Breed Matcher** — an honest, lead-generating breed-matching quiz (added 2026-06-20). It is a **standalone `index.html`** (vanilla HTML/CSS/JS, **no build step, no framework, no bundler** — opens directly in a browser; British English; its own self-contained palette).
+- **Where it lives = the integration pattern for any such tool:**
+  - **The tool itself (single source of truth):** `public/breed-matcher/index.html`. Astro copies `public/` **verbatim** into `dist/`, so it ships with **zero build wiring** and is served at **`/breed-matcher/`**. There is **only one copy** — edit it directly; do not create a mirror.
+  - **The isolation/dev kit (NOT served):** `tools/breed-matcher/` — `CLAUDE.md` (the full authoritative brief; auto-loads when working in that folder), `README.md`, `test/engine.test.mjs` (the `npm run test:breed-matcher` harness), and a gitignored `backups/` (standing rule: back up before any edit). Keeping docs/tests under `tools/` (not `public/`) means they never ship.
+- **Sacred rules for the Breed Matcher engine** (full detail in `tools/breed-matcher/CLAUDE.md`): the chosen breed stays the hero; **hard-nos never lift** (`supported === base`, stated plainly); the two-register tip voice. The 92 cap bounds the *lift*, not an already-excellent honest score. After any engine/data change: `npm run test:breed-matcher` (regression), then `npm run build && npm run verify-urls` (still ships).
+- **Not on the homepage yet** — the site is built inside-out and the **homepage is built LAST**; featuring/linking/embedding the matcher on `/` is recorded in `WEBSITE-PLAN.md` + `HANDOVER.md` for the homepage build. The tool is fully usable standalone at `/breed-matcher/` on the preview meanwhile.
+- **Service links** in the tool (`FT = {…}`) currently point at the old live domain (still resolving); repoint to new-site paths when those pages exist.

@@ -9,6 +9,10 @@ dist/
 Videos/
 fairytails-image-archive/
 
+# breed-matcher tool — timestamped backups (see tools/breed-matcher/CLAUDE.md §1)
+tools/breed-matcher/backups/*
+!tools/breed-matcher/backups/.gitkeep
+
 # misc
 *.log
 .DS_Store

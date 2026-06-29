@@ -5,7 +5,10 @@ import logo from '../assets/brand/logo.png';
 
 // Inside-out build: nav links are added as pages go live on the preview
 // (WEBSITE-PLAN.md risk #8). Currently live: Board & Train.
-const nav = [{ label: 'Board & Train', href: '/dog-boarding-school' }];
+const nav = [
+  { label: 'Board & Train', href: '/dog-boarding-school' },
+  { label: 'Dog Day School', href: '/dog-day-school' },
+];
 ---
 
 <header
@@ -34,8 +37,8 @@ const nav = [{ label: 'Board & Train', href: '/dog-boarding-school' }];
           </a>
         ))
       }
-      <a href={business.phones.textLine.tel} class="nav-link text-sm font-bold text-bark-700">
-        {business.phones.textLine.display}
+      <a href={business.phones.main.tel} class="nav-link text-sm font-bold text-bark-700">
+        {business.phones.main.display}
       </a>
       <a href={business.acuity.main} class="btn btn-moss !px-5 !py-2.5 text-sm"> Book Appointment </a>
     </nav>
@@ -89,10 +92,10 @@ const nav = [{ label: 'Board & Train', href: '/dog-boarding-school' }];
         </a>
       </nav>
       <div class="space-y-2 text-sm text-bark-700">
-        <a href={business.phones.textLine.tel} class="block font-bold" data-menu-link>
-          Call {business.phones.textLine.display}
+        <a href={business.phones.main.tel} class="block font-bold" data-menu-link>
+          Call {business.phones.main.display}
         </a>
-        <a href={business.phones.textLine.whatsapp} class="block font-bold" data-menu-link>
+        <a href={business.phones.main.whatsapp} class="block font-bold" data-menu-link>
           WhatsApp us
         </a>
       </div>

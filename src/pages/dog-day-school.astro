@@ -1,0 +1,1066 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+import doggyFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
+import enrichmentWoods from '../assets/pages/dog-day-school/enrichment-2-2880w.webp';
+import climbingFrame from '../assets/pages/dog-day-school/dog-in-climbing-frame-2880w.webp';
+import dogFocusing from '../assets/pages/dog-day-school/dog-focusing-2880w.webp';
+import dayReport from '../assets/pages/dog-day-school/day-school-report-1920w.webp';
+import cbsReport from '../assets/pages/dog-day-school/cbs-report-1920w.webp';
+import happyWalk from '../assets/pages/dog-day-school/happy-walk-2880w.webp';
+import onTheBeach from '../assets/pages/dog-day-school/on-the-beach-2880w.webp';
+import buildingConfidence from '../assets/pages/dog-day-school/building-confidence-2880w.webp';
+import onTheBus from '../assets/pages/dog-day-school/on-the-bus-1920w.webp';
+import readyForSchool from '../assets/pages/dog-day-school/ready-for-school-2880w.webp';
+import theBarn from '../assets/pages/dog-day-school/the-barn-1920w.webp';
+
+import iconBuddies from '../assets/pages/dog-day-school/icon-buddies.svg';
+import iconBus from '../assets/pages/dog-day-school/icon-bus.svg';
+import iconEntrance from '../assets/pages/dog-day-school/icon-entrance.svg';
+import iconLove from '../assets/pages/dog-day-school/icon-love.svg';
+
+// Day-school attendance plans (PM half day removed at the 2026-06-29 interview).
+const dayPlans = pricing.offerings
+  .filter((o) => o.category === 'day-school' && (o.id === 'day-full' || o.id === 'day-half-am'))
+  .sort((a, b) => a.order - b.order);
+const fullPlan = pricing.offerings.find((o) => o.id === 'day-full');
+const halfPlan = pricing.offerings.find((o) => o.id === 'day-half-am');
+const taster = pricing.offerings.find((o) => o.id === 'day-taster');
+const cbs = pricing.offerings.find((o) => o.id === 'cbs');
+
+// Pennies shown only when present (£24.99, £12.50) — whole pounds stay clean (£15).
+const gbp = (n) => `£${Number.isInteger(n) ? n.toLocaleString('en-GB') : n.toFixed(2)}`;
+
+const pillars = [
+  {
+    title: 'Real socialisation',
+    body: 'Planned, supervised play with regular friends of all breeds, sizes and temperaments — the foundation of a confident, well-mannered dog.',
+  },
+  {
+    title: 'Energy, well spent',
+    body: 'Walks, games and problem-solving burn off the energy that builds up at home, so the dog you collect is a happy, settled one.',
+  },
+  {
+    title: 'Minds at work',
+    body: 'Timetabled enrichment and proper learning equipment give clever dogs the mental stimulation they’re built for — far more than a day on the sofa.',
+  },
+  {
+    title: 'Routine & structure',
+    body: 'A predictable rhythm — play, lunch, rest — lowers anxiety and reinforces good habits, with gentle daily obedience woven through.',
+  },
+  {
+    title: 'Calm & confidence',
+    body: 'Our team keeps a calm, positive atmosphere; quieter dogs build confidence and resilience in a safe, controlled environment.',
+  },
+  {
+    title: 'Time apart, made easy',
+    body: 'Happy hours away from you, in good company, ease separation anxiety and teach your dog to be content on their own.',
+  },
+];
+
+const daySchedule = [
+  { time: '7:45 – 9:30am', title: 'Pick-up round & arrivals', body: 'Our school buses head out on their rounds and the first happy paws hit the playground.' },
+  { time: '8:00 – 10:00am', title: 'Parent drop-offs', body: 'We open at 8:00am — drop your dog off any time up to 10:00am.' },
+  { time: '9:30 – 10:30am', title: 'Welcome & settling in', body: 'Cuddles and calm to settle everyone in, plus health, poop and bag checks so the day starts right.' },
+  { time: '10:30am – 12:00pm', title: 'Walking & enrichment', body: 'Out for walks, then into the enrichment activities that keep clever dogs happy and pleasantly tired.' },
+  { time: '11:00am – 12:30pm', title: 'Lunch & feeding', body: 'A calm, supervised lunch — every dog fed their own meal, exactly as you’ve asked us to.' },
+  { time: '12:30 – 1:30pm', title: 'Rest period', body: 'Downtime to recharge — indoors or out, wherever your dog is comfiest.' },
+  { time: '1:30 – 2:30pm', title: 'Afternoon play & prep', body: 'More engagement and a little obedience practice, daily reports written up, and we get ready for home time.' },
+  { time: 'From 3:00pm', title: 'Loading the buses', body: 'Dogs loaded into the vans, headcounts done, and the buses set off on the return run.' },
+  { time: 'By 4:30pm', title: 'Home runs complete', body: 'All the school-bus return journeys are wrapped up by half past four.' },
+  { time: 'Until 5:30pm', title: 'Parent pick-ups', body: 'We stay open until 5:30pm for collections — then we do it all again tomorrow!' },
+];
+
+const whyUs = [
+  { icon: iconBuddies, title: 'Regular buddies', body: 'Your dog socialises with its regular friends, engaging in planned activities for the day.' },
+  { icon: iconBus, title: 'Local pick-ups & drop-offs', body: 'Your dog can travel to school and back in one of our buses — saving you time and money.' },
+  { icon: iconEntrance, title: 'Strict entrance criteria', body: 'A careful assessment keeps every doggy client and our staff safe and happy.' },
+  { icon: iconLove, title: 'We love dogs!', body: 'Our doggy clients love our staff, and we love dogs — come and see for yourself.' },
+];
+
+const railCards = [
+  { img: happyWalk, caption: 'Out on the daily walk', rotate: -2.2 },
+  { img: onTheBeach, caption: 'Beach days', rotate: 1.6 },
+  { img: doggyFriends, caption: 'Firm friends', rotate: -1.4 },
+  { img: climbingFrame, caption: 'Enrichment equipment', rotate: 2.2 },
+  { img: dogFocusing, caption: 'Learning to focus', rotate: -1.8 },
+  { img: buildingConfidence, caption: 'Building confidence', rotate: 1.2 },
+  { img: onTheBus, caption: 'The school bus', rotate: -2.0 },
+  { img: readyForSchool, caption: 'Ready for school!', rotate: 1.8 },
+];
+
+const joinSteps = [
+  { title: 'Send an enquiry', body: 'Tell us about your dog and what you’re after. We’ll be in touch to arrange your first visit.' },
+  { title: 'Assessment & tasters', body: `An introductory assessment plus three taster sessions — 1 hour, then 2, then 3 — at ${gbp(taster.price)} each, so we can be sure day school suits your dog.` },
+  { title: 'Welcome to the school', body: 'Once your dog is accepted, you’re all set — and ready to start booking days.' },
+  { title: 'Book your days', body: 'Book full or half days to suit your week, or save with a regular weekly booking or membership.' },
+];
+
+const criteria = [
+  'Every new dog has an introductory assessment plus at least three taster sessions, so we know day school is the right fit.',
+  'Vaccinations up to date — DHP, Leptospirosis and Kennel Cough.',
+  'Intact male dogs over six months old can’t join (unless they’re on one of our training programmes).',
+  'Females in season can’t attend while they’re in season.',
+  'We keep a healthy ratio of dog sizes, so your dog may go on a short waiting list until a suitable space opens up.',
+  'We can’t take dogs with risky behaviour issues — they’re welcome to join our training pipeline (or work with a trainer) first.',
+  'We can’t accept dogs that are allergic, on routine medication, with ongoing medical issues, or in recovery.',
+  'We can’t take any dog before 8:00am.',
+  'Visits are very welcome — strictly by appointment, after 4:00pm on weekdays, and without a dog.',
+];
+
+const kitList = [
+  'Collar with an ID tag showing your up-to-date address and phone number',
+  'An appropriate dog collar, as recommended for handling',
+  'A non-retractable lead',
+  'A fitted harness with a handle',
+  'Vaccination card',
+  'Microchip (with your address up to date)',
+  'Flea-treatment self-declaration',
+  'A named lunch box containing your dog’s normal meal',
+  'A blanket from home',
+  'Treats: plain boiled chicken only (no other treats, due to allergies)',
+  'Registration form, signed and submitted before the first full day',
+];
+---
+
+<Base
+  title="Dog Day School & Doggy Day Care in Hastings | The Fairy Tails K9 Centre"
+  description="Enrichment-led doggy day school near Hastings Country Park — structured play, socialisation, light training and daily reports. Full & half days, with local pick-up & drop-off."
+  path="/dog-day-school"
+>
+  <div data-page="day-school">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- Hero loop cut from the harvested "arrivals" clip; poster doubles as the
+             reduced-motion/fallback state. TODO(owner): swap in fresh footage when ready. -->
+        <video
+          class="h-full w-full object-cover"
+          poster="/media/day-school-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          data-hero-video
+          data-hero-media
+          aria-hidden="true"
+        >
+          <source src="/media/day-school-hero.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/45 to-pine-950/25"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>Doggy Day School · Hastings Country Park</p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">Where dogs learn that</span>
+          <span class="hero-line block"><em class="squiggle not-italic">learning is fun</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          A fun, safe place for your dog to stay, play and learn — busy days of friends, enrichment
+          and structure, with you back to calm, happy evenings.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#enquire" class="btn btn-honey">
+            Send an enquiry <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href={business.acuity.main} class="btn btn-ghost-light"> Already with us? Book your days </a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
+        <li class="paw-bullet flex items-center text-moss-700">Enrichment-led, not just minded</li>
+        <li class="paw-bullet flex items-center text-moss-700">Local pick-up &amp; drop-off</li>
+        <li class="paw-bullet flex items-center text-moss-700">Daily reports, straight to you</li>
+      </ul>
+    </div>
+
+    <!-- ============ WELCOME ============ -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="welcome">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="eyebrow text-honey-600" data-reveal>Welcome to day school</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            A proper day out — for <em class="squiggle not-italic">dogs</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            The day school programme at The Fairy Tails offers a fun and safe place for your dog to
+            stay, play and learn. It’s a great way for them to stay happy, active and busy — and to
+            socialise with fellow furry friends.
+          </p>
+          <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+            For training and enrichment we have plenty of space, learning equipment and timetabled
+            activities. Our schooling programme is designed to engage dogs safely and effectively,
+            with positive behaviour in mind.
+          </p>
+        </div>
+        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(-2deg);" data-reveal>
+          <Image
+            src={doggyFriends}
+            alt="Day-school dogs playing together at The Fairy Tails"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Fellow furry friends
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ WHY DAY SCHOOL — ENRICHMENT ============ -->
+    <section class="bg-cream-100" data-section="enrichment">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <p class="eyebrow text-honey-600" data-reveal>Why day school</p>
+            <h2 class="mt-3 max-w-xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+              Dogs were built for a <em class="squiggle not-italic">busier world</em>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+              A feral dog can spend as much as 70% of its day hunting and searching for food — real
+              physical effort and real problem-solving. For many of our companions, the day is eight
+              hours or more just waiting for us to come home.
+            </p>
+            <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+              Years of domestication made dogs wonderful company, but they still need enrichment in
+              their lives. That’s where we come in — a day full of the movement, stimulation and
+              friendship they’re wired for.
+            </p>
+          </div>
+          <!-- overlapping photo cluster -->
+          <div class="relative mx-auto h-[24rem] w-full max-w-md" data-reveal>
+            <figure class="polaroid absolute left-0 top-2 w-3/5" style="transform: rotate(-4deg);">
+              <Image src={enrichmentWoods} alt="Enrichment walk in the woods" class="aspect-[4/5] w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+            </figure>
+            <figure class="polaroid absolute bottom-0 right-0 w-3/5" style="transform: rotate(3.5deg);">
+              <Image src={climbingFrame} alt="A dog exploring the climbing frame" class="aspect-square w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+            </figure>
+          </div>
+        </div>
+
+        <div class="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+          {
+            pillars.map((p) => (
+              <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-xl font-bold text-moss-700">{p.title}</h3>
+                <p class="mt-3 leading-relaxed text-bark-700">{p.body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ A DAY IN THE LIFE — signature scroll story ============ -->
+    <section class="relative overflow-hidden bg-pine-950 text-cream-100" data-section="day">
+      <HillDivider class="relative z-10 bg-cream-100 text-pine-950" flip />
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-0 h-2/3" aria-hidden="true" style="background: radial-gradient(70% 55% at 50% 0%, rgba(236,194,124,0.16), transparent 72%);"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>A day in the life</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          From morning bus to <em class="squiggle not-italic">happy tired</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-cream-200" data-reveal>
+          Most days follow this rhythm. Times flow into one another — some dogs arrive on the bus
+          while others are dropped off — but here’s how a typical day unfolds.
+        </p>
+
+        <!-- The walk: a trail fills + a paw walks down it as you scroll -->
+        <div class="relative mt-14" data-day-list>
+          <div class="absolute bottom-4 left-[7px] top-2 w-0.5 sm:left-[166px]" aria-hidden="true">
+            <div class="absolute inset-0 rounded bg-pine-800"></div>
+            <div class="day-trail absolute inset-0 origin-top rounded" data-trail-fill></div>
+            <span class="day-sun absolute -left-[15px] top-0 block h-8 w-8" data-trail-sun>
+              <svg viewBox="0 0 32 32" fill="none" class="h-full w-full">
+                <circle cx="16" cy="16" r="6" fill="var(--color-honey-300)"></circle>
+                <g stroke="var(--color-honey-300)" stroke-width="2" stroke-linecap="round">
+                  <line x1="16" y1="2" x2="16" y2="5.5"></line>
+                  <line x1="16" y1="26.5" x2="16" y2="30"></line>
+                  <line x1="2" y1="16" x2="5.5" y2="16"></line>
+                  <line x1="26.5" y1="16" x2="30" y2="16"></line>
+                  <line x1="6.3" y1="6.3" x2="8.8" y2="8.8"></line>
+                  <line x1="23.2" y1="23.2" x2="25.7" y2="25.7"></line>
+                  <line x1="6.3" y1="25.7" x2="8.8" y2="23.2"></line>
+                  <line x1="23.2" y1="8.8" x2="25.7" y2="6.3"></line>
+                </g>
+              </svg>
+            </span>
+          </div>
+
+          <ol class="space-y-10 sm:space-y-12">
+            {
+              daySchedule.map((step) => (
+                <li class="day-step relative grid gap-2 pl-9 sm:grid-cols-[140px_1fr] sm:gap-12 sm:pl-0" data-day-step>
+                  <p class="font-display text-base font-bold uppercase tracking-wide text-honey-400 sm:text-right">
+                    {step.time}
+                  </p>
+                  <div class="sm:pl-14">
+                    <h3 class="font-display text-2xl font-bold text-cream-50">{step.title}</h3>
+                    <p class="mt-2 max-w-2xl leading-relaxed text-cream-200">{step.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <p class="mt-14 max-w-3xl rounded-2xl bg-pine-900 p-6 leading-relaxed text-cream-100" data-reveal>
+          <strong class="text-honey-300">Our hours:</strong> we’re open Monday to Friday, 8:00am to
+          5:30pm (closed weekends and bank holidays). School-bus pick-up and drop-off times vary with
+          your location — we’ll set yours when your dog joins.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ WHY PEOPLE CHOOSE US ============ -->
+    <section data-section="choose">
+      <HillDivider class="bg-pine-950 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Why people choose us</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          The little things that <em class="squiggle not-italic">add up</em>
+        </h2>
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            whyUs.map((item) => (
+              <article class="why-card grain rounded-2xl bg-cream-50 p-7 text-center shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <span class="why-icon mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-moss-100">
+                  <img src={item.icon.src} alt="" width="36" height="36" class="h-9 w-9" loading="lazy" />
+                </span>
+                <h3 class="mt-5 font-display text-lg font-bold text-moss-800">{item.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-bark-700">{item.body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROOF ============ -->
+    <section class="overflow-hidden bg-cream-100" data-section="proof">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Proof, not promises</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Don’t just take our <em class="squiggle not-italic">word for it</em>
+        </h2>
+
+        <div class="mt-12 grid items-start gap-8 lg:grid-cols-2" data-stagger>
+          <!-- promo clip (click to play) -->
+          <figure class="grain rounded-2xl bg-cream-50 p-3 shadow-[var(--shadow-lift)]">
+            <video
+              class="aspect-video w-full rounded-xl bg-pine-950 object-cover"
+              controls
+              preload="none"
+              playsinline
+              poster="/media/day-school-promo-poster.jpg"
+            >
+              <source src="/media/day-school-promo.mp4" type="video/mp4" />
+            </video>
+            <figcaption class="px-1 pt-3 font-display text-sm font-bold text-bark-700">
+              A day with us — straight off the cameras
+            </figcaption>
+          </figure>
+
+          <!-- daily reports -->
+          <div>
+            <h3 class="font-display text-2xl font-bold text-moss-800">Real reports, every day</h3>
+            <p class="mt-3 leading-relaxed text-bark-700">
+              You don’t just collect a tired dog — you get to see their day. Every dog goes home with
+              a daily report, and Confidence Building sessions are recorded on camera with a video
+              link sent straight to you.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-5">
+              <figure class="polaroid w-40 sm:w-48" style="transform: rotate(-2.5deg);">
+                <Image src={dayReport} alt="Example Day School daily report" class="w-full rounded-[2px]" widths={[200, 400]} sizes="12rem" />
+                <figcaption class="px-1 pt-2 text-center font-display text-xs font-bold text-bark-700">Daily report</figcaption>
+              </figure>
+              <figure class="polaroid w-40 sm:w-48" style="transform: rotate(2.5deg);">
+                <Image src={cbsReport} alt="Example Confidence Building Session report" class="w-full rounded-[2px]" widths={[200, 400]} sizes="12rem" />
+                <figcaption class="px-1 pt-2 text-center font-display text-xs font-bold text-bark-700">CBS video report</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Draggable polaroid rail (full-bleed) -->
+      <div class="pb-4" data-reveal>
+        <h3 class="mx-auto max-w-6xl px-4 font-display text-2xl font-bold text-moss-800">
+          A few of our day-school regulars
+        </h3>
+        <p class="mx-auto mt-1 max-w-6xl px-4 text-sm font-bold text-bark-400">
+          Drag to explore <span aria-hidden="true">⟷</span>
+        </p>
+        <div
+          class="drag-track mt-6 flex snap-x snap-mandatory gap-7 overflow-x-auto px-[max(1rem,calc((100vw-72rem)/2+1rem))] pb-6 pt-2"
+          data-drag-track
+        >
+          {
+            railCards.map(({ img, caption, rotate }) => (
+              <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style={`transform: rotate(${rotate}deg);`}>
+                <Image
+                  src={img}
+                  alt={caption}
+                  class="aspect-square w-full rounded-[2px] object-cover"
+                  widths={[480, 960]}
+                  sizes="18rem"
+                  draggable={false}
+                />
+                <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">{caption}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- TODO(owner): parent testimonials — awaiting wording (page spec open item). -->
+      <div class="mx-auto max-w-6xl px-4" data-reveal>
+        <article class="rounded-2xl border-2 border-dashed border-moss-300 bg-cream-50 p-7 text-center">
+          <h3 class="font-display text-xl font-bold text-moss-700">What our families say</h3>
+          <p class="mt-2 leading-relaxed text-bark-700">Real words from day-school families are coming to this spot.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ CONFIDENCE BUILDING SESSIONS ============ -->
+    <section class="bg-pine-900 text-cream-100" data-section="cbs">
+      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <figure class="polaroid mx-auto w-full max-w-md" style="transform: rotate(-2deg);" data-reveal>
+            <Image
+              src={buildingConfidence}
+              alt="A dog building confidence in a training session"
+              class="aspect-[4/3] w-full rounded-[2px] object-cover"
+              widths={[640, 1024]}
+              sizes="(min-width: 1024px) 28rem, 90vw"
+            />
+            <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">Building confidence</figcaption>
+          </figure>
+          <div>
+            <p class="eyebrow text-honey-400" data-reveal>A little extra help</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+              Confidence Building Sessions
+            </h2>
+            <p class="mt-4 font-display text-2xl font-bold text-honey-300" data-reveal>
+              {gbp(cbs.price)} per session, while your dog is at day school
+            </p>
+            <p class="mt-5 leading-relaxed text-cream-200" data-reveal>
+              Designed for dogs who need a bit of extra help. Each session is around 30 minutes,
+              recorded on camera — and you’ll receive a link to the video. They can help with:
+            </p>
+            <ul class="mt-5 flex flex-wrap gap-2.5" data-stagger>
+              {
+                ['Lead pulling', 'Focus', 'Recall', 'Obedience', 'Town walks'].map((s) => (
+                  <li class="rounded-full border-2 border-cream-100/25 bg-pine-950/40 px-4 py-2 text-sm font-bold text-cream-100">{s}</li>
+                ))
+              }
+            </ul>
+            <p class="mt-6 text-sm text-cream-200/80" data-reveal>Booking is subject to availability.</p>
+            <a href="#enquire" class="btn btn-honey mt-7" data-reveal>
+              Ask about CBS <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING + ESTIMATOR ============ -->
+    <section data-section="pricing">
+      <HillDivider class="bg-pine-900 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Day-school plans</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Plans to suit <em class="squiggle not-italic">your week</em>
+        </h2>
+
+        <div class="mt-12 grid items-start gap-6 sm:grid-cols-2" data-stagger>
+          {
+            dayPlans.map((plan) => (
+              <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-2xl font-bold text-moss-800">{plan.name}</h3>
+                {plan.eligibility && <p class="mt-1 text-sm font-bold text-bark-400">{plan.eligibility}</p>}
+                <p class="mt-4">
+                  <span class="font-display text-4xl font-bold text-moss-700">{gbp(plan.price)}</span>
+                  <span class="font-bold text-bark-500"> {plan.unit}</span>
+                </p>
+                {plan.largeDogSurcharge && (
+                  <p class="mt-1.5 text-sm font-bold text-honey-700">+{gbp(plan.largeDogSurcharge)} per day for large dogs</p>
+                )}
+                {plan.weeklyDiscountPrice && (
+                  <p class="mt-2 inline-flex rounded-full bg-moss-100 px-3 py-1 text-sm font-bold text-moss-700">
+                    {gbp(plan.weeklyDiscountPrice)}/day on a regular weekly booking
+                  </p>
+                )}
+                <ul class="mt-5 flex-1 space-y-2.5 text-[0.95rem] text-bark-700">
+                  {plan.features.map((f) => (
+                    <li class="paw-bullet flex items-start">{f}</li>
+                  ))}
+                </ul>
+                <a href="#enquire" class="btn btn-moss mt-7 w-full">Enquire about day school</a>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-6 text-sm font-bold text-bark-500" data-reveal>
+          Add-ons: school bus £1 each way · dog walking £2 · Confidence Building Sessions {gbp(cbs.price)}.
+        </p>
+
+        <!-- Interactive estimator -->
+        <div
+          class="estimator grain mt-10 rounded-3xl bg-cream-50 p-7 shadow-[var(--shadow-polaroid)] sm:p-9"
+          data-estimator
+          data-full={fullPlan.price}
+          data-full-weekly={fullPlan.weeklyDiscountPrice}
+          data-full-large={fullPlan.largeDogSurcharge}
+          data-half={halfPlan.price}
+          data-half-weekly={halfPlan.weeklyDiscountPrice}
+          data-half-large={halfPlan.largeDogSurcharge}
+          data-reveal
+        >
+          <p class="eyebrow text-honey-600">Plan your week</p>
+          <h3 class="mt-2 font-display text-2xl font-bold text-moss-800">Estimate your cost</h3>
+          <div class="mt-7 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+            <div class="space-y-6">
+              <div>
+                <span class="field-label">Day type</span>
+                <div class="seg" role="radiogroup" aria-label="Day type">
+                  <label class="seg-opt"><input type="radio" name="est-type" value="full" checked /><span>Full day</span></label>
+                  <label class="seg-opt"><input type="radio" name="est-type" value="half" /><span>Half day (AM)</span></label>
+                </div>
+              </div>
+              <div>
+                <span class="field-label">Dog size</span>
+                <div class="seg" role="radiogroup" aria-label="Dog size">
+                  <label class="seg-opt"><input type="radio" name="est-size" value="standard" checked /><span>Standard</span></label>
+                  <label class="seg-opt"><input type="radio" name="est-size" value="large" /><span>Large</span></label>
+                </div>
+              </div>
+              <div>
+                <label class="field-label" for="est-days">
+                  Days per week — <span data-est-days-out class="text-moss-700">3 days</span>
+                </label>
+                <input id="est-days" name="est-days" type="range" min="1" max="5" value="3" step="1" class="est-range w-full" />
+              </div>
+              <label class="switch flex items-center gap-3">
+                <input type="checkbox" name="est-weekly" />
+                <span class="switch-track"><span class="switch-thumb"></span></span>
+                <span class="font-bold text-bark-700">Comes every week</span>
+              </label>
+            </div>
+
+            <div class="rounded-2xl bg-moss-800 p-6 text-cream-50">
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-honey-300">Estimated cost</p>
+              <p class="mt-3 font-display text-5xl font-bold leading-none text-cream-50">
+                <span data-est-perday>£24.99</span><span class="align-top text-lg font-bold text-cream-200">/day</span>
+              </p>
+              <dl class="mt-5 space-y-2 text-cream-100">
+                <div class="flex justify-between border-t border-cream-100/15 pt-2"><dt>Per week</dt><dd class="font-bold" data-est-week>£74.97</dd></div>
+                <div class="flex justify-between border-t border-cream-100/15 pt-2"><dt>Per month (approx.)</dt><dd class="font-bold" data-est-month>£325</dd></div>
+              </dl>
+              <p class="mt-4 text-xs leading-relaxed text-honey-200" data-est-hint>Tick “Comes every week” for the weekly-booking discount.</p>
+              <p class="mt-3 text-[0.7rem] leading-relaxed text-cream-200/70">
+                An estimate only — final pricing is confirmed when your dog joins. Excludes the
+                £1-each-way school bus and any add-ons.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Membership teaser -->
+        <div class="mt-10 grain flex flex-col items-start justify-between gap-5 rounded-2xl bg-moss-700 p-7 text-cream-50 sm:flex-row sm:items-center" data-reveal>
+          <div>
+            <h3 class="font-display text-2xl font-bold text-cream-50">Coming every week? Save with membership</h3>
+            <p class="mt-2 max-w-xl leading-relaxed text-cream-100">
+              Monthly membership bundles your days with free walks, free school-bus pick-up &amp;
+              drop-off, grooming perks and priority spaces.
+            </p>
+          </div>
+          <a href="/membership-plans" class="btn btn-honey shrink-0">
+            See membership plans <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ JOINING THE SCHOOL ============ -->
+    <section class="bg-cream-100" data-section="joining">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Joining the school</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How your dog <em class="squiggle not-italic">joins us</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Every dog is assessed before they start — it’s how we keep day school safe, calm and happy
+          for everyone. Here’s how it works.
+        </p>
+
+        <ol class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            joinSteps.map((step, i) => (
+              <li class="relative rounded-2xl border-2 border-cream-200 bg-cream-50 p-7 transition-colors duration-300 hover:border-honey-400">
+                <p class="font-display text-6xl font-bold leading-none text-honey-400/80">{i + 1}</p>
+                <h3 class="mt-4 font-display text-xl font-bold text-moss-800">{step.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-bark-700">{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <p class="mt-8 rounded-2xl bg-cream-50 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
+          <strong class="text-moss-800">The assessment</strong> is made up of three introductory
+          taster sessions at <strong class="text-moss-800">{gbp(taster.price)} each</strong>. After the
+          three sessions, any further half or full days are charged at the standard rate. Please only
+          book once your dog has been accepted into the school.
+        </p>
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-2">
+          <!-- Admission criteria -->
+          <details class="group rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]" data-reveal>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+              How we keep everyone safe — our criteria
+              <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </summary>
+            <div class="accordion-body">
+              <div class="overflow-hidden">
+                <div class="px-7 pb-7">
+                  <ul class="space-y-2.5">
+                    {criteria.map((c) => <li class="paw-bullet flex items-start text-sm text-bark-700">{c}</li>)}
+                  </ul>
+                  <p class="mt-4 text-sm text-bark-700">
+                    By law we also can’t accept any banned breed or derivative (cross breed); our
+                    assessment is the sole criteria.
+                    <a href="https://www.gov.uk/control-dog-public/banned-dogs" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">
+                      See the government’s list
+                    </a>.
+                  </p>
+                  <p class="mt-4 text-sm leading-relaxed text-bark-700">
+                    Very rarely, if a dog presents a risk to people or other dogs, we’re legally bound
+                    to keep everyone safe — which can mean muzzling, restricting movement, isolating,
+                    or sending a dog home. It’s there to protect every dog in our care.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Kit list -->
+          <details class="group rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]" data-reveal>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+              Getting ready — your dog’s kit list
+              <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </summary>
+            <div class="accordion-body">
+              <div class="overflow-hidden">
+                <div class="px-7 pb-7">
+                  <p class="text-sm text-bark-700">Once your dog is accepted, here’s what they’ll need:</p>
+                  <ul class="mt-4 space-y-2.5">
+                    {kitList.map((item) => <li class="paw-bullet flex items-start text-sm text-bark-700">{item}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY FORM ============ -->
+    <section id="enquire" class="bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Let’s talk</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your dog</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Send us a few details and we’ll be in touch to arrange a visit and your dog’s
+            introductory assessment.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Dog Day School" page="/dog-day-school" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk first? Call us on
+          <a href={business.phones.main.tel} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            {business.phones.main.display}
+          </a>
+          or WhatsApp us
+          <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            on the same number
+          </a>.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* Day-in-the-life steps: dimmed until active (JS adds .is-active; no-JS/reduced-motion = full) */
+  .day-step {
+    transition: opacity 0.45s ease;
+  }
+  [data-gsap-init] .day-step:not(.is-active) {
+    opacity: 0.38;
+  }
+
+  /* Day timeline — dawn-to-dusk trail + travelling sun */
+  .day-trail {
+    background: linear-gradient(to bottom, var(--color-honey-200), var(--color-honey-400) 45%, var(--color-honey-700));
+  }
+  .day-sun {
+    filter: drop-shadow(0 0 8px rgb(236 194 124 / 0.55));
+  }
+
+  /* Why-us icon hover micro-interaction */
+  .why-icon {
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .why-card:hover .why-icon {
+    transform: scale(1.08) rotate(-6deg);
+  }
+
+  /* Estimator — segmented controls */
+  .seg {
+    display: inline-flex;
+    margin-top: 0.5rem;
+    gap: 0.4rem;
+    padding: 0.3rem;
+    border-radius: 9999px;
+    background: var(--color-cream-100);
+  }
+  .seg-opt input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .seg-opt span {
+    display: block;
+    cursor: pointer;
+    border-radius: 9999px;
+    padding: 0.5rem 1.1rem;
+    font-weight: 700;
+    color: var(--color-bark-500);
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+  .seg-opt input:checked + span {
+    background: var(--color-honey-400);
+    color: var(--color-bark-900);
+    box-shadow: var(--shadow-lift);
+  }
+  .seg-opt input:focus-visible + span {
+    outline: 2px solid var(--color-moss-500);
+    outline-offset: 2px;
+  }
+
+  /* Estimator — range slider */
+  .est-range {
+    margin-top: 0.6rem;
+    accent-color: var(--color-honey-500);
+  }
+
+  /* Estimator — switch */
+  .switch {
+    cursor: pointer;
+  }
+  .switch input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .switch-track {
+    position: relative;
+    display: inline-block;
+    height: 26px;
+    width: 46px;
+    flex: none;
+    border-radius: 9999px;
+    background: var(--color-cream-300);
+    transition: background-color 0.25s ease;
+  }
+  .switch-thumb {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    height: 20px;
+    width: 20px;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(43 37 30 / 0.35);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .switch input:checked + .switch-track {
+    background: var(--color-moss-500);
+  }
+  .switch input:checked + .switch-track .switch-thumb {
+    transform: translateX(20px);
+  }
+  .switch input:focus-visible + .switch-track {
+    outline: 2px solid var(--color-moss-500);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-gsap-init] .day-step:not(.is-active) {
+      opacity: 1;
+    }
+    .seg-opt span,
+    .switch-track,
+    .switch-thumb,
+    .why-icon {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ---- Interactive cost estimator (core functionality — runs regardless of motion pref) ----
+  function initEstimator(root: HTMLElement) {
+    const est = root.querySelector('[data-estimator]') as HTMLElement | null;
+    if (!est) return;
+    const d = est.dataset;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const money = (n: number) => `£${Number.isInteger(n) ? n.toLocaleString('en-GB') : n.toFixed(2)}`;
+    const pounds = (n: number) => `£${Math.round(n).toLocaleString('en-GB')}`;
+    const get = (sel: string) => est.querySelector(sel) as HTMLElement | null;
+
+    // Count the figures up to their new value (instant under reduced motion).
+    const proxies = { perDay: { v: 0 }, week: { v: 0 }, month: { v: 0 } };
+    let first = true;
+    const animateTo = (el: HTMLElement | null, proxy: { v: number }, to: number, fmt: (n: number) => string) => {
+      if (!el) return;
+      if (reduce || first) {
+        proxy.v = to;
+        el.textContent = fmt(to);
+        return;
+      }
+      gsap.to(proxy, {
+        v: to,
+        duration: 0.45,
+        ease: 'power2.out',
+        overwrite: true,
+        onUpdate: () => (el.textContent = fmt(proxy.v)),
+      });
+    };
+
+    const update = () => {
+      const type = (est.querySelector('input[name="est-type"]:checked') as HTMLInputElement)?.value || 'full';
+      const size = (est.querySelector('input[name="est-size"]:checked') as HTMLInputElement)?.value || 'standard';
+      const days = Number((est.querySelector('input[name="est-days"]') as HTMLInputElement)?.value || 3);
+      const weekly = (est.querySelector('input[name="est-weekly"]') as HTMLInputElement)?.checked;
+
+      const base = type === 'full' ? Number(d.full) : Number(d.half);
+      const wk = type === 'full' ? Number(d.fullWeekly) : Number(d.halfWeekly);
+      const large = type === 'full' ? Number(d.fullLarge) : Number(d.halfLarge);
+
+      const perDay = (weekly ? wk : base) + (size === 'large' ? large : 0);
+      const week = perDay * days;
+      const month = (week * 52) / 12;
+
+      animateTo(get('[data-est-perday]'), proxies.perDay, perDay, money);
+      animateTo(get('[data-est-week]'), proxies.week, week, money);
+      animateTo(get('[data-est-month]'), proxies.month, month, pounds);
+
+      const daysOut = get('[data-est-days-out]');
+      const hint = get('[data-est-hint]') as HTMLElement | null;
+      if (daysOut) daysOut.textContent = `${days} ${days === 1 ? 'day' : 'days'}`;
+      if (hint) hint.style.visibility = weekly ? 'hidden' : 'visible';
+      first = false;
+    };
+
+    est.querySelectorAll('input').forEach((i) => {
+      i.addEventListener('input', update);
+      i.addEventListener('change', update);
+    });
+    update();
+  }
+
+  // ---- Drag-to-scroll polaroid rail (mouse; touch uses native scroll) ----
+  function initDragRail(root: HTMLElement) {
+    const track = root.querySelector('[data-drag-track]') as HTMLElement | null;
+    if (!track) return;
+    let down = false;
+    let moved = false;
+    let startX = 0;
+    let startScroll = 0;
+    track.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      down = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = track.scrollLeft;
+      track.classList.add('dragging');
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      track.scrollLeft = startScroll - dx;
+    });
+    const release = () => {
+      down = false;
+      track.classList.remove('dragging');
+    };
+    track.addEventListener('pointerup', release);
+    track.addEventListener('pointercancel', release);
+    track.addEventListener(
+      'click',
+      (e) => {
+        if (moved) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true
+    );
+  }
+
+  function initDaySchool() {
+    const root = document.querySelector('[data-page="day-school"]') as HTMLElement | null;
+    if (!root || root.dataset.init) return;
+    root.dataset.init = '1';
+
+    // Core, always-on (work under reduced motion too):
+    initEstimator(root);
+    initDragRail(root);
+
+    // Hero video: lazy-start after load; never for reduced-motion or data-saver users.
+    const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    if (video && !reduceMotion && !saveData) {
+      setTimeout(() => {
+        video.load();
+        video.play().catch(() => {});
+      }, 350);
+    }
+
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* --- Hero entrance --- */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* --- Hero parallax drift --- */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* --- Generic reveals --- */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Staggered groups --- */
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          scrollTrigger: { trigger: group, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Signature: a day in the life (the sun rises and sets down the day) --- */
+      const list = root.querySelector('[data-day-list]') as HTMLElement | null;
+      const fill = root.querySelector('[data-trail-fill]');
+      const sun = root.querySelector('[data-trail-sun]') as HTMLElement | null;
+      if (list && fill) {
+        const trail = { trigger: list, start: 'top 62%', end: 'bottom 55%', scrub: 0.5 };
+        gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: trail });
+        if (sun) {
+          gsap.fromTo(
+            sun,
+            { y: 0, rotation: 0 },
+            {
+              y: () => (sun.parentElement?.offsetHeight ?? 0) - 24,
+              rotation: 60,
+              ease: 'none',
+              scrollTrigger: trail,
+            }
+          );
+        }
+      }
+      gsap.utils.toArray<HTMLElement>('[data-day-step]').forEach((step) => {
+        ScrollTrigger.create({
+          trigger: step,
+          start: 'top 68%',
+          end: 'bottom 40%',
+          onToggle: (self) => step.classList.toggle('is-active', self.isActive),
+        });
+        gsap.from(step, {
+          x: 40,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: step, start: 'top 88%', once: true },
+        });
+      });
+    });
+  }
+
+  initDaySchool();
+  document.addEventListener('astro:page-load', initDaySchool);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>

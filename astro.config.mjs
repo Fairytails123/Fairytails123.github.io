@@ -16,7 +16,7 @@ export default defineConfig({
     '/puppy-classes': '/puppy-training-classes',
     '/training-stages': '/dog-boarding-school',
     '/admission-process': '/dog-day-school',
-    '/boarding-information': '/dog-day-school',
+    '/boarding-information': '/dog-boarding-school',
     '/resources-collection': '/puppycourse',
     '/puppy-week-1': '/puppycourse',
     '/week-2-puppy': '/puppycourse',

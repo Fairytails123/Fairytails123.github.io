@@ -10,7 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "verify-urls": "node scripts/verify-urls.mjs"
+    "verify-urls": "node scripts/verify-urls.mjs",
+    "test:breed-matcher": "node tools/breed-matcher/test/engine.test.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

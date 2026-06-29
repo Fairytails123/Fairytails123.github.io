@@ -1,6 +1,32 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-**Last updated:** 2026-06-18 · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c LIVE. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
+## ▶ 2026-06-29 — Page 3 (Dog Day School) BUILT (content + design + motion; awaiting owner review + polish)
+
+Pre-build interview done → **`docs/page-specs/02-dog-day-school.md`** (final spec + BUILD STATE log).
+Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train reference, with the
+`frontend-design` skill's craft applied inside the locked countryside-editorial system.
+
+- **Signature interaction:** scroll-driven **"a day in the life" timeline** (honey trail + paw marker,
+  owner's updated timetable). **Plus an interactive cost estimator** (full/half × size × days/week ×
+  "comes every week" → live per-day/week/month from `pricing.json`). Both verified live on the local
+  preview (estimator maths checked: Half/Large/5/weekly = £19.99 · £99.95 · £433).
+- **Owner decisions baked in:** acceptance-gated CTA (enquiry for new + Acuity for regulars); membership
+  teaser→`/membership-plans`; boarding moved OUT to Board & Train (`/boarding-information`→`/dog-boarding-school`);
+  **PM half-day removed**; "teaching basic commands" dropped; **£12.50 taster** assessment; vaccinations
+  **DHP/Lepto/Kennel-Cough** + **females-in-season excluded**; warm-framed criteria; kit list unchanged;
+  contact = main line 01424 300668; approved SEO title/description.
+- **Media (harvested, graded via `ffmpeg-static`):** hero loop `public/media/day-school-hero.mp4` (1.7 MB,
+  from the "arrivals" clip) + poster; proof clip `day-school-promo.mp4` (3.2 MB) + poster. Photos in
+  `src/assets/pages/dog-day-school/` (AI ChatGPT image + vegetable stock photo dropped).
+- **Data/config:** `pricing.json`, `astro.config.mjs` (boarding redirect), `verify-urls.mjs`
+  (`/dog-day-school`→built), `Header.astro` (nav link added), `WEBSITE-PLAN.md` (tracker ticked).
+  `npm run build && verify-urls --dist` → **0 failures**.
+- **NOT committed/pushed** (owner authorises deploys). To let the owner review on the GH Pages preview
+  (`fairytails123.github.io/dog-day-school`), commit + push to `main` when asked.
+- **Open before sign-off:** owner review of feel; parent testimonials; any fresh footage; then the polish
+  pass (Lighthouse ≥ 90 / reduced-motion / SEO+JSON-LD) and the enquiry-form live n8n test.
+
+**Last updated:** 2026-06-29 (Page 3 Dog Day School BUILT — see the section above; Breed Matcher 2026-06-20 below) · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c LIVE. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
 
 > **2026-06-18 — Hero video produced (see "▶ START HERE" §, "Hero DONE" note).** The owner had dropped a **405 MB / 3:57 raw** `board-train-hero.mp4` straight into `public/media` (over GitHub's 100 MB file limit → would break the push). It was a concat of the same training session as the 25 raw HLG clips in `Videos\`. Replaced with a polished 12 s cut; the owner's oversized raws are **preserved** in `Videos\_owner-dropins\`.
 
@@ -73,6 +99,55 @@ build has zscale/tonemap/vidstab/xfade):
 **Caveat to set with the owner:** only the **hero** is a visible drop-in. Dropping files into the
 body-cam / testimonial / before-after folders shows **no change until step 6 wiring** — that's expected,
 not a failure. Local preview alternative: `npm run dev` → http://localhost:4321/dog-boarding-school.
+
+## 2026-06-20 — Breed Matcher value-added tool integrated (NOT yet on homepage, by design)
+
+The owner supplied a finished **Breed Matcher** tool (standalone `index.html` — vanilla HTML/CSS/JS,
+no build step; an honest breed-matching quiz that keeps the user's chosen breed the hero and lifts the
+fit score as Fairy Tails services bridge the gaps). It's now integrated into the repo so it ships with
+the site **and** can be worked on in isolation.
+
+**What was done (committed work, all verified):**
+- **Tool (single source of truth):** `public/breed-matcher/index.html` — the owner's tested v1, byte-for-byte
+  (engine/data/copy unchanged). Astro copies `public/` verbatim → it ships with **zero build wiring** and
+  serves at **`/breed-matcher/`**. Confirmed in `dist/breed-matcher/index.html` (48,209 B, identical).
+- **Isolation/dev kit (not served):** `tools/breed-matcher/` — `CLAUDE.md` (the full authoritative brief;
+  auto-loads when working there), `README.md`, `test/engine.test.mjs`, gitignored `backups/`.
+- **Regression harness:** `npm run test:breed-matcher` — 17/17 checks pass (the §6.6 verified behaviours
+  + honesty invariants across all 96 breeds). Also ran a render smoke-test: intro / lifted result /
+  hard-no / toddler-steer / no-choice paths all render correctly.
+- **URL gate:** added `/breed-matcher/` (built) to `scripts/verify-urls.mjs` and taught `distFile()` to
+  resolve directory-index URLs. `npm run build && npm run verify-urls` → **0 failures**, `OK /breed-matcher/`.
+- **Docs:** project `CLAUDE.md` ("Value-added tools" section + the test command); `WEBSITE-PLAN.md`
+  (homepage spec now **requires** featuring the matcher; tool added to the URL manifest + a Value-added
+  tools section).
+
+**Homepage:** deliberately **NOT** wired in yet — the site is built inside-out and the **homepage is LAST**
+(owner confirmed 2026-06-20: "keep it in plans for building homepage later"). `WEBSITE-PLAN.md` page 12 now
+mandates a prominent entry point to `/breed-matcher/` (decide link vs iframe-embed in the homepage interview).
+
+**Known follow-ups (in the tool's brief `tools/breed-matcher/CLAUDE.md`):** repoint `FT = {…}` service links
+from the old live domain to new-site paths once those pages exist; Phase 1 = extend dataset to 150+ and
+review the `kids`/`guard`/`aloneTol`/`novice` values with Kam; then richer score visual + more quizzes.
+
+**To deploy it now (optional, owner's call):** it's preview-only until the Stage 5 cutover like everything
+else; pushing to `main` would serve it at `https://fairytails123.github.io/breed-matcher/`.
+
+### STATUS AT PAUSE (2026-06-20, owner paused here)
+- **Breed Matcher integration = DONE and verified** (engine 17/17, render smoke OK, ships byte-identical,
+  `verify-urls` 0 failures). Nothing left to do to make it ship.
+- **Git: NOT committed, NOT pushed.** All work is on disk (OneDrive-synced, so it travels to the next
+  machine). New/changed files: `public/breed-matcher/index.html`, `tools/breed-matcher/**`, `.gitignore`,
+  `package.json`, `scripts/verify-urls.mjs`, `CLAUDE.md`, `WEBSITE-PLAN.md`, `HANDOVER.md`. **Owner has not
+  authorised commit/push** (push = live deploy to the preview) — do it next session only if asked.
+- **Adversarial-review / improvement-backlog workflow:** was started then **stopped for the pause** before
+  it produced output (no backlog file written). Re-running it is OPTIONAL — the tool's roadmap already lives
+  in `tools/breed-matcher/CLAUDE.md` §12 (Phase 1 = extend dataset to 150+ and review kids/guard/aloneTol/
+  novice with Kam; then richer score visual; more quizzes). Improvement work happens **in isolation** in the
+  `tools/breed-matcher/` folder.
+- **Pick-up priority is unchanged:** the main paused work is still **Board & Train (Page 1)** — owner's own
+  media into the 3 remaining slots + refinement → polish (see "▶ START HERE NEXT SESSION" above). The Breed
+  Matcher is a self-contained finished side-task; pick it up whenever the owner wants to grow it.
 
 ## Pick-up point for the next session
 

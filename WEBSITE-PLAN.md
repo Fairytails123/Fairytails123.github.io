@@ -41,7 +41,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 |---|------|---------------------|-------|------------|
 | 1 | `/dog-boarding-school` (Board & Train) — design-system proving ground | ☑ 2026-06-12 → **`docs/page-specs/01-dog-boarding-school.md`** | ◐ passes a–c live; hero video done + live (2026-06-18, owner's clips); polish (d) + 3 media slots pending | ☐ |
 | 2 | `/intensive-dog-training` | ☐ | ☐ | ☐ |
-| 3 | `/dog-day-school` | ☐ | ☐ | ☐ |
+| 3 | `/dog-day-school` | ☑ 2026-06-29 → **`docs/page-specs/02-dog-day-school.md`** | ☐ | ☐ |
 | 4 | `/puppy-training-classes` | ☐ | ☐ | ☐ |
 | 5 | `/training-plans` (new) | ☐ | ☐ | ☐ |
 | 6 | `/membership-plans` (new) | ☐ | ☐ | ☐ |
@@ -56,7 +56,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 
 1. **`/dog-boarding-school` (Board & Train)** — Guided sales arc: problem → programme & why it works → proof (Archie-style case studies, testimonials, photo results) → week-by-week regime (absorbs `/training-stages` 3-stage method + parent-training Fridays) → pricing (£1,200 puppy 4wk / £2,500 adult 8–10wk / +£300 large) → honest limitations & eligibility → 4-step booking. 22-item checklist + open-visit policy + body-cam daily-reports promise in accordions. CTA: enquiry form. **Built with it: form component + n8n "Website Enquiry" workflow (live-tested), header/footer, design tokens, GSAP foundation.**
 2. **`/intensive-dog-training`** — TAR method, CER science section (**preserve `#ConditionedEmotionalResponse` anchor**; absorbs duplicate CER copy from resources-collection), 4-step process, **£2,000**/2mo (+£300 large, full day school incl.) and £1,200/1mo puppy intensive, client gallery. CTA: enquiry form.
-3. **`/dog-day-school`** — Day-in-the-life animated timeline (7:30 pickups → 7:00 drop-offs), enrichment philosophy, **smart pricing cards + interactive estimator** (full/half × dog size × days/week → daily+monthly cost incl. weekly discount), CBS £15 section, admission section (absorbs `/admission-process`: 3 intro sessions 1hr/2hr/3hr, criteria, getting-ready checklist), boarding section (absorbs `/boarding-information`: home-from-home stays, drop-off 8–11am wd / 8:30–11 we, late = extra day, pay at reservation). CTA: enquiry form.
+3. **`/dog-day-school`** — *Final spec: `docs/page-specs/02-dog-day-school.md` (interview 2026-06-29).* Day-in-the-life scroll timeline (signature; updated timetable, open 8am–5:30pm), enrichment philosophy, **pricing cards + interactive estimator** (full/half × dog size × days/week → daily+monthly cost incl. weekly discount), CBS £15 flat section, proof (report samples + testimonials + photo rail + promo clip), admission section (absorbs `/admission-process`: assessment = 3 taster sessions £12.50 each 1hr/2hr/3hr, warm-framed criteria incl. DHP/Lepto/Kennel-Cough + females-in-season excluded, getting-ready checklist unchanged), membership teaser→`/membership-plans`. **Acceptance-gated** CTA: enquiry form (assessment) + regulars' Acuity day-booking link. **PM half-day removed; "teaching basic commands" dropped; overnight boarding moved OUT to Board & Train** (so `/boarding-information`→`/dog-boarding-school`, not here).
 4. **`/puppy-training-classes`** — £175: 4 Thursday-evening sessions at Concordia Hall St Leonards + **three** day-school intro sessions; fix stale "For 2024"; benefits + curriculum; Acuity cart link `id=1469464` preserved alongside enquiry CTA; cross-sell DIY course.
 5. **`/training-plans` (new)** — Comparison hub for all 8 offerings + **"find your plan" interactive picker** (age/issue/goal → recommended plan); animated plan cards link to detail pages; free phone consult (Acuity `56694430`) as universal fallback.
 6. **`/membership-plans` (new)** — 4 tiers (Half £275/mo, Full T1 £375/mo, Full T2 £750 bi-monthly, Grooming sub £25/mo); savings-vs-pay-per-day animated counters; CTA: "Apply for membership" enquiry variant.
@@ -65,7 +65,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 9. **`/gallery`** — Curated from harvested site photos + ImgBB picks; fast lightbox, lazy-loaded animated masonry; adding a photo = drop file + one line.
 10. **`/contact`** — Simplified: main line + WhatsApp text line prominent, collapsible direct-lines (emergency/ops/grooming/training/pick-ups), full enquiry form, **Meet the team (names/roles/photos — owner supplies)**, address + hours + real Google Maps link. Address: Near the Milking Parlour, The Barn, Fairlight Place, Barley Lane, Hastings TN35 5DT.
 11. **`/terms-and-conditions`** — Clean legal page (daycare T&Cs, hours, late fees, liability, grooming T&Cs pointer to sister site); the misplaced "why training takes time"/learning-stages marketing copy relocates to training pages.
-12. **`/` Homepage — LAST** — Transformation-story hero (the Three.js/GSAP signature moment), services journey, `#Trainingplans` + `#MembershipPlans` anchor summary sections (exact-case IDs) rendering from pricing.json, proof strip, club/about, enquiry CTA. Specced fully in its own pre-build interview once all other pages are final.
+12. **`/` Homepage — LAST** — Transformation-story hero (the Three.js/GSAP signature moment), services journey, `#Trainingplans` + `#MembershipPlans` anchor summary sections (exact-case IDs) rendering from pricing.json, proof strip, club/about, enquiry CTA. **MUST feature the Breed Matcher value-added tool** (owner instruction 2026-06-20): a prominent entry point to `/breed-matcher/` — decide link vs inline iframe-embed during the homepage pre-build interview. Specced fully in its own pre-build interview once all other pages are final. (See **Value-added tools** below.)
 13. **`404`** — Friendly not-found + trailing-slash rescue script.
 
 **Site-wide fixes baked into every page:** WhatsApp links corrected to `wa.me/447842116216` / `wa.me/441424300668`; placeholder `mailto:mymail@mailservice.com` buttons eradicated; footer Google Maps link gets the real place URL; day-school "Contact us" → `/contact` not `/`; Employee Login removed from public footer.
@@ -73,9 +73,18 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 ## URL manifest (~40 URLs — the go-live gate)
 
 - **200 (rebuilt):** the 12 pages above + 19 blog post root slugs.
-- **Meta-refresh stubs (Astro `redirects`):** `/puppy-classes`→`/puppy-training-classes` · `/training-stages`→`/dog-boarding-school` · `/admission-process`→`/dog-day-school` · `/boarding-information`→`/dog-day-school` · `/resources-collection`→`/puppycourse` · `/puppy-week-1`, `/week-2-puppy`, `/puppy-week-3`, `/puppy-week-4`, `/puppy-toilet-schdule` (typo slug, verbatim)→`/puppycourse`.
+- **Meta-refresh stubs (Astro `redirects`):** `/puppy-classes`→`/puppy-training-classes` · `/training-stages`→`/dog-boarding-school` · `/admission-process`→`/dog-day-school` · `/boarding-information`→`/dog-boarding-school` (boarding lives with Board & Train, per the 2026-06-29 day-school interview) · `/resources-collection`→`/puppycourse` · `/puppy-week-1`, `/week-2-puppy`, `/puppy-week-3`, `/puppy-week-4`, `/puppy-toilet-schdule` (typo slug, verbatim)→`/puppycourse`.
 - **Intentional 404:** `/staff-resources`, `/internal-management-resources`, `/feed/rss2`, `/feed/atom` (Astro generates `/rss.xml` instead).
+- **Value-added tools (standalone):** `/breed-matcher/` (the Breed Matcher — served verbatim from `public/breed-matcher/index.html`; see below).
 - `scripts/verify-urls.mjs` holds this manifest; `--dist` mode gates every page sign-off, `--live` mode gates and confirms DNS cutover.
+
+## Value-added tools (standalone mini-apps)
+
+Customer-facing interactive tools that are **not** Astro pages — self-contained single-file web apps, iterated on **in isolation** and shipped with the site. Pattern: the tool lives at `public/<tool>/index.html` (Astro copies `public/` verbatim → ships at `/<tool>/` with no build step); its dev kit (brief, tests, backups) lives at `tools/<tool>/` (not served).
+
+- **Breed Matcher** (added 2026-06-20) — an honest, lead-generating breed-matching quiz: keeps the user's chosen breed the hero, shows an honest fit score that climbs once Fairy Tails services bridge the gaps; hard-nos never lift. Vanilla HTML/CSS/JS, British English, 96-breed dataset, node-tested engine.
+  - **Tool:** `public/breed-matcher/index.html` → `/breed-matcher/`. **Dev kit:** `tools/breed-matcher/` (`CLAUDE.md` brief, `test/engine.test.mjs` via `npm run test:breed-matcher`, gitignored `backups/`).
+  - **Homepage (page 12) must feature it** — recorded above. Service links in the tool point at the old live domain for now; repoint to new-site paths when those pages exist. Roadmap (extend dataset to 150+, richer score visual, more quizzes) is in the tool's brief.
 
 ## Architecture (verified June 2026)
 

@@ -18,7 +18,7 @@ const MANIFEST = [
   { path: '/', type: 'page', status: 'built' }, // holding page until homepage (LAST)
   { path: '/dog-boarding-school', type: 'page', status: 'built' },
   { path: '/intensive-dog-training', type: 'page', status: 'planned' },
-  { path: '/dog-day-school', type: 'page', status: 'planned' },
+  { path: '/dog-day-school', type: 'page', status: 'built' },
   { path: '/puppy-training-classes', type: 'page', status: 'planned' },
   { path: '/training-plans', type: 'page', status: 'planned' },
   { path: '/membership-plans', type: 'page', status: 'planned' },
@@ -60,6 +60,8 @@ const MANIFEST = [
   { path: '/puppy-week-3', type: 'stub', status: 'built' },
   { path: '/puppy-week-4', type: 'stub', status: 'built' },
   { path: '/puppy-toilet-schdule', type: 'stub', status: 'built' }, // typo slug is verbatim-correct
+  // ---- value-added tools (standalone, self-contained, served verbatim from public/) ----
+  { path: '/breed-matcher/', type: 'page', status: 'built' }, // tools/breed-matcher -> public/breed-matcher/index.html
   // ---- intentional 404s ----
   { path: '/staff-resources', type: 'gone', status: 'built' },
   { path: '/internal-management-resources', type: 'gone', status: 'built' },
@@ -70,7 +72,10 @@ const MANIFEST = [
 const mode = process.argv.includes('--live') ? 'live' : 'dist';
 
 function distFile(p) {
-  return p === '/' ? join(DIST, 'index.html') : join(DIST, `${p.slice(1)}.html`);
+  if (p === '/') return join(DIST, 'index.html');
+  // a trailing slash = a static directory index (e.g. /breed-matcher/ -> dist/breed-matcher/index.html)
+  if (p.endsWith('/')) return join(DIST, p.slice(1, -1), 'index.html');
+  return join(DIST, `${p.slice(1)}.html`);
 }
 
 let fail = 0;

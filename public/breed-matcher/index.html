@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Your Breed · The Fairy Tails K9 Centre</title>
+<meta name="description" content="An honest breed-matching tool from The Fairy Tails K9 Centre. See how the dog you've set your heart on really fits your life — and how to bridge the gaps.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   THE FAIRY TAILS K9 CENTRE — BREED MATCHER v1
+   Vanilla JS / HTML / CSS · no build step · GitHub Pages ready
+   British English throughout.
+   Edit breed data + service links in the clearly-marked blocks
+   near the top of the <script>. Take a timestamped backup before edits.
+   ===================================================================== */
+
+:root{
+  --ink:#17241F;
+  --forest:#1E4A3A;
+  --forest-deep:#123127;
+  --moss:#3E6B57;
+  --sage:#8AA899;
+  --paper:#F6F2E9;
+  --card:#FCFAF4;
+  --sand:#ECE4D5;
+  --line:#DBD2C1;
+  --gold:#C2853A;
+  --gold-soft:#E8CB94;
+  --clay:#A94C34;
+  --clay-soft:#EBD3CB;
+  --clay-tint:#FBF1ED;
+  --good:#3E7D5A;
+  --demand:#C2853A;
+  --mute:#5B6A62;
+  --shadow:0 1px 2px rgba(18,49,39,.04),0 8px 24px rgba(18,49,39,.06);
+  --radius:18px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  min-height:100vh;
+}
+.wrap{max-width:560px;margin:0 auto;padding:0 20px 64px;}
+
+/* subtle paper texture via layered radial dots */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(62,107,87,.05), transparent 38%),
+    radial-gradient(circle at 84% 78%, rgba(194,133,58,.05), transparent 42%);
+}
+
+/* ---------- top bar ---------- */
+.topbar{
+  display:flex;align-items:center;gap:10px;
+  padding:18px 20px 16px;max-width:560px;margin:0 auto;
+}
+.brandmark{
+  width:30px;height:30px;border-radius:9px;flex:0 0 auto;
+  background:var(--forest);color:var(--gold-soft);
+  display:grid;place-items:center;font-family:'Fraunces';font-weight:600;font-size:18px;
+}
+.brandtext{font-family:'Inter';font-weight:600;font-size:13px;letter-spacing:.02em;color:var(--forest);}
+.brandtext span{display:block;font-weight:400;font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;}
+
+/* ---------- generic ---------- */
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.12;letter-spacing:-.01em;color:var(--forest-deep);}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);margin-bottom:14px;}
+.muted{color:var(--mute);}
+.fade{animation:fade .45s ease both;}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- buttons ---------- */
+.btn{
+  appearance:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;
+  font-size:16px;border-radius:999px;padding:15px 26px;transition:transform .12s ease,background .2s ease,box-shadow .2s ease;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn-primary{background:var(--forest);color:#fff;box-shadow:var(--shadow);}
+.btn-primary:hover{background:var(--forest-deep);transform:translateY(-1px);}
+.btn-primary:active{transform:translateY(0);}
+.btn-ghost{background:transparent;color:var(--moss);padding:12px 16px;font-weight:600;font-size:15px;}
+.btn-ghost:hover{color:var(--forest-deep);}
+.btn-block{width:100%;}
+.btn:focus-visible,a:focus-visible,.opt:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+/* ---------- intro ---------- */
+.hero{padding:26px 0 8px;}
+.hero h1{font-size:clamp(34px,9vw,46px);margin:6px 0 0;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-lead{font-size:17px;color:var(--mute);margin:18px 0 26px;max-width:42ch;}
+.spine{
+  border-left:3px solid var(--gold);padding:4px 0 4px 16px;margin:26px 0 30px;
+  font-family:'Fraunces';font-style:italic;font-size:18px;color:var(--forest-deep);line-height:1.32;
+}
+.hero-points{list-style:none;margin:0 0 30px;display:grid;gap:14px;}
+.hero-points li{display:flex;gap:12px;font-size:15px;color:var(--ink);align-items:flex-start;}
+.hero-points .tick{flex:0 0 auto;width:22px;height:22px;border-radius:7px;background:var(--sand);color:var(--moss);display:grid;place-items:center;font-size:13px;margin-top:1px;}
+
+/* ---------- progress ---------- */
+.progress{display:flex;align-items:center;gap:12px;padding:8px 0 22px;}
+.progress-track{flex:1;height:6px;background:var(--sand);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--moss);border-radius:99px;width:0;transition:width .4s cubic-bezier(.2,.7,.2,1);}
+.progress-label{font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.04em;white-space:nowrap;}
+
+/* ---------- question card ---------- */
+.q-head{margin:6px 0 4px;}
+.q-head h2{font-size:clamp(24px,6.5vw,30px);}
+.q-help{font-size:14px;color:var(--mute);margin:10px 0 22px;}
+.opts{display:grid;gap:11px;margin-bottom:8px;}
+.opt{
+  appearance:none;text-align:left;cursor:pointer;font-family:inherit;font-size:16px;font-weight:500;color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:17px 18px;
+  display:flex;align-items:center;gap:14px;transition:border-color .16s ease,background .16s ease,transform .1s ease;
+}
+.opt:hover{border-color:var(--sage);background:#fff;}
+.opt:active{transform:scale(.99);}
+.opt .box{flex:0 0 auto;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;transition:all .16s ease;}
+.opt.sel{border-color:var(--forest);background:#fff;box-shadow:0 0 0 1px var(--forest);}
+.opt.sel .box{background:var(--forest);border-color:var(--forest);color:#fff;}
+.opt .box svg{width:13px;height:13px;opacity:0;transition:opacity .14s;}
+.opt.sel .box svg{opacity:1;}
+.multi-actions{margin-top:18px;}
+
+/* breed search */
+.search-wrap{position:relative;margin:4px 0 6px;}
+.search-input{
+  width:100%;font-family:inherit;font-size:16px;padding:16px 16px;border:1.5px solid var(--line);
+  border-radius:14px;background:var(--card);color:var(--ink);
+}
+.search-input:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 1px var(--forest);}
+.search-list{margin-top:8px;display:grid;gap:7px;max-height:46vh;overflow:auto;}
+.search-list .opt{padding:13px 16px;font-size:15px;}
+.breed-grp{font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;margin-left:auto;font-weight:600;}
+
+/* ---------- results ---------- */
+.result-top{padding:14px 0 4px;}
+.result-top .eyebrow{margin-bottom:8px;}
+.hero-card{
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:22px 20px;box-shadow:var(--shadow);margin-bottom:18px;
+}
+.hero-card .breed-name{font-size:clamp(26px,7vw,34px);margin:0;}
+.hero-card .breed-meta{font-size:13px;color:var(--mute);margin-top:5px;letter-spacing:.02em;}
+
+/* the signature bridge */
+.bridge{margin:22px 0 6px;}
+.bridge-nums{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-bottom:12px;}
+.bridge-num{display:flex;flex-direction:column;}
+.bridge-num .lab{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:2px;}
+.bridge-num .val{font-family:'Fraunces';font-weight:600;font-size:40px;line-height:1;color:var(--forest-deep);}
+.bridge-num.after .val{color:var(--gold);}
+.bridge-num.after{text-align:right;align-items:flex-end;}
+.bridge-arrow{font-size:20px;color:var(--sage);padding-bottom:6px;}
+.bar{position:relative;height:16px;background:var(--sand);border-radius:99px;overflow:hidden;}
+.bar .base{position:absolute;left:0;top:0;height:100%;width:0;border-radius:99px;background:var(--moss);transition:width .8s cubic-bezier(.2,.7,.2,1);}
+.bar .lift{position:absolute;top:0;height:100%;width:0;border-radius:99px;
+  background:repeating-linear-gradient(45deg,var(--gold) 0 8px,var(--gold-soft) 8px 16px);
+  transition:width .7s cubic-bezier(.2,.7,.2,1) .55s;opacity:.95;}
+.band{display:inline-flex;align-items:center;gap:7px;margin-top:14px;font-size:13px;font-weight:600;padding:6px 13px;border-radius:99px;}
+.band .dot{width:8px;height:8px;border-radius:99px;}
+.band.great{background:rgba(62,125,90,.12);color:var(--good);} .band.great .dot{background:var(--good);}
+.band.support{background:rgba(62,107,87,.12);color:var(--moss);} .band.support .dot{background:var(--moss);}
+.band.demand{background:rgba(194,133,58,.14);color:#9a6722;} .band.demand .dot{background:var(--demand);}
+.band.honest{background:var(--clay-tint);color:var(--clay);} .band.honest .dot{background:var(--clay);}
+
+.why{font-size:15.5px;color:var(--ink);margin:18px 0 2px;line-height:1.45;}
+
+/* gaps & bridges */
+.section-lab{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);margin:24px 0 12px;}
+.bridge-list{display:grid;gap:10px;}
+.bridge-item{
+  background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;
+}
+.bridge-item .bi-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+.bridge-item .gap{font-weight:600;font-size:15px;color:var(--ink);}
+.bridge-item .lift-tag{font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap;}
+.bridge-item .fix{font-size:14px;color:var(--mute);margin-top:5px;line-height:1.45;}
+.bridge-item a{color:var(--forest);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--gold-soft);}
+.bridge-item a:hover{border-bottom-color:var(--gold);}
+
+/* honest / hard-no note */
+.honest-note,.steer-note{
+  border-radius:13px;padding:15px 16px;margin-top:6px;font-size:14.5px;line-height:1.5;
+}
+.honest-note{background:var(--clay-tint);border:1px solid var(--clay-soft);color:#7c3a27;}
+.honest-note strong{color:var(--clay);}
+.steer-note{background:var(--clay-tint);border:1px solid var(--clay-soft);color:#7c3a27;}
+.steer-note .st-head{display:flex;align-items:center;gap:8px;font-family:'Fraunces';font-weight:600;font-size:16px;color:var(--clay);margin-bottom:6px;}
+
+/* tips */
+.tips{display:grid;gap:11px;}
+.tip{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 16px;}
+.tip .t-head{font-weight:600;font-size:15px;color:var(--forest-deep);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.tip .t-body{font-size:14px;color:var(--mute);line-height:1.5;}
+.tip .t-body a{color:var(--forest);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--gold-soft);}
+.tip.flag{background:var(--clay-tint);border-color:var(--clay-soft);}
+.tip.flag .t-head{color:var(--clay);}
+.tip.flag .t-body{color:#7c3a27;}
+.tip .pill{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--clay);color:#fff;}
+.tip.first-tip .t-head{color:var(--gold);}
+.tip-key{font-size:14px;color:var(--mute);margin:2px 0 14px;}
+
+/* alternatives */
+.alts{display:grid;gap:10px;}
+.alt{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px 16px;
+  display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .15s,transform .1s;
+}
+.alt:hover{border-color:var(--sage);}
+.alt:active{transform:scale(.995);}
+.alt .a-score{font-family:'Fraunces';font-weight:600;font-size:24px;color:var(--moss);flex:0 0 auto;width:46px;}
+.alt .a-mid{flex:1;min-width:0;}
+.alt .a-name{font-weight:600;font-size:15.5px;color:var(--ink);}
+.alt .a-line{font-size:13px;color:var(--mute);margin-top:2px;}
+.alt .a-go{color:var(--sage);font-size:18px;}
+
+.disclaimer{font-size:12.5px;color:var(--mute);text-align:center;margin:30px 0 8px;line-height:1.5;padding:0 8px;}
+.footer-spine{font-family:'Fraunces';font-style:italic;color:var(--forest);text-align:center;font-size:15px;margin:26px 0 6px;}
+.restart{display:flex;justify-content:center;margin-top:18px;}
+
+hr.rule{border:none;border-top:1px solid var(--line);margin:30px 0;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important;}
+  .bar .base,.bar .lift,.progress-fill{transition:none!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brandmark">F</div>
+  <div class="brandtext">The Fairy Tails K9 Centre<span>Breed matcher</span></div>
+</div>
+
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<script>
+/* ===================================================================
+   1. FAIRY TAILS SERVICES  — EDIT THESE (placeholder URLs to confirm)
+   =================================================================== */
+const SITE = "https://thefairytails.co.uk";
+const FT = {
+  daycare:    {label:"doggy daycare",            url:SITE+"/daycare"},
+  puppy:      {label:"puppy training course",     url:SITE+"/training"},
+  intensive:  {label:"intensive training",        url:SITE+"/training"},
+  grooming:   {label:"grooming salon",            url:SITE+"/grooming"},
+  walking:    {label:"dog walking",               url:SITE+"/dog-walking"},
+  field:      {label:"secure field hire",         url:SITE+"/contact"}, // ask-us style link
+  boarding:   {label:"boarding",                  url:SITE+"/boarding"},
+  chat:       {label:"a “thinking of getting a dog” chat", url:SITE+"/contact"}
+};
+function svc(key,text){const s=FT[key];return `<a href="${s.url}" target="_blank" rel="noopener">${text||s.label}</a>`;}
+
+/* ===================================================================
+   2. BREED DATA — review & extend toward the full 150+
+   Scale 1–5 unless noted. Crossbreed traits vary; treat as a guide.
+     size       1 toy · 2 small · 3 medium · 4 large · 5 giant
+     energy     1 couch  →  5 tireless working drive
+     spaceNeed  1 flat-fine  →  5 needs real room/access
+     aloneTol   1 needs company (prone to separation issues)  →  5 independent
+     novice     1 experienced handlers only  →  5 ideal first dog
+     groom      1 wash-and-go  →  5 high professional grooming
+     shed       1 minimal  →  5 heavy
+     lowAllergen  true = coat reasonably allergy-friendly
+     kids       1 not suited to toddlers  →  5 excellent with young children
+     guard      1 no guarding instinct  →  5 strong protective/guarding drive
+     bark       1 quiet  →  5 very vocal
+     train      1 stubborn/hard  →  5 eager & easy
+   =================================================================== */
+const B=(name,group,size,energy,spaceNeed,aloneTol,novice,groom,shed,lowAllergen,kids,guard,bark,train)=>
+  ({name,group,size,energy,spaceNeed,aloneTol,novice,groom,shed,lowAllergen,kids,guard,bark,train});
+
+const BREEDS=[
+/* Gundogs */
+B("Labrador Retriever","Gundog",4,4,3,3,5,2,4,false,5,2,2,5),
+B("Golden Retriever","Gundog",4,4,3,3,5,3,4,false,5,2,2,5),
+B("English Cocker Spaniel","Gundog",3,4,3,3,4,3,3,false,4,2,3,4),
+B("Working Cocker Spaniel","Gundog",3,5,4,2,2,3,3,false,4,2,3,4),
+B("English Springer Spaniel","Gundog",3,5,4,2,3,3,3,false,4,2,3,4),
+B("Sprocker Spaniel","Gundog (cross)",3,5,4,2,3,3,3,false,4,2,3,4),
+B("Flat-Coated Retriever","Gundog",4,4,4,3,3,3,4,false,4,2,2,4),
+B("Hungarian Vizsla","Gundog",4,5,4,1,2,1,3,false,4,2,2,4),
+B("Weimaraner","Gundog",4,5,4,1,2,1,3,false,3,3,3,3),
+B("German Shorthaired Pointer","Gundog",4,5,4,2,2,1,3,false,4,2,2,4),
+B("Pointer","Gundog",4,5,4,2,2,1,2,false,4,2,2,3),
+B("Irish Setter","Gundog",4,5,4,2,3,3,3,false,4,1,2,3),
+B("Brittany","Gundog",3,5,4,2,3,2,3,false,4,2,2,4),
+B("Nova Scotia Duck Tolling Retriever","Gundog",3,5,4,2,2,3,4,false,4,2,3,4),
+B("Chesapeake Bay Retriever","Gundog",4,4,4,3,2,2,4,false,3,3,2,3),
+
+/* Pastoral / herding */
+B("Border Collie","Pastoral",3,5,4,2,2,3,4,false,4,2,3,5),
+B("Rough Collie","Pastoral",4,3,3,3,4,4,4,false,5,2,3,4),
+B("Shetland Sheepdog","Pastoral",2,3,2,3,4,4,4,false,4,2,4,5),
+B("German Shepherd","Pastoral",4,4,4,3,2,3,5,false,4,5,3,5),
+B("Old English Sheepdog","Pastoral",4,3,3,3,3,5,4,false,4,2,2,3),
+B("Australian Shepherd","Pastoral",3,5,4,2,2,3,4,false,4,3,3,5),
+B("Pembroke Welsh Corgi","Pastoral",2,3,2,3,3,2,4,false,4,3,4,4),
+B("Belgian Malinois","Pastoral",4,5,5,2,1,2,4,false,3,5,3,5),
+B("Samoyed","Pastoral",4,4,3,2,3,5,5,false,4,2,4,3),
+B("Bearded Collie","Pastoral",4,4,3,3,3,5,4,false,4,2,3,3),
+
+/* Working */
+B("Boxer","Working",4,4,3,2,3,1,2,false,4,4,2,3),
+B("Rottweiler","Working",5,3,4,3,1,2,3,false,3,5,2,4),
+B("Dobermann","Working",4,4,4,2,1,1,2,false,3,5,3,4),
+B("Bernese Mountain Dog","Working",5,2,3,3,3,4,5,false,5,3,2,3),
+B("Great Dane","Working",5,2,4,3,2,1,3,false,4,3,2,3),
+B("Newfoundland","Working",5,2,3,3,3,4,5,false,5,2,2,3),
+B("Saint Bernard","Working",5,2,3,3,2,3,4,false,4,3,2,3),
+B("Siberian Husky","Working",4,5,5,2,1,3,5,false,4,1,3,2),
+B("Alaskan Malamute","Working",5,4,5,2,1,4,5,false,4,2,2,2),
+B("Bullmastiff","Working",5,2,3,3,2,1,3,false,3,5,1,3),
+B("Mastiff","Working",5,2,4,3,2,1,3,false,3,5,1,3),
+B("Leonberger","Working",5,3,4,3,2,4,5,false,4,3,2,3),
+B("Cane Corso","Working",5,3,4,3,1,1,3,false,3,5,2,4),
+B("Dogue de Bordeaux","Working",5,2,3,3,2,1,3,false,3,4,1,3),
+B("Giant Schnauzer","Working",4,4,4,2,1,4,2,true,3,5,3,4),
+
+/* Terriers */
+B("Staffordshire Bull Terrier","Terrier",3,4,2,2,3,1,3,false,5,2,2,4),
+B("Jack Russell Terrier","Terrier",2,5,3,2,2,2,3,false,3,2,4,3),
+B("Parson Russell Terrier","Terrier",2,5,3,2,2,2,3,false,3,2,4,3),
+B("Patterdale Terrier","Terrier",2,5,3,2,2,1,2,false,3,2,4,3),
+B("Border Terrier","Terrier",2,4,2,3,4,3,2,false,4,2,3,4),
+B("West Highland White Terrier","Terrier",2,3,2,3,4,4,2,false,4,2,4,3),
+B("Cairn Terrier","Terrier",2,4,2,3,3,3,2,false,4,2,4,3),
+B("Scottish Terrier","Terrier",2,3,2,3,3,4,2,false,3,3,3,2),
+B("Bull Terrier","Terrier",3,4,3,2,2,1,2,false,3,3,2,3),
+B("Airedale Terrier","Terrier",4,4,3,3,2,4,2,true,4,4,3,4),
+B("Wire Fox Terrier","Terrier",2,4,3,3,2,3,2,false,4,3,4,3),
+B("Bedlington Terrier","Terrier",3,4,3,3,3,4,1,true,4,2,3,3),
+
+/* Hounds */
+B("Beagle","Hound",3,4,3,2,3,2,3,false,5,1,4,2),
+B("Whippet","Hound",3,3,3,3,4,1,2,false,4,1,1,3),
+B("Greyhound","Hound",4,2,3,4,4,1,2,false,4,1,1,3),
+B("Miniature Dachshund","Hound",1,3,1,2,3,2,3,false,3,2,4,2),
+B("Standard Dachshund","Hound",2,3,2,2,3,2,3,false,3,2,4,2),
+B("Basset Hound","Hound",3,2,2,3,3,2,4,false,4,1,3,2),
+B("Rhodesian Ridgeback","Hound",4,4,4,3,2,1,2,false,4,4,2,3),
+B("Afghan Hound","Hound",4,4,4,3,2,5,2,false,3,1,2,2),
+B("Basenji","Hound",2,4,3,3,1,1,2,false,3,2,1,2),
+B("Bloodhound","Hound",5,4,4,3,2,2,3,false,4,1,3,2),
+B("Irish Wolfhound","Hound",5,3,4,3,3,3,3,false,4,1,1,3),
+B("Saluki","Hound",4,4,4,3,2,2,2,false,3,1,2,2),
+
+/* Toy */
+B("Chihuahua","Toy",1,3,1,2,3,1,2,false,2,2,4,3),
+B("Pug","Toy",2,2,1,2,4,2,4,false,5,1,2,3),
+B("Cavalier King Charles Spaniel","Toy",2,3,1,2,5,3,3,false,5,1,2,4),
+B("King Charles Spaniel","Toy",1,2,1,2,4,3,3,false,4,1,2,3),
+B("Pomeranian","Toy",1,3,1,2,3,4,4,false,3,2,4,3),
+B("Yorkshire Terrier","Toy",1,3,1,2,3,4,1,true,3,2,4,3),
+B("Maltese","Toy",1,2,1,2,4,4,1,true,3,1,3,3),
+B("Papillon","Toy",1,3,1,2,3,3,2,false,3,1,3,5),
+B("Italian Greyhound","Toy",1,3,1,2,3,1,1,false,3,1,2,2),
+B("Havanese","Toy",1,3,1,2,4,4,1,true,4,1,3,4),
+
+/* Utility */
+B("French Bulldog","Utility",2,2,1,2,4,1,3,false,4,2,2,3),
+B("Bulldog","Utility",3,1,1,3,4,2,3,false,4,2,1,2),
+B("Boston Terrier","Utility",2,3,1,2,4,1,2,false,4,1,2,4),
+B("Standard Poodle","Utility",4,4,3,3,3,5,1,true,4,2,2,5),
+B("Miniature Poodle","Utility",2,3,2,3,4,5,1,true,4,2,3,5),
+B("Toy Poodle","Utility",1,3,1,2,4,5,1,true,3,1,3,5),
+B("Dalmatian","Utility",4,5,4,2,2,2,5,false,4,3,2,3),
+B("Shih Tzu","Utility",1,2,1,3,4,5,1,true,4,1,2,3),
+B("Lhasa Apso","Utility",2,2,1,3,3,5,1,true,3,3,3,3),
+B("Tibetan Terrier","Utility",3,3,2,3,3,4,1,true,4,2,3,3),
+B("Standard Schnauzer","Utility",3,4,3,3,3,4,1,true,4,4,3,4),
+B("Miniature Schnauzer","Utility",2,4,2,3,4,4,1,true,4,3,4,4),
+B("Bichon Frise","Utility",1,3,1,2,4,5,1,true,4,1,3,4),
+B("Akita","Utility",5,3,4,3,1,3,5,false,3,5,2,3),
+B("Shar Pei","Utility",3,2,2,3,2,2,3,false,3,4,2,3),
+B("Chow Chow","Utility",4,2,2,4,1,4,5,false,2,5,2,2),
+B("Japanese Shiba Inu","Utility",3,3,3,4,1,2,4,false,3,3,2,2),
+
+/* Popular crosses — traits vary widely, shown as a guide */
+B("Cockapoo","Cross",2,4,2,2,4,4,1,true,5,1,3,4),
+B("Cavapoo","Cross",1,3,1,2,4,4,1,true,5,1,2,4),
+B("Labradoodle","Cross",4,4,3,3,4,4,2,true,5,2,2,4),
+B("Goldendoodle","Cross",4,4,3,3,4,4,2,true,5,2,2,4),
+B("Cavachon","Cross",1,3,1,2,4,3,2,false,5,1,2,4)
+];
+
+/* ===================================================================
+   3. QUIZ QUESTIONS
+   =================================================================== */
+const QUESTIONS=[
+ {id:"home",type:"single",title:"Where will your dog call home?",help:"Be realistic about your everyday setup.",opts:[
+   {v:"flat",label:"A flat, or no garden"},
+   {v:"smallGarden",label:"A house with a small garden"},
+   {v:"largeGarden",label:"A house with a large garden or land"}]},
+ {id:"access",type:"single",title:"What exercise space can you actually get to?",help:"Not where you live — where you can realistically take a dog, day to day.",opts:[
+   {v:"parksOnly",label:"Local parks and pavements only"},
+   {v:"natureNearby",label:"Beaches or open countryside nearby"},
+   {v:"willTravel",label:"I’d happily travel or hire a secure field"},
+   {v:"privateLand",label:"Large private land at home"}]},
+ {id:"exercise",type:"single",title:"How much exercise can you commit to, most days?",opts:[
+   {v:"gentle",label:"Gentle strolls"},
+   {v:"moderate",label:"Moderate — around an hour"},
+   {v:"active",label:"Very active — two hours or more"},
+   {v:"working",label:"I want a working-level companion"}]},
+ {id:"alone",type:"single",title:"How long will your dog be alone on a typical day?",opts:[
+   {v:"rarely",label:"Rarely — someone’s usually home"},
+   {v:"fewHours",label:"A few hours"},
+   {v:"mostDay",label:"Most of the working day"}]},
+ {id:"experience",type:"single",title:"How much dog experience do you have?",opts:[
+   {v:"first",label:"First-time owner"},
+   {v:"some",label:"I’ve owned dogs before"},
+   {v:"expert",label:"Very experienced"}]},
+ {id:"grooming",type:"single",title:"How much grooming are you up for?",opts:[
+   {v:"minimal",label:"Minimal — wash and go"},
+   {v:"brush",label:"Happy to brush regularly"},
+   {v:"professional",label:"Happy to use a professional groomer"}]},
+ {id:"coat",type:"single",title:"Any feelings about coat and allergies?",opts:[
+   {v:"sheddingFine",label:"Shedding is fine"},
+   {v:"preferLowShed",label:"I’d prefer low-shedding"},
+   {v:"needHypoallergenic",label:"Someone in the home has a real allergy"}]},
+ {id:"household",type:"multi",title:"Who’s at home?",help:"Tick all that apply.",opts:[
+   {v:"youngKids",label:"Young children or toddlers"},
+   {v:"olderKids",label:"Older children"},
+   {v:"adultsOnly",label:"Adults only"},
+   {v:"otherPets",label:"Other dogs or pets"}]},
+ {id:"sizePref",type:"single",title:"Any size preference?",opts:[
+   {v:"any",label:"Happy with any size"},
+   {v:"small",label:"Smaller"},
+   {v:"medium",label:"Medium"},
+   {v:"large",label:"Large or giant"}]},
+ {id:"barking",type:"single",title:"How do you feel about barking?",opts:[
+   {v:"quiet",label:"I’d prefer a quiet dog"},
+   {v:"some",label:"Some barking is fine"},
+   {v:"fine",label:"Barking doesn’t bother me"}]}
+];
+
+/* ===================================================================
+   4. STATE
+   =================================================================== */
+const state={screen:"intro",step:0,answers:{},chosenBreed:null};
+const app=document.getElementById("app");
+const CHECK=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+
+/* ===================================================================
+   5. SCORING ENGINE
+   Two layers: physical hard-nos cap the score with no lift; everything
+   else is a weighted gap. Bridgeable gaps (time/experience/drive/access/
+   grooming) lift the "with support" score; physical limits don't budge.
+   =================================================================== */
+function effectiveSpace(a){
+  const home={flat:1,smallGarden:3,largeGarden:5}[a.home];
+  const boost={parksOnly:0,natureNearby:1.5,willTravel:1.5,privateLand:2}[a.access];
+  return clamp(home+boost,1,5);
+}
+
+function scoreBreed(breed,a){
+  let base=100, recover=0;
+  const bridges=[];      // recoverable gaps -> service
+  const cautions=[];     // soft, no-penalty nudges
+  let hardNo=null;       // {reason}
+  let steer=null;        // {text}
+  const kids=a.household||[];
+  const hasToddler=kids.includes("youngKids");
+
+  // -- helper to log a bridgeable gap
+  const gap=(penalty,frac,gapText,fixHtml,liftTag)=>{
+    base-=penalty; const r=penalty*frac; recover+=r;
+    bridges.push({gap:gapText,fix:fixHtml,lift:liftTag||("+"+Math.round(r))});
+  };
+
+  /* ---- SPACE (giant-in-flat = hard no; high demand + poor access = bridgeable) ---- */
+  if(breed.size===5 && a.home==="flat"){
+    hardNo={reason:`A ${breed.name.toLowerCase()} simply needs more room than a flat can give — that's about the home itself, and no service or training changes it.`};
+    base=Math.min(base,36);
+  } else {
+    const space=effectiveSpace(a);
+    if(breed.spaceNeed>space){
+      const g=breed.spaceNeed-space;
+      const pen=g*9;
+      // access (not home size) is the solvable part
+      if(a.access==="parksOnly" && breed.size<5){
+        gap(pen,0.7,"Needs more space than parks alone provide",
+          `Regular open space sorts this — ${svc("field","secure field hire")} or making the most of nearby beaches and countryside, plus our ${svc("walking","dog walking")}.`);
+      } else {
+        gap(pen,0.45,"On the demanding side for your space",
+          `${svc("field","Field hire")} and our ${svc("walking","walking team")} take the pressure off.`);
+      }
+    }
+  }
+
+  /* ---- ALLERGY (real allergy + non-allergy-friendly coat = hard no) ---- */
+  if(a.coat==="needHypoallergenic" && !breed.lowAllergen){
+    if(!hardNo) hardNo={reason:`With a real allergy in the home, this coat is a genuine no — that's biology, not something we'd ever paper over.`};
+    base=Math.min(base,38);
+  } else if(a.coat==="preferLowShed" && breed.shed>=4){
+    gap(8,0.35,"A heavier shedder than you'd like",
+      `Routine ${svc("grooming","grooming")} keeps loose hair right down, though it won't make a shedder a non-shedder.`);
+  }
+
+  /* ---- HOURS ALONE (daycare bridges it) ---- */
+  if(!hardNo){
+    if(a.alone==="mostDay" && breed.aloneTol<=2){
+      gap(16,0.85,"Not a breed that loves long days alone",
+        `Our ${svc("daycare","doggy daycare")} fills the gap completely — company and stimulation while you work.`);
+    } else if(a.alone==="mostDay" && breed.aloneTol===3){
+      gap(8,0.85,"Long days alone need managing",`A few days of ${svc("daycare","daycare")} a week keeps things balanced.`);
+    } else if(a.alone==="fewHours" && breed.aloneTol<=2){
+      gap(7,0.8,"Happier with company than long stretches alone",`Half-day ${svc("daycare","daycare")} or a midday visit covers it.`);
+    }
+  }
+
+  /* ---- EXPERIENCE (puppy course bridges it) ---- */
+  if(!hardNo && a.experience==="first" && breed.novice<=2){
+    gap(15,0.8,"A lot of dog for a first-timer",
+      `Our ${svc("puppy","puppy training course")} is exactly the leg-up that makes this work — you'll start right rather than firefight later.`);
+  } else if(!hardNo && a.experience==="some" && breed.novice===1){
+    gap(8,0.75,"A genuinely challenging breed",`${svc("intensive","Intensive training")} gives you the grounding this one demands.`);
+  }
+
+  /* ---- EXERCISE / DRIVE vs COMMITMENT ---- */
+  const exLevel={gentle:1,moderate:2,active:4,working:5}[a.exercise];
+  if(!hardNo && breed.energy>exLevel){
+    const g=breed.energy-exLevel;
+    const pen=g*7;
+    if(breed.energy>=5){
+      gap(pen,0.6,"A working drive that needs an outlet",
+        `Channel it properly with ${svc("intensive","intensive training")} and burn it off through ${svc("daycare","daycare")} — under-stimulation is where the trouble starts.`);
+    } else {
+      gap(pen,0.55,"More energy than your routine plans for",
+        `Our ${svc("walking","walking")} and ${svc("daycare","daycare")} top up what your day can't.`);
+    }
+  }
+
+  /* ---- GROOMING vs WILLINGNESS ---- */
+  if(!hardNo && breed.groom>=4 && a.grooming==="minimal"){
+    gap(11,0.85,"A coat that needs proper upkeep",
+      `Our ${svc("grooming","grooming salon")} handles it — and early, regular handling builds a calmer dog (more on that below).`);
+  } else if(!hardNo && breed.groom>=4 && a.grooming==="brush"){
+    gap(5,0.8,"Brushing alone won't quite keep this coat",`Pair home brushing with regular ${svc("grooming","salon")} visits.`);
+  }
+
+  /* ---- TODDLER SAFETY: strong steer (recoverable, always flagged) ---- */
+  if(!hardNo && hasToddler && (breed.guard>=4 || breed.kids<=2)){
+    const pen=14;
+    base-=pen; recover+=pen*0.7;
+    steer={text:`With a toddler in the home, a ${breed.name.toLowerCase()}'s guarding and management needs are serious — not impossible, but they ask a lot. This is one to take on only with ${svc("intensive","intensive training")}, professional behavioural guidance and careful day-to-day management. We won't pretend that's a small commitment.`};
+  } else if(!hardNo && hasToddler && breed.size>=4){
+    cautions.push("A big, bouncy dog and a tiny child is a lot to manage at once — many families find life easier with a smaller dog while the children are little. Not a no, just worth a thought.");
+  }
+
+  /* ---- SIZE PREFERENCE (their preference; mild, not recoverable) ---- */
+  const wantSize={small:[1,2],medium:[2,3,4],large:[4,5],any:null}[a.sizePref];
+  if(wantSize && !wantSize.includes(breed.size)){
+    const dist=Math.min(...wantSize.map(s=>Math.abs(s-breed.size)));
+    base-=dist*5;
+  }
+
+  /* ---- BARKING ---- */
+  if(!hardNo && a.barking==="quiet" && breed.bark>=4){
+    gap(6,0.45,"On the vocal side",`Training curbs nuisance barking, though some breeds will always have plenty to say.`);
+  }
+
+  base=clamp(Math.round(base),5,97);
+  let supported=hardNo?base:clamp(Math.round(base+recover),base,92);
+
+  // band keys off the best honest score available
+  const headline=hardNo?base:supported;
+  let band;
+  if(hardNo) band={k:"honest",t:"Be honest with yourself"};
+  else if(headline>=82) band={k:"great",t:"A great fit"};
+  else if(headline>=65) band={k:"support",t:"A great fit — with the right support"};
+  else band={k:"demand",t:"Doable, but demanding"};
+
+  return {breed,base,supported,hardNo,steer,bridges,cautions,band,lift:supported-base};
+}
+
+/* one-line summary of fit */
+function whyLine(r,a){
+  const b=r.breed;
+  if(r.hardNo) return `On paper a wonderful breed — but for your circumstances, the honest answer matters more than the dream.`;
+  const pos=[];
+  if(b.kids>=5 && (a.household||[]).includes("youngKids")) pos.push("brilliant with young children");
+  if(b.train>=4) pos.push("genuinely trainable");
+  if(b.aloneTol>=4) pos.push("easy-going about time alone");
+  if(b.novice>=4 && a.experience==="first") pos.push("forgiving for a first dog");
+  if(b.groom<=1) pos.push("wonderfully low-maintenance");
+  if(b.energy<=2 && a.exercise==="gentle") pos.push("happy with a gentler pace");
+  let s;
+  if(r.lift>=12) s=`A real possibility for you — the gaps are the kind we're built to close, not dealbreakers.`;
+  else if(r.supported>=82) s=`A natural match for the life you've described`+(pos.length?`: ${pos.slice(0,2).join(" and ")}.`:".");
+  else s=`A fair fit, with a few things to weigh up`+(pos.length?` — ${pos[0]} on the plus side.`:".");
+  return s;
+}
+
+/* ===================================================================
+   6. TIPS  — universal + triggered, with promotion ("say it louder")
+   Voice: neutral by default; safety-critical points shift to a plainer,
+   direct register and get visually flagged. Promotion pulls a tip to the
+   top and flags it for the users most likely to underestimate it.
+   =================================================================== */
+function buildTips(r,a){
+  const b=r.breed, kids=a.household||[];
+  const tips=[];
+
+  // 1. ALWAYS FIRST — breeder vetting (firm, but neutral register)
+  tips.push({key:"breeder",first:true,order:0,
+    head:"Where you get your dog matters more than the breed",
+    body:`Whatever you choose, this is the single biggest lever on temperament, health and trainability. Buy from a council-licensed, inspected breeder, always see the pup with its mother, and walk away from anything sold purely online. A well-bred, well-started dog is a different animal — and it's what keeps every tip below within reach.`});
+
+  // 2. Grooming-handling / bite prevention — direct voice, ALWAYS shown,
+  //    PROMOTED + louder for low-maintenance coats (the ones who skip it)
+  const skipRisk = (a.grooming==="minimal") || (b.groom<=2);
+  tips.push({key:"handling",flag:true,promote:skipRisk,order:skipRisk?1:5,
+    head:"Get them used to the groomer early — even a low-maintenance breed",
+    body: skipRisk
+      ? `Here's something most people get wrong: a low-upkeep coat tempts you to skip the groomer entirely. That's the very mistake that shows up in bite cases later. Dogs handled by groomers from a young age learn to accept being touched and restrained by people — the ones that bite are very often the ones that never went. Book early, low-maintenance or not. ${svc("grooming","Our salon")} starts pups gently.`
+      : `Early, regular professional handling does more than keep a coat tidy — it teaches a dog to accept being touched and worked on by people, which is a thread running through bite prevention. Start young with ${svc("grooming","our salon")}.`});
+
+  // 3. Day-one separation training — direct + PROMOTED for long-alone profiles
+  const aloneRisk = a.alone==="mostDay" || a.alone==="fewHours";
+  tips.push({key:"separation",flag:aloneRisk,promote:aloneRisk,order:aloneRisk?2:6,
+    head:"Start separation training on day one — not day seven",
+    body: aloneRisk
+      ? `Everyone's instinct is to be glued to a new pup those first unsettled days — and that's exactly how you build the clinginess you'll then spend months undoing. From hour one, build short, calm absences so being alone is simply normal. It's prevention; leave it a week and it becomes treatment, which is far harder. ${svc("daycare","Daycare")} fits naturally into a healthy routine.`
+      : `Even with someone usually home, teach short calm absences from the very first day so alone-time never becomes a worry. Prevention is far easier than fixing it later.`});
+
+  // 4. Early socialisation window — direct + PROMOTED for first-timers
+  const newOwner = a.experience==="first";
+  tips.push({key:"social",flag:newOwner,promote:newOwner,order:newOwner?3:7,
+    head:"Socialise before the jabs are finished — the window's already open",
+    body: newOwner
+      ? `The instinct is "not fully vaccinated, keep them in" — and people miss the critical window that never reopens. Carry your pup or use a sling: feet off the ground for safety, senses wide open to traffic, crowds, hoovers, umbrellas, all the everyday chaos. Done now, it's worth more than any class later.`
+      : `The critical socialisation window runs before the vaccination course ends. Carry them or use a sling to safely expose them to noise, traffic and bustle now — it's a head start you can't get back.`});
+
+  // 5. Triggered: working/high drive -> mental stimulation
+  if(b.energy>=4){
+    const under=({gentle:1,moderate:2,active:4,working:5}[a.exercise])<b.energy;
+    tips.push({key:"stim",flag:under&&b.energy>=5,promote:under,order:under?4:8,
+      head:"Tire the brain, not just the legs",
+      body:`A bright, driven breed that's bored doesn't relax — it invents jobs you won't like. Scent games, training, puzzle work and structured outlets matter as much as the walk. ${svc("intensive","Training")} gives you the toolkit; ${svc("daycare","daycare")} burns the rest.`});
+  }
+
+  // 6. Triggered: heavy coat prep
+  if(b.groom>=4 && !skipRisk){
+    tips.push({key:"coatprep",order:9,
+      head:"Build a grooming routine before the coat needs it",
+      body:`This coat takes real upkeep. Get pup comfortable with brushing and the ${svc("grooming","salon")} early, so grooming is a calm habit rather than a battle once the adult coat arrives.`});
+  }
+
+  // sort: first, then promoted (by order), then the rest
+  tips.sort((x,y)=> (y.first?1:0)-(x.first?1:0) || x.order-y.order );
+  return tips.slice(0,5);
+}
+
+/* ===================================================================
+   7. RENDER
+   =================================================================== */
+function setScreen(html){app.innerHTML=html;app.classList.remove("fade");void app.offsetWidth;app.classList.add("fade");window.scrollTo({top:0,behavior:"instant"});}
+
+function renderIntro(){
+  setScreen(`
+    <section class="hero">
+      <div class="eyebrow">Thinking about a new dog?</div>
+      <h1>The dog you want, <em>made to work</em>.</h1>
+      <p class="hero-lead">Most breed quizzes tell you you've chosen wrong. This one keeps your dream breed centre stage — gives you the honest fit for your life and space, then shows exactly how to close the gap.</p>
+      <div class="spine">The right start prevents the problems people pay to fix later. We're the people who help you start right.</div>
+      <ul class="hero-points">
+        <li><span class="tick">${CHECK}</span><span>An honest match score for your real life — home, space, hours and all.</span></li>
+        <li><span class="tick">${CHECK}</span><span>See your score move once the right support is factored in.</span></li>
+        <li><span class="tick">${CHECK}</span><span>Plain-spoken tips from a working pro — the things that save you grief.</span></li>
+      </ul>
+      <button class="btn btn-primary btn-block" onclick="goBreedSelect()">Start &nbsp;→</button>
+      <p class="disclaimer" style="margin-top:18px">Takes about a minute. Nothing's saved or shared.</p>
+    </section>`);
+}
+
+function goBreedSelect(){state.screen="breed";renderBreedSelect("");}
+function renderBreedSelect(filter){
+  const f=(filter||"").trim().toLowerCase();
+  const list=BREEDS.filter(b=>b.name.toLowerCase().includes(f)).slice(0,60);
+  const rows=list.map(b=>`
+    <button class="opt" onclick="pickBreed('${b.name.replace(/'/g,"\\'")}')">
+      <span>${b.name}</span><span class="breed-grp">${b.group}</span></button>`).join("");
+  setScreen(`
+    <div class="eyebrow">First — the one you've got your eye on</div>
+    <div class="q-head"><h2>Which breed has caught your heart?</h2></div>
+    <p class="q-help">We'll make this one the star of your results. Not sure yet? Skip it and we'll match you from scratch.</p>
+    <div class="search-wrap">
+      <input class="search-input" id="breedSearch" placeholder="Search 90+ breeds…" autocomplete="off"
+        oninput="renderBreedSelectKeepFocus(this.value)" value="${(filter||'').replace(/"/g,'&quot;')}">
+    </div>
+    <div class="search-list">${rows||`<p class="q-help">No match — try another spelling, or skip.</p>`}</div>
+    <div class="restart"><button class="btn-ghost" onclick="skipBreed()">Skip — just match me →</button></div>
+  `);
+}
+function renderBreedSelectKeepFocus(v){
+  const list=BREEDS.filter(b=>b.name.toLowerCase().includes((v||"").trim().toLowerCase())).slice(0,60);
+  const rows=list.map(b=>`
+    <button class="opt" onclick="pickBreed('${b.name.replace(/'/g,"\\'")}')">
+      <span>${b.name}</span><span class="breed-grp">${b.group}</span></button>`).join("");
+  document.querySelector(".search-list").innerHTML=rows||`<p class="q-help">No match — try another spelling, or skip.</p>`;
+}
+function pickBreed(name){state.chosenBreed=name;startQuiz();}
+function skipBreed(){state.chosenBreed=null;startQuiz();}
+
+function startQuiz(){state.screen="quiz";state.step=0;renderQuestion();}
+
+function renderQuestion(){
+  const q=QUESTIONS[state.step];
+  const total=QUESTIONS.length;
+  const pct=Math.round((state.step)/total*100);
+  const cur=state.answers[q.id];
+  const isMulti=q.type==="multi";
+  const opts=q.opts.map(o=>{
+    const sel=isMulti?(Array.isArray(cur)&&cur.includes(o.v)):(cur===o.v);
+    return `<button class="opt ${sel?'sel':''}" onclick="choose('${q.id}','${o.v}',${isMulti})">
+       <span class="box">${CHECK}</span><span>${o.label}</span></button>`;
+  }).join("");
+  setScreen(`
+    <div class="progress">
+      <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+      <div class="progress-label">${state.step+1} / ${total}</div>
+    </div>
+    <div class="q-head"><h2>${q.title}</h2></div>
+    ${q.help?`<p class="q-help">${q.help}</p>`:`<div style="height:8px"></div>`}
+    <div class="opts">${opts}</div>
+    ${isMulti?`<div class="multi-actions"><button class="btn btn-primary btn-block" onclick="nextStep()">Continue →</button></div>`:``}
+    <div class="restart"><button class="btn-ghost" onclick="back()">← Back</button></div>
+  `);
+  requestAnimationFrame(()=>{const f=document.querySelector(".progress-fill");if(f)f.style.width=pct+"%";});
+}
+
+function choose(id,v,multi){
+  if(multi){
+    let arr=Array.isArray(state.answers[id])?[...state.answers[id]]:[];
+    arr=arr.includes(v)?arr.filter(x=>x!==v):[...arr,v];
+    state.answers[id]=arr;renderQuestion();
+  } else {
+    state.answers[id]=v;
+    setTimeout(nextStep,170); // gentle auto-advance
+  }
+}
+function nextStep(){
+  if(state.step<QUESTIONS.length-1){state.step++;renderQuestion();}
+  else renderResults();
+}
+function back(){
+  if(state.step>0){state.step--;renderQuestion();}
+  else goBreedSelect();
+}
+
+function renderResults(){
+  state.screen="results";
+  const a=state.answers;
+  const ranked=BREEDS.map(b=>scoreBreed(b,a))
+    .sort((x,y)=>(y.hardNo?-100:y.supported)-(x.hardNo?-100:x.supported));
+
+  let hero=null;
+  if(state.chosenBreed){hero=scoreBreed(BREEDS.find(b=>b.name===state.chosenBreed),a);}
+  const heroIsHardNo=hero&&hero.hardNo;
+
+  // alternatives: top matches excluding the hero; surface more prominently on a hard-no
+  const altPool=ranked.filter(r=>!hero||r.breed.name!==hero.breed.name);
+  const altCount=heroIsHardNo?5:3;
+  const alts=altPool.slice(0,altCount);
+
+  let html=`<div class="result-top"><div class="eyebrow">Your results</div></div>`;
+
+  if(hero){
+    html+=heroCardHtml(hero,a);
+  } else {
+    html+=`<div class="q-head"><h2 style="margin-bottom:6px">Your strongest matches</h2></div>
+           <p class="q-help">Ranked for the life you've described. Tap any to make it the star.</p>`;
+    html+=heroCardHtml(alts[0]&&ranked[0],a); // top match as hero when none chosen
+  }
+
+  // alternatives block
+  const altTitle = hero
+    ? (heroIsHardNo ? "Where we'd gently point you instead" : "Others you might also fall for")
+    : "More that suit you";
+  html+=`<div class="section-lab">${altTitle}</div>
+    <div class="alts">${alts.map(r=>altHtml(r)).join("")}</div>`;
+
+  html+=`<p class="disclaimer">These are honest generalisations to guide you — every dog is an individual, and the right upbringing changes everything. For a steer on your exact situation, ${svc("chat","have a chat with us")}.</p>
+    <div class="footer-spine">Start right. The rest follows.</div>
+    <div class="restart"><button class="btn-ghost" onclick="restart()">↺ Start again</button></div>`;
+
+  setScreen(html);
+  animateBars();
+}
+
+function heroCardHtml(r,a){
+  if(!r) return "";
+  const b=r.breed;
+  const sizeWord=["","toy","small","medium-sized","large","giant"][b.size];
+  const lift=r.lift>0 && !r.hardNo;
+
+  // bridge numbers
+  const bridgeHtml = r.hardNo
+    ? `<div class="bar"><div class="base" data-w="${r.base}" style="background:var(--clay)"></div></div>`
+    : lift
+      ? `<div class="bar"><div class="base" data-w="${r.base}"></div><div class="lift" data-base="${r.base}" data-w="${r.supported}"></div></div>`
+      : `<div class="bar"><div class="base" data-w="${r.supported}"></div></div>`;
+
+  const numsHtml = (lift && !r.hardNo)
+    ? `<div class="bridge-nums">
+         <div class="bridge-num"><span class="lab">Your setup now</span><span class="val">${r.base}%</span></div>
+         <span class="bridge-arrow">→</span>
+         <div class="bridge-num after"><span class="lab">With our support</span><span class="val">${r.supported}%</span></div>
+       </div>`
+    : `<div class="bridge-nums">
+         <div class="bridge-num"><span class="lab">${r.hardNo?"Honest match":"Match for you"}</span><span class="val" style="${r.hardNo?'color:var(--clay)':''}">${r.hardNo?r.base:r.supported}%</span></div>
+       </div>`;
+
+  let inner=`
+    <h2 class="breed-name">${b.name}</h2>
+    <div class="breed-meta">${b.group} · ${sizeWord} breed</div>
+    <div class="bridge">${numsHtml}${bridgeHtml}
+      <div class="band ${r.band.k}"><span class="dot"></span>${r.band.t}</div>
+    </div>
+    <p class="why">${whyLine(r,a)}</p>`;
+
+  // strong steer
+  if(r.steer){
+    inner+=`<div class="steer-note"><div class="st-head">⚠ Worth being straight with you</div>${r.steer.text}</div>`;
+  }
+  // hard-no honesty
+  if(r.hardNo){
+    inner+=`<div class="honest-note"><strong>This one we can't bridge.</strong> ${r.hardNo.reason} We'd rather tell you now than sell you a struggle.</div>`;
+  }
+
+  // bridges
+  if(r.bridges.length){
+    inner+=`<div class="section-lab">Closing the gap${lift?` · ${r.base}% → ${r.supported}%`:''}</div>
+      <div class="bridge-list">${r.bridges.map(g=>`
+        <div class="bridge-item">
+          <div class="bi-top"><span class="gap">${g.gap}</span>${(lift&&g.lift)?`<span class="lift-tag">${g.lift}</span>`:''}</div>
+          <div class="fix">${g.fix}</div>
+        </div>`).join("")}</div>`;
+  }
+  // soft cautions
+  if(r.cautions.length){
+    inner+=r.cautions.map(c=>`<p class="why muted" style="font-size:14px;margin-top:14px">A gentle note — ${c}</p>`).join("");
+  }
+
+  // tips
+  const tips=buildTips(r,a);
+  inner+=`<div class="section-lab">Whatever you choose — start it right</div>
+    <p class="tip-key">A few things worth more than the breed decision itself.</p>
+    <div class="tips">${tips.map(t=>`
+      <div class="tip ${t.flag?'flag':''} ${t.first?'first-tip':''}">
+        <div class="t-head">${t.head}${t.promote?'<span class="pill">Read this</span>':''}</div>
+        <div class="t-body">${t.body}</div>
+      </div>`).join("")}</div>`;
+
+  return `<div class="hero-card">${inner}</div>`;
+}
+
+function altHtml(r){
+  const b=r.breed;
+  const score=r.hardNo?r.base:r.supported;
+  let line;
+  if(r.hardNo) line="A fairer fit for your space";
+  else if(r.lift>=10) line=`${r.base}% now · ${r.supported}% with our support`;
+  else line=`${b.group} · ${["","toy","small","medium","large","giant"][b.size]} breed`;
+  return `<button class="alt" onclick="chooseAlt('${b.name.replace(/'/g,"\\'")}')">
+    <span class="a-score">${score}%</span>
+    <span class="a-mid"><span class="a-name">${b.name}</span><span class="a-line">${line}</span></span>
+    <span class="a-go">→</span></button>`;
+}
+function chooseAlt(name){state.chosenBreed=name;renderResults();}
+function restart(){state.answers={};state.chosenBreed=null;state.step=0;renderIntro();}
+
+function animateBars(){
+  requestAnimationFrame(()=>{ setTimeout(()=>{
+    document.querySelectorAll(".bar .base").forEach(el=>{el.style.width=el.dataset.w+"%";});
+    document.querySelectorAll(".bar .lift").forEach(el=>{
+      el.style.left=el.dataset.base+"%";
+      el.style.width=(el.dataset.w-el.dataset.base)+"%";
+    });
+  },60);});
+}
+
+/* boot */
+renderIntro();
+</script>
+</body>
+</html>

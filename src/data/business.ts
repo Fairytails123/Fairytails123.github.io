@@ -25,7 +25,6 @@ export const business = {
   // Corrected wa.me forms (live site's links are malformed — audit 2026-06-11)
   phones: {
     main: { label: 'Main line', display: '01424 300668', tel: 'tel:+441424300668', whatsapp: 'https://wa.me/441424300668' },
-    textLine: { label: 'Text / WhatsApp line', display: '07842 116216', tel: 'tel:+447842116216', whatsapp: 'https://wa.me/447842116216' },
     emergency: { label: 'Emergency', display: '07517 405466', tel: 'tel:+447517405466' },
     opsManager: { label: 'Ops Manager', display: '07719 739556', tel: 'tel:+447719739556' },
     grooming: { label: 'Dog Grooming', display: '07355 878680', tel: 'tel:+447355878680' },
