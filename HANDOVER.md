@@ -6,8 +6,8 @@ Pre-build interview done → **`docs/page-specs/02-dog-day-school.md`** (final s
 Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train reference, with the
 `frontend-design` skill's craft applied inside the locked countryside-editorial system.
 
-- **Signature interaction:** scroll-driven **"a day in the life" timeline** (honey trail + paw marker,
-  owner's updated timetable). **Plus an interactive cost estimator** (full/half × size × days/week ×
+- **Signature interaction:** scroll-driven **"a day in the life" timeline** (dawn→dusk honey trail with a
+  rising/setting **sun** marker, owner's updated timetable). **Plus an interactive cost estimator** (full/half × size × days/week ×
   "comes every week" → live per-day/week/month from `pricing.json`). Both verified live on the local
   preview (estimator maths checked: Half/Large/5/weekly = £19.99 · £99.95 · £433).
 - **Owner decisions baked in:** acceptance-gated CTA (enquiry for new + Acuity for regulars); membership
@@ -31,7 +31,33 @@ Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train 
 - **Open before sign-off:** owner bug-check on the preview; parent testimonials; any fresh footage; then
   the polish pass (Lighthouse ≥ 90 / reduced-motion / SEO+JSON-LD) and the enquiry-form live n8n test.
 
-**Last updated:** 2026-06-29 (Page 3 Dog Day School BUILT — see the section above; Breed Matcher 2026-06-20 below) · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c LIVE. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
+## 📋 Outstanding / pending work — all pages (snapshot 2026-06-29)
+
+**Page 1 — Board & Train** (`/dog-boarding-school`, LIVE, passes a–c):
+- 3 media slots still placeholder — **body-cam clips · testimonials · before/after pairs** (owner supplies; wiring steps in "▶ START HERE NEXT SESSION" below).
+- Owner review of design/animation feel.
+- Polish pass (d): Lighthouse ≥ 90 · reduced-motion · SEO/JSON-LD → then sign-off + tick tracker.
+
+**Page 3 — Dog Day School** (`/dog-day-school`, BUILT + LIVE 2026-06-29):
+- Owner **bug-check on the preview** (desktop + phone).
+- **Parent testimonials** (currently a graceful placeholder card) + any **fresh hero/day-school photos or footage** to swap for the harvested set.
+- **Polish pass:** Lighthouse ≥ 90 · reduced-motion audit · a11y · per-page SEO + JSON-LD (Service/LocalBusiness).
+- **Enquiry-form live end-to-end n8n test** (service = "Dog Day School"; CORS from a real browser; read the execution).
+- Optional later: a dedicated day-school **Acuity appointment type** (the "Book your days" regulars link currently uses `acuity.main`).
+- Then tick **Built + Signed off** for row 3 in `WEBSITE-PLAN.md`.
+
+**Remaining pages to build** (tracker order, inside-out, homepage LAST): **2** `/intensive-dog-training` (NEXT — run its pre-build interview first) · **4** `/puppy-training-classes` · **5** `/training-plans` · **6** `/membership-plans` (Day School's teaser links here) · **7** `/puppycourse` · **8** `/blog` + 19 posts · **9** `/gallery` (needs ImgBB access) · **10** `/contact` (needs team names/roles/photos) · **11** `/terms-and-conditions` · **12** `/` homepage (LAST — **MUST feature the Breed Matcher**).
+
+**Site-wide / deferred:**
+- **Telegram** destination for enquiry alerts — n8n workflow ready for the node; owner to choose a destination.
+- **GTM:** add a History-Change trigger so `page_view` fires on ClientRouter (view-transition) navigations (Stage 4).
+- **Stage 4:** GA4/GTM login session (GA4 id still empty in `business.ts`).
+- **Stage 5 cutover:** add `public/CNAME`, flip `robots.txt` to allow, run `verify-urls --live`; only then can the repo be renamed.
+- **Breed Matcher** (LIVE at `/breed-matcher/`): repoint its `FT={…}` service links from the old domain to new-site paths as pages ship; Phase-1 dataset expansion (roadmap in `tools/breed-matcher/CLAUDE.md`).
+
+**⚠️ Contact-data note (2026-06-29):** `business.ts` no longer has a `phones.textLine` key — the dead **07842 116216** line was deleted site-wide. The **only public number is `business.phones.main` = 01424 300668** (carries WhatsApp). Use `business.phones.main` for any call/WhatsApp link on future pages; never reintroduce 07842.
+
+**Last updated:** 2026-06-29 (Page 3 Dog Day School BUILT + LIVE; site-wide contact fix — see sections above; Breed Matcher 2026-06-20 below) · **Status: Page 3 (Dog Day School) BUILT + LIVE (review + polish pending); Page 1 (Board & Train) passes a–c LIVE, paused for 3 owner media slots + polish. Stage 0 + Stage 1 done. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
 
 > **2026-06-18 — Hero video produced (see "▶ START HERE" §, "Hero DONE" note).** The owner had dropped a **405 MB / 3:57 raw** `board-train-hero.mp4` straight into `public/media` (over GitHub's 100 MB file limit → would break the push). It was a concat of the same training session as the 25 raw HLG clips in `Videos\`. Replaced with a polished 12 s cut; the owner's oversized raws are **preserved** in `Videos\_owner-dropins\`.
 
