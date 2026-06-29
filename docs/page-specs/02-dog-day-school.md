@@ -101,4 +101,6 @@ Owner sign-off on the live preview · `verify-urls --dist` · Lighthouse ≥ 90 
 
 **Data/config:** `pricing.json` (PM half removed, "commands" removed, `day-taster` £12.50 added, Half Day labelled "Half Day (AM)"); `astro.config.mjs` (`/boarding-information` → `/dog-boarding-school`); `verify-urls.mjs` (`/dog-day-school` → built; `npm run build && verify-urls --dist` → 0 failures); `Header.astro` (Dog Day School nav link added).
 
-**Still open before sign-off:** owner review of design/feel on the GH Pages preview (needs commit + push) · parent testimonials · any fresh hero footage · then the polish pass (Lighthouse/reduced-motion/SEO/JSON-LD) + enquiry-form live n8n test. NOT committed/pushed yet (owner authorises deploys).
+**Shipped 2026-06-29:** committed `c59ca9f` + pushed to `main`; **LIVE on the preview** at `https://fairytails123.github.io/dog-day-school` (verified 200). Also shipped a site-wide contact fix (dead `07842 116216` removed; `01424 300668` is the only public number, carries WhatsApp) and a design-elevation pass (dawn→dusk sun timeline, estimator count-up, why-us icon hover).
+
+**Still open before sign-off:** owner bug-check on the preview · parent testimonials · any fresh hero footage · then the polish pass (Lighthouse/reduced-motion/SEO/JSON-LD) + enquiry-form live n8n test.

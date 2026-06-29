@@ -21,10 +21,15 @@ Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train 
 - **Data/config:** `pricing.json`, `astro.config.mjs` (boarding redirect), `verify-urls.mjs`
   (`/dog-day-school`→built), `Header.astro` (nav link added), `WEBSITE-PLAN.md` (tracker ticked).
   `npm run build && verify-urls --dist` → **0 failures**.
-- **NOT committed/pushed** (owner authorises deploys). To let the owner review on the GH Pages preview
-  (`fairytails123.github.io/dog-day-school`), commit + push to `main` when asked.
-- **Open before sign-off:** owner review of feel; parent testimonials; any fresh footage; then the polish
-  pass (Lighthouse ≥ 90 / reduced-motion / SEO+JSON-LD) and the enquiry-form live n8n test.
+- **LIVE on the preview** — committed `c59ca9f` + pushed to `main` 2026-06-29; Pages deploy succeeded,
+  verified `https://fairytails123.github.io/dog-day-school` → 200 (timeline + estimator present).
+- **Site-wide contact fix shipped (2026-06-29):** the dead **`07842 116216`** line was removed
+  everywhere (business.ts `textLine` deleted; Header/Footer/EnquiryForm/Board & Train repointed) — the
+  only public number is now **`01424 300668`** (carries WhatsApp). Verified live: 0× `07842` on home,
+  Board & Train and Day School. **Design elevation also shipped:** dawn→dusk gradient timeline with a
+  rising/setting **sun** marker, estimator number count-up, why-us icon hover.
+- **Open before sign-off:** owner bug-check on the preview; parent testimonials; any fresh footage; then
+  the polish pass (Lighthouse ≥ 90 / reduced-motion / SEO+JSON-LD) and the enquiry-form live n8n test.
 
 **Last updated:** 2026-06-29 (Page 3 Dog Day School BUILT — see the section above; Breed Matcher 2026-06-20 below) · **Status: PAUSED mid-Page-1, per owner. Stage 0 + Stage 1 done; Page 1 (Board & Train) passes a–c LIVE. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
 
