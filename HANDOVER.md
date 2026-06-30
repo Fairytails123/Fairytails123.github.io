@@ -1,5 +1,20 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ▶ 2026-06-30 — Page 2 (Intensive Dog Training) BUILT (content + design + motion; awaiting owner review + polish)
+
+Pre-build interview done → **`docs/page-specs/03-intensive-dog-training.md`** (final spec + BUILD STATE log).
+Page built at **`src/pages/intensive-dog-training.astro`**, mirroring the Board & Train reference.
+
+- **Identity:** the **day-only sibling of Board & Train** — same TAR programme **minus overnight boarding**; the dog attends full day school by day, home every night, parent training from week 5. Slug `/intensive-dog-training` preserved.
+- **Signature interaction:** the **week-by-week scroll-story** (reuses Board & Train's trail/paw mechanic) — currently an **8-step skeleton**; owner to supply the real week content.
+- **Sections:** hero (interim video) · TAR-method (verbatim) · 4 "how it helps" cards (verbatim) · week-by-week · day-school-included (→`/dog-day-school`) · staying-involved (daily handover + weekly summary + wk-5 parent training) · pricing (2 cards) · **CER science under `#ConditionedEmotionalResponse`** (verbatim, exact case) · eligibility + day-only kit · proof (4 gallery cards + placeholders) · 4-step process (verbatim) · enquiry form (`service="Intensive Dog Training"`).
+- **Owner decisions baked in (interview 2026-06-29/30):** £2,000/2mo all-inclusive of day school (taster folded into intake); puppy £1,200/1mo, **local pups ≤18 weeks**, full day school (= puppy Board & Train minus overnight); daily handover + weekly summary + wk-5 parent training (replaces boarding-only body-cam/visits); reuse-B&T-minus-residential eligibility + DHP/Lepto/Kennel-Cough; custom hero footage to come.
+- **Data fix:** `pricing.json` `puppy-intensive` — removed false "Boarding included", eligibility → "Local puppies up to 18 weeks".
+- **Media (interim, graded via `ffmpeg-static`):** hero `public/media/intensive-hero.mp4` (1.6 MB, 1280×720, from the legacy `Parklandscape_V4` countryside clip — SDR, no tonemap) + poster. Photos in `src/assets/pages/intensive-dog-training/` (8 harvested webp; ChatGPT/WhatsApp images dropped).
+- **Wiring:** `Header.astro` nav link (between Board & Train and Dog Day School); `verify-urls.mjs` (`/intensive-dog-training`→built); cross-link on `dog-boarding-school.astro` → Intensive; `WEBSITE-PLAN.md` tracker row 2 updated. `npm run build && npm run verify-urls` → **0 failures**.
+- **Env note:** local build needed `@rollup/rollup-win32-arm64-msvc@4.61.1` installed `--no-save` (this machine is **arm64**; the shared junction `node_modules` only had x64 binaries). CI (Linux) unaffected; `package.json`/lockfile untouched. *(If a future session can't build on this machine, re-run that install.)*
+- **Open before sign-off:** owner bug-check on preview; real **week-by-week content** (skeleton now); **case study + testimonial**; **custom hero footage**; parent-training/weekly-summary specifics; SEO approval; then polish (Lighthouse / reduced-motion / **Service JSON-LD**) + enquiry-form live n8n test.
+
 ## ▶ 2026-06-29 — Page 3 (Dog Day School) BUILT (content + design + motion; awaiting owner review + polish)
 
 Pre-build interview done → **`docs/page-specs/02-dog-day-school.md`** (final spec + BUILD STATE log).
@@ -46,7 +61,15 @@ Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train 
 - Optional later: a dedicated day-school **Acuity appointment type** (the "Book your days" regulars link currently uses `acuity.main`).
 - Then tick **Built + Signed off** for row 3 in `WEBSITE-PLAN.md`.
 
-**Remaining pages to build** (tracker order, inside-out, homepage LAST): **2** `/intensive-dog-training` (NEXT — run its pre-build interview first) · **4** `/puppy-training-classes` · **5** `/training-plans` · **6** `/membership-plans` (Day School's teaser links here) · **7** `/puppycourse` · **8** `/blog` + 19 posts · **9** `/gallery` (needs ImgBB access) · **10** `/contact` (needs team names/roles/photos) · **11** `/terms-and-conditions` · **12** `/` homepage (LAST — **MUST feature the Breed Matcher**).
+**Page 2 — Intensive Dog Training** (`/intensive-dog-training`, BUILT + on preview 2026-06-30):
+- Owner **bug-check on the preview** (desktop + phone).
+- **Real week-by-week (8-week) content** — §5 scroll-story is currently a sensible skeleton.
+- **Case study + written testimonial** (graceful placeholders now) + **custom intensive/TAR hero footage** (interim = legacy parkland clip).
+- Parent-training (wk5+) cadence/location/duration + weekly-summary format; optional data rename "Comprehensive Puppy Training" → "Intensive Puppy Training".
+- **Polish pass:** Lighthouse ≥ 90 · reduced-motion · a11y · per-page SEO + **Service JSON-LD** (no page carries it yet — establish here, retrofit B&T/Day School).
+- **Enquiry-form live end-to-end n8n test** (service = "Intensive Dog Training"). Then tick **Built + Signed off** for row 2.
+
+**Remaining pages to build** (tracker order, inside-out, homepage LAST): **4** `/puppy-training-classes` (NEXT) · **5** `/training-plans` · **6** `/membership-plans` (Day School's teaser links here) · **7** `/puppycourse` · **8** `/blog` + 19 posts · **9** `/gallery` (needs ImgBB access) · **10** `/contact` (needs team names/roles/photos) · **11** `/terms-and-conditions` · **12** `/` homepage (LAST — **MUST feature the Breed Matcher**).
 
 **Site-wide / deferred:**
 - **Telegram** destination for enquiry alerts — n8n workflow ready for the node; owner to choose a destination.
@@ -57,7 +80,7 @@ Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train 
 
 **⚠️ Contact-data note (2026-06-29):** `business.ts` no longer has a `phones.textLine` key — the dead **07842 116216** line was deleted site-wide. The **only public number is `business.phones.main` = 01424 300668** (carries WhatsApp). Use `business.phones.main` for any call/WhatsApp link on future pages; never reintroduce 07842.
 
-**Last updated:** 2026-06-29 (Page 3 Dog Day School BUILT + LIVE; site-wide contact fix — see sections above; Breed Matcher 2026-06-20 below) · **Status: Page 3 (Dog Day School) BUILT + LIVE (review + polish pending); Page 1 (Board & Train) passes a–c LIVE, paused for 3 owner media slots + polish. Stage 0 + Stage 1 done. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
+**Last updated:** 2026-06-30 (Page 2 Intensive Dog Training BUILT + pushed to preview — see top section. Earlier: Page 3 Dog Day School BUILT + LIVE; site-wide contact fix; Breed Matcher 2026-06-20 below) · **Status: Page 2 (Intensive Dog Training) BUILT + on preview (review + polish pending); Page 3 (Dog Day School) BUILT + LIVE (review + polish pending); Page 1 (Board & Train) passes a–c LIVE, paused for 3 owner media slots + polish. Stage 0 + Stage 1 done. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
 
 > **2026-06-18 — Hero video produced (see "▶ START HERE" §, "Hero DONE" note).** The owner had dropped a **405 MB / 3:57 raw** `board-train-hero.mp4` straight into `public/media` (over GitHub's 100 MB file limit → would break the push). It was a concat of the same training session as the 25 raw HLG clips in `Videos\`. Replaced with a polished 12 s cut; the owner's oversized raws are **preserved** in `Videos\_owner-dropins\`.
 

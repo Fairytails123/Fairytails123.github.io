@@ -17,7 +17,7 @@ const MANIFEST = [
   // ---- rebuilt pages (final 200s) ----
   { path: '/', type: 'page', status: 'built' }, // holding page until homepage (LAST)
   { path: '/dog-boarding-school', type: 'page', status: 'built' },
-  { path: '/intensive-dog-training', type: 'page', status: 'planned' },
+  { path: '/intensive-dog-training', type: 'page', status: 'built' },
   { path: '/dog-day-school', type: 'page', status: 'built' },
   { path: '/puppy-training-classes', type: 'page', status: 'planned' },
   { path: '/training-plans', type: 'page', status: 'planned' },

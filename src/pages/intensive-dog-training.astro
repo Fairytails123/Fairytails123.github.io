@@ -1,0 +1,880 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+import countryPark from '../assets/pages/intensive-dog-training/Intensive-Training-in-the-Country-Park-2880w.webp';
+import puppyTown from '../assets/pages/intensive-dog-training/Puppy-Training-in-Town-2880w.webp';
+import trainingPark from '../assets/pages/intensive-dog-training/Training-in-park-2880w.webp';
+import daySchoolImg from '../assets/pages/intensive-dog-training/day-school-2880w.webp';
+import galNew from '../assets/pages/intensive-dog-training/New-Experiences-1920w.webp';
+import galLearning from '../assets/pages/intensive-dog-training/Learning-Development-1920w.webp';
+import galSkill from '../assets/pages/intensive-dog-training/Developing-skill-set-1920w.webp';
+import galFocus from '../assets/pages/intensive-dog-training/Keep-focused-1920w.webp';
+
+// Day-only intensive: the two intensive offerings only (NOT one-to-one / classes / walks).
+const plans = pricing.offerings
+  .filter((o) => o.category === 'training' && o.id.includes('intensive'))
+  .sort((a, b) => a.order - b.order);
+
+// TAR is focused — no more than two issues at a time. A tighter, honest list than Board & Train.
+const issues = [
+  'Pulling on the lead',
+  'Recall',
+  'Loose-lead walking',
+  'Reactivity to dogs or people',
+  'Jumping up',
+  'Focus & impulse control',
+  'Door & barrier manners',
+  'Limited anxiety-related issues',
+];
+
+const howItHelps = [
+  {
+    title: 'Knowing when to stop',
+    body: 'We break the training into shorter sessions, where we focus on one key behaviour at a time. It’s better to do multiple short sessions with breaks than one long one to keep your dog on task and focused. It’s not about how long a session is, it’s about how effective it is.',
+  },
+  {
+    title: 'Consistency',
+    body: 'We make sure every dog handler uses the same cues, gestures, timing, and tones — and a number of trainers take turns leading a session to ensure that your dog responds equally to all.',
+  },
+  {
+    title: 'Exposure to places',
+    body: 'We train in different environments, so your dog knows that cues mean the same thing no matter where they are.',
+  },
+  {
+    title: 'Working our way up',
+    body: 'We gradually increase distractions throughout training sessions to get your dog used to doing their behaviour even when more exciting things are going on. We reward consistently with high-value training treats.',
+  },
+];
+
+// SKELETON week-by-week (day-only: home every night, no mid-course break, parent training from week 5).
+// TODO(owner): refine against your real 8-week intensive structure (page spec open item).
+const regime = [
+  {
+    label: 'Week 1',
+    title: 'Settling in & assessment',
+    body: 'Your dog joins us for full day school, meets the crew and settles into a calm routine while we assess exactly what we’re working with. A relaxed dog is a dog who can learn — and they’re home with you every evening from day one.',
+  },
+  {
+    label: 'Week 2',
+    title: 'Foundations & first target',
+    body: 'Core calm behaviours and the first of your two priority issues, taught in the quiet around the barn — space and tranquillity, no distractions.',
+  },
+  {
+    label: 'Weeks 3–4',
+    title: 'TAR in motion',
+    body: 'Train · Adjust · Repeat on the first issue: structured repetition at the right distance and duration, with distractions layered in gradually as your dog grows more reliable.',
+  },
+  {
+    label: 'Week 5',
+    title: 'Parent training begins',
+    body: 'You come in to learn the cues, timing and tones we use, so your dog’s new responses transfer cleanly to home and your everyday walks. This is the part that makes it last.',
+  },
+  {
+    label: 'Weeks 6–7',
+    title: 'Second issue & the real world',
+    body: 'The second priority issue, plus real-world proofing: on-lead at local parks, along the seafront promenade and through busy high streets — wherever your dog’s plan needs us to be.',
+  },
+  {
+    label: 'Week 8',
+    title: 'Tighten up & handover',
+    body: 'The last pieces are polished one-to-one, with a final parent session, and we hand back a dog you can take anywhere — plus a simple schedule to keep it all going.',
+  },
+];
+
+const bookingSteps = [
+  {
+    title: 'Contact us',
+    body: 'Contact us by phone, email, or via the contact form. Tell us your needs by describing your dog’s struggles and tell us your aim.',
+  },
+  {
+    title: 'Approve estimate',
+    body: 'We’ll prepare a plan for you to review and approve.',
+  },
+  {
+    title: 'Training begins',
+    body: 'Once we’ve agreed on all the details, we’ll get started!',
+  },
+  {
+    title: 'Training ends',
+    body: 'Training ends on time, and when you’re satisfied to take over.',
+  },
+];
+
+const clientCards = [
+  { img: galNew, caption: 'New experiences', rotate: -2.5 },
+  { img: galLearning, caption: 'Learning development', rotate: 1.8 },
+  { img: galSkill, caption: 'Developing skill set', rotate: -1.2 },
+  { img: galFocus, caption: 'Keeping focused', rotate: 2.4 },
+];
+
+const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+---
+
+<Base
+  title="Intensive Dog Training in Hastings | The Fairy Tails K9 Centre"
+  description="Structured one-to-one behaviour training (TAR method) for adult dogs & puppies near Hastings — five days a week, full day school included, your dog home every night. From £2,000 / 2 months."
+  path="/intensive-dog-training"
+>
+  <div data-page="intensive">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- Interim hero cut from the legacy countryside clip; poster doubles as the
+             reduced-motion/fallback state. TODO(owner): swap in your own intensive/TAR
+             training footage when ready (page spec Q7 open item). -->
+        <video
+          class="h-full w-full object-cover"
+          poster="/media/intensive-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          data-hero-video
+          data-hero-media
+          aria-hidden="true"
+        >
+          <source src="/media/intensive-hero.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/45 to-pine-950/30"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>
+          Intensive behaviour training · Hastings, East Sussex
+        </p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">Real change — your dog</span>
+          <span class="hero-line block"><em class="squiggle not-italic">home every night</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Structured one-to-one behaviour training, five days a week, using our TAR method — with
+          full day school included. All the work of board &amp; train, but your dog sleeps at home.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#enquire" class="btn btn-honey">
+            Send an enquiry <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href={business.acuity.freeConsult} class="btn btn-ghost-light"> Book a free phone consult </a>
+        </div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
+        <li class="paw-bullet flex items-center text-moss-700">TAR method — focused, no more than two issues at a time</li>
+        <li class="paw-bullet flex items-center text-moss-700">Full day school included, five days a week</li>
+        <li class="paw-bullet flex items-center text-moss-700">Home every night + parent training from week 5</li>
+      </ul>
+    </div>
+
+    <!-- ============ THE PROBLEM ============ -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="problem">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <h2 class="font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            One or two big things you’d love to <em class="squiggle not-italic">finally fix?</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Intensive training is for the focused, stubborn issues — the ones that need proper
+            repetition to shift, not a weekly class. We train five days a week on what matters most:
+          </p>
+          <ul class="mt-7 flex flex-wrap gap-2.5" data-stagger>
+            {
+              issues.map((issue) => (
+                <li class="rounded-full border-2 border-moss-200 bg-cream-100 px-4 py-2 text-sm font-bold text-moss-800 transition-colors duration-200 hover:border-honey-400 hover:bg-honey-200/40">
+                  {issue}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-7 text-bark-700" data-reveal>
+            TAR works best on <strong>no more than two issues at a time</strong> — so if your list is
+            longer,
+            <a href="#enquire" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">tell us the one big thing</a>
+            you’d most like cracked, and we’ll prioritise together. (For a whole-dog reset with
+            overnight stays, that’s our
+            <a href="/dog-boarding-school" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">Board &amp; Train</a>.)
+          </p>
+        </div>
+        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(2deg);" data-reveal>
+          <Image
+            src={trainingPark}
+            alt="Intensive one-to-one training in the park at The Fairy Tails"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Focused work, in the real world
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ THE TAR METHOD ============ -->
+    <section class="bg-cream-100" data-section="tar">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Our method</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          TAR training — <em class="squiggle not-italic">Train · Adjust · Repeat</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          The key ingredient to successful dog training is not a golden solution that only a dog
+          trainer knows — it is in the <strong>repetition</strong>.
+        </p>
+        <p class="mt-4 max-w-3xl leading-relaxed text-bark-700" data-reveal>
+          The repetition of training protocols at a suitable distance, for a timed duration, with
+          below-threshold distractions is far more likely to succeed than an ad-hoc approach to an
+          issue. Repeat &ndash; treat &ndash; Repeat &ndash; treat &ndash; Adjust &ndash; and then
+          Repeat. Sometimes, it is also known as creating a
+          <a href="#ConditionedEmotionalResponse" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">conditioned emotional response</a>.
+        </p>
+        <p class="mt-4 max-w-3xl leading-relaxed text-bark-700" data-reveal>
+          Our intensive plans feature TAR training and consist of well-planned, structured sessions,
+          <strong>five days a week</strong>, for issues such as lead walking, recall, pull training
+          and limited anxiety-related issues — carried out by a member of our staff. TAR is only
+          effective against no more than two issues at a time, but is available to
+          <strong>adult dogs and puppies</strong> alike.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT HELPS ============ -->
+    <section data-section="help">
+      <HillDivider class="bg-cream-100 text-cream-50" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Why it works</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How does it <em class="squiggle not-italic">help?</em>
+        </h2>
+        <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            howItHelps.map((card) => (
+              <article class="grain rounded-2xl bg-cream-100 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-xl font-bold text-moss-700">{card.title}</h3>
+                <p class="mt-4 leading-relaxed text-bark-700">{card.body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WEEK-BY-WEEK REGIME — signature scroll story ============ -->
+    <section class="bg-pine-950 text-cream-100" data-section="regime">
+      <HillDivider class="bg-cream-50 text-pine-950" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>The journey</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          What the two months <em class="squiggle not-italic">look like</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-cream-200" data-reveal>
+          Every dog’s plan is tailored with you before they start — but here’s the typical shape of a
+          full intensive course. Your dog trains with us by day and comes home every evening.
+        </p>
+
+        <!-- The walk: a trail line fills + a paw walks down it as you scroll -->
+        <div class="relative mt-14" data-regime-list>
+          <div class="absolute bottom-4 left-[7px] top-2 w-0.5 sm:left-[166px]" aria-hidden="true">
+            <div class="absolute inset-0 rounded bg-moss-800"></div>
+            <div class="absolute inset-0 origin-top rounded bg-honey-400" data-trail-fill></div>
+            <span
+              class="paw-bullet absolute -left-[9px] top-0 block h-5 w-5 text-honey-300"
+              data-trail-paw></span>
+          </div>
+
+          <ol class="space-y-12 sm:space-y-14">
+            {
+              regime.map((step, i) => (
+                <li
+                  class="regime-step relative grid gap-2 pl-9 sm:grid-cols-[140px_1fr] sm:gap-12 sm:pl-0"
+                  data-regime-step
+                  data-step={i + 1}
+                >
+                  <p class="font-display text-lg font-bold uppercase tracking-wide text-honey-400 sm:text-right">
+                    {step.label}
+                  </p>
+                  <div class="sm:pl-14">
+                    <h3 class="font-display text-2xl font-bold text-cream-50">{step.title}</h3>
+                    <p class="mt-2.5 max-w-2xl leading-relaxed text-cream-200">{step.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <p class="mt-14 max-w-3xl rounded-2xl bg-pine-900 p-6 leading-relaxed text-cream-100" data-reveal>
+          <strong class="text-honey-300">Puppies are different:</strong> local puppies up to 18 weeks
+          run a focused one-month course. It’s the same programme as our puppy Board &amp; Train — the
+          only difference is they come <strong>home each evening</strong> instead of boarding overnight.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ DAY SCHOOL INCLUDED ============ -->
+    <section data-section="dayschool">
+      <HillDivider class="bg-pine-950 text-cream-50" />
+      <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-12 sm:pb-28 lg:grid-cols-2">
+        <div>
+          <p class="eyebrow text-honey-600" data-reveal>Included by day</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            Full day school is <em class="squiggle not-italic">part of the price</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Between training sessions your dog isn’t sitting in a kennel — they’re at our day school,
+            walking, playing and socialising with the pack, then home to you every evening. It’s all
+            included in the course price, with no day-rate stacked on top.
+          </p>
+          <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+            The introductory assessment is folded into your dog’s intake, so there’s nothing extra to
+            book or pay for separately.
+          </p>
+          <a
+            href="/dog-day-school"
+            class="mt-6 inline-flex items-center gap-1.5 font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4"
+            data-reveal
+          >
+            See what a day at day school looks like <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <figure class="polaroid mx-auto w-full max-w-md" style="transform: rotate(-2deg);" data-reveal>
+          <Image
+            src={daySchoolImg}
+            alt="Dogs enjoying day school at The Fairy Tails K9 Centre"
+            class="aspect-[4/3] w-full rounded-[2px] object-cover"
+            widths={[640, 1024]}
+            sizes="(min-width: 1024px) 28rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Day school, every training day
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ STAYING INVOLVED ============ -->
+    <section class="bg-cream-100" data-section="involvement">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Your part matters most</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          You’ll see the progress — <em class="squiggle not-italic">every single evening</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Because your dog comes home each night, you’re part of the journey from day one. Lasting
+          change is always a partnership — the families who follow through are the ones whose dogs
+          keep blossoming.
+        </p>
+        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-2xl font-bold text-moss-700">A daily handover</h3>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              At every pick-up we talk you through how the day went — what we worked on, what clicked,
+              and what to gently practise at home that evening.
+            </p>
+          </article>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-2xl font-bold text-moss-700">A weekly summary</h3>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              Each week you get a written and video summary of where your dog is up to, so you can see
+              the change building session by session.
+            </p>
+          </article>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-2xl font-bold text-moss-700">Parent training, from week 5</h3>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              You come in to learn your dog’s new language — the same cues, timing and tones we use —
+              so everything transfers cleanly to your everyday walks.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section data-section="pricing">
+      <HillDivider class="bg-cream-100 text-cream-50" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Investment</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Programmes &amp; pricing
+        </h2>
+        <div class="mx-auto mt-12 grid max-w-3xl items-start gap-6 sm:grid-cols-2" data-stagger>
+          {
+            plans.map((plan, i) => (
+              <article
+                class:list={[
+                  'grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5',
+                  i === 0 && 'ring-2 ring-honey-400 sm:-mt-4 sm:mb-4',
+                ]}
+              >
+                {i === 0 && <p class="eyebrow mb-3 text-honey-600">Our flagship programme</p>}
+                <h3 class="font-display text-2xl font-bold text-moss-800">{plan.name}</h3>
+                <p class="mt-4">
+                  <span class="font-display text-4xl font-bold text-moss-700">{gbp(plan.price)}</span>
+                  <span class="font-bold text-bark-500"> {plan.unit}</span>
+                </p>
+                {plan.largeDogSurcharge && (
+                  <p class="mt-1.5 text-sm font-bold text-honey-700">
+                    +{gbp(plan.largeDogSurcharge)} for large dogs
+                  </p>
+                )}
+                {plan.eligibility && <p class="mt-2 text-sm font-bold text-bark-400">{plan.eligibility}</p>}
+                <ul class="mt-5 flex-1 space-y-2.5 text-[0.95rem] text-bark-700">
+                  {plan.features.map((f) => (
+                    <li class="paw-bullet flex items-start">{f}</li>
+                  ))}
+                </ul>
+                <a href="#enquire" class:list={['btn mt-7 w-full', i === 0 ? 'btn-honey' : 'btn-moss']}>
+                  Enquire about this programme
+                </a>
+              </article>
+            ))
+          }
+        </div>
+        <p class="mx-auto mt-8 max-w-3xl text-center text-sm leading-relaxed text-bark-500" data-reveal>
+          Live further away, or prefer your dog to board overnight? The same training, residential,
+          is our
+          <a href="/dog-boarding-school" class="font-bold text-moss-700 underline decoration-honey-400 underline-offset-4">Board &amp; Train</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ THE SCIENCE — CER ============ -->
+    <section class="bg-cream-100" data-section="science">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-3xl px-4 pb-20 pt-12 sm:pb-28" id="ConditionedEmotionalResponse">
+        <p class="eyebrow text-honey-600" data-reveal>The science</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Conditioned Emotional Response <span class="text-bark-400">(CER)</span>
+        </h2>
+        <p class="mt-6 leading-relaxed text-bark-700" data-reveal>
+          You may not have heard of the phrase “Conditioned Emotional Response,” abbreviated as CER,
+          but if you own a dog, you have most definitely observed this phenomenon. If your dog pricks
+          his ears and comes racing joyfully in anticipation of a walk every time you grasp the leash,
+          he has formed a CER — but let’s take a deeper look at how it unfolds from a scientific
+          standpoint.
+        </p>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          Animals, like humans, are born with a biological system that allows them to experience
+          pleasure and pain, eliciting emotional reactions. In humans, the sound of a drill may create
+          goose bumps if you had a bad dental experience, or the sound of the phone ringing may make
+          your heart race if you link it with the voice of a loved one. These emotional responses occur
+          swiftly and automatically, with little rational thought involved.
+        </p>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          Similar reactions occur in dogs. Your dog’s eyes may light up when he hears the click of a
+          clicker because he has learnt to link its sound with rewards. Pleasure-related (appetitive)
+          reactions stimulate approach and contact, while fear-related (aversive) responses urge
+          retreat and avoidance. From an evolutionary standpoint this makes sense: to survive, animals
+          should seek life-sustaining reinforcers and avoid life-threatening events.
+        </p>
+        <h3 class="mt-10 font-display text-2xl font-bold text-moss-800" data-reveal>
+          How a conditioned emotional response is built
+        </h3>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          Conditioned emotional reactions are based on associative learning (classical conditioning).
+          In the instance of Pavlov’s dogs, a dog learns through connections that a leash equals a
+          walk, a clicker equals a treat, and a white coat equals food. The brain, nervous system and
+          endocrine system are all involved.
+        </p>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          The <strong>amygdala</strong> — often called the “smoke detector of the brain” — processes
+          memories and emotional reactions, signalling the adrenal cortex to release the hormones
+          (cortisol, adrenaline) that prepare for fight or flight. The dog’s brain operates in a
+          “hardwired,” reflex-like manner in reaction to each event, based on earlier learning by
+          association. This is why standard training approaches aren’t very effective at changing
+          behaviour: we are working on an emotional, not a cognitive, level.
+        </p>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          Instead, behaviour modification works because we change emotions through
+          <strong>counter-conditioning</strong> — one conditioned response to the same stimulus is
+          replaced by another. A good emotional response eventually clashes with, and overrides, the
+          fearful one. During counter-conditioning, neurons are re-joined so the nervous system’s
+          adaptability improves: we change past connections between neurons, transforming a frightened
+          response into a pleasant, pleasurable one. That is the whole point of TAR.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ ELIGIBILITY & KIT ============ -->
+    <section data-section="eligibility">
+      <HillDivider class="bg-cream-100 text-cream-50" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Straight talk</p>
+        <h2 class="mt-3 max-w-3xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Is intensive training <em class="squiggle not-italic">right for your dog?</em>
+        </h2>
+        <p class="mt-6 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          We’ll always be honest about what we can and can’t do. TAR is brilliant for focused,
+          repetition-led change on no more than two issues at a time — it isn’t a magic wand for a
+          dog’s whole character. If your dog needs something we’re not the right fit for, we’ll tell
+          you and point you in the right direction.
+        </p>
+        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
+          <article class="rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-moss-300">
+            <h3 class="font-display text-xl font-bold text-moss-700">Adult dogs</h3>
+            <p class="mt-3 leading-relaxed text-bark-700">
+              A two-month course of structured, five-days-a-week training for one or two priority
+              issues. We only use positive methods and never use aversive tools.
+            </p>
+          </article>
+          <article class="rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-moss-300">
+            <h3 class="font-display text-xl font-bold text-moss-700">Local puppies</h3>
+            <p class="mt-3 leading-relaxed text-bark-700">
+              Puppies up to 18 weeks run a focused one-month course — at that age they’re a blank
+              canvas, and a month sets a wonderful foundation. Available to local families who can
+              bring their pup in each day.
+            </p>
+          </article>
+          <article class="rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-moss-300">
+            <h3 class="font-display text-xl font-bold text-moss-700">Local, and home-ready</h3>
+            <p class="mt-3 leading-relaxed text-bark-700">
+              Because your dog attends day school daily and goes home each night, intensive training
+              is for local families. Dogs need to be up to date on their vaccinations (DHP, Lepto and
+              Kennel Cough). Not local, or want overnight stays? See
+              <a href="/dog-boarding-school" class="font-bold text-moss-700 underline decoration-honey-400 underline-offset-4">Board &amp; Train</a>.
+            </p>
+          </article>
+        </div>
+
+        <details class="group mt-12 rounded-2xl bg-cream-100 shadow-[var(--shadow-lift)]" data-reveal>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+            What to bring each day — the kit list
+            <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </summary>
+          <div class="accordion-body">
+            <div class="overflow-hidden">
+              <div class="px-7 pb-7">
+                <p class="text-bark-700">
+                  Intensive is a day programme, so there’s no overnight kit — just the day-to-day
+                  essentials:
+                </p>
+                <ul class="mt-4 grid gap-2.5 sm:grid-cols-2">
+                  <li class="paw-bullet flex items-start text-sm text-bark-700">A well-fitted harness with a top handle (Y-shaped — Perfect Fit, Hurtta or similar)</li>
+                  <li class="paw-bullet flex items-start text-sm text-bark-700">A non-retractable lead, plus a collar with an ID tag</li>
+                  <li class="paw-bullet flex items-start text-sm text-bark-700">Your dog’s usual food / lunch, named</li>
+                  <li class="paw-bullet flex items-start text-sm text-bark-700">High-value training treats (plain boiled chicken is perfect)</li>
+                  <li class="paw-bullet flex items-start text-sm text-bark-700">Fresh water and a travel bowl</li>
+                  <li class="paw-bullet flex items-start text-sm text-bark-700">Up-to-date vaccination card on your first day</li>
+                </ul>
+                <p class="mt-5 text-sm font-bold text-bark-700">
+                  Anything specific to your dog’s plan we’ll agree with you before the first day.
+                </p>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ PROOF ============ -->
+    <section class="overflow-hidden bg-cream-100 py-20 sm:py-28" data-section="proof">
+      <div class="mx-auto max-w-6xl px-4">
+        <p class="eyebrow text-honey-600" data-reveal>Proof, not promises</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Some of our doggy clients <em class="squiggle not-italic">in training</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          We’ll never sell you a guaranteed fix — no honest trainer can. What we can show you is how
+          we actually work, every single day.
+        </p>
+      </div>
+
+      <!-- Draggable polaroid rail (full-bleed) -->
+      <div class="mt-12" data-reveal>
+        <p class="mx-auto max-w-6xl px-4 text-sm font-bold text-bark-400">
+          Drag to explore <span aria-hidden="true">⟷</span>
+        </p>
+        <div
+          class="drag-track mt-4 flex snap-x snap-mandatory gap-7 overflow-x-auto px-[max(1rem,calc((100vw-72rem)/2+1rem))] pb-6 pt-2"
+          data-drag-track
+        >
+          {
+            clientCards.map(({ img, caption, rotate }) => (
+              <figure
+                class="polaroid w-64 shrink-0 snap-start sm:w-72"
+                style={`transform: rotate(${rotate}deg);`}
+              >
+                <Image
+                  src={img}
+                  alt={caption}
+                  class="aspect-square w-full rounded-[2px] object-cover"
+                  widths={[480, 960]}
+                  sizes="18rem"
+                  draggable={false}
+                />
+                <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+                  {caption}
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- TODO(owner): a real Intensive case study + a written testimonial (page spec Q6 open items). -->
+      <div class="mx-auto mt-10 grid max-w-6xl gap-6 px-4 md:grid-cols-2" data-stagger>
+        <article class="rounded-2xl border-2 border-dashed border-moss-300 bg-cream-50 p-7 text-center">
+          <h3 class="font-display text-xl font-bold text-moss-700">An intensive success story</h3>
+          <p class="mt-2 leading-relaxed text-bark-700">
+            A real before-and-after from an intensive course — the dog, the two issues, and the change
+            — is coming to this spot.
+          </p>
+        </article>
+        <article class="rounded-2xl border-2 border-dashed border-moss-300 bg-cream-50 p-7 text-center">
+          <h3 class="font-display text-xl font-bold text-moss-700">What our families say</h3>
+          <p class="mt-2 leading-relaxed text-bark-700">
+            Real words from an intensive-training family are coming here.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section data-section="booking">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Getting started</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How our intensive plans work — <em class="squiggle not-italic">four simple steps</em>
+        </h2>
+        <ol class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            bookingSteps.map((step, i) => (
+              <li class="relative rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-honey-400">
+                <p class="font-display text-6xl font-bold leading-none text-honey-400/80">{i + 1}</p>
+                <h3 class="mt-4 font-display text-xl font-bold text-moss-800">{step.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-bark-700">{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY FORM ============ -->
+    <section id="enquire" class="bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-50 text-pine-900" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Let’s talk</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your dog</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Send us the one or two issues you’d most like us to crack, and we’ll come back to you with
+            an honest plan and an estimate.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Intensive Dog Training" page="/intensive-dog-training" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk it through first?
+          <a href={business.acuity.freeConsult} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            Book a free phone consultation
+          </a>
+          or WhatsApp us on
+          <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            {business.phones.main.display}
+          </a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* Regime steps: dimmed until active (JS adds .is-active; no-JS/reduced-motion = full) */
+  .regime-step {
+    transition: opacity 0.45s ease;
+  }
+  [data-gsap-init] .regime-step:not(.is-active) {
+    opacity: 0.38;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-gsap-init] .regime-step:not(.is-active) {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initIntensive() {
+    const root = document.querySelector('[data-page="intensive"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+
+    // Hero video: lazy-start after load; never for reduced-motion or data-saver users.
+    const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    if (video && !reduceMotion && !saveData) {
+      setTimeout(() => {
+        video.load();
+        video.play().catch(() => {});
+      }, 350);
+    }
+
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* --- Hero entrance --- */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* --- Hero parallax drift --- */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* --- Generic reveals --- */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Staggered groups --- */
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          scrollTrigger: { trigger: group, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Signature: the week-by-week walk --- */
+      const list = root.querySelector('[data-regime-list]') as HTMLElement | null;
+      const fill = root.querySelector('[data-trail-fill]');
+      const paw = root.querySelector('[data-trail-paw]') as HTMLElement | null;
+      if (list && fill) {
+        const trail = {
+          trigger: list,
+          start: 'top 62%',
+          end: 'bottom 55%',
+          scrub: 0.5,
+        };
+        gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: trail });
+        if (paw) {
+          gsap.fromTo(
+            paw,
+            { y: 0, rotation: -8 },
+            {
+              y: () => (paw.parentElement?.offsetHeight ?? 0) - 12,
+              rotation: 8,
+              ease: 'none',
+              scrollTrigger: trail,
+            }
+          );
+        }
+      }
+      gsap.utils.toArray<HTMLElement>('[data-regime-step]').forEach((step) => {
+        ScrollTrigger.create({
+          trigger: step,
+          start: 'top 68%',
+          end: 'bottom 40%',
+          onToggle: (self) => step.classList.toggle('is-active', self.isActive),
+        });
+        gsap.from(step, {
+          x: 40,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: step, start: 'top 88%', once: true },
+        });
+      });
+    });
+
+    /* --- Drag-to-scroll polaroid rail (mouse; touch uses native scroll) --- */
+    const track = root.querySelector('[data-drag-track]') as HTMLElement | null;
+    if (track) {
+      let down = false;
+      let moved = false;
+      let startX = 0;
+      let startScroll = 0;
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        down = true;
+        moved = false;
+        startX = e.clientX;
+        startScroll = track.scrollLeft;
+        track.classList.add('dragging');
+        track.setPointerCapture(e.pointerId);
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startScroll - dx;
+      });
+      const release = () => {
+        down = false;
+        track.classList.remove('dragging');
+      };
+      track.addEventListener('pointerup', release);
+      track.addEventListener('pointercancel', release);
+      track.addEventListener(
+        'click',
+        (e) => {
+          if (moved) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        true
+      );
+    }
+  }
+
+  initIntensive();
+  document.addEventListener('astro:page-load', initIntensive);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>
