@@ -1,6 +1,6 @@
 # Gallery — final spec + build state
 
-**Slug:** `/gallery` (preserved from the live site) · **Built:** 2026-07-01 (out of the inside-out order, at the owner's explicit request) · **Status:** content + design + motion live on preview; owner sign-off + polish pending.
+**Slug:** `/gallery` (preserved from the live site) · **Built:** 2026-07-01 (out of the inside-out order, at the owner's explicit request) · **Status:** ✅ BUILT + PUSHED + LIVE on preview (commits `b07f747` build + `d7443df` head-collar→scenes swap; GitHub Actions deploy verified live at `https://fairytails123.github.io/gallery`); owner sign-off + polish pending.
 
 Reference implementation mirrored: `src/pages/dog-boarding-school.astro`. File: `src/pages/gallery.astro`.
 
