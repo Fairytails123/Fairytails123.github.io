@@ -5,15 +5,15 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 
-// Two photo sources, both owner-provided:
-//  1. Ten of the strongest shots already public on the live /gallery (harvested into
-//     ..\fairytails-image-archive\gallery — Duda-cropped 800px squares).
-//  2. Curated client day-care photos from the owner's ImgBB library (consent confirmed
-//     by the owner 2026-07-01). Portrait phone snaps; the square tiles centre-crop them
-//     and the lightbox shows each one in full. Alt text + captions came from a per-photo
-//     vision pass (countryside-editorial, British English).
-// The gallery is data-driven: add/remove entries in `duda` / `client` below and the
-// mosaic, filter chips and lightbox all follow.
+// Four photo sources, all owner-provided + consent-confirmed (2026-07-01):
+//  1. `duda`    — strongest shots already public on the old live /gallery (800px squares).
+//  2. `client`  — curated day-care photos from the owner's ImgBB library.
+//  3. `training`— training-in-action shots from the owner's Jotform "Training Report" form.
+//  4. `scenes`  — town / seafront / countryside scenes (Jotform) that replaced the
+//                 head-collar/Halti shots at the owner's request.
+// Alt text + captions came from per-photo vision passes; all head-collar shots were
+// screened out. The gallery is data-driven: add/remove entries in any of the four arrays
+// and the round-robin mosaic, filter chips and lightbox all follow.
 
 // Hero (already-public human+dog shot) — shown in the hero band, not repeated in the grid.
 import heroImg from '../assets/pages/gallery/gallery-15.webp';
@@ -24,20 +24,14 @@ import g1 from '../assets/pages/gallery/gallery-1.webp';
 import g2 from '../assets/pages/gallery/gallery-2.webp';
 import g3 from '../assets/pages/gallery/gallery-3.webp';
 import g5 from '../assets/pages/gallery/gallery-5.webp';
-import g7 from '../assets/pages/gallery/gallery-7.webp';
 import g8 from '../assets/pages/gallery/gallery-8.webp';
 import g9 from '../assets/pages/gallery/gallery-9.webp';
-import g10 from '../assets/pages/gallery/gallery-10.webp';
 import g11 from '../assets/pages/gallery/gallery-11.webp';
-import g16 from '../assets/pages/gallery/gallery-16.webp';
 
 // --- curated client photos (ImgBB, consent confirmed 2026-07-01) ---
 import c42 from '../assets/pages/gallery/client-42-roxy.jpg';
 import c21 from '../assets/pages/gallery/client-21-jet.jpg';
-import c54 from '../assets/pages/gallery/client-54-tallulah.jpg';
-import c31 from '../assets/pages/gallery/client-31-bluey.jpg';
 import c1 from '../assets/pages/gallery/client-1-alan.jpg';
-import c44 from '../assets/pages/gallery/client-44-rosie.jpg';
 import c35 from '../assets/pages/gallery/client-35-dexter.jpg';
 import c5 from '../assets/pages/gallery/client-5-goldie.jpg';
 import c26 from '../assets/pages/gallery/client-26-incy.jpg';
@@ -54,26 +48,34 @@ import c53 from '../assets/pages/gallery/client-53-teddy.jpg';
 import c16 from '../assets/pages/gallery/client-16-obie.jpg';
 import c46 from '../assets/pages/gallery/client-46-dicee.jpg';
 import c39 from '../assets/pages/gallery/client-39-aldo.jpg';
-import c32 from '../assets/pages/gallery/client-32-buddy.jpg';
-import c63 from '../assets/pages/gallery/client-63-enzo.jpg';
 
 // --- training-in-action photos (Jotform "Training Report" uploads, consent confirmed 2026-07-01) ---
-import t42 from '../assets/pages/gallery/train-42-ruby.webp';
-import t90 from '../assets/pages/gallery/train-90-frankie.webp';
 import t104 from '../assets/pages/gallery/train-104-henry.webp';
-import t61 from '../assets/pages/gallery/train-61-tato.webp';
-import t47 from '../assets/pages/gallery/train-47-rollo.webp';
 import t50 from '../assets/pages/gallery/train-50-betty.webp';
 import t28 from '../assets/pages/gallery/train-28-enzo.webp';
-import t106 from '../assets/pages/gallery/train-106-bay.webp';
 import t5 from '../assets/pages/gallery/train-5-april.webp';
 import t83 from '../assets/pages/gallery/train-83-bailey.webp';
 import t100 from '../assets/pages/gallery/train-100-tato.webp';
-import t69 from '../assets/pages/gallery/train-69-april.webp';
 import t99 from '../assets/pages/gallery/train-99-rollo.webp';
 import t84 from '../assets/pages/gallery/train-84-bay.webp';
 import t95 from '../assets/pages/gallery/train-95-henry.webp';
 import t6 from '../assets/pages/gallery/train-6-alan.webp';
+
+// --- town / seafront / countryside scenes (Jotform, consent confirmed 2026-07-01) ---
+import s14 from '../assets/pages/gallery/scene-14-ruby.webp';
+import s18 from '../assets/pages/gallery/scene-18-bay.webp';
+import s27 from '../assets/pages/gallery/scene-27-henry.webp';
+import s19 from '../assets/pages/gallery/scene-19-enzo.webp';
+import s31 from '../assets/pages/gallery/scene-31-rollo.webp';
+import s3 from '../assets/pages/gallery/scene-3-april.webp';
+import s53 from '../assets/pages/gallery/scene-53-betty.webp';
+import s21 from '../assets/pages/gallery/scene-21-tato.webp';
+import s57 from '../assets/pages/gallery/scene-57-enzo.webp';
+import s1 from '../assets/pages/gallery/scene-1-betty.webp';
+import s37 from '../assets/pages/gallery/scene-37-alan.webp';
+import s11 from '../assets/pages/gallery/scene-11-rollo.webp';
+import s58 from '../assets/pages/gallery/scene-58-ruby.webp';
+import s24 from '../assets/pages/gallery/scene-24-april.webp';
 
 // Filter categories (owner opted in). Each photo maps to exactly one.
 const cats = [
@@ -89,23 +91,17 @@ type Photo = { img: ImageMetadata; alt: string; caption: string; cat: string; fe
 const duda: Photo[] = [
   { img: g8, alt: 'Grey Labrador in a harness standing in a sunlit meadow with countryside hills and a village beyond', caption: 'Open-air friend', cat: 'out', feature: true },
   { img: g9, alt: 'Brindle boxer and friends playing on colourful climbing structures in a sunny outdoor area', caption: 'Playtime in the sun', cat: 'play', feature: true },
-  { img: g16, alt: 'Brown boxer taking a treat from a trainer during positive-reinforcement training', caption: 'Trust and treats', cat: 'train', feature: false },
   { img: g11, alt: 'Tan hound in a bright pink harness with an alert, eager expression on a paved yard', caption: 'Alert and keen', cat: 'rest', feature: false },
   { img: g2, alt: 'Black cockapoo swimming in a bright blue pool with a yellow toy, other dogs paddling behind', caption: 'Splash time', cat: 'play', feature: false },
-  { img: g7, alt: 'Cream Labrador in a purple harness and a fluffy tan-and-white dog walking on leads across grassy countryside', caption: 'Hillside companions', cat: 'out', feature: false },
   { img: g1, alt: 'Grey bull-breed dog in a black cap and red collar, eyes closed with a contented expression indoors', caption: 'Sporting the style', cat: 'rest', feature: false },
   { img: g3, alt: 'Black spaniel with its tongue out, playing through a colourful garden tunnel', caption: 'Playtime smile', cat: 'play', feature: false },
-  { img: g10, alt: 'Grey dog resting in a black bowl bed with colourful blankets, a second dog dozing behind', caption: 'Bowl-time bliss', cat: 'rest', feature: false },
   { img: g5, alt: 'Brown cockapoo with its tongue out on a yellow play toy, a black dog on the deck behind', caption: 'Pure playground joy', cat: 'play', feature: false },
 ];
 
 const client: Photo[] = [
   { img: c42, alt: "Dark sighthound resting on tan leather sofa, amber eyes looking directly at camera", caption: "Roxy's cosy moment", cat: "rest", feature: true },
   { img: c21, alt: "Black and tan long-haired dog walking through farmyard with wooden fencing", caption: "Jet on the ramble", cat: "out", feature: true },
-  { img: c54, alt: "Cream fluffy Poodle in black harness standing indoors, alert and facing camera", caption: "Tallulah at play", cat: "play", feature: false },
-  { img: c31, alt: "Brindled Staffordshire Bull Terrier trotting across brick courtyard in dark harness, mouth open happily, weathered wooden fence behind", caption: "Bluey's happy stride", cat: "out", feature: true },
   { img: c1, alt: "Golden Labrador wearing blue collar, sitting indoors on wooden floor, looking at camera", caption: "Alan awaits", cat: "train", feature: false },
-  { img: c44, alt: "White husky standing in a country courtyard, looking to the side", caption: "Rosie's countryside home", cat: "out", feature: false },
   { img: c35, alt: "Black Labrador with tongue out in indoor play facility, other dogs blurred in background", caption: "Dexter at play", cat: "play", feature: true },
   { img: c5, alt: "Cream-coloured spaniel resting on grey sofa, wearing red harness, looking at camera", caption: "Goldie's cosy moment", cat: "rest", feature: false },
   { img: c26, alt: "Alert beagle in colourful harness walking on gravel country path", caption: "Incy's countryside amble", cat: "out", feature: false },
@@ -122,32 +118,42 @@ const client: Photo[] = [
   { img: c16, alt: "Fluffy cream Chow Chow with blue collar standing on wooden flooring, tongue playfully out, larger dogs blurred behind", caption: "Obie's cheerful moment", cat: "rest", feature: false },
   { img: c46, alt: "Brown and black terrier in a hot-pink harness looking up at the camera beside a weathered wooden door", caption: "Hopeful Dicee", cat: "train", feature: false },
   { img: c39, alt: "Wiry-coated tan-and-black terrier sitting on a brown leather sofa wearing a collar with a gold tag", caption: "Aldo at home", cat: "rest", feature: false },
-  { img: c32, alt: "Black and white spaniel with an alert expression on a wooden floor indoors", caption: "Attentive Buddy", cat: "train", feature: false },
-  { img: c63, alt: "Tan Wheaten Terrier lying relaxed on concrete in the shelter of a brick wall", caption: "Enzo at rest", cat: "rest", feature: false },
 ];
 
 const training: Photo[] = [
-  { img: t42, alt: "Brown and white spaniel trotting on a long line through an open countryside field with a hedgerow behind", caption: "Ruby works the grounds", cat: "train", feature: true },
-  { img: t90, alt: "German Shepherd lying settled on a café floor, ears alert and a happy expression", caption: "Frankie's confident calm", cat: "train", feature: true },
   { img: t104, alt: "Apricot spaniel settled on a paved town square beside bronze sculptures", caption: "Henry's urban settle", cat: "out", feature: true },
-  { img: t61, alt: "Yellow Labrador settling calmly on paving beside seafront sculptures", caption: "Seafront settle", cat: "out", feature: false },
-  { img: t47, alt: "Black Rottweiler on lead, alert and composed on a tree-lined park path", caption: "Woodland composure", cat: "out", feature: false },
   { img: t50, alt: "Tiny white Chihuahua on lead walking across a gravel drive near the barn buildings", caption: "Betty's countryside debut", cat: "out", feature: false },
   { img: t28, alt: "Cream doodle sitting calmly on Hastings High Street amid historic shopfronts and bunting", caption: "Enzo's urban poise", cat: "out", feature: false },
-  { img: t106, alt: "Cream terrier on lead settling calmly at the Rock-a-Nore fishing huts", caption: "Seaside settling", cat: "out", feature: true },
   { img: t5, alt: "Brown and white spaniel on lead in rolling countryside with coastal views beyond", caption: "Clifftop confidence", cat: "out", feature: false },
   { img: t83, alt: "Small black-and-tan spaniel with a bright, happy expression settled in a busy café", caption: "Bailey shines bright", cat: "train", feature: false },
   { img: t100, alt: "Golden Labrador settled on the high street with colourful shopfronts behind", caption: "TaTo's town calm", cat: "out", feature: false },
-  { img: t69, alt: "White-and-brown dog on lead walking calmly through a tree-lined park path", caption: "Parkside poise with April", cat: "out", feature: false },
   { img: t99, alt: "Relaxed black-and-tan Dobermann with tongue out, standing on barn-area gravel", caption: "Rollo's happy moment", cat: "out", feature: false },
   { img: t84, alt: "Cream-coloured terrier standing calmly in a café with chairs and the counter behind", caption: "Bay's café composure", cat: "train", feature: false },
   { img: t95, alt: "Golden spaniel exploring on a long lead across a sunlit training field under a clear sky", caption: "Off to explore", cat: "train", feature: false },
   { img: t6, alt: "Cream Labrador settling calmly on a bus floor during transport training", caption: "Alan rides calmly", cat: "train", feature: false },
 ];
 
+// Town / seafront / countryside scenes — replaced the head-collar shots (owner request 2026-07-01).
+const scenes: Photo[] = [
+  { img: s14, alt: "Tan-and-white spaniel at the Rock-a-Nore fishing huts beside striking metal sculptures", caption: "Ruby explores the sculptures", cat: "out", feature: true },
+  { img: s18, alt: "Cream terrier on lead in a charming historic town centre with antique shops and trees", caption: "Bay's shopping day", cat: "out", feature: true },
+  { img: s27, alt: "Reddish spaniel on the seafront promenade beside ornamental sculptures", caption: "Henry at the promenade", cat: "out", feature: true },
+  { img: s19, alt: "Cream doodle in a harness at a vibrant seaside town arcade with a sweet shop behind", caption: "Enzo's seaside adventure", cat: "out", feature: false },
+  { img: s31, alt: "Happy dark dog beaming amongst vibrant marigolds and pink flowers in a lush cottage garden", caption: "Rollo's garden joy", cat: "out", feature: true },
+  { img: s3, alt: "Brown-and-white spaniel walking confidently along a town high street", caption: "April's town outing", cat: "out", feature: false },
+  { img: s53, alt: "White dog running free in open countryside with a farmhouse backdrop", caption: "Betty's countryside freedom", cat: "train", feature: true },
+  { img: s21, alt: "Yellow Labrador in a town square with decorative stone statues", caption: "TaTo on town patrol", cat: "out", feature: false },
+  { img: s57, alt: "Golden Labrador on a coastal path overlooking the sea", caption: "Enzo by the coast", cat: "train", feature: false },
+  { img: s1, alt: "Chihuahua on the beach with a seaside fairground in the background", caption: "Seaside Betty", cat: "out", feature: false },
+  { img: s37, alt: "Cream Labrador walking a rural track lined with lush green vegetation", caption: "Alan on the country lane", cat: "train", feature: false },
+  { img: s11, alt: "Black-and-tan dog in a harness on a town-centre paved square with brick buildings and palms beyond", caption: "Rollo enjoys the town", cat: "out", feature: false },
+  { img: s58, alt: "Brown-and-white Labrador standing on flagstones by an old pump house", caption: "Ruby at the pump house", cat: "out", feature: false },
+  { img: s24, alt: "Brown-and-white dog gazing across open coastal fields under a blue sky", caption: "April's seaside moment", cat: "out", feature: false },
+];
+
 // Interleave all three sources (already-public / client / training) by round-robin,
 // then space the feature tiles evenly for editorial rhythm.
-const sources: Photo[][] = [duda, client, training];
+const sources: Photo[][] = [duda, client, training, scenes];
 const roundRobin = (arrs: Photo[][]): Photo[] => {
   const out: Photo[] = [];
   const max = Math.max(...arrs.map((a) => a.length));
