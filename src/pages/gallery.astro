@@ -1,0 +1,855 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+
+// Two photo sources, both owner-provided:
+//  1. Ten of the strongest shots already public on the live /gallery (harvested into
+//     ..\fairytails-image-archive\gallery — Duda-cropped 800px squares).
+//  2. Curated client day-care photos from the owner's ImgBB library (consent confirmed
+//     by the owner 2026-07-01). Portrait phone snaps; the square tiles centre-crop them
+//     and the lightbox shows each one in full. Alt text + captions came from a per-photo
+//     vision pass (countryside-editorial, British English).
+// The gallery is data-driven: add/remove entries in `duda` / `client` below and the
+// mosaic, filter chips and lightbox all follow.
+
+// Hero (already-public human+dog shot) — shown in the hero band, not repeated in the grid.
+import heroImg from '../assets/pages/gallery/gallery-15.webp';
+const heroAlt = 'Smiling handler lifting a playful dark Labrador puppy in a sunny yard';
+
+// --- already-public picks ---
+import g1 from '../assets/pages/gallery/gallery-1.webp';
+import g2 from '../assets/pages/gallery/gallery-2.webp';
+import g3 from '../assets/pages/gallery/gallery-3.webp';
+import g5 from '../assets/pages/gallery/gallery-5.webp';
+import g7 from '../assets/pages/gallery/gallery-7.webp';
+import g8 from '../assets/pages/gallery/gallery-8.webp';
+import g9 from '../assets/pages/gallery/gallery-9.webp';
+import g10 from '../assets/pages/gallery/gallery-10.webp';
+import g11 from '../assets/pages/gallery/gallery-11.webp';
+import g16 from '../assets/pages/gallery/gallery-16.webp';
+
+// --- curated client photos (ImgBB, consent confirmed 2026-07-01) ---
+import c42 from '../assets/pages/gallery/client-42-roxy.jpg';
+import c21 from '../assets/pages/gallery/client-21-jet.jpg';
+import c54 from '../assets/pages/gallery/client-54-tallulah.jpg';
+import c31 from '../assets/pages/gallery/client-31-bluey.jpg';
+import c1 from '../assets/pages/gallery/client-1-alan.jpg';
+import c44 from '../assets/pages/gallery/client-44-rosie.jpg';
+import c35 from '../assets/pages/gallery/client-35-dexter.jpg';
+import c5 from '../assets/pages/gallery/client-5-goldie.jpg';
+import c26 from '../assets/pages/gallery/client-26-incy.jpg';
+import c61 from '../assets/pages/gallery/client-61-marloe.jpg';
+import c30 from '../assets/pages/gallery/client-30-betty.jpg';
+import c65 from '../assets/pages/gallery/client-65-florence.jpg';
+import c9 from '../assets/pages/gallery/client-9-clifford.jpg';
+import c58 from '../assets/pages/gallery/client-58-miley.jpg';
+import c33 from '../assets/pages/gallery/client-33-bonnie.jpg';
+import c68 from '../assets/pages/gallery/client-68-banjo.jpg';
+import c10 from '../assets/pages/gallery/client-10-henry.jpg';
+import c2 from '../assets/pages/gallery/client-2-rolo.jpg';
+import c53 from '../assets/pages/gallery/client-53-teddy.jpg';
+import c16 from '../assets/pages/gallery/client-16-obie.jpg';
+import c46 from '../assets/pages/gallery/client-46-dicee.jpg';
+import c39 from '../assets/pages/gallery/client-39-aldo.jpg';
+import c32 from '../assets/pages/gallery/client-32-buddy.jpg';
+import c63 from '../assets/pages/gallery/client-63-enzo.jpg';
+
+// --- training-in-action photos (Jotform "Training Report" uploads, consent confirmed 2026-07-01) ---
+import t42 from '../assets/pages/gallery/train-42-ruby.webp';
+import t90 from '../assets/pages/gallery/train-90-frankie.webp';
+import t104 from '../assets/pages/gallery/train-104-henry.webp';
+import t61 from '../assets/pages/gallery/train-61-tato.webp';
+import t47 from '../assets/pages/gallery/train-47-rollo.webp';
+import t50 from '../assets/pages/gallery/train-50-betty.webp';
+import t28 from '../assets/pages/gallery/train-28-enzo.webp';
+import t106 from '../assets/pages/gallery/train-106-bay.webp';
+import t5 from '../assets/pages/gallery/train-5-april.webp';
+import t83 from '../assets/pages/gallery/train-83-bailey.webp';
+import t100 from '../assets/pages/gallery/train-100-tato.webp';
+import t69 from '../assets/pages/gallery/train-69-april.webp';
+import t99 from '../assets/pages/gallery/train-99-rollo.webp';
+import t84 from '../assets/pages/gallery/train-84-bay.webp';
+import t95 from '../assets/pages/gallery/train-95-henry.webp';
+import t6 from '../assets/pages/gallery/train-6-alan.webp';
+
+// Filter categories (owner opted in). Each photo maps to exactly one.
+const cats = [
+  { key: 'all', label: 'All' },
+  { key: 'play', label: 'Playtime' },
+  { key: 'out', label: 'Out & about' },
+  { key: 'train', label: 'Training' },
+  { key: 'rest', label: 'Portraits' },
+];
+
+type Photo = { img: ImageMetadata; alt: string; caption: string; cat: string; feature: boolean };
+
+const duda: Photo[] = [
+  { img: g8, alt: 'Grey Labrador in a harness standing in a sunlit meadow with countryside hills and a village beyond', caption: 'Open-air friend', cat: 'out', feature: true },
+  { img: g9, alt: 'Brindle boxer and friends playing on colourful climbing structures in a sunny outdoor area', caption: 'Playtime in the sun', cat: 'play', feature: true },
+  { img: g16, alt: 'Brown boxer taking a treat from a trainer during positive-reinforcement training', caption: 'Trust and treats', cat: 'train', feature: false },
+  { img: g11, alt: 'Tan hound in a bright pink harness with an alert, eager expression on a paved yard', caption: 'Alert and keen', cat: 'rest', feature: false },
+  { img: g2, alt: 'Black cockapoo swimming in a bright blue pool with a yellow toy, other dogs paddling behind', caption: 'Splash time', cat: 'play', feature: false },
+  { img: g7, alt: 'Cream Labrador in a purple harness and a fluffy tan-and-white dog walking on leads across grassy countryside', caption: 'Hillside companions', cat: 'out', feature: false },
+  { img: g1, alt: 'Grey bull-breed dog in a black cap and red collar, eyes closed with a contented expression indoors', caption: 'Sporting the style', cat: 'rest', feature: false },
+  { img: g3, alt: 'Black spaniel with its tongue out, playing through a colourful garden tunnel', caption: 'Playtime smile', cat: 'play', feature: false },
+  { img: g10, alt: 'Grey dog resting in a black bowl bed with colourful blankets, a second dog dozing behind', caption: 'Bowl-time bliss', cat: 'rest', feature: false },
+  { img: g5, alt: 'Brown cockapoo with its tongue out on a yellow play toy, a black dog on the deck behind', caption: 'Pure playground joy', cat: 'play', feature: false },
+];
+
+const client: Photo[] = [
+  { img: c42, alt: "Dark sighthound resting on tan leather sofa, amber eyes looking directly at camera", caption: "Roxy's cosy moment", cat: "rest", feature: true },
+  { img: c21, alt: "Black and tan long-haired dog walking through farmyard with wooden fencing", caption: "Jet on the ramble", cat: "out", feature: true },
+  { img: c54, alt: "Cream fluffy Poodle in black harness standing indoors, alert and facing camera", caption: "Tallulah at play", cat: "play", feature: false },
+  { img: c31, alt: "Brindled Staffordshire Bull Terrier trotting across brick courtyard in dark harness, mouth open happily, weathered wooden fence behind", caption: "Bluey's happy stride", cat: "out", feature: true },
+  { img: c1, alt: "Golden Labrador wearing blue collar, sitting indoors on wooden floor, looking at camera", caption: "Alan awaits", cat: "train", feature: false },
+  { img: c44, alt: "White husky standing in a country courtyard, looking to the side", caption: "Rosie's countryside home", cat: "out", feature: false },
+  { img: c35, alt: "Black Labrador with tongue out in indoor play facility, other dogs blurred in background", caption: "Dexter at play", cat: "play", feature: true },
+  { img: c5, alt: "Cream-coloured spaniel resting on grey sofa, wearing red harness, looking at camera", caption: "Goldie's cosy moment", cat: "rest", feature: false },
+  { img: c26, alt: "Alert beagle in colourful harness walking on gravel country path", caption: "Incy's countryside amble", cat: "out", feature: false },
+  { img: c61, alt: "Chocolate Doodle standing indoors on wooden flooring wearing tan jumper, alert expression", caption: "Marloe, snug and ready", cat: "train", feature: false },
+  { img: c30, alt: "Small white dog in checkered jacket exploring outdoor play area with tyres and equipment", caption: "Betty's playful moment", cat: "play", feature: false },
+  { img: c65, alt: "Black dog with greying muzzle and amber eyes wearing teal harness", caption: "Florence's knowing gaze", cat: "rest", feature: true },
+  { img: c9, alt: "Black and white Boston Terrier in training harness, indoor portrait", caption: "Clifford in his vest", cat: "train", feature: false },
+  { img: c58, alt: "Black-and-tan German Shepherd alert in sunny farmyard courtyard, under wooden pergola, with rural outbuildings beyond", caption: "Miley on courtyard watch", cat: "out", feature: false },
+  { img: c33, alt: "Grey and white terrier wearing red collar, alert and engaged indoors with other dogs playing in background", caption: "Bonnie in her element", cat: "play", feature: false },
+  { img: c68, alt: "Brindle and white boxer in navy harness, facing camera with a bright, soulful expression, indoors", caption: "Banjo's hopeful gaze", cat: "rest", feature: true },
+  { img: c10, alt: "Yellow Labrador walking towards the camera across a paved outdoor area at Fairy Tails", caption: "Henry exploring", cat: "play", feature: false },
+  { img: c2, alt: "Alert black and tan dog facing camera indoors, wearing a harness", caption: "Rolo all attention", cat: "train", feature: false },
+  { img: c53, alt: "Black spaniel in a red harness relaxing on a wooden play-area floor", caption: "Teddy at ease", cat: "play", feature: false },
+  { img: c16, alt: "Fluffy cream Chow Chow with blue collar standing on wooden flooring, tongue playfully out, larger dogs blurred behind", caption: "Obie's cheerful moment", cat: "rest", feature: false },
+  { img: c46, alt: "Brown and black terrier in a hot-pink harness looking up at the camera beside a weathered wooden door", caption: "Hopeful Dicee", cat: "train", feature: false },
+  { img: c39, alt: "Wiry-coated tan-and-black terrier sitting on a brown leather sofa wearing a collar with a gold tag", caption: "Aldo at home", cat: "rest", feature: false },
+  { img: c32, alt: "Black and white spaniel with an alert expression on a wooden floor indoors", caption: "Attentive Buddy", cat: "train", feature: false },
+  { img: c63, alt: "Tan Wheaten Terrier lying relaxed on concrete in the shelter of a brick wall", caption: "Enzo at rest", cat: "rest", feature: false },
+];
+
+const training: Photo[] = [
+  { img: t42, alt: "Brown and white spaniel trotting on a long line through an open countryside field with a hedgerow behind", caption: "Ruby works the grounds", cat: "train", feature: true },
+  { img: t90, alt: "German Shepherd lying settled on a café floor, ears alert and a happy expression", caption: "Frankie's confident calm", cat: "train", feature: true },
+  { img: t104, alt: "Apricot spaniel settled on a paved town square beside bronze sculptures", caption: "Henry's urban settle", cat: "out", feature: true },
+  { img: t61, alt: "Yellow Labrador settling calmly on paving beside seafront sculptures", caption: "Seafront settle", cat: "out", feature: false },
+  { img: t47, alt: "Black Rottweiler on lead, alert and composed on a tree-lined park path", caption: "Woodland composure", cat: "out", feature: false },
+  { img: t50, alt: "Tiny white Chihuahua on lead walking across a gravel drive near the barn buildings", caption: "Betty's countryside debut", cat: "out", feature: false },
+  { img: t28, alt: "Cream doodle sitting calmly on Hastings High Street amid historic shopfronts and bunting", caption: "Enzo's urban poise", cat: "out", feature: false },
+  { img: t106, alt: "Cream terrier on lead settling calmly at the Rock-a-Nore fishing huts", caption: "Seaside settling", cat: "out", feature: true },
+  { img: t5, alt: "Brown and white spaniel on lead in rolling countryside with coastal views beyond", caption: "Clifftop confidence", cat: "out", feature: false },
+  { img: t83, alt: "Small black-and-tan spaniel with a bright, happy expression settled in a busy café", caption: "Bailey shines bright", cat: "train", feature: false },
+  { img: t100, alt: "Golden Labrador settled on the high street with colourful shopfronts behind", caption: "TaTo's town calm", cat: "out", feature: false },
+  { img: t69, alt: "White-and-brown dog on lead walking calmly through a tree-lined park path", caption: "Parkside poise with April", cat: "out", feature: false },
+  { img: t99, alt: "Relaxed black-and-tan Dobermann with tongue out, standing on barn-area gravel", caption: "Rollo's happy moment", cat: "out", feature: false },
+  { img: t84, alt: "Cream-coloured terrier standing calmly in a café with chairs and the counter behind", caption: "Bay's café composure", cat: "train", feature: false },
+  { img: t95, alt: "Golden spaniel exploring on a long lead across a sunlit training field under a clear sky", caption: "Off to explore", cat: "train", feature: false },
+  { img: t6, alt: "Cream Labrador settling calmly on a bus floor during transport training", caption: "Alan rides calmly", cat: "train", feature: false },
+];
+
+// Interleave all three sources (already-public / client / training) by round-robin,
+// then space the feature tiles evenly for editorial rhythm.
+const sources: Photo[][] = [duda, client, training];
+const roundRobin = (arrs: Photo[][]): Photo[] => {
+  const out: Photo[] = [];
+  const max = Math.max(...arrs.map((a) => a.length));
+  for (let i = 0; i < max; i++) for (const a of arrs) if (i < a.length) out.push(a[i]);
+  return out;
+};
+const feats = roundRobin(sources.map((s) => s.filter((p) => p.feature)));
+const nons = roundRobin(sources.map((s) => s.filter((p) => !p.feature)));
+const gap = Math.max(2, Math.round((feats.length + nons.length) / Math.max(1, feats.length)));
+const ordered: Photo[] = [];
+let fi = 0;
+let ni = 0;
+for (let pos = 0; fi < feats.length || ni < nons.length; pos++) {
+  if (fi < feats.length && pos % gap === 0) ordered.push(feats[fi++]);
+  else if (ni < nons.length) ordered.push(nons[ni++]);
+  else if (fi < feats.length) ordered.push(feats[fi++]);
+}
+
+const photos = await Promise.all(
+  ordered.map(async (p, pos) => {
+    const full = await getImage({ src: p.img, width: 800, format: 'webp' });
+    return { ...p, pos, full: full.src };
+  })
+);
+
+const catCount = (key: string) =>
+  key === 'all' ? photos.length : photos.filter((p) => p.cat === key).length;
+
+const photoCount = photos.length;
+---
+
+<Base
+  title="Gallery — Happy Dogs at The Fairy Tails K9 Centre | Hastings"
+  description="A peek at daily life at our countryside dog boarding school and day care near Hastings — playtimes, countryside walks, training wins and quiet cuddles with just some of our doggy clients."
+  path="/gallery"
+>
+  <div data-page="gallery">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[78svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <Image
+          src={heroImg}
+          alt={heroAlt}
+          class="h-full w-full object-cover"
+          widths={[640, 960, 1280]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          data-hero-media
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/55 to-pine-950/35"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-pine-950/50 to-transparent"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-20 pt-36 sm:pb-24">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>The gallery · Hastings, East Sussex</p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">Just some of our</span>
+          <span class="hero-line block"><em class="squiggle not-italic">lovely doggy clients</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Come and meet the four-legged friends who fill our days — from sun-soaked playtimes and
+          gentle countryside walks to quiet cuddles and clever training wins, here at Fairy Tails.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-4" data-hero-cta>
+          <a href="#photos" class="btn btn-honey">
+            Browse the photos <span class="btn-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a href="#enquire" class="btn btn-ghost-light">Enquire about your dog</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ GALLERY ============ -->
+    <section id="photos" class="scroll-mt-24" data-section="gallery">
+      <div class="mx-auto max-w-6xl px-4 pb-6 pt-16 sm:pt-20">
+        <p class="eyebrow text-honey-600" data-reveal>Life at Fairy Tails</p>
+        <div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+          <h2 class="max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            Real dogs, real days — <em class="squiggle not-italic">living their best life</em>
+          </h2>
+          <p class="text-sm font-bold text-bark-400" data-reveal>
+            {photoCount} photos · tap any to enlarge
+          </p>
+        </div>
+
+        <!-- Filter chips -->
+        <div
+          class="mt-8 flex flex-wrap gap-2.5"
+          role="group"
+          aria-label="Filter photos by theme"
+          data-filters
+          data-reveal
+        >
+          {
+            cats.map((c, i) => (
+              <button
+                type="button"
+                class:list={[
+                  'chip rounded-full border-2 border-moss-200 bg-cream-100 px-4 py-2 text-sm font-bold text-moss-800 transition-colors duration-200 hover:border-honey-400 hover:bg-honey-200/40',
+                  i === 0 && 'is-active',
+                ]}
+                data-filter={c.key}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+              >
+                {c.label}
+                <span class="ml-1 text-xs font-bold opacity-60">{catCount(c.key)}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Mosaic -->
+      <div class="mx-auto max-w-6xl px-4 pb-20 sm:pb-28">
+        <div class="mosaic" data-mosaic>
+          {
+            photos.map((p) => (
+              <button
+                type="button"
+                class:list={['tile group', p.feature && 'feature']}
+                data-tile
+                data-cat={p.cat}
+                data-pos={p.pos}
+                data-full={p.full}
+                data-caption={p.caption}
+                data-alt={p.alt}
+                aria-label={`Enlarge photo: ${p.alt}`}
+              >
+                <Image
+                  src={p.img}
+                  alt={p.alt}
+                  class="tile-img"
+                  widths={p.feature ? [400, 600, 800] : [300, 400, 600]}
+                  sizes={p.feature ? '(min-width:1024px) 32rem, (min-width:640px) 40vw, 66vw' : '(min-width:1024px) 16rem, (min-width:640px) 22vw, 44vw'}
+                  draggable={false}
+                />
+                <span class="tile-veil" aria-hidden="true" />
+                <span class="tile-cap" aria-hidden="true">
+                  <span class="tile-cap-text">{p.caption}</span>
+                  <span class="tile-cap-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                      <path d="M15 3h6v6M21 3l-8 8M9 21H3v-6M3 21l8-8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </span>
+                </span>
+              </button>
+            ))
+          }
+        </div>
+
+        <!-- Empty state (shown only if a filter matches nothing; normally hidden) -->
+        <p class="mt-8 hidden text-center text-bark-500" data-empty>No photos in this theme yet.</p>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY ============ -->
+    <section id="enquire" class="bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-50 text-pine-900" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Your dog next?</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Let's write your dog's <em class="squiggle not-italic">happy tale</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Every dog here started with a single message. Tell us about yours — the issues you're
+            facing, or the one big thing you'd most like us to crack — and we'll come back with an
+            honest plan.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Something else" page="/gallery" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk it through first?
+          <a href={business.acuity.freeConsult} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            Book a free phone consultation
+          </a>
+          or WhatsApp us on
+          <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            {business.phones.main.display}
+          </a>
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div
+    class="lightbox"
+    data-lightbox
+    role="dialog"
+    aria-modal="true"
+    aria-label="Photo viewer"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="lightbox-backdrop" data-lb-backdrop></div>
+
+    <button type="button" class="lb-btn lb-close" data-lb-close aria-label="Close photo viewer">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" aria-hidden="true">
+        <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
+      </svg>
+    </button>
+    <button type="button" class="lb-btn lb-prev" data-lb-prev aria-label="Previous photo">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" aria-hidden="true">
+        <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+    <button type="button" class="lb-btn lb-next" data-lb-next aria-label="Next photo">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" aria-hidden="true">
+        <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+
+    <figure class="lightbox-figure" data-lb-figure>
+      <img class="lightbox-img" data-lb-img alt="" />
+      <figcaption class="lightbox-cap">
+        <span data-lb-caption></span>
+        <span class="lightbox-count" data-lb-count></span>
+      </figcaption>
+    </figure>
+  </div>
+</Base>
+
+<style>
+  /* ---------- Mosaic ---------- */
+  .mosaic {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.55rem;
+    grid-auto-flow: dense;
+  }
+  @media (min-width: 640px) {
+    .mosaic {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .mosaic {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+  }
+
+  .tile {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 0.9rem;
+    background: var(--color-cream-200);
+    cursor: zoom-in;
+    box-shadow: var(--shadow-lift);
+    isolation: isolate;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tile.feature {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+
+  .tile-img {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+  .tile:hover .tile-img,
+  .tile:focus-visible .tile-img {
+    transform: scale(1.06);
+  }
+
+  /* Gradient veil that fades in on hover to lift the caption */
+  .tile-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(18 26 18 / 0.68) 0%, rgb(18 26 18 / 0.12) 42%, transparent 68%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .tile:hover .tile-veil,
+  .tile:focus-visible .tile-veil {
+    opacity: 1;
+  }
+
+  .tile-cap {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.7rem 0.85rem;
+    color: var(--color-cream-50);
+    transform: translateY(0.6rem);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+  }
+  .tile:hover .tile-cap,
+  .tile:focus-visible .tile-cap {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .tile-cap-text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.15;
+    text-shadow: 0 1px 6px rgb(18 26 18 / 0.5);
+  }
+  .tile-cap-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    height: 1.9rem;
+    width: 1.9rem;
+    border-radius: 999px;
+    background: rgb(251 247 237 / 0.16);
+    backdrop-filter: blur(4px);
+    color: var(--color-cream-50);
+  }
+  .tile.feature .tile-cap-text {
+    font-size: 1.15rem;
+  }
+
+  /* Filter chips */
+  .chip {
+    cursor: pointer;
+  }
+  .chip.is-active {
+    border-color: var(--color-moss-700);
+    background: var(--color-moss-700);
+    color: var(--color-cream-50);
+  }
+  .tile[hidden] {
+    display: none;
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: clamp(0.75rem, 3vw, 2.5rem);
+  }
+  .lightbox[hidden] {
+    display: none;
+  }
+  .lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(12 17 12 / 0.9);
+    backdrop-filter: blur(6px);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .lightbox.is-open .lightbox-backdrop {
+    opacity: 1;
+  }
+
+  .lightbox-figure {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    display: flex;
+    max-width: min(92vw, 1100px);
+    max-height: 86svh;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    opacity: 0;
+    transform: scale(0.94);
+    transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .lightbox.is-open .lightbox-figure {
+    opacity: 1;
+    transform: none;
+  }
+  .lightbox-img {
+    max-height: 74svh;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 0.6rem;
+    background: var(--color-pine-950);
+    box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.7);
+    object-fit: contain;
+  }
+  .lightbox-cap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-cream-100);
+    text-align: center;
+  }
+  .lightbox-count {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-cream-200);
+    opacity: 0.7;
+  }
+
+  .lb-btn {
+    position: absolute;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 999px;
+    background: rgb(251 247 237 / 0.12);
+    color: var(--color-cream-50);
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    cursor: pointer;
+  }
+  .lb-btn:hover {
+    background: rgb(251 247 237 / 0.24);
+  }
+  .lb-btn:active {
+    transform: scale(0.94);
+  }
+  .lb-close {
+    top: clamp(0.75rem, 2vw, 1.5rem);
+    right: clamp(0.75rem, 2vw, 1.5rem);
+  }
+  .lb-prev {
+    left: clamp(0.5rem, 2vw, 1.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb-next {
+    right: clamp(0.5rem, 2vw, 1.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb-prev:active,
+  .lb-next:active {
+    transform: translateY(-50%) scale(0.94);
+  }
+  @media (max-width: 640px) {
+    .lb-prev {
+      left: 0.4rem;
+    }
+    .lb-next {
+      right: 0.4rem;
+    }
+  }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    .tile-img,
+    .tile-veil,
+    .tile-cap,
+    .lightbox-backdrop,
+    .lightbox-figure,
+    .lb-btn {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { Flip } from 'gsap/Flip';
+
+  gsap.registerPlugin(ScrollTrigger, Flip);
+
+  let galleryMM: ReturnType<typeof gsap.matchMedia> | null = null;
+
+  function initGallery() {
+    const root = document.querySelector('[data-page="gallery"]') as HTMLElement | null;
+    // One guard set regardless of motion, so filter/lightbox listeners are never
+    // attached twice (astro:page-load fires on initial load too, and again per nav).
+    if (!root || root.dataset.galleryInit) return;
+    root.dataset.galleryInit = '1';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tiles = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-tile]'));
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+
+    // ---------------- Filtering (works with or without motion) ----------------
+    let current = 'all';
+    const applyFilter = (key: string) => {
+      if (key === current) return;
+      current = key;
+
+      chips.forEach((c) => {
+        const active = c.dataset.filter === key;
+        c.classList.toggle('is-active', active);
+        c.setAttribute('aria-pressed', String(active));
+      });
+
+      const matches = (t: HTMLElement) => key === 'all' || t.dataset.cat === key;
+
+      if (reduceMotion) {
+        tiles.forEach((t) => (t.hidden = !matches(t)));
+      } else {
+        const state = Flip.getState(tiles, { props: 'borderRadius' });
+        tiles.forEach((t) => (t.hidden = !matches(t)));
+        Flip.from(state, {
+          duration: 0.55,
+          ease: 'power2.inOut',
+          scale: true,
+          absolute: true,
+          onEnter: (els) =>
+            gsap.fromTo(els, { opacity: 0, scale: 0.82 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }),
+          onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.82, duration: 0.3, ease: 'power2.in' }),
+        });
+      }
+
+      if (empty) empty.classList.toggle('hidden', tiles.some(matches));
+      ScrollTrigger.refresh();
+    };
+
+    chips.forEach((c) => c.addEventListener('click', () => applyFilter(c.dataset.filter || 'all')));
+
+    // ---------------- Lightbox (works with or without motion) ----------------
+    const lb = document.querySelector<HTMLElement>('[data-lightbox]');
+    const lbImg = lb?.querySelector<HTMLImageElement>('[data-lb-img]');
+    const lbCap = lb?.querySelector<HTMLElement>('[data-lb-caption]');
+    const lbCount = lb?.querySelector<HTMLElement>('[data-lb-count]');
+    const lbFigure = lb?.querySelector<HTMLElement>('[data-lb-figure]');
+    const lbBackdrop = lb?.querySelector<HTMLElement>('[data-lb-backdrop]');
+
+    let group: HTMLButtonElement[] = [];
+    let idx = 0;
+    let lastFocus: HTMLElement | null = null;
+    let closeTimer: number | undefined;
+
+    const preload = (src?: string) => {
+      if (src) new Image().src = src;
+    };
+
+    const render = (animate = false, dir = 0) => {
+      if (!lbImg || !lbCap || !lbCount) return;
+      const t = group[idx];
+      lbImg.src = t.dataset.full || '';
+      lbImg.alt = t.dataset.alt || '';
+      lbCap.textContent = t.dataset.caption || '';
+      lbCount.textContent = `${idx + 1} / ${group.length}`;
+      // Preload neighbours for instant prev/next
+      preload(group[(idx + 1) % group.length]?.dataset.full);
+      preload(group[(idx - 1 + group.length) % group.length]?.dataset.full);
+      // Transform-only crossfade so a throttled ticker can never leave it hidden.
+      if (animate && !reduceMotion && lbImg) {
+        gsap.fromTo(lbImg, { x: dir * 36 }, { x: 0, duration: 0.32, ease: 'power2.out', clearProps: 'x' });
+      }
+    };
+
+    const openAt = (tile: HTMLButtonElement) => {
+      if (!lb) return;
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = undefined; }
+      group = tiles.filter((t) => !t.hidden);
+      idx = group.indexOf(tile);
+      if (idx < 0) idx = 0;
+      lastFocus = document.activeElement as HTMLElement;
+      lb.hidden = false;
+      lb.setAttribute('aria-hidden', 'false');
+      root.inert = true; // keep AT / focus out of the page behind the modal
+      document.documentElement.style.overflow = 'hidden';
+      render(false);
+      // CSS drives the fade via .is-open; rAF lets the transition play from the
+      // hidden state, and the timeout is a fallback for background-throttled rAF
+      // so the overlay always resolves to open (never a transparent backdrop).
+      requestAnimationFrame(() => lb.classList.add('is-open'));
+      setTimeout(() => lb.classList.add('is-open'), 60);
+      lb.querySelector<HTMLButtonElement>('[data-lb-close]')?.focus();
+    };
+
+    const close = () => {
+      if (!lb || lb.hidden) return;
+      lb.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+      root.inert = false;
+      const finish = () => {
+        lb.hidden = true;
+        lb.setAttribute('aria-hidden', 'true');
+        if (lbImg) lbImg.src = '';
+      };
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = undefined; }
+      if (reduceMotion) finish();
+      else closeTimer = window.setTimeout(finish, 300); // let the CSS fade-out play
+      lastFocus?.focus();
+    };
+
+    const step = (d: number) => {
+      if (group.length < 2) return;
+      idx = (idx + d + group.length) % group.length;
+      render(true, d);
+    };
+
+    tiles.forEach((t) => t.addEventListener('click', () => openAt(t)));
+    lb?.querySelector('[data-lb-close]')?.addEventListener('click', close);
+    lb?.querySelector('[data-lb-prev]')?.addEventListener('click', () => step(-1));
+    lb?.querySelector('[data-lb-next]')?.addEventListener('click', () => step(1));
+    lbBackdrop?.addEventListener('click', close);
+
+    // Scoped to the lightbox element (replaced per navigation) so it can't leak
+    // across view transitions; focus is trapped inside lb while it is open.
+    lb?.addEventListener('keydown', (e) => {
+      if (!lb || lb.hidden) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'ArrowLeft') step(-1);
+      else if (e.key === 'Tab') {
+        // simple focus trap
+        const f = lb.querySelectorAll<HTMLElement>('button');
+        if (!f.length) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Swipe on touch
+    if (lbFigure) {
+      let sx = 0;
+      let sy = 0;
+      lbFigure.addEventListener('touchstart', (e) => {
+        sx = e.touches[0].clientX;
+        sy = e.touches[0].clientY;
+      }, { passive: true });
+      lbFigure.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - sx;
+        const dy = e.changedTouches[0].clientY - sy;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+      }, { passive: true });
+    }
+
+    // ---------------- Motion (reveals) ----------------
+    if (reduceMotion) return; // static page; everything already visible
+
+    const mm = gsap.matchMedia();
+    galleryMM = mm;
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      // Hero entrance
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72);
+
+      // Hero Ken Burns + parallax
+      gsap.fromTo('[data-hero-media]', { scale: 1.12 }, { scale: 1.2, ease: 'none', scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true } });
+
+      // Section reveals
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 34,
+          autoAlpha: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        });
+      });
+
+      // Mosaic tiles — batch stagger as they scroll in
+      ScrollTrigger.batch('[data-tile]', {
+        start: 'top 92%',
+        once: true,
+        onEnter: (batch) =>
+          gsap.from(batch, {
+            y: 40,
+            autoAlpha: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            stagger: { each: 0.06, from: 'start' },
+            overwrite: true,
+          }),
+      });
+    });
+  }
+
+  initGallery();
+  document.addEventListener('astro:page-load', initGallery);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    galleryMM?.revert();
+    galleryMM = null;
+    // Restore scroll lock if navigating away with the lightbox open
+    document.documentElement.style.overflow = '';
+  });
+</script>

@@ -24,7 +24,7 @@ const MANIFEST = [
   { path: '/membership-plans', type: 'page', status: 'planned' },
   { path: '/puppycourse', type: 'page', status: 'planned' },
   { path: '/blog', type: 'page', status: 'planned' },
-  { path: '/gallery', type: 'page', status: 'planned' },
+  { path: '/gallery', type: 'page', status: 'built' },
   { path: '/contact', type: 'page', status: 'planned' },
   { path: '/terms-and-conditions', type: 'page', status: 'planned' },
   // ---- blog posts (19, root-level slugs, filename = slug) ----

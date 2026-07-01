@@ -1,5 +1,22 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ▶ 2026-07-01 — Page 9 (Gallery) BUILT (content + design + motion; awaiting owner review + polish)
+
+Built **out of the inside-out order at the owner's explicit request.** Pre-build interview (in-chat) → **`docs/page-specs/09-gallery.md`**. Page at **`src/pages/gallery.astro`**, mirroring the Board & Train reference.
+
+- **Design/interaction:** curated **editorial mosaic** (square tiles + 2×2 feature tiles), **GSAP-Flip theme filters** (All / Playtime / Out & about / Training / Portraits with live counts), **full-screen lightbox** (prev/next, keyboard ←/→/Esc, swipe, focus-trap, scroll-lock, neighbour preload), hero band with Ken-Burns/parallax, enquiry CTA. All reduced-motion gated; single `data-galleryInit` guard; keydown scoped to the lightbox (no nav leak); `astro:before-swap` cleanup.
+- **Photos = 50 grid + 1 hero**, from THREE owner-provided sources, interleaved (round-robin) with feature tiles spaced evenly:
+  1. **10 already-public** shots (from the harvest, 800px squares).
+  2. **24 client day-care photos** from the owner's **ImgBB** library (via the `session_photos` tab of their marketing-automation Google Sheet). Portrait; centre-cropped in tiles, full in lightbox.
+  3. **16 training-in-action photos** from the owner's **Jotform "Training Report"** form (`240177109303044`, EU; 3,018 submissions, "My Photo in Training" field). Full-res (~5 MB) downscaled to lean webp; curated for **real-world location variety** (café settling, high street, park, seafront, Rock-a-Nore fishing huts, the barn/field, even a dog settling on a bus). These strengthen the Training + Out & about themes.
+  - Three vision-curation workflows ran (16 harvested; 69 ImgBB → 24; 114 Jotform → 16), each producing alt text + captions.
+- **⚠️ Consent:** the ImgBB source is the **`session_photos` tab of the owner's consent-gated social-media automation sheet** (`docs.google.com/.../1nctIh0ICD...`) — its consent tab marks every real dog `pending` (only a `__TEST_DOG__` is `approved`). The Jotform photos are client dogs' training-report images. Building **paused to flag the ImgBB consent gate**; the **owner confirmed (2026-07-01) they have consent** to use both the ImgBB and Jotform photos on the public website. Captions use **dog first names only**. If consent for a dog changes, delete its entry from the `client`/`training` array in `gallery.astro` and rebuild.
+- **Wiring:** `Header.astro` nav + `Footer.astro` link (Gallery); `verify-urls.mjs` `/gallery` → **built**. Assets in `src/assets/pages/gallery/` (16 harvested webp + 24 `client-*.jpg` + 16 `train-*.webp`). `npm run build && verify-urls` → **0 failures** (50 images optimised).
+- **Env note (same class as Page 2's):** this session's node is **x64**, but the junction `node_modules` only carried **arm64** native binaries → installed `@rollup/rollup-win32-x64-msvc@4.61.1` + `@img/sharp-win32-x64@0.34.5` `--no-save` (package.json/lockfile untouched). If a future session can't build, install the arch-matching rollup + sharp binaries.
+- **QA:** browser-verified on the dev server (hero, mosaic, filters, lightbox). Three real bugs found & fixed during QA: lightbox backdrop rAF-gating → CSS-driven + `setTimeout` fallback; reduced-motion double-init; `document` keydown leak → scoped to lightbox.
+- **NOT committed / NOT pushed** — on disk (OneDrive-synced) only. Push = deploy to the preview; do it next session if the owner asks.
+- **Open before sign-off:** owner bug-check on the preview (confirm each client dog's crop/curation is acceptable); optional higher-res client originals; polish pass (Lighthouse ≥ 90 / reduced-motion / SEO); sanity-check the now-longer header nav at tablet widths.
+
 ## ▶ 2026-06-30 — Page 2 (Intensive Dog Training) BUILT (content + design + motion; awaiting owner review + polish)
 
 Pre-build interview done → **`docs/page-specs/03-intensive-dog-training.md`** (final spec + BUILD STATE log).
@@ -69,7 +86,7 @@ Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train 
 - **Polish pass:** Lighthouse ≥ 90 · reduced-motion · a11y · per-page SEO + **Service JSON-LD** (no page carries it yet — establish here, retrofit B&T/Day School).
 - **Enquiry-form live end-to-end n8n test** (service = "Intensive Dog Training"). Then tick **Built + Signed off** for row 2.
 
-**Remaining pages to build** (tracker order, inside-out, homepage LAST): **4** `/puppy-training-classes` (NEXT) · **5** `/training-plans` · **6** `/membership-plans` (Day School's teaser links here) · **7** `/puppycourse` · **8** `/blog` + 19 posts · **9** `/gallery` (needs ImgBB access) · **10** `/contact` (needs team names/roles/photos) · **11** `/terms-and-conditions` · **12** `/` homepage (LAST — **MUST feature the Breed Matcher**).
+**Remaining pages to build** (tracker order, inside-out, homepage LAST): **4** `/puppy-training-classes` (NEXT) · **5** `/training-plans` · **6** `/membership-plans` (Day School's teaser links here) · **7** `/puppycourse` · **8** `/blog` + 19 posts · **9** `/gallery` — **BUILT 2026-07-01** (see top section; review + polish pending) · **10** `/contact` (needs team names/roles/photos) · **11** `/terms-and-conditions` · **12** `/` homepage (LAST — **MUST feature the Breed Matcher**).
 
 **Site-wide / deferred:**
 - **Telegram** destination for enquiry alerts — n8n workflow ready for the node; owner to choose a destination.
@@ -80,7 +97,7 @@ Page built at **`src/pages/dog-day-school.astro`**, mirroring the Board & Train 
 
 **⚠️ Contact-data note (2026-06-29):** `business.ts` no longer has a `phones.textLine` key — the dead **07842 116216** line was deleted site-wide. The **only public number is `business.phones.main` = 01424 300668** (carries WhatsApp). Use `business.phones.main` for any call/WhatsApp link on future pages; never reintroduce 07842.
 
-**Last updated:** 2026-06-30 (Page 2 Intensive Dog Training BUILT + pushed to preview — see top section. Earlier: Page 3 Dog Day School BUILT + LIVE; site-wide contact fix; Breed Matcher 2026-06-20 below) · **Status: Page 2 (Intensive Dog Training) BUILT + on preview (review + polish pending); Page 3 (Dog Day School) BUILT + LIVE (review + polish pending); Page 1 (Board & Train) passes a–c LIVE, paused for 3 owner media slots + polish. Stage 0 + Stage 1 done. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
+**Last updated:** 2026-07-01 (Page 9 Gallery BUILT — content+design+motion, 50 photos = 10 already-public + 24 consented ImgBB client + 16 consented Jotform training-in-action; on disk, NOT yet committed/pushed — see top section. Earlier: 2026-06-30 Page 2 Intensive Dog Training BUILT + pushed to preview — see its section. Earlier: Page 3 Dog Day School BUILT + LIVE; site-wide contact fix; Breed Matcher 2026-06-20 below) · **Status: Page 2 (Intensive Dog Training) BUILT + on preview (review + polish pending); Page 3 (Dog Day School) BUILT + LIVE (review + polish pending); Page 1 (Board & Train) passes a–c LIVE, paused for 3 owner media slots + polish. Stage 0 + Stage 1 done. 2026-06-18: the owner's real HERO video is BUILT, graded, compressed, installed, committed (70ee6fc), pushed, and **DEPLOYED LIVE** — Pages deploy succeeded and verified serving on the preview (`/media/board-train-hero.mp4` = 1,913,946 B, poster = 254,931 B, page 200 at https://fairytails123.github.io/dog-boarding-school). The other 3 media slots (body-cam, testimonials, before/after) still pending. Then refinements + polish pass (d).**
 
 > **2026-06-18 — Hero video produced (see "▶ START HERE" §, "Hero DONE" note).** The owner had dropped a **405 MB / 3:57 raw** `board-train-hero.mp4` straight into `public/media` (over GitHub's 100 MB file limit → would break the push). It was a concat of the same training session as the 25 raw HLG clips in `Videos\`. Replaced with a polished 12 s cut; the owner's oversized raws are **preserved** in `Videos\_owner-dropins\`.
 
@@ -283,8 +300,10 @@ else; pushing to `main` would serve it at `https://fairytails123.github.io/breed
 - Page 1 (before sign-off): regime-timeline corrections · testimonial picks · before/after photos +
   body-cam clips. (Hero video clip: ✅ DONE + LIVE 2026-06-18 — edited from the owner's own clips.)
 - Deferred: Telegram destination for enquiry alerts (workflow ready for the node).
-- Page 9: ImgBB access · Page 10: team names/roles · Stage 4: GA4/GTM login session ·
-  Stage 5: IONOS DNS login.
+- Page 9 (gallery): ImgBB + Jotform photo access **received + used 2026-07-01** (owner's
+  marketing-automation sheet session_photos tab → 24; Jotform "Training Report" form
+  240177109303044 → 16; consent confirmed for all used). · Page 10: team names/roles ·
+  Stage 4: GA4/GTM login session · Stage 5: IONOS DNS login.
 
 ## Quick reference
 

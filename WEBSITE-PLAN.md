@@ -47,7 +47,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 | 6 | `/membership-plans` (new) | ☐ | ☐ | ☐ |
 | 7 | `/puppycourse` (immersive course hub) | ☐ | ☐ | ☐ |
 | 8 | `/blog` + 19 posts | ☐ | ☐ | ☐ |
-| 9 | `/gallery` | ☐ | ☐ | ☐ |
+| 9 | `/gallery` (built out of order at owner's request) | ☑ 2026-07-01 → **`docs/page-specs/09-gallery.md`** | ◐ content+design+motion live on preview (2026-07-01); 50 photos (10 already-public + 24 consented ImgBB client + 16 consented Jotform training-in-action); sign-off pending | ☐ |
 | 10 | `/contact` | ☐ | ☐ | ☐ |
 | 11 | `/terms-and-conditions` | ☐ | ☐ | ☐ |
 | 12 | `/` **Homepage — LAST** | ☐ | ☐ | ☐ |
@@ -62,7 +62,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 6. **`/membership-plans` (new)** — 4 tiers (Half £275/mo, Full T1 £375/mo, Full T2 £750 bi-monthly, Grooming sub £25/mo); savings-vs-pay-per-day animated counters; CTA: "Apply for membership" enquiry variant.
 7. **`/puppycourse`** — ONE immersive free course hub: GSAP scroll chapters for Weeks 1–4 (Skills & Exposure / Build Confidence / Socialisation / Fine Tuning), daily schedule, toilet-training section (interactive schedule tool), methods/anti-punishment philosophy. Absorbs `/resources-collection` non-duplicate copy + the 5 hidden subpages.
 8. **`/blog` + 19 posts** — Advice-hub index with category filters; post template (related posts, service CTA per category); posts at identical root slugs, filename = slug.
-9. **`/gallery`** — Curated from harvested site photos + ImgBB picks; fast lightbox, lazy-loaded animated masonry; adding a photo = drop file + one line.
+9. **`/gallery`** — *Final spec: `docs/page-specs/09-gallery.md` (built 2026-07-01, out of inside-out order at the owner's request).* Curated editorial mosaic (square tiles, 2×2 feature tiles, GSAP-Flip theme filters All/Playtime/Out&about/Training/Portraits, full-screen lightbox with keyboard/swipe), enquiry CTA. **50 photos from 3 owner sources (consent confirmed 2026-07-01): 10 already-public shots + 24 client day-care photos (ImgBB `session_photos` tab) + 16 training-in-action photos (Jotform "Training Report" form 240177109303044 — café/high-street/park/seafront/fishing-huts/field, real-world proof).** Data-driven (`duda`/`client`/`training` arrays, round-robin interleave): adding a photo = drop file + one array line. ImgBB pool is consent-gated for social; captions use dog first names only.
 10. **`/contact`** — Simplified: main line + WhatsApp text line prominent, collapsible direct-lines (emergency/ops/grooming/training/pick-ups), full enquiry form, **Meet the team (names/roles/photos — owner supplies)**, address + hours + real Google Maps link. Address: Near the Milking Parlour, The Barn, Fairlight Place, Barley Lane, Hastings TN35 5DT.
 11. **`/terms-and-conditions`** — Clean legal page (daycare T&Cs, hours, late fees, liability, grooming T&Cs pointer to sister site); the misplaced "why training takes time"/learning-stages marketing copy relocates to training pages.
 12. **`/` Homepage — LAST** — Transformation-story hero (the Three.js/GSAP signature moment), services journey, `#Trainingplans` + `#MembershipPlans` anchor summary sections (exact-case IDs) rendering from pricing.json, proof strip, club/about, enquiry CTA. **MUST feature the Breed Matcher value-added tool** (owner instruction 2026-06-20): a prominent entry point to `/breed-matcher/` — decide link vs inline iframe-embed during the homepage pre-build interview. Specced fully in its own pre-build interview once all other pages are final. (See **Value-added tools** below.)
@@ -110,7 +110,7 @@ Customer-facing interactive tools that are **not** Astro pages — self-containe
 
 ## Owner inputs needed along the way
 
-Page 1+: which Telegram chat/bot receives enquiry alerts · Page 9: ImgBB access · Page 10: team names/roles · Stage 4: GA4 property creation + GTM edits (their Google login, guided) · Stage 5: IONOS DNS login. Each page's pre-build interview may add small asks (case-study details, better photos).
+Page 1+: which Telegram chat/bot receives enquiry alerts · Page 9 (gallery): ImgBB access **received 2026-07-01** (owner's marketing-automation Google Sheet — session_photos tab; consent confirmed for the 24 photos used) · Page 10: team names/roles · Stage 4: GA4 property creation + GTM edits (their Google login, guided) · Stage 5: IONOS DNS login. Each page's pre-build interview may add small asks (case-study details, better photos).
 
 ## Key risks
 
