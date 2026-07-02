@@ -1,6 +1,6 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-## ▶ 2026-07-02 (later) — SITE-WIDE MOBILE-COMPATIBILITY FIX (owner reported "menu bar doesn't work on mobile"). On disk, NOT yet committed/pushed.
+## ▶ 2026-07-02 (later) — SITE-WIDE MOBILE-COMPATIBILITY FIX (owner reported "menu bar doesn't work on mobile"). COMMITTED (`12740e7`) + PUSHED + LIVE — menu open + zero overflow re-verified with touch emulation AGAINST THE LIVE PREVIEW on /, /dog-boarding-school and /gallery. (Pages deploy flaked once with a transient "Deployment failed, try again later" — `gh run rerun --failed` succeeded.)
 
 Full mobile pass across all 6 built pages, verified with Playwright at 320/360/390/414 px (touch emulation) against BOTH the dev server and the production `dist` via `npm run preview`. Desktop verified unchanged at 1440 px (nav/hamburger/checkbox sizes/scroll width all identical). `npm run build` 6 pages 0 errors · `npm run verify-urls` 0 failures. **4 fixes, 9-line diff:**
 
