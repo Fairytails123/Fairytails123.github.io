@@ -87,13 +87,13 @@ const labelClass = 'field-label';
     <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {
         concerns.map((c, i) => (
-          <label class="flex items-center gap-2 text-sm text-bark-700">
+          <label class="flex items-center gap-2 py-1 text-sm text-bark-700 sm:py-0">
             <input
               type="checkbox"
               name="concerns"
               value={c}
               id={`ef-concern-${i}`}
-              class="h-4 w-4 rounded border-cream-300 text-moss-600 focus:ring-moss-300"
+              class="h-5 w-5 rounded border-cream-300 text-moss-600 focus:ring-moss-300 sm:h-4 sm:w-4"
             />
             {c}
           </label>
