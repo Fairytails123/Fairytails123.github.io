@@ -141,7 +141,7 @@
       "largeDogSurcharge": 10,
       "weeklyDiscountPrice": 19.99,
       "eligibility": "8:00am – 5:30pm",
-      "features": ["Local pick-up & drop-off (£1 each way)", "Activities & socialisation training", "Dog walking (£2 add-on)"],
+      "features": ["Local pick-up & drop-off (£1 each way)", "Activities & socialisation training", "Dog walking (£5 add-on)"],
       "acuityUrl": null,
       "order": 10
     },
@@ -154,7 +154,7 @@
       "largeDogSurcharge": 5,
       "weeklyDiscountPrice": 14.99,
       "eligibility": "Mornings only",
-      "features": ["Local pick-up & drop-off (£1 each way)", "Activities & socialisation training", "Dog walking (£2 add-on)"],
+      "features": ["Local pick-up & drop-off (£1 each way)", "Activities & socialisation training", "Dog walking (£5 add-on)"],
       "acuityUrl": null,
       "order": 11
     },
@@ -203,7 +203,7 @@
       "unit": "per month",
       "largeDogSurcharge": 25,
       "eligibility": "Registered school dogs",
-      "features": ["Invoiced monthly bookings", "Free pickups", "Free grooming", "1 free training session per month"],
+      "features": ["Invoiced monthly bookings", "£1/journey pick-ups & drop-offs", "Free grooming", "1 free training session per month"],
       "acuityUrl": null,
       "order": 15
     },

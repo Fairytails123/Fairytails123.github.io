@@ -220,4 +220,7 @@ strong, b {
   .accordion-chevron {
     transition: none;
   }
+  .animate-bounce {
+    animation: none;
+  }
 }

@@ -1,21 +1,1099 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-// Inside-out build: the real homepage is built LAST (WEBSITE-PLAN.md).
-// This is a temporary holding page so / resolves on the preview.
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+// Hero backdrop (reuse now, swap later — page spec §Media)
+import heroPhoto from '../assets/pages/gallery/gallery-15.webp';
+// Proof "daily life" rail — reused gallery photos (consent-confirmed 2026-07-01; first names only)
+import railA from '../assets/pages/gallery/scene-1-betty.webp';
+import railB from '../assets/pages/gallery/train-5-april.webp';
+import railC from '../assets/pages/gallery/client-2-rolo.jpg';
+import railD from '../assets/pages/gallery/scene-27-henry.webp';
+import railE from '../assets/pages/gallery/train-99-rollo.webp';
+import railF from '../assets/pages/gallery/client-30-betty.jpg';
+import railG from '../assets/pages/gallery/scene-19-enzo.webp';
+import railH from '../assets/pages/gallery/train-84-bay.webp';
+import railI from '../assets/pages/gallery/client-53-teddy.jpg';
+// Whole-dog-club / lifestyle imagery (reused)
+import clubBarn from '../assets/pages/dog-day-school/the-barn-1920w.webp';
+import clubWalk from '../assets/pages/dog-day-school/happy-walk-2880w.webp';
+import clubFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
+import reassurePhoto from '../assets/pages/gallery/scene-11-rollo.webp';
+// About/team — Kam on a countryside walk (reused; swap for a real founder/team shot)
+import teamKam from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
+
+const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+const bySort = (a: any, b: any) => a.order - b.order;
+
+// --- Two tracks, rendered from pricing.json (single source of truth) ---
+const flagshipBoard = pricing.offerings.find((o) => o.id === 'board-train-adult')!;
+const flagshipIntensive = pricing.offerings.find((o) => o.id === 'intensive-dog-training')!;
+const trainingGrid = pricing.offerings
+  .filter(
+    (o) =>
+      (o.category === 'board-train' || o.category === 'training') &&
+      o.id !== 'board-train-adult' &&
+      o.id !== 'intensive-dog-training'
+  )
+  .sort(bySort);
+const dayFull = pricing.offerings.find((o) => o.id === 'day-full')!;
+const dayHalf = pricing.offerings.find((o) => o.id === 'day-half-am')!;
+const memberships = pricing.offerings.filter((o) => o.category === 'membership').sort(bySort);
+const socialWalks = pricing.offerings.find((o) => o.id === 'social-walks')!;
+
+// Where each supporting service card links (built pages, or enquiry-first where the page isn't live yet)
+const detailHref: Record<string, string> = {
+  'board-train-puppy': '/dog-boarding-school',
+  'board-train-holiday': '/dog-boarding-school',
+  'puppy-intensive': '/intensive-dog-training',
+  'puppy-classes': '/puppy-training-classes',
+  'one-to-one': '#enquire',
+  'social-walks': '#enquire',
+  'free-consult': business.acuity.freeConsult,
+};
+
+// The pains that bring people to us (drives the reassurance band + issue chips)
+const pains = [
+  'Pulling on the lead',
+  'Lunging at other dogs',
+  'Barking at everything',
+  "Won't come back",
+  "Can't settle",
+  'Anxious & overwhelmed',
+  'Nervous of the world',
+  'Reactive on walks',
+];
+
+// The whole-dog club — one place for a dog's whole life
+const journey = [
+  { title: 'Train', body: 'Kind, force-free training that actually changes behaviour.' },
+  { title: 'Day school', body: 'Enrichment-led days of play, friends and structure.' },
+  { title: 'Board', body: 'A home-from-home in the countryside when you’re away.' },
+  { title: 'Groom', body: 'Looking as good as they feel, at our sister salon.' },
+  { title: 'Belong', body: 'A club that keeps a hand on your shoulder for life.' },
+];
+
+// Proof rail — reused gallery photos, first-name captions (consent-confirmed)
+const rail = [
+  { img: railA, name: 'Betty', caption: 'Out on the seafront', rotate: -2.4 },
+  { img: railB, name: 'April', caption: 'Focus work in town', rotate: 1.8 },
+  { img: railC, name: 'Rolo', caption: 'A day at day school', rotate: -1.4 },
+  { img: railD, name: 'Henry', caption: 'Exploring the Old Town', rotate: 2.2 },
+  { img: railE, name: 'Rollo', caption: 'Lead skills on the high street', rotate: -1.9 },
+  { img: railF, name: 'Betty', caption: 'Making new friends', rotate: 1.4 },
+  { img: railG, name: 'Enzo', caption: 'Countryside adventures', rotate: -2.1 },
+  { img: railH, name: 'Bay', caption: 'Settled and calm', rotate: 1.6 },
+  { img: railI, name: 'Teddy', caption: 'Playtime at the barn', rotate: -1.3 },
+];
+
+// Life in the club
+const clubLife = [
+  {
+    title: 'Dog grooming',
+    body: 'From a full groom to a quick tidy — kept looking their best at our sister salon.',
+    href: business.groomingSite,
+    external: true,
+    cta: 'Visit the grooming site',
+  },
+  {
+    title: 'Boarding at The Barn',
+    body: 'A five-star home-from-home in the Sussex countryside while you’re away.',
+    href: '/dog-boarding-school',
+    external: false,
+    cta: 'About boarding',
+  },
+  {
+    title: 'Social walks',
+    body: `${gbp(socialWalks.price)} per walk, small groups of five — for dogs who’ve trained with us.`,
+    href: '#enquire',
+    external: false,
+    cta: 'Ask about walks',
+  },
+  {
+    title: 'Doggy events',
+    body: 'Summer barbecues and a Christmas party for our club dogs and their families.',
+    href: '#enquire',
+    external: false,
+    cta: 'Join the club',
+  },
+];
+
+// JSON-LD — the site's primary structured data lives on the homepage
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  url: business.domain,
+  telephone: business.phones.main.tel.replace('tel:', ''),
+  email: business.emails.info,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${business.address.line1}, ${business.address.line2}`,
+    addressLocality: business.address.town,
+    postalCode: business.address.postcode,
+    addressCountry: business.address.countryCode,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: business.geo.lat, longitude: business.geo.lng },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: business.hours.jsonLd.days,
+      opens: business.hours.jsonLd.opens,
+      closes: business.hours.jsonLd.closes,
+    },
+  ],
+  sameAs: [business.socials.facebook, business.socials.instagram],
+  areaServed: 'Hastings & 1066 Country, East Sussex',
+  priceRange: '££',
+};
 ---
 
 <Base
-  title="The Fairy Tails K9 Centre"
-  description="Dog training, day school and board & train in Hastings Country Park."
+  title="Dog Training, Day School & Board & Train in Hastings | The Fairy Tails K9 Centre"
+  description="Kind, force-free dog training, day school and board & train near Hastings — turning anxious, reactive dogs into calmer, happier companions. Book a free consult."
   path="/"
 >
-  <section class="mx-auto max-w-3xl px-4 pb-24 pt-40 text-center">
-    <h1 class="font-display text-4xl font-bold text-moss-800 sm:text-5xl">The Fairy Tails K9 Centre</h1>
-    <p class="mt-4 text-lg text-bark-700">
-      New site preview — pages go live here one at a time as they're finished.
-    </p>
-    <a href="/dog-boarding-school" class="btn btn-moss mt-8">
-      See Board & Train <span class="btn-arrow" aria-hidden="true">→</span>
-    </a>
-  </section>
+  <div data-page="home">
+    <!-- ============ HERO — the 3D transformation moment (signature) ============ -->
+    <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- Static photo: the LCP + the reduced-motion / no-WebGL fallback (page spec §Hero). -->
+        <Image
+          src={heroPhoto}
+          alt=""
+          class="h-full w-full object-cover opacity-45"
+          widths={[768, 1280, 1920]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          data-hero-media
+        />
+        <!-- WebGL "settling storm" — lazy-loaded after paint, skipped for reduced-motion / data-saver. -->
+        <canvas class="absolute inset-0 h-full w-full" data-hero-canvas aria-hidden="true"></canvas>
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/60 to-pine-950/40"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>
+          Dog training · day school · board &amp; train — Hastings
+        </p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">The dog you love</span>
+          <span class="hero-line block">is still <em class="squiggle not-italic">in there.</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Kind, real-world training and day school that turns anxious, reactive or overwhelmed dogs
+          into calmer, happier companions — in the heart of the Sussex countryside.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#enquire" class="btn btn-honey">
+            Start your enquiry <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href={business.phones.main.whatsapp} class="btn btn-ghost-light">Or talk to us</a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
+        <li class="paw-bullet flex items-center text-moss-700">Force-free &amp; qualified</li>
+        <li class="paw-bullet flex items-center text-moss-700">Real-world countryside training</li>
+        <li class="paw-bullet flex items-center text-moss-700">Daily reports home</li>
+      </ul>
+    </div>
+
+    <!-- ============ REASSURANCE — "we've helped dogs just like yours" ============ -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="reassurance">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <p class="eyebrow text-honey-600" data-reveal>You're not alone in this</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            We've helped dogs <em class="squiggle not-italic">just like yours</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            The pulling, the barking, the lunging, the dog who just won't settle — it's exhausting,
+            and it can feel lonely. But these are the everyday things we work with, dog after dog:
+          </p>
+          <ul class="mt-7 flex flex-wrap gap-2.5" data-stagger>
+            {
+              pains.map((p) => (
+                <li class="rounded-full border-2 border-moss-200 bg-cream-100 px-4 py-2 text-sm font-bold text-moss-800 transition-colors duration-200 hover:border-honey-400 hover:bg-honey-200/40">
+                  {p}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-7 text-lg leading-relaxed text-bark-700" data-reveal>
+            You're not failing them, and they're not a lost cause — they just haven't had the right
+            help yet. <strong>That's exactly what we do.</strong>
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4" data-reveal>
+            <a href="#Trainingplans" class="btn btn-moss">See how we help <span class="btn-arrow" aria-hidden="true">→</span></a>
+            <a href="#enquire" class="btn btn-ghost-light !border-moss-300 !text-moss-700 hover:!bg-moss-100">Start your enquiry</a>
+          </div>
+        </div>
+        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(2deg);" data-reveal>
+          <Image
+            src={reassurePhoto}
+            alt="A once-nervous dog relaxed and confident out in the countryside"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Calm, confident, out in the world
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ THE WHOLE-DOG CLUB — the difference ============ -->
+    <section class="bg-cream-100" data-section="club-difference">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Why Fairy Tails</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          One place for the <em class="squiggle not-italic">whole</em> of their life
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Most trainers hand you a course and wave goodbye. We're an exclusive premier club for the
+          most beloved dogs in 1066 country — training, day school, boarding, grooming and lifelong
+          support, all under one roof. One team who knows your dog inside out, for as long as you
+          have them.
+        </p>
+
+        <ol class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-5" data-stagger>
+          {
+            journey.map((stop, i) => (
+              <li class="grain relative rounded-2xl bg-cream-50 p-6 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <span class="font-display text-4xl font-bold leading-none text-honey-400/80">{i + 1}</span>
+                <h3 class="mt-3 font-display text-xl font-bold text-moss-800">{stop.title}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-bark-700">{stop.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="mt-10 flex flex-wrap items-center gap-3" data-reveal>
+          <span class="paw-bullet inline-flex items-center rounded-full border-2 border-moss-200 bg-cream-50 px-4 py-2 text-sm font-bold text-moss-700">
+            Committed to pain-free dog care
+          </span>
+          <span class="paw-bullet inline-flex items-center rounded-full border-2 border-moss-200 bg-cream-50 px-4 py-2 text-sm font-bold text-moss-700">
+            Committed to improving industry standards
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TRACK 1 — Training that transforms ============ -->
+    <section id="Trainingplans" class="bg-pine-950 text-cream-100 scroll-mt-24" data-section="track-training">
+      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>Track 1 · for dogs who are struggling</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          Training that <em class="squiggle not-italic">transforms</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-cream-200" data-reveal>
+          When the everyday things have become too much, this is where we do the hard work for you —
+          then hand you back a dog you can take anywhere.
+        </p>
+
+        <!-- Two flagship programmes -->
+        <div class="mt-12 grid gap-6 lg:grid-cols-2" data-stagger>
+          {
+            [
+              { plan: flagshipBoard, href: '/dog-boarding-school', tag: 'Board with us', blurb: 'Your dog lives and trains with us in the countryside — the deepest, fastest change for the toughest cases.' },
+              { plan: flagshipIntensive, href: '/intensive-dog-training', tag: 'Home every night', blurb: 'The same intensive programme, but your dog comes home each evening — full day school by day.' },
+            ].map(({ plan, href, tag, blurb }) => (
+              <article class="grain flex flex-col rounded-2xl bg-pine-900 p-8 ring-1 ring-cream-100/10">
+                <p class="eyebrow text-honey-400">{tag}</p>
+                <h3 class="mt-2 font-display text-2xl font-bold text-cream-50">{plan.name}</h3>
+                <p class="mt-4">
+                  <span class="font-display text-4xl font-bold text-honey-300">{gbp(plan.price)}</span>
+                  <span class="font-bold text-cream-200"> {plan.unit}</span>
+                </p>
+                {plan.largeDogSurcharge && (
+                  <p class="mt-1.5 text-sm font-bold text-honey-300/90">+{gbp(plan.largeDogSurcharge)} for large dogs</p>
+                )}
+                <p class="mt-4 leading-relaxed text-cream-200">{blurb}</p>
+                <ul class="mt-5 flex-1 space-y-2.5 text-[0.95rem] text-cream-100">
+                  {plan.features.map((f) => (
+                    <li class="paw-bullet flex items-start text-honey-200/90">
+                      <span class="text-cream-100">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div class="mt-7 flex flex-wrap gap-3">
+                  <a href="#enquire" class="btn btn-honey">Enquire</a>
+                  <a href={href} class="btn btn-ghost-light">Explore this programme</a>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+
+        <!-- The rest of the training range -->
+        <h3 class="mt-16 font-display text-2xl font-bold text-cream-50" data-reveal>The full training range</h3>
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+          {
+            trainingGrid.map((plan) => (
+              <a
+                href={detailHref[plan.id] ?? '#enquire'}
+                class="group flex h-full flex-col rounded-2xl bg-pine-900/70 p-6 ring-1 ring-cream-100/10 transition-colors duration-300 hover:ring-honey-400/60"
+              >
+                <h4 class="font-display text-lg font-bold text-cream-50">{plan.name}</h4>
+                <p class="mt-2">
+                  <span class="font-display text-2xl font-bold text-honey-300">
+                    {plan.price === 0 ? 'Free' : gbp(plan.price)}
+                  </span>
+                  {plan.price !== 0 && <span class="text-sm font-bold text-cream-200"> {plan.unit}</span>}
+                </p>
+                {plan.eligibility && <p class="mt-2 text-sm text-cream-200/80">{plan.eligibility}</p>}
+                <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-honey-300">
+                  Learn more
+                  <span class="transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">→</span>
+                </span>
+              </a>
+            ))
+          }
+        </div>
+        <p class="mt-9 max-w-3xl text-cream-200" data-reveal>
+          Not sure which fits? <a href="#enquire" class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">Tell us about your dog</a>
+          and we'll point you to the right one — or
+          <a href={business.acuity.freeConsult} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">book a free phone consult</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ TRACK 2 — Day-to-day care & the club ============ -->
+    <section class="bg-cream-100" data-section="track-care">
+      <HillDivider class="bg-pine-950 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Track 2 · everyday care</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Everyday care, <em class="squiggle not-italic">done beautifully</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Busy week? Our day school keeps your dog happy, active and learning — and membership makes
+          it effortless.
+        </p>
+
+        <!-- Day school -->
+        <div class="mt-12 grid items-center gap-8 lg:grid-cols-2" data-reveal>
+          <figure class="polaroid mx-auto w-full max-w-md" style="transform: rotate(-1.6deg);">
+            <Image
+              src={clubFriends}
+              alt="Dogs playing together at day school"
+              class="aspect-[4/3] w-full rounded-[2px] object-cover"
+              widths={[640, 1024]}
+              sizes="(min-width: 1024px) 28rem, 90vw"
+            />
+            <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+              A busy, happy day at school
+            </figcaption>
+          </figure>
+          <div class="grain rounded-2xl bg-cream-50 p-8 shadow-[var(--shadow-lift)]">
+            <h3 class="font-display text-2xl font-bold text-moss-800">Dog Day School</h3>
+            <p class="mt-3 leading-relaxed text-bark-700">
+              Enrichment-led days of play, friends, structure and light training — with a school bus
+              that brings them there and back.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-x-8 gap-y-3">
+              <p>
+                <span class="font-display text-3xl font-bold text-moss-700">{gbp(dayFull.price)}</span>
+                <span class="font-bold text-bark-500"> full day</span>
+              </p>
+              <p>
+                <span class="font-display text-3xl font-bold text-moss-700">{gbp(dayHalf.price)}</span>
+                <span class="font-bold text-bark-500"> half day</span>
+              </p>
+            </div>
+            <p class="mt-2 text-sm font-bold text-honey-700">
+              From {gbp(dayFull.weeklyDiscountPrice)}/day on a regular weekly booking
+            </p>
+            <a href="/dog-day-school" class="btn btn-moss mt-6">
+              Day school &amp; cost estimator <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Membership -->
+        <div id="MembershipPlans" class="mt-16 scroll-mt-24">
+          <h3 class="font-display text-2xl font-bold text-moss-800" data-reveal>Membership &amp; the club</h3>
+          <p class="mt-3 max-w-3xl leading-relaxed text-bark-700" data-reveal>
+            For registered school dogs — bundle your days and save, with grooming perks and priority
+            spaces.
+          </p>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+            {
+              memberships.map((plan) => (
+                <article class="flex h-full flex-col rounded-2xl border-2 border-cream-200 bg-cream-50 p-6 transition-colors duration-300 hover:border-honey-400">
+                  <h4 class="font-display text-lg font-bold text-moss-800">{plan.name}</h4>
+                  <p class="mt-3">
+                    <span class="font-display text-2xl font-bold text-moss-700">{gbp(plan.price)}</span>
+                    <span class="text-sm font-bold text-bark-500"> {plan.unit}</span>
+                  </p>
+                  <ul class="mt-4 flex-1 space-y-1.5 text-sm text-bark-700">
+                    {plan.features.slice(0, 3).map((f) => (
+                      <li class="paw-bullet flex items-start">{f}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))
+            }
+          </div>
+          <a href="/membership-plans" class="btn btn-moss mt-8" data-reveal>
+            Compare membership plans <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BREED MATCHER — inline interactive value section ============ -->
+    <section class="bg-pine-900 text-cream-100" data-section="breed-matcher">
+      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Free tool</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Is your breed really a <em class="squiggle not-italic">fit?</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+            An honest, no-nonsense breed match. It keeps your chosen breed the hero and shows,
+            plainly, how the right support closes the gaps — no matter the breed.
+          </p>
+        </div>
+
+        <div class="mx-auto mt-10 max-w-4xl overflow-hidden rounded-3xl bg-cream-50 shadow-[var(--shadow-polaroid)]" data-reveal>
+          <iframe
+            title="The Fairy Tails Breed Matcher — an honest breed-matching quiz"
+            class="h-[600px] w-full sm:h-[680px]"
+            loading="lazy"
+            data-matcher-frame
+            data-src="/breed-matcher/index.html"
+          ></iframe>
+          <noscript>
+            <div class="p-10 text-center">
+              <p class="font-display text-xl font-bold text-moss-800">The Breed Matcher</p>
+              <p class="mt-2 text-bark-700">An honest breed-matching quiz.</p>
+              <a href="/breed-matcher/" class="btn btn-moss mt-4">Open the Breed Matcher</a>
+            </div>
+          </noscript>
+        </div>
+
+        <div class="mt-8 text-center" data-reveal>
+          <a href="/breed-matcher/" target="_blank" rel="noopener" class="btn btn-ghost-light">
+            Open the matcher full screen <span aria-hidden="true">↗</span>
+          </a>
+          <p class="mt-5 leading-relaxed text-cream-200">
+            Whatever your breed, we'll help you get the very best from them.
+            <a href="#enquire" class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">Start your enquiry →</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROOF — a day at Fairy Tails ============ -->
+    <section class="overflow-hidden bg-cream-50 py-0" data-section="proof">
+      <HillDivider class="bg-pine-900 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pt-16">
+        <p class="eyebrow text-honey-600" data-reveal>Proof, not promises</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          A day at <em class="squiggle not-italic">Fairy Tails</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          No honest trainer promises a guaranteed fix. What we can show you is real dogs, thriving —
+          on the seafront, through town, in the fields and at the barn.
+        </p>
+      </div>
+
+      <!-- Draggable photo rail (full-bleed) -->
+      <div class="mt-10" data-reveal>
+        <p class="mx-auto max-w-6xl px-4 text-sm font-bold text-bark-500">
+          Drag to explore <span aria-hidden="true">⟷</span>
+        </p>
+        <div
+          class="drag-track mt-4 flex snap-x snap-mandatory gap-7 overflow-x-auto px-[max(1rem,calc((100vw-72rem)/2+1rem))] pb-6 pt-2"
+          data-drag-track
+          tabindex="0"
+          role="group"
+          aria-label="Photos of Fairy Tails dogs — scroll to explore"
+        >
+          {
+            rail.map(({ img, name, caption, rotate }) => (
+              <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style={`transform: rotate(${rotate}deg);`}>
+                <Image
+                  src={img}
+                  alt={`${name}, a Fairy Tails dog — ${caption.toLowerCase()}`}
+                  class="aspect-square w-full rounded-[2px] object-cover"
+                  widths={[480, 960]}
+                  sizes="18rem"
+                  draggable={false}
+                />
+                <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+                  {name} · {caption}
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <p class="mx-auto max-w-6xl px-4 text-sm text-bark-400">
+          <a href="/gallery" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">See the full gallery →</a>
+        </p>
+      </div>
+
+      <!-- Credibility bar + transformation callout -->
+      <div class="mx-auto mt-14 max-w-6xl px-4">
+        <!-- TODO(owner): drop in real accreditation logos + exact figures (years / dogs trained / review rating). -->
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+          <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
+            <p class="font-display text-xl font-bold text-moss-800">Qualified team</p>
+            <p class="mt-1.5 text-sm text-bark-700">Recognised trainer &amp; behaviourist qualifications.</p>
+          </div>
+          <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
+            <p class="font-display text-xl font-bold text-moss-800">Force-free</p>
+            <p class="mt-1.5 text-sm text-bark-700">Accredited, pain-free methods — never fear or force.</p>
+          </div>
+          <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
+            <p class="font-display text-xl font-bold text-moss-800">Years of happy dogs</p>
+            <p class="mt-1.5 text-sm text-bark-700">A track record across 1066 country.</p>
+          </div>
+          <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
+            <p class="font-display text-xl font-bold text-moss-800">Loved locally</p>
+            {/* TODO(owner): confirm the live figure before stating a number — the 2026-06 site audit recorded 4.9★ from 61 Google reviews. */}
+            <p class="mt-1.5 text-sm text-bark-700">Well-loved by families across 1066 country.</p>
+          </div>
+        </div>
+
+        <!-- TODO(owner): swap for one real transformation — named dog, before → after, with consent. -->
+        <article class="grain mt-6 flex flex-col items-start gap-5 rounded-2xl border-2 border-dashed border-moss-300 bg-cream-100 p-8 sm:flex-row sm:items-center" data-reveal>
+          <div class="flex-1">
+            <p class="eyebrow text-honey-600">A transformation story</p>
+            <h3 class="mt-2 font-display text-2xl font-bold text-moss-800">Every calm dog started as someone's worry</h3>
+            <p class="mt-3 leading-relaxed text-bark-700">
+              A real before-and-after — the anxious dog who learned to breathe — is coming to this
+              spot. Yours could be the next one.
+            </p>
+          </div>
+          <a href="#enquire" class="btn btn-honey shrink-0">Start your dog's story <span class="btn-arrow" aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ THE HONEST BIT — the bookcase truth ============ -->
+    <section class="bg-cream-100" data-section="bookcase">
+      <HillDivider class="bg-cream-50 text-cream-100" flip />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 text-center sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>The honest bit</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Great training is like building a <em class="squiggle not-italic">bookcase</em>
+        </h2>
+        <p class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-bark-700" data-reveal>
+          A professional can supply the blueprint, pre-sort the parts and walk you through every
+          step. But the lasting structure — the dog who responds at home, in the park and everywhere
+          in between — comes from the people who tighten every screw and keep the Allen key handy.
+        </p>
+        <p class="mx-auto mt-4 max-w-2xl leading-relaxed text-bark-700" data-reveal>
+          Practise daily, reinforce consistently, revisit the instructions whenever something
+          wobbles, and the training holds together beautifully. We give you the blueprint —
+          <strong>and we stay to help you tighten every screw.</strong>
+        </p>
+        <div class="mt-8" data-reveal>
+          <a href={business.acuity.freeConsult} class="btn btn-moss">Book a free phone consult <span class="btn-arrow" aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ LIFE IN THE CLUB — lifestyle band ============ -->
+    <section class="bg-cream-50" data-section="club-life">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>More than training</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Life in <em class="squiggle not-italic">the club</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Once your dog is one of ours, they're one of ours for life — with a school bus at just
+          £1 a journey, and all the good bits of belonging.
+        </p>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-2" data-stagger>
+          <figure class="relative overflow-hidden rounded-2xl">
+            <Image
+              src={clubBarn}
+              alt="The barn at The Fairy Tails K9 Centre in the Sussex countryside"
+              class="aspect-[16/10] w-full object-cover"
+              widths={[640, 1280]}
+              sizes="(min-width: 768px) 50vw, 100vw"
+            />
+          </figure>
+          <figure class="relative overflow-hidden rounded-2xl">
+            <Image
+              src={clubWalk}
+              alt="A happy dog on a countryside walk with The Fairy Tails"
+              class="aspect-[16/10] w-full object-cover"
+              widths={[640, 1280]}
+              sizes="(min-width: 768px) 50vw, 100vw"
+            />
+          </figure>
+        </div>
+
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            clubLife.map((item) => (
+              <article class="flex h-full flex-col rounded-2xl bg-cream-100 p-6 shadow-[var(--shadow-lift)]">
+                <h3 class="font-display text-xl font-bold text-moss-800">{item.title}</h3>
+                <p class="mt-2 flex-1 text-sm leading-relaxed text-bark-700">{item.body}</p>
+                <a
+                  href={item.href}
+                  target={item.external ? '_blank' : undefined}
+                  rel={item.external ? 'noopener' : undefined}
+                  class="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4"
+                >
+                  {item.cta}
+                  <span aria-hidden="true">{item.external ? '↗' : '→'}</span>
+                </a>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT / MEET THE TEAM ============ -->
+    <section class="bg-cream-100" data-section="about">
+      <HillDivider class="bg-cream-50 text-cream-100" flip />
+      <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-12 sm:pb-28 lg:grid-cols-2">
+        <figure class="polaroid mx-auto w-full max-w-md" style="transform: rotate(-2deg);" data-reveal>
+          <Image
+            src={teamKam}
+            alt="A member of the Fairy Tails team out training a dog in the countryside"
+            class="aspect-[4/3] w-full rounded-[2px] object-cover"
+            widths={[640, 1024]}
+            sizes="(min-width: 1024px) 28rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Out in the fields, where real life happens
+          </figcaption>
+        </figure>
+        <div>
+          <p class="eyebrow text-honey-600" data-reveal>Meet us</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            The people behind <em class="squiggle not-italic">the barn</em>
+          </h2>
+          <!-- TODO(owner): founder name + "why we started" story + team names/roles/photos (page spec §Owner inputs). -->
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            We started The Fairy Tails because we believe every dog deserves kind, honest training —
+            and every owner deserves to enjoy their dog. We love our clients' dogs like our own, and
+            their health and happiness is our priority.
+          </p>
+          <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+            You'll find us in the stunning Hastings Country Park, with plenty of space to train and
+            exercise, parking on site, and a £1-a-journey school bus for local pick-ups and
+            drop-offs.
+          </p>
+          <div class="mt-8" data-reveal>
+            <a href="#enquire" class="btn btn-moss">Come and meet us <span class="btn-arrow" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY FORM — where every path lands ============ -->
+    <section id="enquire" class="bg-pine-900 scroll-mt-20" data-section="enquire">
+      <HillDivider class="bg-cream-100 text-pine-900" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Let's talk</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your dog</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Whatever's going on — the pulling, the barking, the worry, or just wanting the best for
+            them — tell us, and we'll come back with an honest plan.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm page="/" />
+        </div>
+
+        <div class="mx-auto mt-10 grid max-w-4xl gap-6 text-cream-200 sm:grid-cols-3" data-stagger>
+          <div>
+            <p class="eyebrow text-honey-400">Find us</p>
+            <p class="mt-2 leading-relaxed">
+              {business.address.line1}, {business.address.line2}, {business.address.town} {business.address.postcode}
+            </p>
+            <a href={business.mapsUrl} target="_blank" rel="noopener" class="mt-1 inline-block font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+              Open in Google Maps ↗
+            </a>
+          </div>
+          <div>
+            <p class="eyebrow text-honey-400">Opening hours</p>
+            <p class="mt-2 leading-relaxed">{business.hours.display}</p>
+          </div>
+          <div>
+            <p class="eyebrow text-honey-400">Talk to us</p>
+            <a href={business.phones.main.tel} class="mt-2 block font-bold text-honey-300">{business.phones.main.display}</a>
+            <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">WhatsApp us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 </Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let hero3dCleanup: (() => void) | null = null;
+  let mm: any = null;
+  let heroGen = 0;
+
+  function initHome() {
+    const root = document.querySelector('[data-page="home"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+
+    // Lazy-load the Breed Matcher iframe when it's near the viewport (content, not motion —
+    // runs even for reduced-motion users).
+    const frame = root.querySelector('[data-matcher-frame]') as HTMLIFrameElement | null;
+    if (frame && !frame.src && frame.dataset.src && !frame.dataset.io) {
+      frame.dataset.io = '1';
+      const io = new IntersectionObserver(
+        (entries, obs) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              frame.src = frame.dataset.src as string;
+              obs.disconnect();
+            }
+          });
+        },
+        { rootMargin: '400px' }
+      );
+      io.observe(frame);
+    }
+
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    // WebGL hero — after first paint, never for data-saver users.
+    // gen token + isConnected guard: bail if the user navigates away during the async import.
+    if (!saveData) {
+      const gen = ++heroGen;
+      requestAnimationFrame(() => {
+        if (!root.isConnected || gen !== heroGen) return;
+        import('three')
+          .then((THREE) => {
+            if (!root.isConnected || gen !== heroGen) return;
+            try {
+              hero3dCleanup = initHero3D(THREE, root);
+            } catch (e) {
+              /* WebGL unavailable — static photo hero stands on its own */
+            }
+          })
+          .catch(() => {});
+      });
+    }
+
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* --- Hero entrance --- */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.9)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.15);
+
+      /* --- Hero parallax drift --- */
+      gsap.to('[data-hero-media]', {
+        scale: 1.12,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* --- Generic reveals --- */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Staggered groups --- */
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          scrollTrigger: { trigger: group, start: 'top 86%', once: true },
+        });
+      });
+    });
+
+    /* --- Drag-to-scroll photo rail (mouse; touch uses native scroll) --- */
+    const track = root.querySelector('[data-drag-track]') as HTMLElement | null;
+    if (track) {
+      let down = false;
+      let moved = false;
+      let startX = 0;
+      let startScroll = 0;
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        down = true;
+        moved = false;
+        startX = e.clientX;
+        startScroll = track.scrollLeft;
+        track.classList.add('dragging');
+        track.setPointerCapture(e.pointerId);
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startScroll - dx;
+      });
+      const release = () => {
+        down = false;
+        track.classList.remove('dragging');
+      };
+      track.addEventListener('pointerup', release);
+      track.addEventListener('pointercancel', release);
+      track.addEventListener(
+        'click',
+        (e) => {
+          if (moved) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        true
+      );
+    }
+  }
+
+  /* ============ The WebGL "settling storm" hero (anxious → calm) ============ */
+  function initHero3D(THREE: any, root: HTMLElement): (() => void) | null {
+    const canvas = root.querySelector('[data-hero-canvas]') as HTMLCanvasElement | null;
+    const heroSection = root.querySelector('[data-hero]') as HTMLElement | null;
+    if (!canvas || !heroSection) return null;
+
+    let renderer: any;
+    try {
+      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
+    } catch (e) {
+      return null;
+    }
+
+    const getSize = () => ({ w: heroSection.clientWidth, h: heroSection.clientHeight });
+    let { w, h } = getSize();
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pixelRatio);
+    renderer.setSize(w, h, false);
+    renderer.setClearColor(0x000000, 0);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(55, w / h, 0.1, 100);
+    camera.position.z = 6;
+
+    const COUNT = window.innerWidth < 768 ? 1800 : 3800;
+    const positions = new Float32Array(COUNT * 3);
+    const offsets = new Float32Array(COUNT * 3);
+    const rands = new Float32Array(COUNT);
+    for (let i = 0; i < COUNT; i++) {
+      // "calm" home — an upper-biased soft cloud (keeps clear of the bottom-left copy)
+      positions[i * 3] = (Math.random() * 2 - 1) * 5.2;
+      positions[i * 3 + 1] = (Math.random() * 2 - 1) * 2.0 + 0.9;
+      positions[i * 3 + 2] = (Math.random() * 2 - 1) * 1.6;
+      // "anxious" scatter direction
+      offsets[i * 3] = (Math.random() * 2 - 1) * 3.4;
+      offsets[i * 3 + 1] = (Math.random() * 2 - 1) * 3.0;
+      offsets[i * 3 + 2] = (Math.random() * 2 - 1) * 2.4;
+      rands[i] = Math.random();
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('aOffset', new THREE.BufferAttribute(offsets, 3));
+    geometry.setAttribute('aRand', new THREE.BufferAttribute(rands, 1));
+
+    const uniforms = {
+      uTime: { value: 0 },
+      uCalm: { value: 0 },
+      uSize: { value: 0.16 },
+      uPixelRatio: { value: pixelRatio },
+      uColorCool: { value: new THREE.Color('#6f8391') },
+      uColorWarm: { value: new THREE.Color('#dfa854') },
+    };
+
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexShader: `
+        uniform float uTime;
+        uniform float uCalm;
+        uniform float uSize;
+        uniform float uPixelRatio;
+        uniform vec3 uColorCool;
+        uniform vec3 uColorWarm;
+        attribute vec3 aOffset;
+        attribute float aRand;
+        varying float vAlpha;
+        varying vec3 vColor;
+        void main() {
+          vec3 scattered = position + aOffset;
+          vec3 pos = mix(scattered, position, uCalm);
+          float amp = mix(0.5, 0.12, uCalm);
+          float ph = aRand * 6.2831853;
+          pos.x += sin(uTime * 0.6 + ph) * amp;
+          pos.y += cos(uTime * 0.5 + ph * 1.3) * amp;
+          pos.z += sin(uTime * 0.4 + ph * 0.7) * amp;
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+          float size = uSize * (0.5 + aRand);
+          gl_PointSize = size * uPixelRatio * (140.0 / -mvPosition.z);
+          vColor = mix(uColorCool, uColorWarm, uCalm);
+          vAlpha = mix(0.32, 0.9, uCalm) * (0.55 + 0.45 * aRand);
+        }
+      `,
+      fragmentShader: `
+        precision mediump float;
+        varying float vAlpha;
+        varying vec3 vColor;
+        void main() {
+          float d = length(gl_PointCoord - vec2(0.5));
+          if (d > 0.5) discard;
+          float a = smoothstep(0.5, 0.05, d);
+          gl_FragColor = vec4(vColor, a * vAlpha);
+        }
+      `,
+    });
+
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
+
+    // Entrance: anxious (0) → calm (1)
+    const calmTween = gsap.to(uniforms.uCalm, { value: 1, duration: 2.8, ease: 'power2.out', delay: 0.25 });
+
+    // Pointer parallax
+    let targetRotX = 0;
+    let targetRotY = 0;
+    const onPointer = (e: PointerEvent) => {
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      targetRotY = nx * 0.3;
+      targetRotX = -ny * 0.18;
+    };
+    heroSection.addEventListener('pointermove', onPointer);
+
+    const onResize = () => {
+      const s = getSize();
+      w = s.w;
+      h = s.h;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h, false);
+    };
+    window.addEventListener('resize', onResize);
+
+    const clock = new THREE.Clock();
+    let raf = 0;
+    let running = false;
+    let inView = true;
+    let tabVisible = document.visibilityState !== 'hidden';
+    const tick = () => {
+      uniforms.uTime.value = clock.getElapsedTime();
+      points.rotation.y += (targetRotY - points.rotation.y) * 0.05;
+      points.rotation.x += (targetRotX - points.rotation.x) * 0.05;
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(tick);
+    };
+    // Only render when the hero is on-screen AND the tab is visible (save GPU/battery on this long page).
+    const sync = () => {
+      const should = inView && tabVisible;
+      if (should && !running) {
+        running = true;
+        raf = requestAnimationFrame(tick);
+      } else if (!should && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    };
+    const onVis = () => {
+      tabVisible = document.visibilityState !== 'hidden';
+      sync();
+    };
+    document.addEventListener('visibilitychange', onVis);
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0]?.isIntersecting ?? true;
+        sync();
+      },
+      { threshold: 0 }
+    );
+    io.observe(heroSection);
+    sync();
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      calmTween.kill();
+      io.disconnect();
+      window.removeEventListener('resize', onResize);
+      heroSection.removeEventListener('pointermove', onPointer);
+      document.removeEventListener('visibilitychange', onVis);
+      geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+    };
+  }
+
+  initHome();
+  document.addEventListener('astro:page-load', initHome);
+  document.addEventListener('astro:before-swap', () => {
+    heroGen++; // invalidate any in-flight WebGL init still awaiting import('three')
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
+    if (hero3dCleanup) {
+      hero3dCleanup();
+      hero3dCleanup = null;
+    }
+  });
+</script>

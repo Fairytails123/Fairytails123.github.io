@@ -15,7 +15,7 @@ const DIST = join(import.meta.dirname, '..', 'dist');
 /** @type {{path: string, type: 'page'|'stub'|'gone', status: 'built'|'planned'}[]} */
 const MANIFEST = [
   // ---- rebuilt pages (final 200s) ----
-  { path: '/', type: 'page', status: 'built' }, // holding page until homepage (LAST)
+  { path: '/', type: 'page', status: 'built' }, // homepage (built 2026-07-02, LAST in the inside-out order)
   { path: '/dog-boarding-school', type: 'page', status: 'built' },
   { path: '/intensive-dog-training', type: 'page', status: 'built' },
   { path: '/dog-day-school', type: 'page', status: 'built' },
