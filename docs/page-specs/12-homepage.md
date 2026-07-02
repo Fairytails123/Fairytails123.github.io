@@ -9,8 +9,8 @@
 > signature moment, everything the other pages proved now brought together.
 >
 > ✅ **STATUS: initial version BUILT 2026-07-02** (`src/pages/index.astro`; content + design + motion +
-> WebGL; build 0 errors, verify-urls 0 failures; adversarial-reviewed, 12/14 findings fixed). **Not yet
-> committed/pushed.** See the **BUILD STATE log** at the foot of this file. Copy marked *DRAFT* is mine to
+> WebGL; build 0 errors, verify-urls 0 failures; adversarial-reviewed, 12/14 findings fixed). **Committed
+> `57d9a99` + pushed + LIVE 2026-07-02** (deploy verified 200 at https://fairytails123.github.io/). See the **BUILD STATE log** at the foot of this file. Copy marked *DRAFT* is mine to
 > be refined; content marked *[OWNER]* is a fact I did not invent (graceful placeholder, swap before
 > sign-off — the established Day School / Intensive pattern).
 
@@ -134,6 +134,6 @@ Per the owner's process and the standing rule *"never present a bare structure p
 - **Media:** reused (gallery + day-school + a Board & Train "Kam" shot) — swap for fresh homepage media before sign-off.
 - **Site-wide fact fixes shipped:** dog walking **£5** (was £2); pick-ups **£1/journey for everyone** (membership "free pickups" removed); header CTA → **enquiry-first** (`/#enquire`).
 - **Adversarial review** (7-agent workflow): 14 verified findings, **12 fixed** (see HANDOVER 2026-07-02). **2 deferred:** `og:image` + JSON-LD `image` — need a **1200×630 OG card** asset (make one from a hero/gallery frame, drop at `public/og/home.jpg`, add `ogImage={\`${business.domain}/og/home.jpg\`}` to `<Base>` and `image` to the JSON-LD).
-- **Not committed/pushed.** Owner review happens on the live preview → requires a push to `main` (do not push until asked).
+- **Committed (`57d9a99`) + pushed + LIVE 2026-07-02** — Pages deploy run `28611528666` succeeded; verified serving 200 at https://fairytails123.github.io/. Owner reviews on the live preview.
 
 **Remaining to reach sign-off:** swap all *[OWNER]* placeholders (founder/team, transformation, exact credentials/numbers/reviews) → pick hero headline + approve SEO → the OG card → polish pass (Lighthouse ≥ 90 / a11y / reduced-motion audit) → live enquiry-form n8n test → owner sign-off → tick `WEBSITE-PLAN.md` row 12 → **site feature-complete → Stage 5 cutover**.
