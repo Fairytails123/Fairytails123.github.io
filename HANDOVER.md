@@ -1,5 +1,11 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ▶ 2026-07-04 (evening 2) — NEW blog post (Careers category) + PAGE 11 /terms-and-conditions BUILT — both LIVE
+
+1. **New original blog post** `/animal-management-qualification-jobs` (owner-written, published 2026-07-04, `a9c9e50`): employer's view on animal management qualifications. Added a **5th blog category `Careers`** (content.config enum + hub filter list in blog.astro — the hub's category array is hard-coded, remember to extend it for any new category + add a CTA entry in `[slug].astro` `ctas` or the build renders `cta.heading` of undefined). Careers CTA → day school + enquire. Hero = `doggy-friends` (already public on /dog-day-school — no new consent exposure). Internal links (day school/boarding/grooming) + external source links (BIAZA, UK Pet Food, NCS, legislation.gov.uk DDA 1991 c.65 / HSWA 1974 c.37 / SI 2018/486) added.
+2. **Page 11 `/terms-and-conditions` BUILT** (`64b695c`, owner request — "they are important for our service"): legal copy **verbatim** from `fairytails-image-archive/terms-and-conditions/copy.md` — quality policy, full 36-clause daycare agreement, grooming-terms button → `https://fairytailsdoggrooming.co.uk/terms-and-conditions/`, 4-stage learning block, section-3 note. **Only 3 artefacts fixed** (stray "Here's a revised version of clause 12:" line removed; ETIRE→ENTIRE; Aquisition→Acquisition) — clause cross-reference oddities (18→21, 20→"22 to 24", 23→23, 32→32) left AS-IS, flagged to owner. Footer "Terms and conditions" link restored. No GSAP on this page (deliberate — legal page, always fully visible). verify-urls: 47 URLs, 0 failures, 5 planned left (pages 4-7 + /contact).
+3. **Ops gotcha learned:** after `git push`, `gh run list --limit 1` can race the new run and return the PREVIOUS (already-green) run — poll for the run whose headSha = the pushed commit before watching, or you'll "verify" a deploy that hasn't happened.
+
 ## ▶ 2026-07-04 (late) — Day-school estimator: optional extras + Flexi Pass note; header/drawer polish — ALL LIVE
 
 Owner-driven batch, each piece deployed + live-verified same day (deploys `dc7ae01`, `571977c`, `3d4c1c2`; the Hostinger FTPS action intermittently fails with `Timeout (control socket)` — just `gh run rerun <id> --failed`):
