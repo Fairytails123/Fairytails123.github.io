@@ -49,7 +49,7 @@ const detailHref: Record<string, string> = {
   'board-train-puppy': '/dog-boarding-school',
   'board-train-holiday': '/dog-boarding-school',
   'puppy-intensive': '/intensive-dog-training',
-  'puppy-classes': '/puppy-training-classes',
+  'puppy-classes': '#enquire', // TEMP: -> /puppy-training-classes once that page is built
   'one-to-one': '#enquire',
   'social-walks': '#enquire',
   'free-consult': business.acuity.freeConsult,
@@ -480,8 +480,9 @@ const jsonLd = {
               ))
             }
           </div>
-          <a href="/membership-plans" class="btn btn-moss mt-8" data-reveal>
-            Compare membership plans <span class="btn-arrow" aria-hidden="true">→</span>
+          {/* TEMP: -> /membership-plans once that page is built (cards above already show full plan details) */}
+          <a href="#enquire" class="btn btn-moss mt-8" data-reveal>
+            Enquire about membership <span class="btn-arrow" aria-hidden="true">→</span>
           </a>
         </div>
       </div>

@@ -248,17 +248,17 @@ hr.rule{border:none;border-top:1px solid var(--line);margin:30px 0;}
 
 <script>
 /* ===================================================================
-   1. FAIRY TAILS SERVICES  — EDIT THESE (placeholder URLs to confirm)
+   1. FAIRY TAILS SERVICES — repointed to the NEW site 2026-07-04
    =================================================================== */
-const SITE = "https://thefairytails.co.uk";
+const SITE = "https://www.thefairytails.co.uk";
 const FT = {
-  daycare:    {label:"doggy daycare",            url:SITE+"/daycare"},
-  puppy:      {label:"puppy training course",     url:SITE+"/training"},
-  intensive:  {label:"intensive training",        url:SITE+"/training"},
-  grooming:   {label:"grooming salon",            url:SITE+"/grooming"},
-  walking:    {label:"dog walking",               url:SITE+"/dog-walking"},
+  daycare:    {label:"doggy daycare",            url:SITE+"/dog-day-school"},
+  puppy:      {label:"puppy training course",     url:SITE+"/#Trainingplans"}, // TEMP: -> /puppy-training-classes once that page is built
+  intensive:  {label:"intensive training",        url:SITE+"/intensive-dog-training"},
+  grooming:   {label:"grooming salon",            url:"https://fairytailsdoggrooming.co.uk/"}, // sister site
+  walking:    {label:"dog walking",               url:SITE+"/dog-day-school"}, // walking is a day-school add-on
   field:      {label:"secure field hire",         url:SITE+"/contact"}, // ask-us style link
-  boarding:   {label:"boarding",                  url:SITE+"/boarding"},
+  boarding:   {label:"boarding",                  url:SITE+"/dog-boarding-school"},
   chat:       {label:"a “thinking of getting a dog” chat", url:SITE+"/contact"}
 };
 function svc(key,text){const s=FT[key];return `<a href="${s.url}" target="_blank" rel="noopener">${text||s.label}</a>`;}

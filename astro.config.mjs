@@ -13,16 +13,20 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   redirects: {
-    '/puppy-classes': '/puppy-training-classes',
+    // ⚠ TEMP targets (owner 2026-07-04): the real targets /puppy-training-classes
+    // and /puppycourse are not built yet, so these legacy URLs would land on a 404.
+    // FLIP BACK when pages 4-7 ship: '/puppy-classes' -> '/puppy-training-classes',
+    // and the six stubs below -> '/puppycourse'.
+    '/puppy-classes': '/#Trainingplans',
     '/training-stages': '/dog-boarding-school',
     '/admission-process': '/dog-day-school',
     '/boarding-information': '/dog-boarding-school',
-    '/resources-collection': '/puppycourse',
-    '/puppy-week-1': '/puppycourse',
-    '/week-2-puppy': '/puppycourse',
-    '/puppy-week-3': '/puppycourse',
-    '/puppy-week-4': '/puppycourse',
-    '/puppy-toilet-schdule': '/puppycourse',
+    '/resources-collection': '/blog',
+    '/puppy-week-1': '/blog',
+    '/week-2-puppy': '/blog',
+    '/puppy-week-3': '/blog',
+    '/puppy-week-4': '/blog',
+    '/puppy-toilet-schdule': '/blog',
   },
   integrations: [
     sitemap({

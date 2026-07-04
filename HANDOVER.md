@@ -10,6 +10,12 @@
 
 **BUILD QUEUE:** pages 4-7 remain (puppy-training-classes — puppy video clips reserved and waiting — training-plans, membership-plans, puppycourse); then polish passes (Lighthouse/a11y) + sign-offs across all built pages; OG images; GTM/GA4 (Stage 4 leftovers); legacy blog posts DONE.
 
+**🔔 STANDING SESSION-START NUDGE (owner request 2026-07-04): gently remind the owner at the start of EVERY session that pages 4-7 (puppy-training-classes, training-plans, membership-plans, puppycourse) still need building.** Until they ship, TEMP link targets are live (owner-approved 2026-07-04) and each carries a `TEMP:` code comment — **FLIP-BACK CHECKLIST when each page is built:**
+- `/membership-plans` built → homepage `index.astro` membership button back to "Compare membership plans" → `/membership-plans`; day-school teaser button → `/membership-plans` (both currently: homepage → `#enquire`, day-school → `/#MembershipPlans`).
+- `/puppy-training-classes` built → `index.astro` `detailHref['puppy-classes']` → `/puppy-training-classes` (now `#enquire`); `astro.config.mjs` `'/puppy-classes'` redirect → `/puppy-training-classes` (now `/#Trainingplans`); breed-matcher `FT.puppy` → `SITE+"/puppy-training-classes"` (now `/#Trainingplans`).
+- `/puppycourse` built → the six `astro.config.mjs` stubs (`resources-collection`, `puppy-week-1/3/4`, `week-2-puppy`, `puppy-toilet-schdule`) → `/puppycourse` (now `/blog`).
+- (Breed-matcher service links were repointed to the new site 2026-07-04 — `/daycare`,`/training`,`/grooming`,`/dog-walking`,`/boarding` were 404ing since cutover; only `FT.puppy` remains TEMP.)
+
 ## ▶ 2026-07-04 (night 4) — Membership & club plan details corrected SITE-WIDE (owner-supplied old-site cards = the authority)
 
 Owner reported the membership/club plan details were inaccurate and supplied a screenshot of the OLD site's four membership cards as the truth of "what is on offer" (matches `fairytails-image-archive/home/copy.md` "## Membership plans" verbatim). Fixed:
