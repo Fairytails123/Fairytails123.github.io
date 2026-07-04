@@ -32,7 +32,7 @@ const nav = [
       <span class="sr-only">The Fairy Tails K9 Centre — home</span>
     </a>
 
-    <nav aria-label="Main" class="hidden items-center gap-7 md:flex">
+    <nav aria-label="Main" class="hidden items-center gap-5 md:flex lg:gap-7">
       {
         nav.map((item) => (
           <a href={item.href} class="nav-link text-sm font-bold text-bark-700">
@@ -40,10 +40,13 @@ const nav = [
           </a>
         ))
       }
-      <a href={business.phones.main.tel} class="nav-link text-sm font-bold text-bark-700">
+      <a href={business.phones.main.tel} class="nav-link hidden text-sm font-bold text-bark-700 lg:block">
         {business.phones.main.display}
       </a>
       <a href="/#enquire" class="btn btn-moss !px-5 !py-2.5 text-sm"> Enquire </a>
+      <a href={business.acuity.bookAppointment} class="btn btn-honey !px-5 !py-2.5 text-sm">
+        Book Appointment
+      </a>
     </nav>
 
     <button
@@ -87,8 +90,15 @@ const nav = [
           ))
         }
         <a
+          href={business.acuity.bookAppointment}
+          class="btn btn-honey mt-6 w-full"
+          data-menu-link
+        >
+          Book Appointment
+        </a>
+        <a
           href="/#enquire"
-          class="btn btn-moss mt-6 w-full"
+          class="btn btn-moss mt-3 w-full"
           data-menu-link
         >
           Enquire
@@ -128,10 +138,22 @@ const nav = [
     transform: scaleX(1);
     transform-origin: left;
   }
-  [data-header].is-scrolled {
+  /* The scrolled backdrop lives on a ::before, NOT on the header itself:
+     backdrop-filter on [data-header] would make it the containing block for
+     the position:fixed mobile panel, clipping the drawer to the header bar. */
+  [data-header]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: color-mix(in srgb, var(--color-cream-50) 92%, transparent);
     backdrop-filter: blur(10px);
     box-shadow: 0 1px 0 rgb(43 37 30 / 0.06), 0 8px 24px -16px rgb(43 37 30 / 0.25);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  [data-header].is-scrolled::before {
+    opacity: 1;
   }
   [data-header].is-scrolled [data-header-logo] {
     transform: scale(0.88);
@@ -167,6 +189,7 @@ const nav = [
     .menu-bar,
     [data-menu-backdrop],
     [data-menu-drawer],
+    [data-header]::before,
     [data-header-logo] {
       transition: none;
     }

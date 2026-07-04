@@ -44,6 +44,8 @@ export const business = {
 
   acuity: {
     main: 'https://app.acuityscheduling.com/schedule.php?owner=13914499',
+    // Header "Book Appointment" — the old site's prominent CTA for returning regulars
+    bookAppointment: 'https://app.acuityscheduling.com/schedule/be03d6bc',
     freeConsult: 'https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=56694430',
     oneToOne: 'https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=51989230',
     puppyClassesCart: 'https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469464',
