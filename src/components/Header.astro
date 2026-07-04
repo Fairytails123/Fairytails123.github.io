@@ -5,13 +5,15 @@ import logo from '../assets/brand/logo.png';
 
 // Inside-out build: nav links are added as pages go live on the preview
 // (WEBSITE-PLAN.md risk #8). Currently live: Board & Train, Intensive Dog Training,
-// Dog Day School, Gallery, Blog.
+// Dog Day School, Gallery. Grooming = the sister business site (owner decision
+// 2026-07-04: a main product, belongs in the header; Blog lives in the footer
+// only — it's mainly for SEO).
 const nav = [
   { label: 'Board & Train', href: '/dog-boarding-school' },
   { label: 'Intensive Dog Training', href: '/intensive-dog-training' },
   { label: 'Dog Day School', href: '/dog-day-school' },
+  { label: 'Grooming', href: business.groomingSite },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Blog', href: '/blog' },
 ];
 ---
 
