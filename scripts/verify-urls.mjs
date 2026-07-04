@@ -25,7 +25,7 @@ const MANIFEST = [
   { path: '/puppycourse', type: 'page', status: 'planned' },
   { path: '/blog', type: 'page', status: 'built' }, // advice hub (built 2026-07-04)
   { path: '/gallery', type: 'page', status: 'built' },
-  { path: '/contact', type: 'page', status: 'planned' },
+  { path: '/contact', type: 'page', status: 'built' }, // built 2026-07-04
   { path: '/terms-and-conditions', type: 'page', status: 'built' }, // built 2026-07-04
   // ---- blog posts (root-level slugs, filename = slug; 19 legacy posts built
   //      2026-07-04 with ORIGINAL 2020-2025 publish dates preserved, plus new

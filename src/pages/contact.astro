@@ -1,0 +1,292 @@
+---
+// Page 10 — /contact (legacy URL). Baseline per WEBSITE-PLAN: main line +
+// WhatsApp prominent, collapsible direct-lines directory, full enquiry form,
+// address + hours + real Maps link. Trust centrepiece (owner, 2026-07-04):
+// the framed council licence certificate + verify link to the Hastings BC
+// public register. Meet-the-team names/roles still owner-pending — photo only.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CouncilRating from '../components/CouncilRating.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+
+import certificate from '../assets/pages/contact/licence-certificate.jpg';
+import teamPhoto from '../assets/pages/contact/the-fairy-tails-team.webp';
+import contactDoggy from '../assets/pages/contact/contact-doggy.png';
+
+const councilRegister = 'https://www.hastings.gov.uk/licensing/animal/register/';
+
+const directLines = [
+  { ...business.phones.emergency, note: 'Out-of-hours only — WhatsApp preferred, phone signal is patchy at the barn' },
+  { ...business.phones.opsManager, note: 'Weekday working hours' },
+  { ...business.phones.grooming, note: 'Weekday working hours' },
+  { ...business.phones.training, note: 'Weekday working hours' },
+  { ...business.phones.pickups, note: 'Pick-up & driving enquiries — weekday working hours' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  url: `${business.domain}/contact`,
+  telephone: business.phones.main.display.replace(/\s/g, ''),
+  email: business.emails.info,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${business.address.line1}, ${business.address.line2}`,
+    addressLocality: business.address.town,
+    postalCode: business.address.postcode,
+    addressCountry: business.address.countryCode,
+  },
+  geo: { '@type': 'GeoCoordinates', latitude: business.geo.lat, longitude: business.geo.lng },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: business.hours.jsonLd.days,
+    opens: business.hours.jsonLd.opens,
+    closes: business.hours.jsonLd.closes,
+  },
+  sameAs: [business.socials.facebook, business.socials.instagram],
+};
+---
+
+<Base
+  title="Contact The Fairy Tails K9 Centre"
+  description="Contact us here using our contact details and contact form."
+  path="/contact"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+  <div data-page="contact">
+    <!-- ============ Header ============ -->
+    <header class="bg-moss-900 pb-16 pt-32 sm:pb-20 sm:pt-40">
+      <div class="mx-auto max-w-6xl px-4">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>Talk to us</p>
+        <h1 class="mt-4 font-display text-4xl font-bold leading-tight text-cream-50 sm:text-5xl" data-hero-title>
+          Contact <em class="squiggle not-italic">us</em>
+        </h1>
+        <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream-200/90" data-hero-sub>
+          Please don’t hesitate to contact us if you require any further information or wish to
+          book a visit.
+        </p>
+      </div>
+    </header>
+    <HillDivider class="text-moss-900" flip />
+
+    <!-- ============ Ways to reach us ============ -->
+    <section class="mx-auto max-w-6xl px-4 pb-16 pt-10 sm:pt-14" data-section="channels">
+      <div class="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <div class="grid gap-4 sm:grid-cols-2" data-stagger>
+            <a
+              href={business.phones.main.tel}
+              class="grain flex items-center gap-4 rounded-2xl bg-cream-50 p-5 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1"
+            >
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-moss-700 text-cream-50" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              </span>
+              <span>
+                <span class="block font-display text-lg font-bold text-moss-800">{business.phones.main.display}</span>
+                <span class="block text-sm text-bark-700">Immediate answer — signal can be patchy at the barn</span>
+              </span>
+            </a>
+            <a
+              href={business.phones.main.whatsapp}
+              class="grain flex items-center gap-4 rounded-2xl bg-cream-50 p-5 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1"
+            >
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-honey-500 text-pine-950" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"></path>
+                </svg>
+              </span>
+              <span>
+                <span class="block font-display text-lg font-bold text-moss-800">WhatsApp us</span>
+                <span class="block text-sm text-bark-700">Call or text {business.phones.main.display} — quickest reply, 8 am–5 pm</span>
+              </span>
+            </a>
+          </div>
+
+          <div class="mt-8 space-y-3 text-bark-700" data-reveal>
+            <p>
+              <strong class="text-moss-800">Email:</strong>
+              <a href={`mailto:${business.emails.info}`} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">{business.emails.info}</a>
+              <span class="text-sm"> (reply within 24 hours to a week)</span>
+            </p>
+            <p>
+              <strong class="text-moss-800">Address:</strong>
+              {business.address.line1}, {business.address.line2}, {business.address.town}
+              {business.address.postcode} ·
+              <a href={business.mapsUrl} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">Find us on Google Maps</a>
+            </p>
+            <p><strong class="text-moss-800">Hours:</strong> {business.hours.display}. We close on Bank Holidays.</p>
+          </div>
+
+          <!-- Direct lines directory (collapsible per plan) -->
+          <details class="group mt-8 rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]" data-reveal>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-7 py-5">
+              <span class="font-display text-lg font-bold text-moss-800">Direct lines — grooming, training, pick-ups &amp; out-of-hours</span>
+              <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd"></path>
+              </svg>
+            </summary>
+            <div class="accordion-body">
+              <div class="overflow-hidden">
+                <ul class="space-y-3.5 px-7 pb-7">
+                  {
+                    directLines.map((line) => (
+                      <li class="text-sm text-bark-700">
+                        <a href={line.tel} class="font-bold text-moss-800">{line.label}: {line.display}</a>
+                        <span class="block text-bark-500">{line.note}</span>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <figure class="mx-auto w-full max-w-sm lg:mt-2" data-reveal>
+          <Image
+            src={contactDoggy}
+            alt="A happy Fairy Tails dog waiting to hear from you"
+            class="w-full"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 80vw"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ Licence & regulation — the trust centrepiece ============ -->
+    <section class="bg-pine-950" data-section="licence">
+      <HillDivider class="bg-cream-50 text-pine-950" />
+      <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-12 sm:pb-24 lg:grid-cols-[0.9fr_1.1fr]">
+        <figure class="mx-auto w-full max-w-md" data-reveal>
+          <Image
+            src={certificate}
+            alt="The Fairy Tails' framed licence from Hastings Borough Council: home boarding and day care for dogs, 5-star rated, licence number WK/202503477, valid 11 December 2025 to 10 December 2028"
+            class="w-full rounded-xl shadow-2xl"
+            widths={[540, 1080]}
+            sizes="(min-width: 1024px) 28rem, 90vw"
+          />
+        </figure>
+        <div>
+          <CouncilRating size="lg" />
+          <h2 class="mt-6 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            The licence on our wall — <em class="squiggle not-italic">and on the public record</em>
+          </h2>
+          <p class="mt-5 leading-relaxed text-cream-200" data-reveal>
+            Dog boarding and day care are licensed activities. We operate under a
+            {business.licence.authority} licence issued under the Animal Welfare (Licensing of
+            Activities Involving Animals) (England) Regulations 2018 — inspected by council
+            inspectors and rated <strong class="text-cream-50">{business.licence.rating} stars, the
+            highest rating a council can award</strong>.
+          </p>
+          <ul class="mt-5 space-y-2 text-cream-200" data-reveal>
+            <li class="paw-bullet flex items-start">Licence No. {business.licence.number} · valid to 10 December 2028</li>
+            <li class="paw-bullet flex items-start">Licensed for home boarding &amp; day care — max 15 boarders and 55 day-care dogs at any one time</li>
+            <li class="paw-bullet flex items-start">Independently inspected — welfare standards checked, not just promised</li>
+          </ul>
+          <p class="mt-7" data-reveal>
+            <a href={councilRegister} class="btn btn-honey">
+              Verify us on the council register <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Enquiry form ============ -->
+    <section id="enquire" class="bg-cream-100" data-section="enquire">
+      <HillDivider class="bg-pine-950 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-600" data-reveal>Send us a message</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your dog</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-bark-700" data-reveal>
+            Whatever you need — training, day school, boarding or just some honest advice — send it
+            over and we’ll reply within 24–48 hours.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="General enquiry" page="/contact" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Meet the team ============ -->
+    <section class="mx-auto max-w-6xl px-4 py-16 sm:py-20" data-section="team">
+      <div class="mx-auto max-w-3xl text-center">
+        <p class="eyebrow text-honey-600" data-reveal>The humans behind the dogs</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Meet some of The Fairy Tails <em class="squiggle not-italic">team!</em>
+        </h2>
+      </div>
+      <figure class="polaroid mx-auto mt-10 w-full max-w-2xl" style="transform: rotate(-1deg);" data-reveal>
+        <Image
+          src={teamPhoto}
+          alt="The Fairy Tails team together at the centre"
+          class="w-full rounded-[2px]"
+          widths={[768, 1536]}
+          sizes="(min-width: 768px) 42rem, 92vw"
+        />
+        <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+          The people your dog spends their day with
+        </figcaption>
+      </figure>
+    </section>
+  </div>
+</Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initContact() {
+    const root = document.querySelector('[data-page="contact"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    root.dataset.gsapInit = '1';
+
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from(['[data-hero-eyebrow]', '[data-hero-title]', '[data-hero-sub]'], {
+        opacity: 0,
+        y: 24,
+        duration: 0.7,
+        ease: 'power2.out',
+        stagger: 0.12,
+      });
+      root.querySelectorAll('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 28,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+        });
+      });
+      root.querySelectorAll('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          opacity: 0,
+          y: 28,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: 0.1,
+          scrollTrigger: { trigger: group, start: 'top 88%' },
+        });
+      });
+    });
+  }
+
+  initContact();
+  document.addEventListener('astro:page-load', initContact);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>
