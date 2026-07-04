@@ -49,7 +49,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 | 8 | `/blog` + 19 posts | ☑ 2026-07-04 (compact — owner locked: light tidy-up copy, visible original dates, all-in-one rollout) | ◐ BUILT + LIVE 2026-07-04: advice hub w/ category filters + all 19 posts at legacy slugs with ORIGINAL 2020-2025 dates (content collection, BlogPosting JSON-LD, related posts, per-category CTA); owner review pending | ☐ |
 | 9 | `/gallery` (built out of order at owner's request) | ☑ 2026-07-01 → **`docs/page-specs/09-gallery.md`** | ✅ BUILT + PUSHED + LIVE on preview (2026-07-01, commits b07f747 + d7443df); 50 photos (7 already-public + 19 ImgBB client + 10 Jotform training + 14 town/seafront scenes; all consent-confirmed; Halti/head-collar shots removed); owner sign-off + polish pending | ☐ |
 | 10 | `/contact` | ☐ | ☐ | ☐ |
-| 11 | `/terms-and-conditions` | ☐ | ☐ | ☐ |
+| 11 | `/terms-and-conditions` | ☑ 2026-07-04 (owner request: restore missing legal page; legal copy verbatim from harvest) | ◐ BUILT + LIVE 2026-07-04: quality policy + full daycare agreement + grooming-terms link + training-stages block; footer link restored; owner review pending | ☐ |
 | 12 | `/` **Homepage — LAST** | ☑ 2026-07-02 → **`docs/page-specs/12-homepage.md`** | ◐ content+design+motion+WebGL built + PUSHED + LIVE (2026-07-02, `57d9a99`, deploy verified 200); soul content + polish + sign-off pending | ☐ |
 
 ### Baseline spec per page
