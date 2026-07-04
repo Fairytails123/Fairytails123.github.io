@@ -1,5 +1,12 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ▶ 2026-07-04 (late) — Day-school estimator: optional extras + Flexi Pass note; header/drawer polish — ALL LIVE
+
+Owner-driven batch, each piece deployed + live-verified same day (deploys `dc7ae01`, `571977c`, `3d4c1c2`; the Hostinger FTPS action intermittently fails with `Timeout (control socket)` — just `gh run rerun <id> --failed`):
+1. **Estimator optional extras** — Sniffari walk (£5/day), Morning pick-up + Home drop-off (£1/journey each, one journey per attended day) as switch toggles; itemised "Optional extras +£X/week" row; week/month totals include them; weekly discount applies to care only. Prices in `pricing.json.addOns`.
+2. **Flexi Pass note (NEW product, owner interview 2026-07-04):** "Five Days Flexi Pass — Daycare" £99.95 = 5 full days = £19.99/day (exactly the full-day weekly rate), valid 30 days, stackable. Presented as a **smart inline note** in the estimator result panel (honey-bordered box): shows only when "Comes every week" is UNTICKED; **washed out (opacity .3) when Half day selected** (pass = full days only); **informational only — no button; NO T&Cs on site** (terms live on Acuity at purchase — owner explicitly said don't build them). Product data: `pricing.json.flexiPass`. No `offerings[]` entry (would render a plan card).
+3. **Header:** Blog link removed from nav (footer-only, SEO); **Grooming** (sister site, `business.groomingSite`) added between Dog Day School and Gallery. **Mobile drawer:** contact block redesigned — "Talk to us" divider + icon-badge rows (moss phone badge "Tap to call", honey WhatsApp badge "Quickest reply"); drawer now `overflow-y-auto` + `mt-auto` (was `justify-between`, which crushed the links on small screens).
+
 ## ▶ 2026-07-04 (evening) — 📚 PAGE 8 BLOG BUILT + LIVE: `/blog` advice hub + all 19 legacy posts with their ORIGINAL 2020-2025 dates
 
 Owner asked for the legacy blog migrated "as if built and written over time — same dates as the last website." Compact pre-build interview locked: **light tidy-up copy** (typos only, no rewrites), **visible original dates** on posts + hub cards, **all-in-one rollout**.
