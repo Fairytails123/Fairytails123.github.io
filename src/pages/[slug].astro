@@ -1,0 +1,248 @@
+---
+// Legacy blog posts at their original ROOT-LEVEL slugs (URL preservation IS
+// the SEO migration — WEBSITE-PLAN.md). Filename = legacy slug = collection id.
+import { getCollection, render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+
+export async function getStaticPaths() {
+  // Build-time collision guard (WEBSITE-PLAN.md): a post slug must never
+  // shadow (or be shadowed by) a static page or a redirect stub.
+  const reserved = new Set([
+    'index', 'blog', '404', 'gallery',
+    'dog-boarding-school', 'dog-day-school', 'intensive-dog-training',
+    'puppy-training-classes', 'training-plans', 'membership-plans',
+    'puppycourse', 'contact', 'terms-and-conditions',
+    'puppy-classes', 'training-stages', 'admission-process',
+    'boarding-information', 'resources-collection', 'puppy-week-1',
+    'week-2-puppy', 'puppy-week-3', 'puppy-week-4', 'puppy-toilet-schdule',
+  ]);
+  const posts = await getCollection('blog');
+  for (const post of posts) {
+    if (reserved.has(post.id)) {
+      throw new Error(`Blog slug collision: "${post.id}" is a reserved page slug`);
+    }
+  }
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, category, heroImage, heroAlt } = post.data;
+
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+// Related: same category first (newest first), padded with newest others.
+const related = posts
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => {
+    const cat = Number(b.data.category === category) - Number(a.data.category === category);
+    return cat !== 0 ? cat : b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+  })
+  .slice(0, 3);
+
+// Per-category service CTA (WEBSITE-PLAN.md blog spec) — link only to pages
+// that are already live on the new site.
+const ctas = {
+  'Puppies': {
+    heading: 'Raising a puppy?',
+    line: 'Our Dog Day School gives puppies safe socialisation, manners and confidence — with daily reports home.',
+    href: '/dog-day-school',
+    label: 'Explore Dog Day School',
+  },
+  'Behaviour': {
+    heading: 'Struggling with behaviour like this?',
+    line: 'Our Intensive Dog Training programme works with anxious, reactive and overwhelmed dogs every day.',
+    href: '/intensive-dog-training',
+    label: 'Explore Intensive Training',
+  },
+  'Training Methods': {
+    heading: 'Want training done properly?',
+    line: 'Our Board & Train programme immerses your dog in kind, force-free, real-world training in the Sussex countryside.',
+    href: '/dog-boarding-school',
+    label: 'Explore Board & Train',
+  },
+  'Health & Care': {
+    heading: 'Want a happier, healthier dog?',
+    line: 'From day school to training, we help you build the routines that keep dogs thriving.',
+    href: '/dog-day-school',
+    label: 'Explore Dog Day School',
+  },
+} as const;
+const cta = ctas[category];
+
+const heroOg = await getImage({ src: heroImage, width: 1200 });
+
+// BlogPosting JSON-LD with the ORIGINAL publish date — the post history
+// (2020-2025) is preserved from the old site.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  datePublished: pubDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  image: `${business.domain}${heroOg.src}`,
+  author: { '@type': 'Person', name: 'Kamal Singh' },
+  publisher: { '@type': 'Organization', name: business.name, url: business.domain },
+  mainEntityOfPage: `${business.domain}/${post.id}`,
+};
+---
+
+<Base
+  title={`${title} | The Fairy Tails K9 Centre`}
+  description={description}
+  path={`/${post.id}`}
+  ogImage={`${business.domain}${heroOg.src}`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+  <article data-page="blog-post">
+    <!-- ============ Post header ============ -->
+    <header class="bg-moss-900 pb-16 pt-32 sm:pb-20 sm:pt-40">
+      <div class="mx-auto max-w-3xl px-4">
+        <p class="eyebrow text-honey-300" data-post-eyebrow>
+          <a href={`/blog?category=${encodeURIComponent(category)}`} class="hover:text-honey-200">{category}</a>
+        </p>
+        <h1
+          class="mt-4 font-display text-3xl font-bold leading-tight text-cream-50 sm:text-5xl"
+          data-post-title
+        >
+          {title}
+        </h1>
+        <p class="mt-5 text-sm font-bold text-cream-200/90" data-post-byline>
+          Kamal Singh
+          <span class="mx-2 text-honey-400" aria-hidden="true">•</span>
+          <time datetime={pubDate.toISOString()}>{dateFmt.format(pubDate)}</time>
+        </p>
+      </div>
+    </header>
+    <HillDivider class="text-moss-900" flip />
+
+    <!-- ============ Hero image ============ -->
+    <div class="mx-auto -mt-6 max-w-3xl px-4 sm:-mt-10" data-post-hero>
+      <Image
+        src={heroImage}
+        alt={heroAlt}
+        widths={[480, 768, 1200]}
+        sizes="(min-width: 768px) 768px, 100vw"
+        class="grain w-full rounded-2xl object-cover shadow-[var(--shadow-polaroid)]"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+
+    <!-- ============ Body ============ -->
+    <div class="post-body mx-auto max-w-3xl px-4 pb-16 pt-10 sm:pt-14">
+      <Content />
+    </div>
+
+    <!-- ============ Category service CTA ============ -->
+    <section class="mx-auto max-w-3xl px-4 pb-16">
+      <div class="grain rounded-2xl bg-pine-950 p-8 text-center sm:p-10" data-reveal>
+        <h2 class="font-display text-2xl font-bold text-cream-50 sm:text-3xl">{cta.heading}</h2>
+        <p class="mx-auto mt-3 max-w-xl leading-relaxed text-cream-200">{cta.line}</p>
+        <div class="mt-7 flex flex-wrap justify-center gap-4">
+          <a href={cta.href} class="btn btn-honey">
+            {cta.label} <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href="/#enquire" class="btn btn-ghost-light">Start your enquiry</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Related posts ============ -->
+    {
+      related.length > 0 && (
+        <section class="mx-auto max-w-6xl px-4 pb-8">
+          <p class="eyebrow text-honey-600" data-reveal>Keep reading</p>
+          <h2 class="mt-3 font-display text-2xl font-bold text-moss-800 sm:text-3xl" data-reveal>
+            More from the <em class="squiggle not-italic">advice hub</em>
+          </h2>
+          <div class="mt-8 grid gap-6 sm:grid-cols-3" data-stagger>
+            {related.map((r) => (
+              <a href={`/${r.id}`} class="group block overflow-hidden rounded-2xl bg-cream-50 shadow-[var(--shadow-polaroid)] transition-transform duration-300 hover:-translate-y-1">
+                <div class="aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={r.data.heroImage}
+                    alt={r.data.heroAlt}
+                    widths={[480, 768]}
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+                <div class="p-5">
+                  <p class="text-xs font-bold uppercase tracking-wide text-honey-600">
+                    {r.data.category}
+                    <span class="mx-1.5 text-bark-400" aria-hidden="true">•</span>
+                    <time datetime={r.data.pubDate.toISOString()} class="normal-case tracking-normal text-bark-500">
+                      {dateFmt.format(r.data.pubDate)}
+                    </time>
+                  </p>
+                  <p class="mt-2 font-display text-lg font-bold leading-snug text-moss-800 group-hover:underline">
+                    {r.data.title}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+          <p class="mt-8" data-reveal>
+            <a href="/blog" class="btn btn-moss">All blog posts <span class="btn-arrow" aria-hidden="true">→</span></a>
+          </p>
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function init() {
+    const root = document.querySelector('[data-page="blog-post"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    root.dataset.gsapInit = '1';
+
+    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+      // Header entrance
+      gsap.from(['[data-post-eyebrow]', '[data-post-title]', '[data-post-byline]', '[data-post-hero]'], {
+        opacity: 0,
+        y: 24,
+        duration: 0.7,
+        ease: 'power2.out',
+        stagger: 0.12,
+      });
+      // Scroll reveals
+      root.querySelectorAll('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 28,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 88%' },
+        });
+      });
+      root.querySelectorAll('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          opacity: 0,
+          y: 28,
+          duration: 0.6,
+          ease: 'power2.out',
+          stagger: 0.1,
+          scrollTrigger: { trigger: group, start: 'top 88%' },
+        });
+      });
+    });
+  }
+
+  init();
+  document.addEventListener('astro:page-load', init);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>

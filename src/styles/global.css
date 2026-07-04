@@ -210,6 +210,54 @@ strong, b {
     cursor: grabbing;
     scroll-snap-type: none;
   }
+
+  /* Long-form blog post body (rendered markdown — no utility classes inside) */
+  .post-body {
+    @apply text-[1.0625rem] leading-relaxed text-bark-700;
+  }
+  .post-body h2 {
+    @apply mt-10 font-display text-2xl font-bold text-moss-800 sm:text-3xl;
+  }
+  .post-body h3 {
+    @apply mt-8 font-display text-xl font-bold text-moss-800 sm:text-2xl;
+  }
+  .post-body h4 {
+    @apply mt-6 font-display text-lg font-bold text-moss-700;
+  }
+  .post-body p {
+    @apply mt-5;
+  }
+  .post-body ul,
+  .post-body ol {
+    @apply mt-5 space-y-2.5 pl-6;
+  }
+  .post-body ul {
+    list-style: disc;
+  }
+  .post-body ol {
+    list-style: decimal;
+  }
+  .post-body li::marker {
+    color: var(--color-honey-600);
+  }
+  .post-body a {
+    @apply font-bold text-moss-700 underline decoration-honey-500 decoration-2 underline-offset-4;
+  }
+  .post-body a:hover {
+    @apply text-moss-800;
+  }
+  .post-body img {
+    @apply mt-8 h-auto w-full rounded-2xl shadow-[var(--shadow-polaroid)];
+  }
+  .post-body blockquote {
+    @apply mt-6 border-l-4 border-honey-500 pl-5 italic text-bark-700;
+  }
+  .post-body hr {
+    @apply mt-10 border-moss-200;
+  }
+  .post-body strong {
+    @apply text-bark-900;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

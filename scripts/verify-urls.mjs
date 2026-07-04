@@ -23,11 +23,12 @@ const MANIFEST = [
   { path: '/training-plans', type: 'page', status: 'planned' },
   { path: '/membership-plans', type: 'page', status: 'planned' },
   { path: '/puppycourse', type: 'page', status: 'planned' },
-  { path: '/blog', type: 'page', status: 'planned' },
+  { path: '/blog', type: 'page', status: 'built' }, // advice hub (built 2026-07-04)
   { path: '/gallery', type: 'page', status: 'built' },
   { path: '/contact', type: 'page', status: 'planned' },
   { path: '/terms-and-conditions', type: 'page', status: 'planned' },
-  // ---- blog posts (19, root-level slugs, filename = slug) ----
+  // ---- blog posts (19, root-level slugs, filename = slug; built 2026-07-04
+  //      with ORIGINAL 2020-2025 publish dates preserved) ----
   ...[
     'archiestory',
     'training-is-not-working',
@@ -48,7 +49,7 @@ const MANIFEST = [
     'why-dog-grooming-is-important',
     'why-your-dog-is-pulling-on-the-leash',
     '15-food-items-to-avoid',
-  ].map((slug) => ({ path: `/${slug}`, type: 'page', status: 'planned' })),
+  ].map((slug) => ({ path: `/${slug}`, type: 'page', status: 'built' })),
   // ---- meta-refresh stubs (Astro redirects — generated since Stage 1) ----
   { path: '/puppy-classes', type: 'stub', status: 'built' },
   { path: '/training-stages', type: 'stub', status: 'built' },
