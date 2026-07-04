@@ -50,7 +50,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 | 9 | `/gallery` (built out of order at owner's request) | ☑ 2026-07-01 → **`docs/page-specs/09-gallery.md`** | ✅ BUILT + PUSHED + LIVE on preview (2026-07-01, commits b07f747 + d7443df); 50 photos (7 already-public + 19 ImgBB client + 10 Jotform training + 14 town/seafront scenes; all consent-confirmed; Halti/head-collar shots removed); owner sign-off + polish pending | ☐ |
 | 10 | `/contact` | ☑ 2026-07-04 (owner-initiated: licence certificate + council-register verify link as trust centrepiece) | ◐ BUILT + LIVE 2026-07-04: call/WhatsApp cards, direct-lines accordion, licence certificate panel + register link, enquiry form, team photo (names/roles still owner-pending); owner review pending | ☐ |
 | 11 | `/terms-and-conditions` | ☑ 2026-07-04 (owner request: restore missing legal page; legal copy verbatim from harvest) | ◐ BUILT + LIVE 2026-07-04: quality policy + full daycare agreement + grooming-terms link + training-stages block; footer link restored; owner review pending | ☐ |
-| 12 | `/` **Homepage — LAST** | ☑ 2026-07-02 → **`docs/page-specs/12-homepage.md`** | ◐ content+design+motion+WebGL built + PUSHED + LIVE (2026-07-02, `57d9a99`, deploy verified 200); soul content + polish + sign-off pending | ☐ |
+| 12 | `/` **Homepage — LAST** | ☑ 2026-07-02 → **`docs/page-specs/12-homepage.md`** | ◐ content+design+motion+WebGL built + LIVE (2026-07-02, `57d9a99`); **2026-07-04: hero upgraded to a 3-step sequence** (photo+storm → particles form the brand logo → `home-hero.mp4` fades in) + reassurance video loop + retagline + trust-strip council rating; soul content + polish + sign-off pending | ☐ |
 
 ### Baseline spec per page
 

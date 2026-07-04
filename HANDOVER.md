@@ -1,5 +1,15 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ⏸️ PAUSE POINT 2026-07-04 (end of a MEGA-session) — read this first
+
+**Everything below dated 2026-07-04 shipped TODAY, all committed + pushed + live-verified on production (www.thefairytails.co.uk, Hostinger).** In order: Book-Appointment CTA restored + scrolled-drawer bug fix → homepage retagline ("A calmer, happier dog is in there.") → **PAGE 8 BLOG** (hub + 19 legacy posts, original 2020-2025 dates) → header Grooming link (Blog → footer) → drawer "Talk to us" redesign → estimator optional extras (Sniffari £5/day, pick-up/drop-off £1/journey) → **Flexi Pass** inline note (£99.95/5 days, pricing.json `flexiPass`) → NEW blog post `/animal-management-qualification-jobs` (+ Careers category) → **PAGE 11 TERMS** (verbatim + owner-approved cross-ref fixes) → homepage Force-free card reword → **5-star council rating + licence WK/202503477** (footer badge site-wide, B&T panel, trust strips) → both-viewports testing RULE added to CLAUDE.md → **13 owner videos processed: 6 placements live** (day-school hero recut, B&T town film + owner loop, intensive loop, home reassurance loop) → **PAGE 10 CONTACT** (licence certificate + council-register verify link; Contact = footer-only, phone stays in nav) → **homepage hero SEQUENCE** (photo → particles form the LOGO → home-hero.mp4 fades in).
+
+**Deploys:** last commit today `f949ca3` region; FTPS action flaky (`Timeout (control socket)` → `gh run rerun --failed`); after push match runs by `headSha`, not `--limit 1`. **Stale-DNS trap** (old Duda site still live on old IPs) documented below — "old site showing" = cached DNS, not a regression.
+
+**OWNER REVIEW QUEUE (next session's first conversation):** (1) watch the homepage hero sequence + all 5 video placements on real phone/desktop — timing tweaks are one-liners; (2) blog: flagged verbatim defects (puppy-daycare truncated paragraph, fear-and-anxiety fragments, door-post merged bullets, 15-food garbled lines) + category assignments; (3) terms: solicitor skim recommended (Fairy Tails/Tales spellings, clause 3.2 lettering); (4) contact: supply team names/roles for proper team cards; (5) homepage soul content still owed (founder story, real transformation dog, review rating).
+
+**BUILD QUEUE:** pages 4-7 remain (puppy-training-classes — puppy video clips reserved and waiting — training-plans, membership-plans, puppycourse); then polish passes (Lighthouse/a11y) + sign-offs across all built pages; OG images; GTM/GA4 (Stage 4 leftovers); legacy blog posts DONE.
+
 ## ▶ 2026-07-04 (night 3) — HOMEPAGE HERO SEQUENCE: photo → storm particles FORM THE LOGO → hero film fades in
 
 Owner spec: keep the hero image + cloud particles, make the "random dots" gather into the brand logo, then start a hero video (day-school-style). Implemented in `index.astro`'s `initHero3D`:
