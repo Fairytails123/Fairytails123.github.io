@@ -1,0 +1,18 @@
+# Hostinger (LiteSpeed) config for www.thefairytails.co.uk
+# GH Pages preview handled these behaviours implicitly; on Hostinger they must be explicit.
+
+RewriteEngine On
+
+# 1) Canonical host + HTTPS: everything 301s to https://www.thefairytails.co.uk
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^www\.thefairytails\.co\.uk$ [NC]
+RewriteRule ^(.*)$ https://www.thefairytails.co.uk/$1 [R=301,L]
+
+# 2) Legacy URL preservation: serve extensionless URLs from the built .html files
+#    (Astro build.format:'file' — /gallery must serve gallery.html with a direct 200)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+ErrorDocument 404 /404.html

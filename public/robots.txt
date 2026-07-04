@@ -1,4 +1,5 @@
-# PREVIEW PHASE — blocks crawling until DNS cutover.
-# Stage 5 gate: replace with an allow-all + Sitemap line (see WEBSITE-PLAN.md).
+# LIVE — cutover to www.thefairytails.co.uk (Hostinger) completed.
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://www.thefairytails.co.uk/sitemap-index.xml

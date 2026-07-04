@@ -1,8 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy preview to GitHub Pages (manual only)
 
+# Production is Hostinger (deploy-hostinger.yml, auto on push).
+# This preview deploy is manual-only since the 2026-07-04 cutover, so the
+# indexed robots.txt never reaches the preview host by accident.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
