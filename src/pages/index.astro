@@ -22,7 +22,6 @@ import railI from '../assets/pages/gallery/client-53-teddy.jpg';
 import clubBarn from '../assets/pages/dog-day-school/the-barn-1920w.webp';
 import clubWalk from '../assets/pages/dog-day-school/happy-walk-2880w.webp';
 import clubFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
-import reassurePhoto from '../assets/pages/gallery/scene-11-rollo.webp';
 // About/team — Kam on a countryside walk (reused; swap for a real founder/team shot)
 import teamKam from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
 
@@ -246,14 +245,17 @@ const jsonLd = {
             <a href="#enquire" class="btn btn-ghost-light !border-moss-300 !text-moss-700 hover:!bg-moss-100">Start your enquiry</a>
           </div>
         </div>
-        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(2deg);" data-reveal>
-          <Image
-            src={reassurePhoto}
-            alt="A once-nervous dog relaxed and confident out in the countryside"
-            class="aspect-[4/5] w-full rounded-[2px] object-cover"
-            widths={[480, 960]}
-            sizes="(min-width: 1024px) 24rem, 90vw"
-          />
+        <figure class="polaroid mx-auto w-full max-w-[17rem] sm:max-w-xs" style="transform: rotate(2deg);" data-reveal>
+          <video
+            class="aspect-[9/16] w-full rounded-[2px] object-cover"
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="/media/home-reassurance-loop-poster.jpg"
+            data-src="/media/home-reassurance-loop.mp4"
+            aria-label="Dogs like yours in training: a steady sit-stay, calm by the sea, settling quietly at a café"
+          ></video>
           <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
             Calm, confident, out in the world
           </figcaption>
@@ -761,6 +763,7 @@ const jsonLd = {
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initVideoLoops } from '../scripts/videoLoops';
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -771,6 +774,7 @@ const jsonLd = {
   function initHome() {
     const root = document.querySelector('[data-page="home"]') as HTMLElement | null;
     if (!root || root.dataset.gsapInit) return;
+    initVideoLoops(root);
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const saveData = (navigator as any).connection?.saveData === true;

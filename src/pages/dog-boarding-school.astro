@@ -8,7 +8,6 @@ import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 
 import puppyTraining from '../assets/pages/dog-boarding-school/Puppy-Training-1920w.webp';
-import atTheBarn from '../assets/pages/dog-boarding-school/At-The-Barn-2880w.webp';
 import puppySquare from '../assets/pages/dog-boarding-school/Puppy-Training-square-2880w.webp';
 import busLab from '../assets/pages/dog-boarding-school/Black-Lab-on-the-bus-square-2-2880w.webp';
 import shepherd from '../assets/pages/dog-boarding-school/German-Shepherd-Training-1920w.webp';
@@ -345,13 +344,24 @@ const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
             </a>
           </article>
 
-          <!-- TODO(owner): body-cam proof clips slot — awaiting picks (page spec open item). -->
-          <article class="flex flex-col justify-center rounded-2xl border-2 border-dashed border-moss-300 bg-cream-50 p-8 text-center">
-            <h3 class="font-display text-2xl font-bold text-moss-700">Watch us work</h3>
-            <p class="mt-3 leading-relaxed text-bark-700">
-              Every training session is recorded on body-cam — it's how we report progress to
-              parents daily. A selection of real session clips is coming to this spot.
-            </p>
+          <!-- Real town-training film (owner's edit, 2026-07-04). Click-to-play with
+               sound; preload=none so the 27 MB file only loads on demand. -->
+          <article class="grain overflow-hidden rounded-2xl border-2 border-cream-200 bg-cream-100">
+            <video
+              class="aspect-video w-full bg-pine-950"
+              controls
+              preload="none"
+              poster="/media/bt-town-training-poster.jpg"
+              src="/media/bt-town-training.mp4"
+            ></video>
+            <div class="p-6">
+              <h3 class="font-display text-2xl font-bold text-moss-800">Watch us work</h3>
+              <p class="mt-2 leading-relaxed text-bark-700">
+                A real training session, start to finish — through the streets, seafront and cafés
+                of Hastings. Busy pavements, traffic, other dogs: this is exactly the real world
+                your dog learns to be calm in. Press play — this is the proof.
+              </p>
+            </div>
           </article>
         </div>
       </div>
@@ -485,16 +495,19 @@ const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
     <section class="overflow-hidden" data-section="involvement">
       <HillDivider class="bg-pine-950 text-cream-50" />
       <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-12 sm:pb-28 lg:grid-cols-2">
-        <figure class="polaroid mx-auto w-full max-w-md" style="transform: rotate(-2deg);" data-reveal>
-          <Image
-            src={atTheBarn}
-            alt="Dogs at the barn at The Fairy Tails K9 Centre"
-            class="aspect-[4/3] w-full rounded-[2px] object-cover"
-            widths={[640, 1024]}
-            sizes="(min-width: 1024px) 28rem, 90vw"
-          />
+        <figure class="polaroid mx-auto w-full max-w-[17rem] sm:max-w-xs" style="transform: rotate(-2deg);" data-reveal>
+          <video
+            class="aspect-[9/16] w-full rounded-[2px] object-cover"
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="/media/bt-owner-loop-poster.jpg"
+            data-src="/media/bt-owner-loop.mp4"
+            aria-label="A family practising loose-lead walking with their Rottweiler during a handover session"
+          ></video>
           <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
-            Life at the barn
+            Parents learning the ropes at handover
           </figcaption>
         </figure>
         <div>
@@ -744,12 +757,14 @@ const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initVideoLoops } from '../scripts/videoLoops';
 
   gsap.registerPlugin(ScrollTrigger);
 
   function initBoardTrain() {
     const root = document.querySelector('[data-page="board-train"]') as HTMLElement | null;
     if (!root || root.dataset.gsapInit) return;
+    initVideoLoops(root);
 
     // Hero video: lazy-start after load; never for reduced-motion or data-saver users.
     const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
