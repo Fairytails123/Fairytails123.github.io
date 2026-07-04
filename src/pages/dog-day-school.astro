@@ -30,6 +30,7 @@ const dayPlans = pricing.offerings
   .sort((a, b) => a.order - b.order);
 const fullPlan = pricing.offerings.find((o) => o.id === 'day-full');
 const halfPlan = pricing.offerings.find((o) => o.id === 'day-half-am');
+const addOns = pricing.addOns;
 const taster = pricing.offerings.find((o) => o.id === 'day-taster');
 const cbs = pricing.offerings.find((o) => o.id === 'cbs');
 
@@ -523,7 +524,7 @@ const kitList = [
         </div>
 
         <p class="mt-6 text-sm font-bold text-bark-500" data-reveal>
-          Add-ons: school bus £1 each way · dog walking £5 · Confidence Building Sessions {gbp(cbs.price)}.
+          Add-ons: pick-up &amp; drop-off {gbp(addOns.pickUpPerJourney)} per journey · Sniffari walk {gbp(addOns.sniffariPerDay)} · Confidence Building Sessions {gbp(cbs.price)}.
         </p>
 
         <!-- Interactive estimator -->
@@ -536,6 +537,9 @@ const kitList = [
           data-half={halfPlan.price}
           data-half-weekly={halfPlan.weeklyDiscountPrice}
           data-half-large={halfPlan.largeDogSurcharge}
+          data-sniffari={addOns.sniffariPerDay}
+          data-pickup={addOns.pickUpPerJourney}
+          data-dropoff={addOns.dropOffPerJourney}
           data-reveal
         >
           <p class="eyebrow text-honey-600">Plan your week</p>
@@ -567,6 +571,35 @@ const kitList = [
                 <span class="switch-track"><span class="switch-thumb"></span></span>
                 <span class="font-bold text-bark-700">Comes every week</span>
               </label>
+              <div>
+                <span class="field-label">Optional extras</span>
+                <div class="mt-1.5 space-y-3">
+                  <label class="switch flex items-center gap-3">
+                    <input type="checkbox" name="est-sniffari" />
+                    <span class="switch-track"><span class="switch-thumb"></span></span>
+                    <span class="font-bold text-bark-700">
+                      Sniffari walk
+                      <span class="ml-1 text-sm text-honey-700">+{gbp(addOns.sniffariPerDay)}/day</span>
+                    </span>
+                  </label>
+                  <label class="switch flex items-center gap-3">
+                    <input type="checkbox" name="est-pickup" />
+                    <span class="switch-track"><span class="switch-thumb"></span></span>
+                    <span class="font-bold text-bark-700">
+                      Morning pick-up
+                      <span class="ml-1 text-sm text-honey-700">+{gbp(addOns.pickUpPerJourney)}/journey</span>
+                    </span>
+                  </label>
+                  <label class="switch flex items-center gap-3">
+                    <input type="checkbox" name="est-dropoff" />
+                    <span class="switch-track"><span class="switch-thumb"></span></span>
+                    <span class="font-bold text-bark-700">
+                      Home drop-off
+                      <span class="ml-1 text-sm text-honey-700">+{gbp(addOns.dropOffPerJourney)}/journey</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
             </div>
 
             <div class="rounded-2xl bg-moss-800 p-6 text-cream-50">
@@ -575,13 +608,16 @@ const kitList = [
                 <span data-est-perday>£24.99</span><span class="align-top text-lg font-bold text-cream-200">/day</span>
               </p>
               <dl class="mt-5 space-y-2 text-cream-100">
+                <div class="flex justify-between border-t border-cream-100/15 pt-2" data-est-extras-row style="display: none;">
+                  <dt>Optional extras</dt><dd class="font-bold" data-est-extras>+£0/week</dd>
+                </div>
                 <div class="flex justify-between border-t border-cream-100/15 pt-2"><dt>Per week</dt><dd class="font-bold" data-est-week>£74.97</dd></div>
                 <div class="flex justify-between border-t border-cream-100/15 pt-2"><dt>Per month (approx.)</dt><dd class="font-bold" data-est-month>£325</dd></div>
               </dl>
               <p class="mt-4 text-xs leading-relaxed text-honey-200" data-est-hint>Tick “Comes every week” for the weekly-booking discount.</p>
               <p class="mt-3 text-[0.7rem] leading-relaxed text-cream-200/70">
-                An estimate only — final pricing is confirmed when your dog joins. Excludes the
-                £1-each-way school bus and any add-ons.
+                An estimate only — final pricing is confirmed when your dog joins. Confidence
+                Building Sessions are booked separately.
               </p>
             </div>
           </div>
@@ -882,18 +918,33 @@ const kitList = [
       const size = (est.querySelector('input[name="est-size"]:checked') as HTMLInputElement)?.value || 'standard';
       const days = Number((est.querySelector('input[name="est-days"]') as HTMLInputElement)?.value || 3);
       const weekly = (est.querySelector('input[name="est-weekly"]') as HTMLInputElement)?.checked;
+      const sniffari = (est.querySelector('input[name="est-sniffari"]') as HTMLInputElement)?.checked;
+      const pickup = (est.querySelector('input[name="est-pickup"]') as HTMLInputElement)?.checked;
+      const dropoff = (est.querySelector('input[name="est-dropoff"]') as HTMLInputElement)?.checked;
 
       const base = type === 'full' ? Number(d.full) : Number(d.half);
       const wk = type === 'full' ? Number(d.fullWeekly) : Number(d.halfWeekly);
       const large = type === 'full' ? Number(d.fullLarge) : Number(d.halfLarge);
 
       const perDay = (weekly ? wk : base) + (size === 'large' ? large : 0);
-      const week = perDay * days;
+      // Optional extras, all per attended day: Sniffari walk is per day; each of
+      // pick-up and drop-off is one journey per day.
+      const extrasPerDay =
+        (sniffari ? Number(d.sniffari) : 0) +
+        (pickup ? Number(d.pickup) : 0) +
+        (dropoff ? Number(d.dropoff) : 0);
+      const extrasWeek = extrasPerDay * days;
+      const week = perDay * days + extrasWeek;
       const month = (week * 52) / 12;
 
       animateTo(get('[data-est-perday]'), proxies.perDay, perDay, money);
       animateTo(get('[data-est-week]'), proxies.week, week, money);
       animateTo(get('[data-est-month]'), proxies.month, month, pounds);
+
+      const extrasRow = get('[data-est-extras-row]');
+      const extrasOut = get('[data-est-extras]');
+      if (extrasRow) extrasRow.style.display = extrasWeek > 0 ? '' : 'none';
+      if (extrasOut) extrasOut.textContent = `+${money(extrasWeek)}/week`;
 
       const daysOut = get('[data-est-days-out]');
       const hint = get('[data-est-hint]') as HTMLElement | null;

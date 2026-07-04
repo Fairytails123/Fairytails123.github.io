@@ -1,4 +1,9 @@
 {
+  "addOns": {
+    "sniffariPerDay": 5,
+    "pickUpPerJourney": 1,
+    "dropOffPerJourney": 1
+  },
   "offerings": [
     {
       "id": "board-train-puppy",
