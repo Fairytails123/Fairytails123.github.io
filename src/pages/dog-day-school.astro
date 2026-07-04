@@ -31,6 +31,7 @@ const dayPlans = pricing.offerings
 const fullPlan = pricing.offerings.find((o) => o.id === 'day-full');
 const halfPlan = pricing.offerings.find((o) => o.id === 'day-half-am');
 const addOns = pricing.addOns;
+const flexi = pricing.flexiPass;
 const taster = pricing.offerings.find((o) => o.id === 'day-taster');
 const cbs = pricing.offerings.find((o) => o.id === 'cbs');
 
@@ -615,6 +616,20 @@ const kitList = [
                 <div class="flex justify-between border-t border-cream-100/15 pt-2"><dt>Per month (approx.)</dt><dd class="font-bold" data-est-month>£325</dd></div>
               </dl>
               <p class="mt-4 text-xs leading-relaxed text-honey-200" data-est-hint>Tick “Comes every week” for the weekly-booking discount.</p>
+              <div
+                class="mt-4 rounded-xl border border-honey-400/40 bg-honey-400/10 p-4 text-sm leading-relaxed text-cream-100 transition-opacity duration-300"
+                data-est-flexi
+                style="display: none;"
+              >
+                <p class="font-bold text-honey-300">Can’t come every week?</p>
+                <p class="mt-1">
+                  The <strong>{flexi.name}</strong> gets you the weekly rate anyway —
+                  {flexi.days} full days for <strong>{gbp(flexi.price)}</strong>
+                  ({gbp(flexi.price / flexi.days)}/day), used whenever suits you within
+                  {flexi.validityDays} days. No weekly commitment, and you can buy as many
+                  passes as you like.
+                </p>
+              </div>
               <p class="mt-3 text-[0.7rem] leading-relaxed text-cream-200/70">
                 An estimate only — final pricing is confirmed when your dog joins. Confidence
                 Building Sessions are booked separately.
@@ -945,6 +960,14 @@ const kitList = [
       const extrasOut = get('[data-est-extras]');
       if (extrasRow) extrasRow.style.display = extrasWeek > 0 ? '' : 'none';
       if (extrasOut) extrasOut.textContent = `+${money(extrasWeek)}/week`;
+
+      // Flexi Pass note: relevant only to non-weekly clients; full days only,
+      // so it washes out (stays visible but dimmed) on Half day.
+      const flexiNote = get('[data-est-flexi]');
+      if (flexiNote) {
+        flexiNote.style.display = weekly ? 'none' : '';
+        flexiNote.style.opacity = type === 'half' ? '0.3' : '1';
+      }
 
       const daysOut = get('[data-est-days-out]');
       const hint = get('[data-est-hint]') as HTMLElement | null;

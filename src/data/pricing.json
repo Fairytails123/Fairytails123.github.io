@@ -4,6 +4,12 @@
     "pickUpPerJourney": 1,
     "dropOffPerJourney": 1
   },
+  "flexiPass": {
+    "name": "Five Days Flexi Pass",
+    "days": 5,
+    "price": 99.95,
+    "validityDays": 30
+  },
   "offerings": [
     {
       "id": "board-train-puppy",
