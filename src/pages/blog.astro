@@ -9,8 +9,8 @@ import HillDivider from '../components/HillDivider.astro';
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
-const categories = ['Puppies', 'Behaviour', 'Training Methods', 'Health & Care'].filter((c) =>
-  posts.some((p) => p.data.category === c)
+const categories = ['Puppies', 'Behaviour', 'Training Methods', 'Health & Care', 'Careers'].filter(
+  (c) => posts.some((p) => p.data.category === c)
 );
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---

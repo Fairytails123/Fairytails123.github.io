@@ -27,9 +27,11 @@ const MANIFEST = [
   { path: '/gallery', type: 'page', status: 'built' },
   { path: '/contact', type: 'page', status: 'planned' },
   { path: '/terms-and-conditions', type: 'page', status: 'planned' },
-  // ---- blog posts (19, root-level slugs, filename = slug; built 2026-07-04
-  //      with ORIGINAL 2020-2025 publish dates preserved) ----
+  // ---- blog posts (root-level slugs, filename = slug; 19 legacy posts built
+  //      2026-07-04 with ORIGINAL 2020-2025 publish dates preserved, plus new
+  //      posts appended as written) ----
   ...[
+    'animal-management-qualification-jobs', // NEW post, published 2026-07-04
     'archiestory',
     'training-is-not-working',
     'board-and-train-intensive-dog-training-program',

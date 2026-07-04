@@ -12,7 +12,7 @@ const blog = defineCollection({
       description: z.string(),
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
-      category: z.enum(['Puppies', 'Behaviour', 'Training Methods', 'Health & Care']),
+      category: z.enum(['Puppies', 'Behaviour', 'Training Methods', 'Health & Care', 'Careers']),
       heroImage: image(),
       heroAlt: z.string().default(''),
     }),
