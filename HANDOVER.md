@@ -1,6 +1,8 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-**📼 STANDING CHECK — owner video drop folder.** The owner drops new raw hero/promo clips into `Videos\_owner-dropins\<purpose>\` (e.g. `day-school-hero-new\`, created 2026-07-04 — a NEW day-school hero is expected there). At session start, glance at `Videos\_owner-dropins\` for files newer than the matching installed hero in `public\media\`; if found, run the FFmpeg pipeline (`docs/video-hero-pipeline.md` — tonemap HLG→SDR, grade, trim, compress, poster) and install over the existing `public/media/<page>-hero.mp4`. Raw clips are gitignored and must NEVER be committed (100 MB limit) or copied raw into `public\media\`.
+**📼 STANDING CHECK — owner video drop folders.** The owner drops new raw clips into `Videos\_owner-dropins\<purpose>\`. At session start, glance at `Videos\_owner-dropins\` for new files; process via the FFmpeg pipeline (`docs/video-hero-pipeline.md` — tonemap HLG→SDR, grade, trim, compress, poster) before anything ships. Raw clips are gitignored and must NEVER be committed (100 MB limit) or copied raw into `public\media\`. Currently expected:
+- `day-school-hero-new\` (created 2026-07-04) — replacement day-school hero.
+- `site-videos\` (created 2026-07-04) — a BATCH of trust-building videos for site-wide placement. Owner will designate the homepage-hero and Dog-School-hero clips (by filename prefix `HOMEPAGE-HERO…` / `DAYSCHOOL-HERO…`, or by message); the REST are for Claude to review, analyse and place wherever they best build trust/credibility across the site (owner brief 2026-07-04: videos = psychologically high-trust markers). Review each clip's content before choosing placements; check client-dog consent posture (memory: client-dog media is consent-gated) before publishing any dog that isn't already public.
 
 ## ▶ 2026-07-04 (evening 3) — 5-star council rating + licence display LIVE site-wide (`9eb6230`)
 
