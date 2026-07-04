@@ -1052,7 +1052,8 @@ const jsonLd = {
     const t0 = performance.now();
     const elapsed = () => (performance.now() - t0) / 1000;
 
-    seqTweens.push(gsap.to(uniforms.uCalm, { value: 1, duration: 1.5, ease: 'power2.out', delay: 0.25 }));
+    seqTweens.push(gsap.to(uniforms.uCalm, { value: 1, duration: 0.7, ease: 'power2.out', delay: 0.1 }));
+    heroVideo?.load(); // buffer from the very start — the film enters ~2s in (owner: keep it QUICK)
 
     let videoStarted = false;
     const startVideo = () => {
@@ -1061,12 +1062,12 @@ const jsonLd = {
       heroVideo
         .play()
         .then(() => {
-          seqTweens.push(gsap.to(heroVideo, { autoAlpha: 1, duration: 1.0, ease: 'power2.inOut' }));
+          seqTweens.push(gsap.to(heroVideo, { autoAlpha: 1, duration: 0.8, ease: 'power2.inOut' }));
           seqTweens.push(
             gsap.to(canvas, {
               autoAlpha: 0,
-              duration: 1.3,
-              delay: 0.6,
+              duration: 1.1,
+              delay: 0.4,
               ease: 'power2.inOut',
               onComplete: () => {
                 stopped = true;
@@ -1139,18 +1140,17 @@ const jsonLd = {
       }
       if (built) {
         seqCalls.push(
-          gsap.delayedCall(Math.max(0.1, 1.9 - elapsed()), () => {
-            heroVideo?.load(); // start buffering while the logo forms
-            seqTweens.push(gsap.to(uniforms.uLogo, { value: 1, duration: 1.6, ease: 'power3.inOut' }));
-            seqCalls.push(gsap.delayedCall(2.7, startVideo)); // formed + ~1.1s hold
+          gsap.delayedCall(Math.max(0.05, 0.55 - elapsed()), () => {
+            seqTweens.push(gsap.to(uniforms.uLogo, { value: 1, duration: 1.0, ease: 'power3.inOut' }));
+            seqCalls.push(gsap.delayedCall(1.45, startVideo)); // formed (~1s) + a short beat
           })
         );
       } else {
-        seqCalls.push(gsap.delayedCall(Math.max(0.1, 3.0 - elapsed()), startVideo));
+        seqCalls.push(gsap.delayedCall(Math.max(0.1, 1.2 - elapsed()), startVideo));
       }
     };
     logoImg.onerror = () => {
-      seqCalls.push(gsap.delayedCall(Math.max(0.1, 3.0 - elapsed()), startVideo));
+      seqCalls.push(gsap.delayedCall(Math.max(0.1, 1.2 - elapsed()), startVideo));
     };
     logoImg.src = logoSrc;
 
