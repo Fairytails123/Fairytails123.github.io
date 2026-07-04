@@ -199,10 +199,16 @@
       "category": "membership",
       "name": "Membership Half Days",
       "price": 275,
-      "unit": "per month",
+      "unit": "per month · AM or PM",
       "largeDogSurcharge": 25,
-      "eligibility": "Registered school dogs",
-      "features": ["AM or PM half days", "Hot towel wash", "Monthly grooming"],
+      "eligibility": "Available to registered school dogs who have been through the introduction process and are accepted into the school.",
+      "features": [
+        "Booked and invoiced for you",
+        "Hot towel wash after muddy days",
+        "Monthly bath and brush with a maintenance trim included",
+        "Priority boarding space",
+        "Half price Full Dog Grooming"
+      ],
       "acuityUrl": null,
       "order": 14
     },
@@ -213,8 +219,15 @@
       "price": 375,
       "unit": "per month",
       "largeDogSurcharge": 25,
-      "eligibility": "Registered school dogs",
-      "features": ["Invoiced monthly bookings", "£1/journey pick-ups & drop-offs", "Free grooming", "1 free training session per month"],
+      "eligibility": "Available to registered school dogs who have been through the introduction process and are accepted into the school.",
+      "features": [
+        "Invoiced bookings",
+        "Full-Day School",
+        "Includes Free pick-ups & drop-offs",
+        "Monthly bath and brush with a maintenance trim included",
+        "Priority boarding space",
+        "Half price Full Dog Grooming"
+      ],
       "acuityUrl": null,
       "order": 15
     },
@@ -224,9 +237,17 @@
       "name": "Membership Full Days — Tier 2",
       "price": 750,
       "unit": "bi-monthly",
-      "largeDogSurcharge": null,
-      "eligibility": "Registered school dogs",
-      "features": ["Free full grooming", "4 free training sessions per cycle", "No large-dog surcharge"],
+      "largeDogSurcharge": 0,
+      "eligibility": "Available to registered school dogs who have been through the introduction process and are accepted into the school.",
+      "features": [
+        "Invoiced bookings",
+        "Full Day School",
+        "Includes Free pick-ups & drop-offs",
+        "Monthly bath and brush with a maintenance trim included",
+        "Priority boarding space",
+        "Free Full Dog Grooming",
+        "Two free dog training sessions each cycle"
+      ],
       "acuityUrl": null,
       "order": 16
     },
@@ -237,8 +258,15 @@
       "price": 25,
       "unit": "per month",
       "largeDogSurcharge": null,
-      "eligibility": null,
-      "features": ["One maintenance or full groom monthly", "Free nail clipping"],
+      "eligibility": "Available to our regular grooming dogs.",
+      "features": [
+        "Online code for bookings",
+        "Fit around your schedule",
+        "Booking reminders",
+        "Free pick ups and drop offs",
+        "Once a month Maintenance Groom or once a month Full Groom",
+        "Free nail clipping whenever required"
+      ],
       "acuityUrl": "https://thefairytailsdoggrooming.as.me/schedule.php",
       "order": 17
     }

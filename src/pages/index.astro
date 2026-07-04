@@ -451,8 +451,8 @@ const jsonLd = {
         <div id="MembershipPlans" class="mt-16 scroll-mt-24">
           <h3 class="font-display text-2xl font-bold text-moss-800" data-reveal>Membership &amp; the club</h3>
           <p class="mt-3 max-w-3xl leading-relaxed text-bark-700" data-reveal>
-            For registered school dogs — bundle your days and save, with grooming perks and priority
-            spaces.
+            Bundle your days and save — grooming perks and priority boarding space for registered
+            school dogs, plus a monthly grooming subscription for our regular grooming dogs.
           </p>
           <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
             {
@@ -463,8 +463,16 @@ const jsonLd = {
                     <span class="font-display text-2xl font-bold text-moss-700">{gbp(plan.price)}</span>
                     <span class="text-sm font-bold text-bark-500"> {plan.unit}</span>
                   </p>
+                  {typeof plan.largeDogSurcharge === 'number' && (
+                    <p class="mt-1 text-sm font-bold text-honey-700">
+                      +{gbp(plan.largeDogSurcharge)} for large dogs
+                    </p>
+                  )}
+                  {plan.eligibility && (
+                    <p class="mt-2 text-xs leading-relaxed text-bark-500">{plan.eligibility}</p>
+                  )}
                   <ul class="mt-4 flex-1 space-y-1.5 text-sm text-bark-700">
-                    {plan.features.slice(0, 3).map((f) => (
+                    {plan.features.map((f) => (
                       <li class="paw-bullet flex items-start">{f}</li>
                     ))}
                   </ul>
