@@ -1,5 +1,19 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ▶ 2026-07-04 — 🚀 STAGE 5 CUTOVER DONE — SITE IS LIVE AT https://www.thefairytails.co.uk (production host = HOSTINGER, not GitHub Pages)
+
+The domain migrated IONOS→Hostinger (email first, then .uk IPS-tag transfer to AXIDOMAINS; full story in `C:\Users\Kam\OneDrive\Business\CODING\Hostinger\n8n-vps-migration-handover.md`). **The original Stage-5 plan (GH Pages custom domain) was superseded by owner decision: production is Hostinger Business hosting**, addon vhost `thefairytails.co.uk`, docroot `/home/u575459407/domains/thefairytails.co.uk/public_html`.
+
+Commit `89c0012` (pushed + deployed + live-verified):
+1. **`public/.htaccess` (NEW — load-bearing on Hostinger/LiteSpeed):** 301s everything to `https://www.thefairytails.co.uk` (canonical www + HTTPS) and rewrites extensionless URLs to their `.html` files (GH Pages did this implicitly; without it every legacy URL 404s). Keep this file in every deploy.
+2. **`public/robots.txt`:** preview Disallow-all → LIVE allow-all + `Sitemap: https://www.thefairytails.co.uk/sitemap-index.xml`.
+3. **`.github/workflows/deploy-hostinger.yml` (NEW — THE deploy path):** on every push to `main`: npm ci → astro build → `verify-urls.mjs --dist` gate → FTPS deploy of `dist/` to Hostinger. Secrets: `FTP_SERVER` (31.220.106.186 — IP on purpose, ftp hostname is new DNS), `FTP_USERNAME` (`u575459407.ftwebsite`), `FTP_PASSWORD` (owner-set; first run failed 530 until owner reset the FTP password in hPanel). On-demand: `gh workflow run deploy-hostinger.yml`.
+4. **`.github/workflows/deploy.yml`:** GH Pages preview is now **workflow_dispatch-only** (so the allow-all robots.txt never auto-reaches the preview host; preview still serves the old Disallow-all until someone manually redeploys it).
+
+Live verification passed: apex/HTTP→https+www 301 chain, `/gallery` 200, `/puppy-classes` meta-refresh stub, robots.txt + sitemap-index.xml 200, valid SSL. ⚠️ Hostinger's `hosting_deployStaticWebsite` API endpoint 500s on this account — use the GitHub Action, not the API deploy.
+
+**NEXT WEBSITE SESSION (owner-agreed): build the 26 legacy blog posts** — they're the `verify-urls` WARNs ("planned, not built yet"); source copy/images archived in `fairytails-image-archive/blog/`; rebuild each at its exact original URL (redirect to nearest page instead if not worth keeping). Also still pending: owner's GSC sitemap submission (property confusion — "Invalid sitemap address"; likely needs the Domain-property + full sitemap URL); GA4/GTM stage; team page content. NOTE: `fairytailsdoggrooming.co.uk` is a separate sister grooming site on the same hosting — **never redirect it here**.
+
 ## ▶ 2026-07-02 (later) — SITE-WIDE MOBILE-COMPATIBILITY FIX (owner reported "menu bar doesn't work on mobile"). COMMITTED (`12740e7`) + PUSHED + LIVE — menu open + zero overflow re-verified with touch emulation AGAINST THE LIVE PREVIEW on /, /dog-boarding-school and /gallery. (Pages deploy flaked once with a transient "Deployment failed, try again later" — `gh run rerun --failed` succeeded.)
 
 Full mobile pass across all 6 built pages, verified with Playwright at 320/360/390/414 px (touch emulation) against BOTH the dev server and the production `dist` via `npm run preview`. Desktop verified unchanged at 1440 px (nav/hamburger/checkbox sizes/scroll width all identical). `npm run build` 6 pages 0 errors · `npm run verify-urls` 0 failures. **4 fixes, 9-line diff:**
