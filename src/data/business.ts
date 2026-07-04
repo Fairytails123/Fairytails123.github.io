@@ -42,6 +42,16 @@ export const business = {
     instagram: 'https://www.instagram.com/fairytails_dogschool/',
   },
 
+  // Council licensing under the Animal Welfare (Licensing of Activities
+  // Involving Animals) (England) Regulations 2018. Displaying the licence
+  // number is a legal requirement for a licensed premises — it lives in the
+  // site-wide footer. 5 stars = the highest rating a council can award.
+  licence: {
+    number: 'WK/202503477',
+    authority: 'Hastings Borough Council',
+    rating: 5,
+  },
+
   acuity: {
     main: 'https://app.acuityscheduling.com/schedule.php?owner=13914499',
     // Header "Book Appointment" — the old site's prominent CTA for returning regulars

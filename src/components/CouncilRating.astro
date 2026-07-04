@@ -1,0 +1,54 @@
+---
+// The 5-star council-rating badge (the old site's footer graphic, rebuilt as
+// crisp SVG in the site palette). For DARK backgrounds (pine/moss bands, the
+// footer). Facts come from business.licence — never hard-code them here.
+import { business } from '../data/business';
+
+interface Props {
+  /** Show the "Licensed premises · Licence No. …" line (required in the footer) */
+  licence?: boolean;
+  align?: 'left' | 'center';
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const { licence = false, align = 'left', size = 'md', class: className = '' } = Astro.props;
+const starPx = size === 'lg' ? 32 : 22;
+const stars = Array.from({ length: business.licence.rating });
+---
+
+<div class:list={[align === 'center' && 'text-center', className]}>
+  <div class:list={['flex gap-1.5', align === 'center' && 'justify-center']} aria-hidden="true">
+    {
+      stars.map(() => (
+        <svg width={starPx} height={starPx} viewBox="0 0 24 24" fill="none">
+          <path
+            d="M12 1.8l3.1 6.4 7 .85-5.15 4.8 1.35 6.95L12 17.35 5.7 20.8l1.35-6.95L1.9 9.05l7-.85L12 1.8z"
+            fill="var(--color-honey-500)"
+            stroke="var(--color-honey-700)"
+            stroke-width="1"
+            stroke-linejoin="round"
+          />
+        </svg>
+      ))
+    }
+  </div>
+  <p
+    class:list={[
+      'font-display font-bold tracking-[0.08em] text-cream-50',
+      size === 'lg' ? 'mt-3 text-2xl' : 'mt-2.5 text-lg',
+    ]}
+  >
+    {business.licence.rating} STAR RATED
+  </p>
+  <p class="mt-1 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-cream-200">
+    By {business.licence.authority} for dog care
+  </p>
+  {
+    licence && (
+      <p class="mt-2 text-xs text-cream-200/80">
+        Licensed premises · Licence No. {business.licence.number}
+      </p>
+    )
+  }
+</div>

@@ -1,5 +1,6 @@
 ---
 import { business } from '../data/business';
+import CouncilRating from './CouncilRating.astro';
 const year = new Date().getFullYear();
 ---
 
@@ -84,6 +85,17 @@ const year = new Date().getFullYear();
           </a>
         </li>
       </ul>
+    </div>
+  </div>
+
+  <!-- Council licence display — a legal requirement for a licensed premises -->
+  <div class="mx-auto max-w-6xl px-4 pb-10">
+    <div class="flex flex-col items-center gap-2 border-t border-pine-800 pt-8">
+      <CouncilRating licence align="center" />
+      <p class="mt-1 max-w-md text-center text-xs leading-relaxed text-cream-200/70">
+        Inspected by council inspectors and operating under the Animal Welfare (Licensing of
+        Activities Involving Animals) Regulations 2018 and government welfare guidance.
+      </p>
     </div>
   </div>
 
