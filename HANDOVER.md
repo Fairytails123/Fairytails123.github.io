@@ -1,6 +1,8 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
-## ▶ 2026-07-04 (later) — Header "Book Appointment" CTA added (owner request) + scrolled-mobile-menu bug FIXED. ⚠️ NOT committed, NOT pushed — pushing deploys straight to the LIVE production site now; owner said "pause here for today"
+## ▶ 2026-07-04 (later still) — the above header work is now **COMMITTED + PUSHED + LIVE** (`1c7ea71`, Hostinger deploy green, both CTAs + Acuity link verified in the served HTML). Owner also re-taglined the homepage hero: "The dog you love / is still in there." → **"A calmer, happier dog / is in there."** (owner felt the old line could read as the love having faded; chosen from four options) — commit `9503682`, deployed + live-verified same day. Next: resume the standing plan (26 legacy blog posts — see the cutover section below).
+
+## ▶ 2026-07-04 (later) — Header "Book Appointment" CTA added (owner request) + scrolled-mobile-menu bug FIXED. ~~⚠️ NOT committed, NOT pushed~~ **superseded — shipped, see above**
 
 Owner asked for the old site's prominent header **Book Appointment** button back, for returning regulars, linking `https://app.acuityscheduling.com/schedule/be03d6bc`. This **partially reverses the 2026-07-02 enquiry-first header change** — the header now carries BOTH: **Enquire (moss, primary for new customers) + Book Appointment (honey, for regulars)**.
 
