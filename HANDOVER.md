@@ -1,5 +1,15 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+## ▶ 2026-07-04 (night 3) — HOMEPAGE HERO SEQUENCE: photo → storm particles FORM THE LOGO → hero film fades in
+
+Owner spec: keep the hero image + cloud particles, make the "random dots" gather into the brand logo, then start a hero video (day-school-style). Implemented in `index.astro`'s `initHero3D`:
+- **Shader:** new `aLogo` attribute + `uLogo`/`uColorLogo` uniforms — third morph target on the existing scattered→calm mix; wobble/size damp toward the logo, colour → bright honey `#efc987`.
+- **Logo targets:** brand `logo.png` sampled at ≤260px (alpha>120, luminance≤215 → skips the white card, keeps dog/fairy/text; ~17.5k points; verified visually — legible logo at 3,800 particles). Mobile COUNT raised 1800→2600 for text fidelity.
+- **Timeline:** settle 0.25–1.75s → logo forms 1.9–3.5s (video `.load()` starts buffering at 1.9) → hold ~1.1s → `play()` then video fades in over 1s and canvas fades out (render loop STOPS after — `stopped` flag in `sync()`).
+- **Video:** `public/media/home-hero.mp4` (1.8 MB, 12.2s loop) cut from the montage's UNUSED second half (lane pack-walk 123-128 → van-crate staffie 139-142.5 → apricot poodle run-in 149.5-154) — zero overlap with the day-school hero. `<video data-home-hero-video data-hero-media>` under the canvas (inherits scroll parallax).
+- **Fallbacks:** reduced-motion/save-data = static photo (unchanged); logo sampling fails → settle + video at 3s; autoplay refused → formed logo stays; no WebGL → photo.
+- **⚠️ Automation-tab caveat (again):** rAF throttling + background-media power policy mean the sequence can't be watched via the Chrome tools — verified instead via state probes (video.load() fired = logo phase ran; 0 console errors) + a 2D-canvas simulation of the exact sampling (screenshot in session). OWNER should watch it on a real device.
+
 ## ▶ 2026-07-04 (night 2) — PAGE 10 /contact BUILT + LIVE, licence certificate as trust centrepiece
 
 Owner-initiated (follow-on from the council-rating rollout): `/contact` built per the WEBSITE-PLAN baseline — prominent call + WhatsApp icon cards, email/address/hours (Maps link), **collapsible direct-lines directory** (emergency/ops/grooming/training/pickups from `business.phones`, with response-time notes; dead 07842 nowhere), full `EnquiryForm` (`service="General enquiry"`), team photo (names/roles STILL owner-pending per baseline). **Trust centrepiece:** the framed council licence certificate photo (`src/assets/pages/contact/licence-certificate.jpg`, from owner 2026-07-04) + `CouncilRating` badge + facts (15 boarders / 55 day-care max, valid to 10 Dec 2028) + **"Verify us on the council register" → https://www.hastings.gov.uk/licensing/animal/register/**. LocalBusiness JSON-LD on the page (plan: home+contact). Nav: **Contact added to header (6 links) — the raw phone number was REMOVED from the desktop nav to stop two-line wrapping** (phone still in drawer/footer/contact page); Contact also in footer Explore. verify-urls 47 URLs 0 failures (4 planned left: pages 4-7).
