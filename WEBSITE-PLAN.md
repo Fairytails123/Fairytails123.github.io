@@ -42,7 +42,7 @@ Lifecycle per page: **pre-build interview → content → design → animation �
 | 1 | `/dog-boarding-school` (Board & Train) — design-system proving ground | ☑ 2026-06-12 → **`docs/page-specs/01-dog-boarding-school.md`** | ◐ passes a–c live; hero video done + live (2026-06-18, owner's clips); polish (d) + 3 media slots pending | ☐ |
 | 2 | `/intensive-dog-training` | ☑ 2026-06-29 → **`docs/page-specs/03-intensive-dog-training.md`** | ◐ content+design+motion live on preview (2026-06-30); week-by-week content skeleton + media interim; polish + sign-off pending | ☐ |
 | 3 | `/dog-day-school` | ☑ 2026-06-29 → **`docs/page-specs/02-dog-day-school.md`** | ◐ content+design+motion live on preview (2026-06-29); polish + sign-off pending | ☐ |
-| 4 | `/puppy-training-classes` | ☐ | ☐ | ☐ |
+| 4 | `/puppy-training-classes` | ☑ 2026-07-05 → **`docs/page-specs/04-puppy-training-classes.md`** | ◐ content+design+motion built 2026-07-05 (class-night moon timeline, owner curriculum, video hero + 2 golden-pup loops; class-night rundown/kit list/FAQs = drafts for owner correction); polish + sign-off pending | ☐ |
 | 5 | `/training-plans` (new) | ☐ | ☐ | ☐ |
 | 6 | `/membership-plans` (new) | ☐ | ☐ | ☐ |
 | 7 | `/puppycourse` (immersive course hub) | ☐ | ☐ | ☐ |

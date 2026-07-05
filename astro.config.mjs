@@ -13,11 +13,10 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   redirects: {
-    // ⚠ TEMP targets (owner 2026-07-04): the real targets /puppy-training-classes
-    // and /puppycourse are not built yet, so these legacy URLs would land on a 404.
-    // FLIP BACK when pages 4-7 ship: '/puppy-classes' -> '/puppy-training-classes',
-    // and the six stubs below -> '/puppycourse'.
-    '/puppy-classes': '/#Trainingplans',
+    // ⚠ TEMP targets (owner 2026-07-04): /puppycourse is not built yet, so its six
+    // legacy stub URLs would land on a 404. FLIP BACK when page 7 ships: the six
+    // '/blog' stubs below -> '/puppycourse'.
+    '/puppy-classes': '/puppy-training-classes',
     '/training-stages': '/dog-boarding-school',
     '/admission-process': '/dog-day-school',
     '/boarding-information': '/dog-boarding-school',

@@ -5,15 +5,18 @@ import logo from '../assets/brand/logo.png';
 
 // Inside-out build: nav links are added as pages go live on the preview
 // (WEBSITE-PLAN.md risk #8). Currently live: Board & Train, Intensive Dog Training,
-// Dog Day School, Gallery. Grooming = the sister business site (owner decision
-// 2026-07-04: a main product, belongs in the header; Blog lives in the footer
-// only — it's mainly for SEO).
+// Dog Day School, Puppy Classes, Gallery. Grooming = the sister business site
+// (owner decision 2026-07-04: a main product, belongs in the header; Blog lives
+// in the footer only — it's mainly for SEO).
 // Contact lives in the FOOTER only (owner decision 2026-07-04: keeps the desktop
 // nav on one line; the phone number stays in the nav as a CTA instead).
 const nav = [
   { label: 'Board & Train', href: '/dog-boarding-school' },
-  { label: 'Intensive Dog Training', href: '/intensive-dog-training' },
+  // Nav label shortened from "Intensive Dog Training" (2026-07-05: 6th link made
+  // the one-line desktop nav overflow — flag with owner; page title unchanged).
+  { label: 'Intensive Training', href: '/intensive-dog-training' },
   { label: 'Dog Day School', href: '/dog-day-school' },
+  { label: 'Puppy Classes', href: '/puppy-training-classes' },
   { label: 'Grooming', href: business.groomingSite },
   { label: 'Gallery', href: '/gallery' },
 ];
@@ -37,7 +40,10 @@ const nav = [
       <span class="sr-only">The Fairy Tails K9 Centre — home</span>
     </a>
 
-    <nav aria-label="Main" class="hidden items-center gap-5 md:flex lg:gap-7">
+    {/* Desktop nav from lg only (2026-07-05): with 6 links + nowrap, the md band
+        (768-990px) overflowed and clipped the Book Appointment CTA — tablets now
+        get the drawer instead, which never clips. */}
+    <nav aria-label="Main" class="hidden items-center gap-5 lg:flex">
       {
         nav.map((item) => (
           <a href={item.href} class="nav-link text-sm font-bold text-bark-700">
@@ -45,18 +51,18 @@ const nav = [
           </a>
         ))
       }
-      <a href={business.phones.main.tel} class="nav-link hidden text-sm font-bold text-bark-700 lg:block">
+      <a href={business.phones.main.tel} class="nav-link hidden text-sm font-bold text-bark-700 xl:block">
         {business.phones.main.display}
       </a>
-      <a href="/#enquire" class="btn btn-moss !px-5 !py-2.5 text-sm"> Enquire </a>
-      <a href={business.acuity.bookAppointment} class="btn btn-honey !px-5 !py-2.5 text-sm">
+      <a href="/#enquire" class="btn btn-moss !px-4 !py-2.5 text-sm"> Enquire </a>
+      <a href={business.acuity.bookAppointment} class="btn btn-honey !px-4 !py-2.5 text-sm">
         Book Appointment
       </a>
     </nav>
 
     <button
       type="button"
-      class="relative z-50 flex h-11 w-11 items-center justify-center rounded-full bg-cream-50/80 md:hidden"
+      class="relative z-50 flex h-11 w-11 items-center justify-center rounded-full bg-cream-50/80 lg:hidden"
       aria-label="Open menu"
       aria-expanded="false"
       aria-controls="mobile-menu"
@@ -73,7 +79,7 @@ const nav = [
   <!-- Mobile slide-in panel -->
   <div
     id="mobile-menu"
-    class="fixed inset-0 z-40 hidden md:hidden"
+    class="fixed inset-0 z-40 hidden lg:hidden"
     data-menu-panel
     aria-hidden="true"
   >
@@ -160,6 +166,7 @@ const nav = [
   .nav-link {
     position: relative;
     padding-bottom: 2px;
+    white-space: nowrap; /* one-line desktop nav (owner rule) — labels never wrap internally */
   }
   .nav-link::after {
     content: '';

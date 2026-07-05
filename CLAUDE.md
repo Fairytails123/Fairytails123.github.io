@@ -1,5 +1,33 @@
 # CLAUDE.md
 
+<!-- n8n-vps-brief:v1 -->
+## ⚠️ n8n platform: self-hosted VPS — NOT n8n Cloud (migration active since 2026-07-04)
+
+The business's n8n is moving from n8n Cloud (`ftmanager.app.n8n.cloud`) to a **self-hosted n8n on a Hostinger VPS**. All future work in this project must assume n8n lives on the VPS.
+
+- **n8n editor / API / webhook base: `https://auto.thefairytails.co.uk`** (webhooks: `https://auto.thefairytails.co.uk/webhook/<path>`; workflow IDs and webhook paths were preserved from cloud).
+- **Cutover status (as of 2026-07-04): NOT flipped yet — workflows are being switched over ONE BY ONE** (Phase F4). A workflow is live on exactly one side: active on the VPS = flipped; still active on cloud = not yet. Check the handover doc (below) for current status before assuming. **Never let the same workflow be active on both sides** — activating a Telegram-trigger workflow steals the bot webhook from cloud instantly, and schedule triggers double-fire.
+- **All new and future work targets the VPS.** Build, change, and amend workflows — and any code that calls n8n — against `auto.thefairytails.co.uk`. Do not build anything new against n8n Cloud. When amending a not-yet-flipped workflow, make the change on the VPS copy and flip that workflow as part of the work (per the F4 play card), rather than investing further in the cloud copy.
+- **n8n MCP deploys:** before creating/updating workflows via an n8n MCP, verify the MCP targets the VPS instance. If it still points at n8n Cloud, ask Kam to reconnect it to `https://auto.thefairytails.co.uk` first.
+
+**Source of truth for the migration** (VPS specs, SSH access, credential + data-table ID maps, F4 cutover plan, live status): `C:\Users\Kam\OneDrive\Business\CODING\Hostinger_n8n\n8n-vps-migration-handover.md`
+
+**Self-hosting benefits — design for them:**
+- No cloud plan limits: no execution-time caps and no per-execution/active-workflow billing pressure — long-running, heavy, or chatty workflows are fine; split logic into as many workflows as is clean.
+- Full server control: SSH + `docker exec` n8n CLI (bulk import/export, upserts by workflow ID), container logs, compose + env on the VPS. **Access details (host/user/key/paths) live in the migration handover doc — NOT here: this repo is public.**
+- Community nodes can be installed if a task needs them (cloud didn't allow this).
+- Static egress IP (in the handover doc) — usable for third-party API allowlists.
+
+**Caveats:**
+- Credential IDs and data-table IDs are DIFFERENT on the VPS vs cloud (maps: `Hostinger_n8n\cloud-export-2026-07-04\cred-id-map-batch*.json`). Data Table nodes reference tables BY ID — never copy cloud IDs into VPS workflows.
+- Any external caller (web page, script, form, bot, dashboard) still pointing at `ftmanager.app.n8n.cloud` must be repointed to `https://auto.thefairytails.co.uk` when its workflow flips — and must never be newly written against the cloud URL.
+
+### n8n touchpoints in this project (scanned 2026-07-04)
+
+- `src\data\business.ts:77` — `enquiryWebhook: 'https://ftmanager.app.n8n.cloud/webhook/website-enquiry'` — the single source of truth the site-wide EnquiryForm POSTs to; must repoint to `https://auto.thefairytails.co.uk/webhook/website-enquiry` when the "Website Enquiry" workflow flips (then rebuild/redeploy + live-test end-to-end incl. CORS from a real browser, per the n8n enquiry rule below).
+- `HANDOVER.md:400` — status note recording the "Website Enquiry" workflow (`qVpPqijvyEqWiPwy`) as LIVE on `ftmanager.app.n8n.cloud` — update this status entry when the workflow flips to the VPS.
+- `HANDOVER.md:401` — documents the cloud webhook URL `https://ftmanager.app.n8n.cloud/webhook/website-enquiry` and its CORS setup — rewrite to the `auto.thefairytails.co.uk` URL when flipped (CORS allowlist must be reproduced on the VPS workflow).
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## What this project is

@@ -19,7 +19,7 @@ const MANIFEST = [
   { path: '/dog-boarding-school', type: 'page', status: 'built' },
   { path: '/intensive-dog-training', type: 'page', status: 'built' },
   { path: '/dog-day-school', type: 'page', status: 'built' },
-  { path: '/puppy-training-classes', type: 'page', status: 'planned' },
+  { path: '/puppy-training-classes', type: 'page', status: 'built' }, // built 2026-07-05
   { path: '/training-plans', type: 'page', status: 'planned' },
   { path: '/membership-plans', type: 'page', status: 'planned' },
   { path: '/puppycourse', type: 'page', status: 'planned' },
