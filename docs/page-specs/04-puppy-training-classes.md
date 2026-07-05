@@ -57,4 +57,11 @@
 
 ## BUILD STATE
 
-- 2026-07-05 — interview complete (3 AskUserQuestion rounds + follow-ups + owner curriculum message), spec written. Build starting.
+- 2026-07-05 — interview complete (3 AskUserQuestion rounds + follow-ups + owner curriculum message), spec written.
+- 2026-07-05 — **BUILT + DEPLOYED + LIVE-VERIFIED** (commit `5ad8949`, production www.thefairytails.co.uk). All 13 sections per the map; media = `puppy-classes-hero.mp4` (clean hall clip; the `puppy class.mp4` twin has baked-in social graphics) + `puppy-walk-loop` + `puppy-settle-loop` + posters; 9 curated images (AI png, collar-poster graphic + logo dropped; real-hall WhatsApp photo kept as welcome polaroid).
+- 2026-07-05 — **Spec amendments from the adversarial review (38 agents, 5 confirmed findings, all fixed pre-deploy):**
+  - §7 bridge + hero sub: intros are worded "three intro sessions" NOT "three (full) days" — duration is unsourced and the day-school page models intros as 1/2/3-hour tasters. If the owner confirms the puppy-course intros ARE full days, the stronger copy can return.
+  - §9: females-in-season exclusion is scoped to the day-school intro sessions only (folded into the day-school-rules line) — it was never confirmed as a hall-class rule.
+  - §5 timeline: step entrance is **x-only** (CSS owns opacity — dim 0.55, spotlight via `.is-active`); mobile trail track at `left-[15px]` so the moon isn't clipped by `overflow-x-clip`.
+  - Site-wide: desktop nav now `lg:`+ (tablets get the drawer); nav label "Intensive Training".
+- **OWNER REVIEW OPEN ITEMS:** class-night rundown times/blocks (draft) · kit list (draft) · FAQ answers (drafts — esp. missed-session + family attendance) · "Intensive Training" nav label · testimonial (placeholder waiting) · confirm whether the 3 day-school intros are full days (copy currently says "sessions") · then polish pass (Lighthouse/a11y/reduced-motion/Service JSON-LD) + sign-off + tracker tick.
