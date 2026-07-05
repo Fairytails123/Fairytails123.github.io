@@ -74,5 +74,5 @@ export const business = {
 
   // n8n "Website Enquiry" production webhook (workflow qVpPqijvyEqWiPwy) —
   // public by design; spam defence lives in n8n.
-  enquiryWebhook: 'https://ftmanager.app.n8n.cloud/webhook/website-enquiry',
+  enquiryWebhook: 'https://auto.thefairytails.co.uk/webhook/website-enquiry',
 } as const;
