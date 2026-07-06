@@ -20,6 +20,7 @@ const MANIFEST = [
   { path: '/intensive-dog-training', type: 'page', status: 'built' },
   { path: '/dog-day-school', type: 'page', status: 'built' },
   { path: '/puppy-training-classes', type: 'page', status: 'built' }, // built 2026-07-05
+  { path: '/comprehensive-puppy-training', type: 'page', status: 'built' }, // built 2026-07-06 (off-nav; surfaced from homepage options + puppy-classes cross-sell)
   { path: '/training-plans', type: 'page', status: 'planned' },
   { path: '/membership-plans', type: 'page', status: 'planned' },
   { path: '/puppycourse', type: 'page', status: 'planned' },

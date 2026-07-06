@@ -1,0 +1,865 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import CouncilRating from '../components/CouncilRating.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+// Reused real photos from the harvest (cross-folder imports are fine — Astro
+// dedupes by hash). A dedicated /comprehensive-puppy-training asset folder can
+// replace these if the owner wants bespoke images.
+import puppyLabSit from '../assets/pages/puppy-training-classes/puppy-lab-sit.webp';
+import puppyLifeSkills from '../assets/pages/puppy-training-classes/puppy-life-skills.webp';
+import classesLeadWalk from '../assets/pages/puppy-training-classes/classes-lead-walk.webp';
+import puppyRecall from '../assets/pages/puppy-training-classes/puppy-recall.webp';
+import puppyHeadTilt from '../assets/pages/puppy-training-classes/puppy-head-tilt.webp';
+import puppyTerrierGrass from '../assets/pages/puppy-training-classes/puppy-terrier-grass.webp';
+import dogWalkKam from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
+import puppyTown from '../assets/pages/intensive-dog-training/Puppy-Training-in-Town-2880w.webp';
+import countryPark from '../assets/pages/intensive-dog-training/Intensive-Training-in-the-Country-Park-2880w.webp';
+import busLab from '../assets/pages/dog-boarding-school/Black-Lab-on-the-bus-square-2-2880w.webp';
+import doggyFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
+import buildingConfidence from '../assets/pages/dog-day-school/building-confidence-2880w.webp';
+
+const plan = pricing.offerings.find((o) => o.id === 'puppy-intensive');
+const puppyClasses = pricing.offerings.find((o) => o.id === 'puppy-classes');
+const puppyBoard = pricing.offerings.find((o) => o.id === 'board-train-puppy');
+
+const gbp = (n) => `£${Number.isInteger(n) ? n.toLocaleString('en-GB') : n.toFixed(2)}`;
+
+// What a trainer adds — the "more than basic obedience" cards. The last card
+// carries the trainer-led vs parent-led contrast with the £175 classes (owner
+// positioning, 2026-07-06).
+const trainerAdds = [
+  {
+    title: 'We read the room',
+    body: 'Our trainers read your puppy’s body language all day — knowing when to gently push and when to give space, so every new experience builds confidence instead of fear.',
+  },
+  {
+    title: 'The right pace, all day',
+    body: 'Socialisation happens at a pace that suits your puppy, with structured time on and time off, so they cope, settle and grow — never over-faced, never overtired.',
+  },
+  {
+    title: 'Consistency you can’t fake at home',
+    body: 'The same trainers, the same rules, every hour of every day. That steady repetition is what actually makes training stick — and it’s hard to reproduce around family life.',
+  },
+  {
+    title: 'We do the heavy lifting',
+    body: 'This is the real difference from a weekly class: in classes we teach you and you put in the work at home. Here your puppy spends full days with us and we do the training for you.',
+  },
+];
+
+// SIGNATURE: managed socialisation as a rhythm of "time on" (play/learning) and
+// "time off" (rest). DRAFT copy — owner to fine-tune on the preview.
+const rhythm = [
+  { on: true, phase: 'Time on', title: 'Arrive & tune in', body: 'A calm hello and a good sniff. We read your puppy’s mood before anything else begins.' },
+  { on: false, phase: 'Time off', title: 'Settle first', body: 'Before any fun, a moment of quiet. A puppy that can settle is a puppy that can learn.' },
+  { on: true, phase: 'Time on', title: 'The right introductions', body: 'Structured play with carefully chosen friends — different breeds, sizes and temperaments, always supervised.' },
+  { on: false, phase: 'Time off', title: 'Rest & reset', body: 'Down-time in their own space. This is where confidence actually sets in — short bursts, then proper recovery.' },
+  { on: true, phase: 'Time on', title: 'A taste of the world', body: 'A little training and a new experience woven in — a new surface, a new sound, a new face.' },
+  { on: false, phase: 'Time off', title: 'Wind down for home', body: 'Brains full, tails wagging. They go home tired in the best way, ready to do it all again tomorrow.' },
+];
+
+// What your puppy learns out in the real world.
+const worldSkills = [
+  'Good loose-lead walking — no dragging, no zig-zag',
+  'Coming back when called, even with distractions',
+  'Calm, polite manners in cafés, shops and on public transport',
+  'Confidence around traffic, crowds, other dogs and new surfaces',
+  'Appropriate play — and learning when it’s time to stop',
+];
+
+// The shape of the month. DRAFT — owner to supply the real week-by-week on the preview.
+const monthPlan = [
+  { week: 'Week 1', title: 'Settle & assess', body: 'Your puppy moves into the rhythm of full-day school. We get to know them and they get to know us — routine and trust come first.' },
+  { week: 'Week 2', title: 'Socialise & explore', body: 'Structured introductions ramp up, first outings into the quieter corners of the real world, and overnight stays begin — gently.' },
+  { week: 'Week 3', title: 'Out into the world', body: 'Busier places — a café, a short bus ride, a livelier park — with loose-lead walking and recall growing stronger every day.' },
+  { week: 'Week 4', title: 'Consolidate & hand over', body: 'Everything comes together, and we coach you: the cues, the timing and the habits that keep it all going once your puppy is home for good.' },
+];
+
+// What the month includes — marketing copy (NOT price facts, which live in pricing.json).
+const includes = [
+  'Full days of trainer-led training and socialisation',
+  'Structured introductions to all breeds, shapes and sizes',
+  'Real-world outings — towns, cafés, transport and busy parks',
+  'Overnight stays to head off separation anxiety',
+  'An end-of-month handover so the training sticks at home',
+];
+
+// The pay-off.
+const benefits = [
+  { title: 'A confident dog', body: 'Early, expert exposure builds a puppy that meets the world calmly instead of fearing it.' },
+  { title: 'Confident when left alone', body: 'A puppy taught early to settle without you grows into a dog you can leave — calmly, without the guilt, the chewed door frames, or the upset neighbours.' },
+  { title: 'Genuinely well-socialised', body: 'Not just “friendly” — a puppy that reads other dogs, plays fairly and knows when to settle.' },
+  { title: 'Habits that hold', body: 'The foundations are laid right the first time, so you’re not un-teaching bad habits for years.' },
+];
+
+// Eligibility for a mid-vaccination puppy (differs from the classes' "under 6 months").
+const entryRules = [
+  'Best for local puppies from their second set of vaccinations, up to around 18 weeks old.',
+  'Vaccinations in progress or up to date — DHP, Leptospirosis and Kennel Cough (the same set our day school asks for). If your pup is mid-course, get in touch and we’ll plan the right start date.',
+  'A short chat or free consult first, so we can build the month around your puppy — and be honest if a different route would suit them better.',
+];
+
+// DRAFT FAQs — conservative, enquiry-first answers (flagged for owner review).
+const faqs = [
+  {
+    q: 'When can my puppy start?',
+    a: 'As early as it’s safe to — from their second set of vaccinations. The early weeks are a one-time window, and the sooner we start, the less there is to un-teach later. If your puppy is mid-vaccination, book a chat and we’ll plan the right start date together.',
+  },
+  {
+    q: 'How is this different from your puppy classes?',
+    a: 'Puppy Training Classes are a weekly evening course where we teach you and you put in the work at home — brilliant value at £175. This is full-day, trainer-led training: your puppy spends whole days with us and we do the heavy lifting. Plenty of owners do both.',
+  },
+  {
+    q: 'How is it different from Board & Train?',
+    a: 'Board & Train is residential — your dog lives with us — and is often the right call for older dogs or serious behavioural issues. This is full-day puppy school with overnight stays woven in for the separation-anxiety work, so your pup is home with you most nights.',
+  },
+  {
+    q: 'Will the overnight stays upset my puppy?',
+    a: 'No — that’s rather the point. Stays are gentle, gradual and in good company, and they teach your puppy that being apart from you is nothing to fear. Preventing separation anxiety now is far kinder than trying to fix it later.',
+  },
+  {
+    q: 'Is my puppy too young, or too nervous?',
+    a: 'The earlier the better, and nervous pups often benefit most — we simply pace everything to suit them. If we honestly feel a different route would be kinder, we’ll say so.',
+  },
+  {
+    q: 'What happens after the month?',
+    a: 'We hand the training over to you so it sticks, and many puppies carry on with day-school days to keep their socialisation and confidence topped up. We’ll talk you through the options.',
+  },
+];
+---
+
+<Base
+  title="Comprehensive Puppy Training in Hastings & St Leonards | The Fairy Tails"
+  description="Full-day, trainer-led puppy training and structured socialisation in Hastings & St Leonards. We build real-world confidence and help prevent separation anxiety."
+  path="/comprehensive-puppy-training"
+>
+  <div data-page="comprehensive-puppy">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- TODO(owner): swap in a bespoke full-day / trainer-led puppy clip.
+             Interim reuse of the live puppy clip (owner-approved), per the
+             pre-build interview 2026-07-06. Poster = reduced-motion fallback. -->
+        <video
+          class="h-full w-full object-cover"
+          poster="/media/puppy-classes-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          data-hero-video
+          data-hero-media
+          aria-hidden="true"
+        >
+          <source src="/media/puppy-classes-hero.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/45 to-pine-950/25"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>Comprehensive Puppy Training · Full-day puppy school in Hastings</p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">A month that shapes</span>
+          <span class="hero-line block">the <em class="squiggle not-italic">rest of their life</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          One month of full-day, trainer-led training and structured socialisation — we introduce your
+          puppy to the world so they grow up confident, settled and easy to live with. For local pups
+          from their second vaccinations, up to 18 weeks.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#enquire" class="btn btn-honey">
+            Send an enquiry <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href={business.acuity.freeConsult} class="btn btn-ghost-light">Book a free consult</a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
+        <li class="paw-bullet flex items-center text-moss-700">Full days with our trainers — we do the hard work</li>
+        <li class="paw-bullet flex items-center text-moss-700">Socialised with all breeds, shapes and sizes</li>
+        <li class="paw-bullet flex items-center text-moss-700">Overnight stays that head off separation anxiety</li>
+      </ul>
+    </div>
+
+    <!-- ============ WHY START NOW — the window ============ -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="window">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <p class="eyebrow text-honey-600" data-reveal>Start as early as it’s safe</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            A window that <em class="squiggle not-italic">won’t come back</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            The best time to train a puppy is as soon as it’s safe to start — right from the get-go.
+            Those early weeks are a one-time developmental window: a blank canvas, when your puppy soaks
+            up the world faster than they ever will again.
+          </p>
+          <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+            The longer training is delayed, the harder it becomes to break old habits. Starting from your
+            puppy’s second set of vaccinations gives them the best possible chance of growing into a
+            confident, well-behaved dog — and a month of expert work now saves you months of correction
+            later.
+          </p>
+        </div>
+        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(-2deg);" data-reveal>
+          <Image
+            src={puppyLabSit}
+            alt="A young puppy sitting and looking up attentively during training"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            A blank canvas — let’s make it count
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ MORE THAN BASIC OBEDIENCE ============ -->
+    <section class="bg-cream-100" data-section="more">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <p class="eyebrow text-honey-600" data-reveal>More than sit and stay</p>
+            <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+              Not just obedience — <em class="squiggle not-italic">a proper education</em>
+            </h2>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-bark-700" data-reveal>
+              Basic obedience and a bit of socialising in the park are a good start. Comprehensive puppy
+              training is something more: a professional introducing your puppy to the world from an
+              expert’s point of view — carefully, at the right pace, all day long.
+            </p>
+          </div>
+          <figure class="polaroid mx-auto w-full max-w-[17rem]" style="transform: rotate(2.5deg);" data-reveal>
+            <Image
+              src={dogWalkKam}
+              alt="A Fairy Tails trainer walking a dog on a loose lead through the countryside"
+              class="aspect-[4/5] w-full rounded-[2px] object-cover"
+              widths={[360, 720]}
+              sizes="17rem"
+            />
+            <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+              Led by trainers, every step
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            trainerAdds.map((c) => (
+              <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-lg font-bold text-moss-800">{c.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-bark-700">{c.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 rounded-2xl bg-cream-50 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
+          <strong class="text-moss-800">Prefer to do the training yourself?</strong> Our
+          <a href="/puppy-training-classes" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">group puppy classes</a>
+          teach you how, for {gbp(puppyClasses.price)} — you put in the homework. This page is for owners
+          who’d rather we did the hard work, full-time.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ SIGNATURE: TIME ON, TIME OFF ============ -->
+    <section class="relative overflow-hidden bg-pine-950 text-cream-100" data-section="rhythm">
+      <HillDivider class="relative z-10 bg-cream-100 text-pine-950" flip />
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-0 h-2/3" aria-hidden="true" style="background: radial-gradient(60% 50% at 78% 0%, rgba(236,194,124,0.14), transparent 70%), radial-gradient(70% 55% at 20% 100%, rgba(245,238,221,0.08), transparent 72%);"></div>
+
+      <div class="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>Managed socialisation</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          Confidence is built in <em class="squiggle not-italic">rhythm</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-cream-200" data-reveal>
+          Good socialisation is never a free-for-all. We introduce your puppy to different breeds, sizes
+          and playmates in short, structured bursts — <strong class="text-honey-300">time on</strong> —
+          followed by proper rest — <strong class="text-honey-300">time off</strong> — so they learn to
+          cope, settle, and come back for more. Here’s the rhythm of a session.
+        </p>
+
+        <!-- The rhythm: a trail fills + a marker travels as you scroll -->
+        <div class="relative mt-14 overflow-x-clip" data-rhythm-list>
+          <div class="absolute bottom-4 left-[15px] top-2 w-0.5 sm:left-[110px]" aria-hidden="true">
+            <div class="absolute inset-0 rounded bg-pine-800"></div>
+            <div class="rhythm-trail absolute inset-0 origin-top rounded" data-trail-fill></div>
+            <span class="rhythm-marker absolute -left-[13px] top-0 block h-7 w-7" data-trail-marker>
+              <svg viewBox="0 0 28 28" fill="none" class="h-full w-full">
+                <circle cx="14" cy="14" r="7" fill="var(--color-honey-300)"></circle>
+                <circle cx="14" cy="14" r="11" stroke="var(--color-honey-300)" stroke-width="1.5" opacity="0.5"></circle>
+              </svg>
+            </span>
+          </div>
+
+          <ol class="space-y-10 sm:space-y-12">
+            {
+              rhythm.map((step) => (
+                <li class="rhythm-step relative grid gap-2 pl-9 sm:grid-cols-[84px_1fr] sm:gap-12 sm:pl-0" data-rhythm-step>
+                  <p
+                    class:list={[
+                      'font-display text-xs font-bold uppercase tracking-[0.12em] sm:text-right',
+                      step.on ? 'text-honey-400' : 'text-cream-300',
+                    ]}
+                  >
+                    {step.phase}
+                  </p>
+                  <div class="sm:pl-14">
+                    <h3 class="font-display text-2xl font-bold text-cream-50">{step.title}</h3>
+                    <p class="mt-2 max-w-2xl leading-relaxed text-cream-200">{step.body}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <div class="mt-14 grid items-center gap-8 rounded-2xl bg-pine-900 p-6 sm:grid-cols-[1fr_auto] sm:p-8" data-reveal>
+          <p class="leading-relaxed text-cream-100">
+            <strong class="text-honey-300">Why the rest matters as much as the play:</strong> a puppy
+            learns to be confident when it’s never over-faced and never overtired. The “time off” is where
+            the growing actually happens — it’s the part most owners skip, and the part we build in.
+          </p>
+          <figure class="mx-auto w-40 shrink-0 overflow-hidden rounded-xl sm:w-44">
+            <Image src={doggyFriends} alt="Two puppies of different breeds playing together under supervision" class="aspect-square w-full object-cover" widths={[176, 352]} sizes="11rem" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BOARDING THAT PREVENTS SEPARATION ANXIETY ============ -->
+    <section class="bg-moss-800 text-cream-100" data-section="independence">
+      <HillDivider class="bg-pine-950 text-moss-800" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+          <figure class="polaroid mx-auto w-full max-w-[15rem] sm:max-w-[17rem]" style="transform: rotate(-2deg);" data-reveal>
+            <video
+              class="aspect-[9/16] w-full rounded-[2px] object-cover"
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster="/media/puppy-settle-poster.jpg"
+              data-src="/media/puppy-settle-loop.mp4"
+              aria-label="A golden retriever puppy settling calmly on its own"
+            ></video>
+            <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-cream-100">
+              Calm and content on their own
+            </figcaption>
+          </figure>
+          <div>
+            <p class="eyebrow text-honey-300" data-reveal>Time apart, on purpose</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+              Learning to be <em class="squiggle not-italic">alone and okay</em>
+            </h2>
+            <p class="mt-5 leading-relaxed text-cream-100" data-reveal>
+              One of the kindest things you can teach a young puppy is that being apart from you is nothing
+              to fear. Overnight stays with us, woven into the month, teach your puppy to settle without
+              you — calmly, in good company.
+            </p>
+            <p class="mt-4 leading-relaxed text-cream-100" data-reveal>
+              It matters more than most people realise. Separation anxiety is one of the hardest
+              behaviours to fix once it takes hold, and one of the biggest reasons puppies are given up.
+              Left unchecked, it can leave owners feeling like prisoners of their own dog — unable to leave
+              the house without a scene — and it’s rarely fair on the neighbours either. Prevention now is
+              far kinder, and far easier, than a cure later.
+            </p>
+            <div class="mt-7 rounded-2xl bg-moss-900/60 p-6" data-reveal>
+              <CouncilRating licence={true} size="md" />
+              <p class="mt-4 leading-relaxed text-cream-100">
+                Our overnight stays are on fully licensed premises. For dogs who already struggle with
+                separation, our residential
+                <a href="/dog-boarding-school" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Board &amp; Train</a>
+                tackles it head-on — <a href="/archiestory" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Archie’s story</a>
+                is a good example.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ INTO THE WORLD, AT THEIR PACE ============ -->
+    <section data-section="world">
+      <HillDivider class="bg-moss-800 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Real-world socialisation</p>
+        <h2 class="mt-3 max-w-3xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Towns, cafés, buses and busy parks — <em class="squiggle not-italic">all part of the lesson</em>
+        </h2>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-bark-700" data-reveal>
+          A confident adult dog is made in everyday places, not just on the training field. Our trainers
+          take your puppy out into the real world at a pace that suits them — introducing the sights,
+          sounds and surfaces that so many dogs never quite get used to.
+        </p>
+
+        <div class="mt-12 grid items-start gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <div class="grid gap-4 sm:grid-cols-2" data-stagger>
+            <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+              <Image src={puppyTown} alt="A puppy being trained on a busy town pavement" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 22rem, 45vw" />
+              <figcaption class="bg-cream-50 px-4 py-2 text-sm font-bold text-bark-700">In town</figcaption>
+            </figure>
+            <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+              <Image src={busLab} alt="A dog sitting calmly on a bus" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 22rem, 45vw" />
+              <figcaption class="bg-cream-50 px-4 py-2 text-sm font-bold text-bark-700">On public transport</figcaption>
+            </figure>
+            <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+              <Image src={countryPark} alt="A puppy training in a busy country park" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 22rem, 45vw" />
+              <figcaption class="bg-cream-50 px-4 py-2 text-sm font-bold text-bark-700">In busy parks</figcaption>
+            </figure>
+            <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+              <Image src={classesLeadWalk} alt="A puppy walking nicely on a loose lead" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 22rem, 45vw" />
+              <figcaption class="bg-cream-50 px-4 py-2 text-sm font-bold text-bark-700">On the lead</figcaption>
+            </figure>
+          </div>
+
+          <div class="grain rounded-2xl bg-moss-800 p-8 text-cream-50 shadow-[var(--shadow-lift)]" data-reveal>
+            <h3 class="font-display text-2xl font-bold text-cream-50">What your puppy learns</h3>
+            <ul class="mt-5 space-y-2.5" data-stagger>
+              {worldSkills.map((s) => <li class="paw-bullet flex items-start text-cream-100">{s}</li>)}
+            </ul>
+            <figure class="mt-7 overflow-hidden rounded-xl">
+              <Image src={puppyRecall} alt="A puppy running back to its handler on a recall" class="aspect-[16/9] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 26rem, 90vw" />
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ YOUR MONTH WITH US ============ -->
+    <section class="bg-cream-100" data-section="shape">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>The shape of the month</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Four weeks, <em class="squiggle not-italic">built to last a lifetime</em>
+        </h2>
+        <p class="mt-4 max-w-2xl leading-relaxed text-bark-700" data-reveal>
+          Every puppy is different, so we shape the month around yours — but it tends to build like this.
+        </p>
+
+        <ol class="mt-12 grid gap-6 overflow-x-clip md:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            monthPlan.map((w, i) => (
+              <li class="grain relative flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]">
+                <p class="font-display text-5xl font-bold leading-none text-honey-400/80">{i + 1}</p>
+                <p class="mt-3 eyebrow text-honey-600">{w.week}</p>
+                <h3 class="mt-1 font-display text-xl font-bold text-moss-800">{w.title}</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">{w.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ HOW YOUR PUPPY BENEFITS ============ -->
+    <section data-section="benefits">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>The pay-off</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          A dog you can <em class="squiggle not-italic">take anywhere</em>
+        </h2>
+
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            benefits.map((b) => (
+              <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-lg font-bold text-moss-800">{b.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-bark-700">{b.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="mt-16 grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+          <div class="relative mx-auto h-[24rem] w-full max-w-md" data-reveal>
+            <figure class="polaroid absolute left-0 top-2 w-3/5" style="transform: rotate(-4deg);">
+              <Image src={buildingConfidence} alt="A puppy growing in confidence during training" class="aspect-[4/5] w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+            </figure>
+            <figure class="polaroid absolute bottom-0 right-0 w-3/5" style="transform: rotate(3.5deg);">
+              <Image src={puppyLifeSkills} alt="A puppy practising its everyday life skills" class="aspect-square w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+            </figure>
+          </div>
+          <div>
+            <h3 class="font-display text-2xl font-bold text-moss-800" data-reveal>And you learn, too</h3>
+            <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+              The training only sticks if it comes home with you. In the final week we coach you through
+              everything your puppy has learned — the cues, the timing, the little habits — so you can keep
+              it all going. You get back a puppy that’s had the best possible start, and the know-how to
+              build on it.
+            </p>
+            <a href="#enquire" class="btn btn-moss mt-7" data-reveal>
+              Start the conversation <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- TODO(owner): puppy-graduate testimonial — graceful placeholder until the real story lands. -->
+        <div class="mt-14" data-reveal>
+          <article class="rounded-2xl border-2 border-dashed border-moss-300 bg-cream-50 p-7 text-center">
+            <h3 class="font-display text-xl font-bold text-moss-700">What our puppy parents say</h3>
+            <p class="mt-2 leading-relaxed text-bark-700">A graduate pup’s story is on its way to this spot.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING & HOW TO BOOK ============ -->
+    <section class="bg-pine-900 text-cream-100" data-section="book">
+      <HillDivider class="bg-cream-50 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+          <div>
+            <p class="eyebrow text-honey-400" data-reveal>The investment</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+              One month, <em class="squiggle not-italic">one clear price</em>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+              This is a bespoke month built around your puppy, so we don’t take instant online bookings —
+              we start with a chat. Send an enquiry or grab a free consult, and we’ll talk through your
+              pup, answer your questions and plan the right start date.
+            </p>
+            <ul class="mt-6 space-y-2.5" data-stagger>
+              {includes.map((item) => <li class="paw-bullet flex items-start text-cream-100">{item}</li>)}
+            </ul>
+          </div>
+
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 text-bark-700 shadow-[var(--shadow-polaroid)]" data-reveal>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-display text-2xl font-bold text-moss-800">{plan.name}</h3>
+                <p class="mt-1 text-sm font-bold text-bark-500">{plan.eligibility}</p>
+              </div>
+              <Image
+                src={puppyTerrierGrass}
+                alt=""
+                class="aspect-square w-16 shrink-0 rounded-xl object-cover"
+                widths={[64, 128]}
+                sizes="4rem"
+              />
+            </div>
+            <p class="mt-4">
+              <span class="font-display text-4xl font-bold text-moss-700">{gbp(plan.price)}</span>
+              <span class="font-bold text-bark-500"> {plan.unit}</span>
+            </p>
+            <ul class="mt-5 flex-1 space-y-2.5 text-[0.95rem] text-bark-700">
+              {plan.features.map((f) => <li class="paw-bullet flex items-start">{f}</li>)}
+            </ul>
+            <div class="mt-7 flex flex-col gap-3">
+              <a href="#enquire" class="btn btn-honey w-full">
+                Send an enquiry <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+              <a href={business.acuity.freeConsult} class="btn btn-moss w-full">Book a free consult</a>
+            </div>
+          </article>
+        </div>
+
+        <details class="group mt-14 rounded-2xl bg-pine-950/40 ring-1 ring-cream-100/10" data-reveal>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-cream-50 [&::-webkit-details-marker]:hidden">
+            Who it’s for — before you enquire
+            <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-400" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </summary>
+          <div class="accordion-body">
+            <div class="overflow-hidden">
+              <div class="px-7 pb-7">
+                <ul class="space-y-2.5">
+                  {entryRules.map((r) => <li class="paw-bullet flex items-start text-sm text-cream-200">{r}</li>)}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="bg-cream-50" data-section="faq">
+      <HillDivider class="bg-pine-900 text-cream-50" />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>Good to know</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Puppy training <em class="squiggle not-italic">questions</em>
+        </h2>
+
+        <div class="mt-10 space-y-4" data-stagger>
+          {
+            faqs.map((f) => (
+              <details class="group rounded-2xl bg-cream-100 shadow-[var(--shadow-lift)]">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-6 font-display text-lg font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </summary>
+                <div class="accordion-body">
+                  <div class="overflow-hidden">
+                    <p class="px-6 pb-6 leading-relaxed text-bark-700">{f.a}</p>
+                  </div>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+        <figure class="mx-auto mt-10 w-44" data-reveal>
+          <Image
+            src={puppyHeadTilt}
+            alt="A puppy tilting its head curiously"
+            class="aspect-square w-full rounded-2xl object-cover shadow-[var(--shadow-lift)]"
+            widths={[176, 352]}
+            sizes="11rem"
+          />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ OTHER PUPPY PATHWAYS ============ -->
+    <section class="bg-cream-100" data-section="pathways">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-600" data-reveal>More puppy pathways</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Not quite the right fit? <em class="squiggle not-italic">There’s a route for every pup</em>
+        </h2>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-xl font-bold text-moss-800">{puppyClasses.name}</h3>
+            <p class="mt-1 text-sm font-bold text-bark-500">{puppyClasses.eligibility}</p>
+            <p class="mt-4">
+              <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyClasses.price)}</span>
+              <span class="font-bold text-bark-500"> {puppyClasses.unit}</span>
+            </p>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
+              The lighter, parent-led option: a weekly evening course where we coach you and you put in the
+              work at home. Includes three day-school intro sessions.
+            </p>
+            <a href="/puppy-training-classes" class="btn btn-moss mt-6 w-full">Puppy Training Classes</a>
+          </article>
+
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-xl font-bold text-moss-800">{puppyBoard.name}</h3>
+            <p class="mt-1 text-sm font-bold text-bark-500">{puppyBoard.eligibility}</p>
+            <p class="mt-4">
+              <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyBoard.price)}</span>
+              <span class="font-bold text-bark-500"> {puppyBoard.unit}</span>
+            </p>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
+              The residential version: your puppy <strong class="text-moss-800">lives with us</strong> for
+              the full four weeks — the deepest immersion, with daily reports home.
+            </p>
+            <a href="/dog-boarding-school" class="btn btn-moss mt-6 w-full">Boarding School for Puppies</a>
+          </article>
+
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-xl font-bold text-moss-800">Do-it-yourself puppy course</h3>
+            <p class="mt-1 text-sm font-bold text-bark-500">Free · at your own pace</p>
+            <p class="mt-4 flex-1 text-sm leading-relaxed text-bark-700">
+              On a budget, or a hands-on type? Our free week-by-week DIY puppy course covers skills,
+              confidence, socialisation and toilet training — written by the same trainers.
+            </p>
+            {/* TEMP: -> /puppycourse once page 7 is built (flip-back checklist in HANDOVER.md) */}
+            <a href="/blog" class="btn btn-moss mt-6 w-full">Read our free advice</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY FORM ============ -->
+    <section id="enquire" class="bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Let’s talk</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your puppy</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Send us a few details and we’ll be in touch to talk through the month — or answer anything
+            you’d like to know first.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Comprehensive Puppy Training" page="/comprehensive-puppy-training" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk first? Call us on
+          <a href={business.phones.main.tel} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            {business.phones.main.display}
+          </a>
+          or WhatsApp us
+          <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            on the same number
+          </a>.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* Rhythm steps: dimmed until active (JS adds .is-active; no-JS/reduced-motion = full).
+     CSS owns step opacity entirely — the entrance tween is x-only, because a gsap.from
+     autoAlpha leaves inline opacity:1 behind and permanently defeats this rule (the
+     silent no-op lesson from the 2026-07-05 review). */
+  .rhythm-step {
+    transition: opacity 0.45s ease;
+  }
+  [data-gsap-init] .rhythm-step:not(.is-active) {
+    opacity: 0.5;
+  }
+
+  /* The socialisation trail — warm daylight fill + travelling marker */
+  .rhythm-trail {
+    background: linear-gradient(to bottom, var(--color-honey-300), var(--color-honey-200) 35%, var(--color-cream-100) 80%, var(--color-cream-50));
+  }
+  .rhythm-marker {
+    filter: drop-shadow(0 0 8px rgb(236 194 124 / 0.6));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-gsap-init] .rhythm-step:not(.is-active) {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initVideoLoops } from '../scripts/videoLoops';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initComprehensivePuppy() {
+    const root = document.querySelector('[data-page="comprehensive-puppy"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    initVideoLoops(root);
+
+    // Hero video: lazy-start after load; never for reduced-motion or data-saver users.
+    const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    if (video && !reduceMotion && !saveData) {
+      setTimeout(() => {
+        video.load();
+        video.play().catch(() => {});
+      }, 350);
+    }
+
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* --- Hero entrance --- */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* --- Hero parallax drift --- */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* --- Generic reveals --- */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Staggered groups --- */
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          scrollTrigger: { trigger: group, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Signature: time on / time off (a marker travels the day's rhythm) --- */
+      const list = root.querySelector('[data-rhythm-list]') as HTMLElement | null;
+      const fill = root.querySelector('[data-trail-fill]');
+      const marker = root.querySelector('[data-trail-marker]') as HTMLElement | null;
+      if (list && fill) {
+        const trail = { trigger: list, start: 'top 62%', end: 'bottom 55%', scrub: 0.5 };
+        gsap.fromTo(fill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: trail });
+        if (marker) {
+          gsap.fromTo(
+            marker,
+            { y: 0 },
+            {
+              y: () => (marker.parentElement?.offsetHeight ?? 0) - 24,
+              ease: 'none',
+              scrollTrigger: trail,
+            }
+          );
+        }
+      }
+      gsap.utils.toArray<HTMLElement>('[data-rhythm-step]').forEach((step) => {
+        ScrollTrigger.create({
+          trigger: step,
+          start: 'top 68%',
+          end: 'bottom 40%',
+          onToggle: (self) => step.classList.toggle('is-active', self.isActive),
+        });
+        // x-only entrance: opacity belongs to the CSS dim rule above — tweening
+        // autoAlpha here would leave inline opacity:1 and kill the effect.
+        gsap.from(step, {
+          x: 40,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: step, start: 'top 88%', once: true },
+        });
+      });
+    });
+  }
+
+  initComprehensivePuppy();
+  document.addEventListener('astro:page-load', initComprehensivePuppy);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>
