@@ -6,8 +6,9 @@ import sitemap from '@astrojs/sitemap';
 // - format:'file' + trailingSlash:'never' => GH Pages serves every legacy
 //   extensionless URL with a direct 200, no server redirects needed.
 // - redirects below become meta-refresh stub pages for consolidated slugs.
-// - site stays the final custom domain; preview indexing is blocked by robots.txt
-//   until cutover (Stage 5).
+// - site is the final custom domain (Hostinger); cutover is COMPLETE and the site
+//   is LIVE + fully indexable (public/robots.txt = "Allow: /" + sitemap, no noindex).
+//   Do NOT re-add a Disallow — that only applied to the pre-cutover preview.
 export default defineConfig({
   site: 'https://www.thefairytails.co.uk',
   trailingSlash: 'never',
@@ -35,6 +36,9 @@ export default defineConfig({
         item.url = item.url.replace(/\.html$/, '');
         return item;
       },
+      // The Breed Matcher is a standalone public/ tool (not an Astro page), so the
+      // integration can't discover it — list it so it's indexable too.
+      customPages: ['https://www.thefairytails.co.uk/breed-matcher/'],
     }),
   ],
 });

@@ -106,7 +106,7 @@ The foundation is built. **`src/pages/dog-boarding-school.astro` is the referenc
 - ClientRouter lifecycle: re-run `init()` on `astro:page-load`, and **kill all ScrollTriggers on `astro:before-swap`** or they leak across navigations.
 - Hero video: `preload="none"`, lazy `.load()/.play()` after first paint, **skipped for reduced-motion or `navigator.connection.saveData`**; the `poster` is the fallback frame.
 
-**URL-preservation mechanics** (the SEO migration). In `astro.config.mjs`, `site` is the **final custom domain**, so canonical/OG/sitemap URLs point there *even on the preview* — which is why `public/robots.txt` is Disallow-all until cutover. `format:'file'` + `trailingSlash:'never'` serve every legacy URL extensionless; `redirects` are the 10 consolidated legacy slugs (emitted as meta-refresh stubs); the sitemap integration strips the `.html`. `src/pages/404.astro` strips a stray trailing slash and retries once. Keep `scripts/verify-urls.mjs` green before every sign-off.
+**URL-preservation mechanics** (the SEO migration). In `astro.config.mjs`, `site` is the **final custom domain**, so canonical/OG/sitemap URLs point there *even on the preview*. **Cutover is COMPLETE: the live site is fully indexable — `public/robots.txt` = `Allow: /` + sitemap, and there is NO `noindex` anywhere (owner wants max SEO, 2026-07-06). Do not re-add a Disallow/noindex.** `format:'file'` + `trailingSlash:'never'` serve every legacy URL extensionless; `redirects` are the 10 consolidated legacy slugs (emitted as meta-refresh stubs); the sitemap integration strips the `.html`. `src/pages/404.astro` strips a stray trailing slash and retries once. Keep `scripts/verify-urls.mjs` green before every sign-off.
 
 ## Value-added tools (standalone mini-apps)
 
