@@ -5,7 +5,7 @@ import logo from '../assets/brand/logo.png';
 
 // Inside-out build: nav links are added as pages go live on the preview
 // (WEBSITE-PLAN.md risk #8). Currently live: Board & Train, Intensive Dog Training,
-// Dog Day School, Puppy Classes, Gallery. Grooming = the sister business site
+// Dog Day School, Puppy School (= Comprehensive Puppy Training), Gallery. Grooming = the sister business site
 // (owner decision 2026-07-04: a main product, belongs in the header; Blog lives
 // in the footer only — it's mainly for SEO).
 // Contact lives in the FOOTER only (owner decision 2026-07-04: keeps the desktop
@@ -16,7 +16,10 @@ const nav = [
   // the one-line desktop nav overflow — flag with owner; page title unchanged).
   { label: 'Intensive Training', href: '/intensive-dog-training' },
   { label: 'Dog Day School', href: '/dog-day-school' },
-  { label: 'Puppy Classes', href: '/puppy-training-classes' },
+  // "Puppy School" = the Comprehensive Puppy Training page — our PRIMARY puppy
+  // offer (owner 2026-07-06). Puppy Training Classes is no longer in the nav but
+  // stays reachable via internal links (homepage grid + the puppy pages' cross-sell).
+  { label: 'Puppy School', href: '/comprehensive-puppy-training' },
   { label: 'Grooming', href: business.groomingSite },
   { label: 'Gallery', href: '/gallery' },
 ];

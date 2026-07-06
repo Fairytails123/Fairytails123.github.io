@@ -1,11 +1,11 @@
 # Page 4b — Comprehensive Puppy Training — FINAL SPEC (pre-build interview 2026-07-06)
 
-**Slug:** `/comprehensive-puppy-training` (NEW, off-plan page — added 2026-07-06 at owner request). **Kept OUT of the nav** (owner: nav-weight) — surfaced from homepage options + the puppy-classes cross-sell. Product = `pricing.json` id `puppy-intensive` (**Comprehensive Puppy Training, £1,200, "for 1 month", "Local puppies up to 18 weeks"**).
+**Slug:** `/comprehensive-puppy-training` (NEW, off-plan page — added 2026-07-06 at owner request). **In the main nav as "Puppy School"** (owner update 2026-07-06 — reversed the initial off-nav plan; this is the primary puppy offer, replacing the "Puppy Classes" nav item). Puppy Training Classes stays reachable via internal links. Product = `pricing.json` id `puppy-intensive` (**Comprehensive Puppy Training, £1,200, "for 1 month", "Local puppies up to 18 weeks"**).
 **Reference implementation:** `src/pages/puppy-training-classes.astro` (mirrored conventions — hero, GSAP contract, price-from-pricing.json, enquiry-first CTAs).
 **Grounding:** recon workflow `wf_30dfc61b-08f` (9 agents) — differentiation map, SEO targets, section plan.
 
 ## Why this page exists
-Owner decision (2026-07-06): the £1,200 Comprehensive Puppy Training product gets its **own dedicated page** rather than borrowing `/intensive-dog-training`. Off-nav to keep the desktop nav one line. It is the destination for the homepage `puppy-intensive` card and the puppy-classes "Comprehensive Puppy Training" cross-sell card.
+Owner decision (2026-07-06): the £1,200 Comprehensive Puppy Training product gets its **own dedicated page** rather than borrowing `/intensive-dog-training`. **Update same day:** promoted to the **main nav as "Puppy School"** (the primary puppy offer), replacing the "Puppy Classes" nav item; Puppy Training Classes stays reachable via internal links. It is also the destination for the homepage `puppy-intensive` card and the puppy-classes cross-sell card.
 
 ## Locked interview decisions (owner, 2026-07-06)
 
@@ -18,7 +18,7 @@ Owner decision (2026-07-06): the £1,200 Comprehensive Puppy Training product ge
 | 5 | **CTAs** | **Enquiry primary** (`#enquire`) + **free phone consult secondary** (`business.acuity.freeConsult`, appt 56694430). No direct Acuity booking (`puppy-intensive.acuityUrl` is null — "bespoke month, we start with a chat"). |
 | 6 | **Hero media** | **Reuse a live puppy clip now** (`/media/puppy-classes-hero.mp4` + poster) via the `data-hero-video` lazy pattern. **TODO(owner):** swap in a bespoke full-day / trainer-led clip later (code-commented in the hero). |
 | 7 | **Proof** | Graceful **dashed placeholder** (client-dog media consent-gated) until a real puppy-graduate story lands. |
-| 8 | **Homepage surfacing** | Repointed **now**: `index.astro` `detailHref['puppy-intensive']` → `/comprehensive-puppy-training`. The real homepage is built LAST — this decision (**surface from homepage options, NOT the nav**) is recorded in WEBSITE-PLAN.md for that build. |
+| 8 | **Nav + homepage surfacing** | **In the main nav as "Puppy School"** (owner update 2026-07-06 — replaced the "Puppy Classes" nav item; Header `nav[]` updated). Also repointed: `index.astro` `detailHref['puppy-intensive']` → `/comprehensive-puppy-training`. Puppy Training Classes stays reachable via internal links (homepage grid + cross-sell), not the nav. |
 | 9 | **Copy** | Claude-drafted from the brief + site voice; `monthPlan`, `faqs`, `rhythm` copy flagged **DRAFT** for owner correction on the preview. |
 | 10 | **Assets** | Reuses real harvest photos cross-folder (puppy-classes / boarding / intensive / day-school sets) — towns/bus/park/loose-lead for the real-world grid. A dedicated `src/assets/pages/comprehensive-puppy-training/` folder can replace them if the owner wants bespoke images. |
 
@@ -42,7 +42,7 @@ Owner decision (2026-07-06): the £1,200 Comprehensive Puppy Training product ge
 - `src/pages/index.astro` — `detailHref['puppy-intensive']` → `/comprehensive-puppy-training` (homepage repoint).
 - `src/pages/puppy-training-classes.astro` — the "Puppy Pathways" Comprehensive-Puppy card link → `/comprehensive-puppy-training` (was `/intensive-dog-training`); button text → "Comprehensive puppy training".
 - `scripts/verify-urls.mjs` — `/comprehensive-puppy-training` added as `status:'built'`.
-- `Header.astro` — **NOT touched** (off-nav, by decision).
+- `Header.astro` — nav item **"Puppy Classes" → "Puppy School"** relabelled and repointed to `/comprehensive-puppy-training` (owner update 2026-07-06). Puppy Training Classes leaves the nav (still internally linked from the homepage grid + the puppy pages' cross-sell).
 - **TEMP link remaining:** the DIY-course pathway card → `/blog` until page 7 `/puppycourse` ships (shares the existing HANDOVER flip-back).
 
 ## Build status (2026-07-06)
@@ -54,7 +54,7 @@ Owner decision (2026-07-06): the £1,200 Comprehensive Puppy Training product ge
 12 findings raised → 7 rejected (false-positive / intentional / draft), **5 survived; 0 high-severity, 0 functional/wiring/GSAP/link defects.** Applied: `text-bark-400`→`bark-500` (AA contrast on card subtitles), deleted 2 dead imports, softened "No separation anxiety" → "Confident when left alone" (absolute-claim/tone), trimmed meta description.
 **Deferred to the site-wide polish pass (NOT page-specific):** `.eyebrow` in `text-honey-600` on cream measures ~3.3–3.6:1 (fails WCAG AA) — a shared design-token issue on every built page (incl. the signed-off reference page); fix once at the token level (e.g. darken eyebrow-on-cream to `honey-700`), and apply the same `bark-400`→`bark-500` bump to the sibling pages for consistency.
 
-Visual check (owner rule): desktop (1920) + mobile (390 via iframe emulation, window was snapped so `resize_window` no-op'd). **0 horizontal-overflow offenders at both widths**; hero, "time on/off" signature, and boarding+council sections eyeballed and correct; nav correctly omits the page.
+Visual check (owner rule): desktop (1920) + mobile (390 via iframe emulation, window was snapped so `resize_window` no-op'd). **0 horizontal-overflow offenders at both widths**; hero, "time on/off" signature, and boarding+council sections eyeballed and correct. (Nav updated 2026-07-06 to include it as "Puppy School" — re-checked one-line desktop fit + mobile drawer.)
 
 ## Quality gates
 `npm run build && npm run verify-urls` green · Lighthouse ≥90 · reduced-motion pass · **desktop (~1440px) AND mobile (~390px) visual check** (owner rule) · owner sign-off on the live preview.
