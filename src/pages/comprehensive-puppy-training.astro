@@ -22,6 +22,22 @@ import countryPark from '../assets/pages/intensive-dog-training/Intensive-Traini
 import busLab from '../assets/pages/dog-boarding-school/Black-Lab-on-the-bus-square-2-2880w.webp';
 import doggyFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
 import buildingConfidence from '../assets/pages/dog-day-school/building-confidence-2880w.webp';
+// Real-world training-in-action photos (our own training reports; head-collar/muzzle screened)
+import cwHenryCafe from '../assets/pages/training-real-world/rw-cafe-henry-301777.webp';
+import cwEnzoSea from '../assets/pages/training-real-world/rw-sea-enzo-092952.webp';
+import cwFrankiePark from '../assets/pages/training-real-world/rw-park-frankie-498846.webp';
+import cwTillySea from '../assets/pages/training-real-world/rw-sea-tilly-990468.webp';
+import cwRubyTown from '../assets/pages/training-real-world/rw-town-ruby-774448.webp';
+import cwAlanBus from '../assets/pages/training-real-world/rw-bus-alan-309772.webp';
+
+const compReal = [
+  { img: cwHenryCafe, name: 'Henry', caption: 'Settled under a café table' },
+  { img: cwEnzoSea, name: 'Enzo', caption: 'Focused on the seafront' },
+  { img: cwRubyTown, name: 'Ruby', caption: 'Settling on a town pavement' },
+  { img: cwAlanBus, name: 'Alan', caption: 'Calm on the bus' },
+  { img: cwFrankiePark, name: 'Frankie', caption: 'A steady sit at the park' },
+  { img: cwTillySea, name: 'Tilly', caption: 'Settling by the seafront' },
+];
 
 const plan = pricing.offerings.find((o) => o.id === 'puppy-intensive');
 const puppyClasses = pricing.offerings.find((o) => o.id === 'puppy-classes');
@@ -219,7 +235,7 @@ const faqs = [
         <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(-2deg);" data-reveal>
           <Image
             src={puppyLabSit}
-            alt="A young puppy sitting and looking up attentively during training"
+            alt="Tilly, a young shepherd puppy, settling calmly by the seafront"
             class="aspect-[4/5] w-full rounded-[2px] object-cover"
             widths={[480, 960]}
             sizes="(min-width: 1024px) 24rem, 90vw"
@@ -427,7 +443,7 @@ const faqs = [
               <figcaption class="bg-cream-50 px-4 py-2 text-sm font-bold text-bark-700">In busy parks</figcaption>
             </figure>
             <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
-              <Image src={classesLeadWalk} alt="A puppy walking nicely on a loose lead" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 22rem, 45vw" />
+              <Image src={classesLeadWalk} alt="Henry, a young cocker spaniel, out on the lead in town" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 22rem, 45vw" />
               <figcaption class="bg-cream-50 px-4 py-2 text-sm font-bold text-bark-700">On the lead</figcaption>
             </figure>
           </div>
@@ -441,6 +457,18 @@ const faqs = [
               <Image src={puppyRecall} alt="A puppy running back to its handler on a recall" class="aspect-[16/9] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 26rem, 90vw" />
             </figure>
           </div>
+        </div>
+
+        <!-- More real-world training photos -->
+        <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" data-stagger>
+          {
+            compReal.map(({ img, name, caption }) => (
+              <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+                <Image src={img} alt={`${name}, a Fairy Tails dog — ${caption.toLowerCase()}`} class="aspect-[4/5] w-full object-cover" widths={[300, 600]} sizes="(min-width: 1024px) 12rem, 45vw" />
+                <figcaption class="bg-cream-50 px-3 py-2 text-xs font-bold text-bark-700">{name} · {caption}</figcaption>
+              </figure>
+            ))
+          }
         </div>
       </div>
     </section>
@@ -498,7 +526,7 @@ const faqs = [
               <Image src={buildingConfidence} alt="A puppy growing in confidence during training" class="aspect-[4/5] w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
             </figure>
             <figure class="polaroid absolute bottom-0 right-0 w-3/5" style="transform: rotate(3.5deg);">
-              <Image src={puppyLifeSkills} alt="A puppy practising its everyday life skills" class="aspect-square w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+              <Image src={puppyLifeSkills} alt="Alan, a young dog, staying calm and focused at a café" class="aspect-square w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
             </figure>
           </div>
           <div>

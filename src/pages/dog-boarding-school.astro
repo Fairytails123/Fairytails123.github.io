@@ -17,6 +17,13 @@ import goldenPuppy from '../assets/pages/dog-boarding-school/Golden-Puppy-cut-ou
 import cycleIndoor from '../assets/pages/dog-boarding-school/Training-Cycle-Graphic-2-1920w.webp';
 import cycleOutdoor from '../assets/pages/dog-boarding-school/Training-Cycle-Graphic-Outside-Areas-1920w.webp';
 import trainingReport from '../assets/pages/dog-boarding-school/Training-Report-2880w.webp';
+// Real-world training-in-action photos (from our own training reports; head-collar/muzzle screened)
+import rwMaxTown from '../assets/pages/training-real-world/rw-town-max-881650.webp';
+import rwNeoTown from '../assets/pages/training-real-world/rw-town-neo-599854.webp';
+import rwAprilCafe from '../assets/pages/training-real-world/rw-cafe-april-207446.webp';
+import rwRigsbyTown from '../assets/pages/training-real-world/rw-town-rigsby-191827.webp';
+import rwDiegoSea from '../assets/pages/training-real-world/rw-sea-diego-534158.webp';
+import rwBayPark from '../assets/pages/training-real-world/rw-park-bay-711487.webp';
 
 const boardTrain = pricing.offerings
   .filter((o) => o.category === 'board-train')
@@ -117,6 +124,12 @@ const clientCards = [
   { img: dogWalk, caption: "It's not all hard work!", rotate: 2.4 },
   { img: collie, caption: 'Focus, even mid-adventure', rotate: -1.8 },
   { img: goldenPuppy, caption: 'Start them young', rotate: 1.4 },
+  { img: rwMaxTown, caption: 'Max, a steady sit on the high street', rotate: -2.2 },
+  { img: rwNeoTown, caption: 'Neo, calm on a busy street', rotate: 1.5 },
+  { img: rwAprilCafe, caption: 'April, settled at the café', rotate: -1.4 },
+  { img: rwRigsbyTown, caption: 'Rigsby, focused in town', rotate: 2.2 },
+  { img: rwDiegoSea, caption: 'Diego, relaxed by the seafront', rotate: -1.7 },
+  { img: rwBayPark, caption: 'Bay, settled as a runner passes', rotate: 1.9 },
 ];
 
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;

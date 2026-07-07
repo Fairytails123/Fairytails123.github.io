@@ -24,6 +24,17 @@ import clubWalk from '../assets/pages/dog-day-school/happy-walk-2880w.webp';
 import clubFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
 // About/team — Kam on a countryside walk (reused; swap for a real founder/team shot)
 import teamKam from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
+// Real-world training-in-action photos (our own training reports; head-collar/muzzle screened)
+import rwRiverTown from '../assets/pages/training-real-world/rw-town-river-247356.webp';
+import rwAprilTown from '../assets/pages/training-real-world/rw-town-april-937294.webp';
+import rwMollieCafe from '../assets/pages/training-real-world/rw-cafe-mollie-010064.webp';
+import rwRubyCafe from '../assets/pages/training-real-world/rw-cafe-ruby-956654.webp';
+import rwRitaSea from '../assets/pages/training-real-world/rw-sea-rita-125907.webp';
+import rwPoppyPark from '../assets/pages/training-real-world/rw-park-poppy-825045.webp';
+import rwRiverTown2 from '../assets/pages/training-real-world/rw-town-river-894739.webp';
+import rwAprilCafe2 from '../assets/pages/training-real-world/rw-cafe-april-883168.webp';
+import rwCheeSea from '../assets/pages/training-real-world/rw-sea-chee-494052.webp';
+import rwHenryPark from '../assets/pages/training-real-world/rw-park-henry-693647.webp';
 
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
 const bySort = (a: any, b: any) => a.order - b.order;
@@ -87,6 +98,20 @@ const rail = [
   { img: railG, name: 'Enzo', caption: 'Countryside adventures', rotate: -2.1 },
   { img: railH, name: 'Bay', caption: 'Settled and calm', rotate: 1.6 },
   { img: railI, name: 'Teddy', caption: 'Playtime at the barn', rotate: -1.3 },
+  { img: rwRiverTown2, name: 'River', caption: 'Settled on the high street', rotate: 2.0 },
+  { img: rwAprilCafe2, name: 'April', caption: 'Calm in a busy café', rotate: -1.7 },
+  { img: rwCheeSea, name: 'Chee', caption: 'Relaxed down by the harbour', rotate: 1.5 },
+  { img: rwHenryPark, name: 'Henry', caption: 'Lovely focus at the park', rotate: -2.0 },
+];
+
+// Real-world training-in-action (our own training-report photos; head-collar/muzzle screened)
+const realWorld = [
+  { img: rwRiverTown, name: 'River', caption: 'Calm on a busy street' },
+  { img: rwAprilTown, name: 'April', caption: 'A steady sit in town' },
+  { img: rwMollieCafe, name: 'Mollie', caption: 'Settled outside the café' },
+  { img: rwRubyCafe, name: 'Ruby', caption: 'Relaxed at the café' },
+  { img: rwRitaSea, name: 'Rita', caption: 'Steady on the seafront' },
+  { img: rwPoppyPark, name: 'Poppy', caption: 'A calm lead walk in the park' },
 ];
 
 // Life in the club
@@ -386,6 +411,31 @@ const jsonLd = {
               </a>
             ))
           }
+        </div>
+
+        <!-- Real-world training in action -->
+        <div class="mt-16" data-reveal>
+          <h3 class="font-display text-2xl font-bold text-cream-50">Out in the real world</h3>
+          <p class="mt-2 max-w-2xl text-cream-200">
+            The whole point is a dog you can take anywhere. Here are some of our dogs staying calm and
+            focused around town, in cafés and on the seafront — the real world, not just the training field.
+          </p>
+          <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" data-stagger>
+            {
+              realWorld.map(({ img, name, caption }) => (
+                <figure class="overflow-hidden rounded-2xl bg-pine-900 ring-1 ring-cream-100/10">
+                  <Image
+                    src={img}
+                    alt={`${name}, a Fairy Tails dog — ${caption.toLowerCase()}`}
+                    class="aspect-[4/5] w-full object-cover"
+                    widths={[300, 600]}
+                    sizes="(min-width: 1024px) 12rem, 45vw"
+                  />
+                  <figcaption class="px-3 py-2 text-xs font-bold text-cream-200">{name} · {caption}</figcaption>
+                </figure>
+              ))
+            }
+          </div>
         </div>
         <p class="mt-9 max-w-3xl text-cream-200" data-reveal>
           Not sure which fits? <a href="#enquire" class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">Tell us about your dog</a>

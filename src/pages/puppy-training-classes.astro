@@ -13,6 +13,22 @@ import classesLeadWalk from '../assets/pages/puppy-training-classes/classes-lead
 import puppyLabSit from '../assets/pages/puppy-training-classes/puppy-lab-sit.webp';
 import puppyHeadTilt from '../assets/pages/puppy-training-classes/puppy-head-tilt.webp';
 import puppyTerrierGrass from '../assets/pages/puppy-training-classes/puppy-terrier-grass.webp';
+// Real-world training-in-action photos (our own training reports; head-collar/muzzle screened)
+import pwTillyTown from '../assets/pages/training-real-world/rw-town-tilly-368642.webp';
+import pwEnzoMilesCafe from '../assets/pages/training-real-world/rw-cafe-enzo-miles-985754.webp';
+import pwNeoCafe from '../assets/pages/training-real-world/rw-cafe-neo-573493.webp';
+import pwBettySea from '../assets/pages/training-real-world/rw-sea-betty-015232.webp';
+import pwFrankiePark from '../assets/pages/training-real-world/rw-park-frankie-278656.webp';
+import pwHenryPark from '../assets/pages/training-real-world/rw-park-henry-555952.webp';
+
+const realWorld = [
+  { img: pwTillyTown, name: 'Tilly', caption: 'Relaxed on a busy street' },
+  { img: pwEnzoMilesCafe, name: 'Enzo & Miles', caption: 'Settling at the café' },
+  { img: pwNeoCafe, name: 'Neo', caption: 'Calm at the café' },
+  { img: pwBettySea, name: 'Betty', caption: 'Loose lead by the seafront' },
+  { img: pwFrankiePark, name: 'Frankie', caption: 'Settling on the park path' },
+  { img: pwHenryPark, name: 'Henry', caption: 'Focused at the park' },
+];
 
 const plan = pricing.offerings.find((o) => o.id === 'puppy-classes');
 const puppyBoard = pricing.offerings.find((o) => o.id === 'board-train-puppy');
@@ -274,8 +290,8 @@ const faqs = [
             <figure class="mt-7 overflow-hidden rounded-xl">
               <Image
                 src={classesLeadWalk}
-                alt="A puppy on a loose lead looking up at its handler"
-                class="aspect-[16/9] w-full object-cover"
+                alt="Henry, a young cocker spaniel, out on the lead in town"
+                class="aspect-square w-full object-cover"
                 widths={[480, 960]}
                 sizes="(min-width: 1024px) 32rem, 90vw"
               />
@@ -421,10 +437,10 @@ const faqs = [
         <div class="mt-16 grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
           <div class="relative mx-auto h-[24rem] w-full max-w-md" data-reveal>
             <figure class="polaroid absolute left-0 top-2 w-3/5" style="transform: rotate(-4deg);">
-              <Image src={puppyLabSit} alt="A young puppy sitting and looking up attentively" class="aspect-[4/5] w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+              <Image src={puppyLabSit} alt="Tilly, a young shepherd puppy, settling by the seafront" class="aspect-[4/5] w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
             </figure>
             <figure class="polaroid absolute bottom-0 right-0 w-3/5" style="transform: rotate(3.5deg);">
-              <Image src={puppySocialisation} alt="Two puppies sitting together at class" class="aspect-square w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
+              <Image src={puppySocialisation} alt="Enzo and Miles waiting nicely together outside a café" class="aspect-square w-full rounded-[2px] object-cover" widths={[360, 720]} sizes="16rem" />
             </figure>
           </div>
           <div>
@@ -459,6 +475,25 @@ const faqs = [
             <h3 class="font-display text-xl font-bold text-moss-700">What our puppy parents say</h3>
             <p class="mt-2 leading-relaxed text-bark-700">A graduate pup’s story is on its way to this spot.</p>
           </article>
+        </div>
+
+        <!-- Real-world training photos -->
+        <div class="mt-14" data-reveal>
+          <h3 class="font-display text-2xl font-bold text-moss-800">Out in the real world</h3>
+          <p class="mt-2 max-w-2xl leading-relaxed text-bark-700">
+            Classes are just the start. Here are some of our dogs staying calm and focused where it really
+            counts — around town, in cafés, at the park and down on the seafront.
+          </p>
+          <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6" data-stagger>
+            {
+              realWorld.map(({ img, name, caption }) => (
+                <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]">
+                  <Image src={img} alt={`${name}, a Fairy Tails dog — ${caption.toLowerCase()}`} class="aspect-[4/5] w-full object-cover" widths={[300, 600]} sizes="(min-width: 1024px) 12rem, 45vw" />
+                  <figcaption class="bg-cream-50 px-3 py-2 text-xs font-bold text-bark-700">{name} · {caption}</figcaption>
+                </figure>
+              ))
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -626,7 +661,7 @@ const faqs = [
         <figure class="mx-auto mt-10 w-44" data-reveal>
           <Image
             src={puppyHeadTilt}
-            alt="A puppy tilting its head curiously"
+            alt="Ruby, a young spaniel, focused at the café"
             class="aspect-square w-full rounded-2xl object-cover shadow-[var(--shadow-lift)]"
             widths={[176, 352]}
             sizes="11rem"
