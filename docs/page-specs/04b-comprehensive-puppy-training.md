@@ -1,5 +1,7 @@
 # Page 4b — Comprehensive Puppy Training — FINAL SPEC (pre-build interview 2026-07-06)
 
+> **📸 Update 2026-07-07 (LIVE):** a real-world photo strip (6 real town/café/seafront/bus/park shots) was appended to the "Into the world" section. The shared stock/AI filler images this page uses (`puppy-lab-sit`, `puppy-life-skills`, `classes-lead-walk`) were **replaced with real photos** and their alt text updated. Source + method: `docs/training-photo-pipeline.md`; head-collar/muzzle screened. See HANDOVER 2026-07-07.
+
 **Slug:** `/comprehensive-puppy-training` (NEW, off-plan page — added 2026-07-06 at owner request). **In the main nav as "Puppy School"** (owner update 2026-07-06 — reversed the initial off-nav plan; this is the primary puppy offer, replacing the "Puppy Classes" nav item). Puppy Training Classes stays reachable via internal links. Product = `pricing.json` id `puppy-intensive` (**Comprehensive Puppy Training, £1,200, "for 1 month", "Local puppies up to 18 weeks"**).
 **Reference implementation:** `src/pages/puppy-training-classes.astro` (mirrored conventions — hero, GSAP contract, price-from-pricing.json, enquiry-first CTAs).
 **Grounding:** recon workflow `wf_30dfc61b-08f` (9 agents) — differentiation map, SEO targets, section plan.

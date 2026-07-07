@@ -1,5 +1,7 @@
 # FINAL page spec — `/dog-boarding-school` (Board & Train)
 
+> **📸 Update 2026-07-07 (LIVE):** the PROOF polaroid rail (`clientCards`) was extended **6 → 12** with real café/town/seafront/park training shots from `src/assets/pages/training-real-world/`. Source + reusable method in `docs/training-photo-pipeline.md`; every shot head-collar/muzzle-screened. See HANDOVER 2026-07-07.
+
 > Produced by the pre-build interview on **2026-06-12**. This is the **final word** for page 1,
 > superseding the baseline in `WEBSITE-PLAN.md` where they differ. Locked site-wide decisions
 > (enquiry form = primary CTA, prices, Acuity links byte-for-byte) still apply.

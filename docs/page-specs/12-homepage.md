@@ -1,5 +1,7 @@
 # FINAL page spec — `/` (Homepage — the LAST page, the flagship)
 
+> **📸 Update 2026-07-07 (LIVE):** Track 1 ("Training that transforms", `#Trainingplans`) — previously photo-less — got a new "Out in the real world" `data-stagger` photo grid (6 real town/café/seafront/park shots, `realWorld` array), and the PROOF polaroid `rail` was topped up **9 → 13**. Source + method: `docs/training-photo-pipeline.md`; head-collar/muzzle screened. See HANDOVER 2026-07-07.
+
 > Produced by the pre-build interview on **2026-07-02** (4 rounds, 16 questions). This is the **final
 > word** for page 12, superseding the baseline in `WEBSITE-PLAN.md` where they differ. Locked
 > site-wide decisions still apply (enquiry form = primary CTA, prices live in `pricing.json`, Acuity

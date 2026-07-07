@@ -1,5 +1,7 @@
 # FINAL page spec — `/intensive-dog-training` (Intensive Dog Training)
 
+> **📸 Update 2026-07-07 (LIVE):** the PROOF polaroid rail (`clientCards`) was extended **4 → 10** with real café/town/seafront/park training shots from `src/assets/pages/training-real-world/`. Source + reusable method in `docs/training-photo-pipeline.md`; every shot head-collar/muzzle-screened. See HANDOVER 2026-07-07.
+
 > Produced by the pre-build interview on **2026-06-29**. This is the **final word** for page 2,
 > superseding the baseline in `WEBSITE-PLAN.md` where they differ. Locked site-wide decisions
 > (enquiry form = primary CTA, prices live in `pricing.json`, Acuity links byte-for-byte, warm
