@@ -79,3 +79,15 @@
 
 ## Quality gates
 - `npm run build && npm run verify-urls` green; Lighthouse ≥90; reduced-motion pass; **desktop AND mobile visual check** before ship; live preview owner sign-off.
+
+## BUILD STATE (2026-07-08) — BUILT on preview, not yet deployed
+
+Built as `src/pages/training-plans.astro` (mirrors `dog-boarding-school.astro`; frontend-design skill). **Final build decisions (owner 2026-07-08, on top of the locked table above):**
+- **Nav:** footer + homepage only — no nav item added (nav stays 6, one-line-locked). `Footer.astro` +Training Plans; `index.astro` #Trainingplans got a "Compare all training plans" honey CTA.
+- **Budget chips:** price ranges only (`£0–£175` / `£1,200+`) — no word labels.
+- **Grid default order:** flagship programmes first (board-train-puppy, board-train-adult, intensive, puppy-intensive, board-train-holiday, puppy-classes, one-to-one, social-walks, free-consult). Free Consult last + honey-elevated (ring + "Start here"), `data-always` so it's never dimmed.
+- **Hero:** owner picked a **variety montage**; built from the `Training1` reserve clip (`Videos\_owner-dropins\site-videos\…Training1-v.mp4`), center-cropped portrait→16:9, 4 shots (seafront → boxer → husky → podenco) crossfaded, warm graded, 10.8s/1.6MB → `public/media/training-plans-hero.mp4` + `-poster.jpg`. **Interim — owner reviews/approves the cut.** No head collars (screened).
+- **Filter mechanic:** multi-select; AND across axes, OR within an axis; soft-dim = class `is-dimmed` (opacity .28 + `saturate(.55)` + `scale(.97)`, CSS-transitioned, no reflow); live count `aria-live`; empty note `role="status"`; `.is-dimmed:focus-within` restores full visibility for keyboard users; chip groups `role="group"`+`aria-labelledby`.
+- **Copy:** all DRAFT (headline, intro, each card's "best for", closing band) — owner corrects on preview. Prices in prose derived from data (`socialWalkPrice`), never hard-coded.
+- **Adversarial review:** 6-dimension workflow → 5 confirmed findings, all fixed (clearProps transform; focus-within; chip-group labelling; £20-from-data; empty-state announcement/count). Full list in `HANDOVER.md` 2026-07-08.
+- **Verified:** build 32 pages 0 errors; verify-urls 0 failures; filter logic + CTAs + soft-dim live-verified in-browser; no desktop overflow. **Mobile real-phone check + hero sign-off + copy corrections still owed by owner; not yet committed/deployed.**

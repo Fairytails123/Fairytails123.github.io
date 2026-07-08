@@ -1,0 +1,684 @@
+---
+// Page 5 — Training Plans (/training-plans). NEW page, no old-site equivalent.
+// Spec: docs/page-specs/05-training-plans.md (+ 2026-07-08 build decisions).
+// Signature interaction: instant multi-axis filter chips that soft-dim the grid.
+// Prices/facts come from pricing.json — never hard-code money. Copy is DRAFT
+// (owner corrects on preview). Mirrors dog-boarding-school.astro conventions.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+// Real training-in-action photos (our own training reports; head-collar/muzzle screened).
+import imgBoardPuppy from '../assets/pages/training-real-world/rw-park-frankie-278656.webp';
+import imgBoardAdult from '../assets/pages/training-real-world/rw-town-river-247356.webp';
+import imgIntensive from '../assets/pages/training-real-world/rw-town-rocco-736596.webp';
+import imgCompPuppy from '../assets/pages/training-real-world/rw-cafe-ruby-495919.webp';
+import imgHoliday from '../assets/pages/training-real-world/rw-sea-tilly-990468.webp';
+import imgClasses from '../assets/pages/training-real-world/rw-cafe-henry-301777.webp';
+import imgOneToOne from '../assets/pages/training-real-world/rw-park-henry-555952.webp';
+import imgWalks from '../assets/pages/training-real-world/rw-park-tato-269715.webp';
+
+const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+
+const byId = Object.fromEntries(pricing.offerings.map((o) => [o.id, o]));
+// Prices in prose come from data too (project rule: never hard-code money in copy).
+const socialWalkPrice = gbp(byId['social-walks'].price);
+
+// Build-decision (owner 2026-07-08): flagship programmes lead; free consult last,
+// elevated as the always-visible "start here" safety net.
+type PlanMeta = {
+  bestFor: string;
+  age: string[];
+  goal: string[];
+  format: string[];
+  budget: string[];
+  cta: { label: string; href: string };
+  img?: ImageMetadata;
+  imgAlt?: string;
+  elevated?: boolean;
+};
+
+const meta: Record<string, PlanMeta> = {
+  'board-train-puppy': {
+    bestFor: 'Puppies 12–16 weeks who can live in with us and get the deepest possible start.',
+    age: ['puppy'],
+    goal: ['obedience', 'socialisation'],
+    format: ['residential'],
+    budget: ['programme'],
+    cta: { label: 'Explore Board & Train', href: '/dog-boarding-school' },
+    img: imgBoardPuppy,
+    imgAlt: 'A young dog learning to settle calmly on a walk during training',
+  },
+  'board-train-adult': {
+    bestFor: 'Adult dogs with real behaviour issues who need the fullest, live-in transformation.',
+    age: ['adult'],
+    goal: ['behaviour', 'obedience'],
+    format: ['residential'],
+    budget: ['programme'],
+    cta: { label: 'Explore Board & Train', href: '/dog-boarding-school' },
+    img: imgBoardAdult,
+    imgAlt: 'A dog walking calmly on a lead through a Hastings street',
+  },
+  'intensive-dog-training': {
+    bestFor: 'Local dogs with behavioural issues — the residential-grade programme, home every night.',
+    age: ['adult'],
+    goal: ['behaviour'],
+    format: ['day-based'],
+    budget: ['programme'],
+    cta: { label: 'Explore Intensive', href: '/intensive-dog-training' },
+    img: imgIntensive,
+    imgAlt: 'A dog focused on its handler amid the distractions of a town centre',
+  },
+  'puppy-intensive': {
+    bestFor: 'Local pups up to 18 weeks — trainer-led, we do the day-in, day-out heavy lifting for you.',
+    age: ['puppy'],
+    goal: ['socialisation', 'obedience'],
+    format: ['day-based'],
+    budget: ['programme'],
+    cta: { label: 'Explore Puppy School', href: '/comprehensive-puppy-training' },
+    img: imgCompPuppy,
+    imgAlt: 'A puppy settled calmly beside a café table during socialisation training',
+  },
+  'board-train-holiday': {
+    bestFor: "Dogs boarding while you're away — a holiday that comes home better trained.",
+    age: ['puppy', 'adult'],
+    goal: ['obedience', 'socialisation'],
+    format: ['residential'],
+    budget: ['programme'],
+    cta: { label: 'Explore Board & Train', href: '/dog-boarding-school' },
+    img: imgHoliday,
+    imgAlt: 'A dog relaxed and attentive on the Hastings seafront',
+  },
+  'puppy-classes': {
+    bestFor: 'New puppy owners who want to learn the ropes together — one evening a week, hands-on.',
+    age: ['puppy'],
+    goal: ['obedience', 'socialisation'],
+    format: ['group-class'],
+    budget: ['pay-as-you-go'],
+    cta: { label: 'Explore Puppy Classes', href: '/puppy-training-classes' },
+    img: imgClasses,
+    imgAlt: 'A puppy learning to settle in a busy café environment',
+  },
+  'one-to-one': {
+    bestFor: "One specific problem you'd like tackled privately, at your dog's own pace.",
+    age: ['puppy', 'adult'],
+    goal: ['behaviour', 'obedience'],
+    format: ['one-to-one'],
+    budget: ['pay-as-you-go'],
+    cta: { label: 'Book a session', href: business.acuity.oneToOne },
+    img: imgOneToOne,
+    imgAlt: 'A dog and handler working quietly together in the park',
+  },
+  'social-walks': {
+    bestFor: 'Existing school dogs who need calm, structured enrichment out with the pack.',
+    age: ['puppy', 'adult'],
+    goal: ['socialisation', 'enrichment'],
+    format: ['walk'],
+    budget: ['pay-as-you-go'],
+    cta: { label: 'Ask us about walks', href: business.acuity.freeConsult },
+    img: imgWalks,
+    imgAlt: 'Dogs enjoying a calm group walk through the countryside',
+  },
+  'free-consult': {
+    bestFor: "Not sure which fits? A free 15-minute call and we'll point you to the honest best fit.",
+    age: ['puppy', 'adult'],
+    goal: ['obedience', 'behaviour', 'socialisation', 'enrichment'],
+    format: ['residential', 'day-based', 'group-class', 'one-to-one', 'walk'],
+    budget: ['pay-as-you-go', 'programme'],
+    cta: { label: 'Book your free call', href: business.acuity.freeConsult },
+    elevated: true,
+  },
+};
+
+const order = [
+  'board-train-puppy',
+  'board-train-adult',
+  'intensive-dog-training',
+  'puppy-intensive',
+  'board-train-holiday',
+  'puppy-classes',
+  'one-to-one',
+  'social-walks',
+  'free-consult',
+];
+
+const plans = order.map((id) => ({ ...byId[id], ...meta[id] }));
+
+// Filter chip axes. Budget labels = price ranges only (owner 2026-07-08).
+const axes = [
+  {
+    key: 'age',
+    label: 'Age',
+    chips: [
+      { v: 'puppy', label: 'Puppy' },
+      { v: 'adult', label: 'Adult' },
+    ],
+  },
+  {
+    key: 'goal',
+    label: 'Goal',
+    chips: [
+      { v: 'obedience', label: 'Obedience' },
+      { v: 'behaviour', label: 'Behaviour' },
+      { v: 'socialisation', label: 'Socialisation' },
+      { v: 'enrichment', label: 'Enrichment' },
+    ],
+  },
+  {
+    key: 'format',
+    label: 'Format',
+    chips: [
+      { v: 'residential', label: 'Residential' },
+      { v: 'day-based', label: 'Day-based' },
+      { v: 'group-class', label: 'Group class' },
+      { v: 'one-to-one', label: 'One-to-one' },
+      { v: 'walk', label: 'Walk' },
+    ],
+  },
+  {
+    key: 'budget',
+    label: 'Budget',
+    chips: [
+      { v: 'pay-as-you-go', label: '£0–£175' },
+      { v: 'programme', label: '£1,200+' },
+    ],
+  },
+];
+---
+
+<Base
+  title="Dog Training Plans & Prices | The Fairy Tails K9 Centre"
+  description={`Compare every way to train with us in Hastings & St Leonards — from ${socialWalkPrice} social walks to live-in Board & Train. Filter by age, goal, format and budget, or book a free phone consult.`}
+  path="/training-plans"
+>
+  <div data-page="training-plans">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[86svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <!-- Interim hero: a "range of training" montage. TODO(owner): swap for your
+             chosen clip once picked from the candidate stills (page spec open item). -->
+        <video
+          class="h-full w-full object-cover"
+          poster="/media/training-plans-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          data-hero-video
+          data-hero-media
+          aria-hidden="true"
+        >
+          <source src="/media/training-plans-hero.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/50 to-pine-950/25"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>
+          Every dog · every budget · Hastings &amp; St Leonards
+        </p>
+        <h1
+          class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl"
+          data-hero-title
+        >
+          <span class="hero-line block">Find the</span>
+          <span class="hero-line block"><em class="squiggle not-italic">right way</em> to train</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Nine honest ways to train with us — from a {socialWalkPrice} social walk to a live-in Board &amp; Train.
+          Filter to your dog, or let a free phone call point you to the best fit.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href={business.acuity.freeConsult} class="btn btn-honey">
+            Book a free consult <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href="#plans" class="btn btn-ghost-light"> See the plans </a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul
+        class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4"
+      >
+        <li class="paw-bullet flex items-center text-moss-700">Nine ways to train — honestly</li>
+        <li class="paw-bullet flex items-center text-moss-700">From {socialWalkPrice} to live-in residential</li>
+        <li class="paw-bullet flex items-center text-moss-700">A free call to point you right</li>
+        <li class="paw-bullet flex items-center text-moss-700">5-star council-licensed premises</li>
+      </ul>
+    </div>
+
+    <!-- ============ INTRO ============ -->
+    <section class="mx-auto max-w-3xl px-4 py-20 text-center sm:py-24" data-section="intro">
+      <p class="eyebrow text-honey-600" data-reveal>Where to start</p>
+      <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+        There's no single right way — <em class="squiggle not-italic">just the right one for your dog</em>
+      </h2>
+      <p class="mt-6 text-lg leading-relaxed text-bark-700" data-reveal>
+        The right plan depends on your dog's age, what you're trying to fix, how hands-on you want to
+        be, and your budget. Below are the nine ways we can help. Use the filters to narrow them down —
+        or skip all that and book a free phone call. We'll point you to the honest best fit, even if
+        it's the cheapest option on the page.
+      </p>
+    </section>
+
+    <!-- ============ SIGNATURE: FILTER + GRID ============ -->
+    <section class="bg-cream-100" data-section="plans">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div id="plans" class="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24 pt-12">
+        <div class="max-w-2xl">
+          <p class="eyebrow text-honey-600" data-reveal>Find your fit</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            Filter to <em class="squiggle not-italic">your dog</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Tap the filters and the plans that don't match gently fade back, so the right ones stand
+            out. Nothing is ever hidden — you can always see everything we offer.
+          </p>
+        </div>
+
+        <!-- Filter chips -->
+        <div class="mt-10 rounded-2xl border-2 border-cream-200 bg-cream-50 p-5 sm:p-6" data-reveal>
+          <div class="space-y-3.5" data-filters>
+            {
+              axes.map((axis) => (
+                <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+                  <span id={`tp-axis-${axis.key}`} class="w-full text-xs font-bold uppercase tracking-[0.16em] text-bark-500 sm:w-20 sm:shrink-0">
+                    {axis.label}
+                  </span>
+                  <div class="flex flex-wrap gap-2" role="group" aria-labelledby={`tp-axis-${axis.key}`}>
+                    {axis.chips.map((c) => (
+                      <button
+                        type="button"
+                        class="tp-chip"
+                        data-axis={axis.key}
+                        data-value={c.v}
+                        aria-pressed="false"
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+          <div class="mt-5 flex items-center justify-between gap-4 border-t border-cream-200 pt-4">
+            <p class="text-sm font-bold text-bark-500" data-plan-count aria-live="polite">
+              Showing all {plans.length} plans
+            </p>
+            <button type="button" class="tp-clear" data-plan-clear hidden>
+              Clear filters <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty state note -->
+        <p
+          class="mt-6 rounded-2xl border-2 border-dashed border-honey-400 bg-honey-200/30 px-6 py-4 text-center font-bold text-bark-700"
+          data-plan-empty
+          role="status"
+          hidden
+        >
+          No plans match that exact mix — but a free call will point you to the honest best fit. It's
+          the elevated card below. 👇
+        </p>
+
+        <!-- The grid -->
+        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-plan-grid>
+          {
+            plans.map((plan) => (
+              <article
+                class:list={[
+                  'plan-card group relative flex flex-col overflow-hidden rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]',
+                  plan.elevated && 'is-elevated ring-2 ring-honey-400',
+                ]}
+                data-plan-card
+                data-age={plan.age?.join(' ')}
+                data-goal={plan.goal?.join(' ')}
+                data-format={plan.format?.join(' ')}
+                data-budget={plan.budget?.join(' ')}
+                data-always={plan.elevated ? 'true' : undefined}
+              >
+                {plan.img ? (
+                  <div class="aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={plan.img}
+                      alt={plan.imgAlt ?? plan.name}
+                      widths={[400, 800]}
+                      sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 90vw"
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                ) : (
+                  <div class="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-honey-200 to-honey-400">
+                    <svg class="h-16 w-16 text-honey-700" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M6.5 3h2l1.5 4-2 1.5a12 12 0 0 0 5.5 5.5l1.5-2 4 1.5v2c0 1.1-.9 2-2 2A15 15 0 0 1 4.5 5c0-1.1.9-2 2-2Z"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                )}
+                <div class="flex flex-1 flex-col p-6">
+                  {plan.elevated && <p class="eyebrow text-honey-700">Start here</p>}
+                  <h3 class="font-display text-xl font-bold text-moss-800">{plan.name}</h3>
+                  <p class="mt-2">
+                    <span class="font-display text-3xl font-bold text-moss-700">
+                      {plan.price === 0 ? 'Free' : gbp(plan.price)}
+                    </span>
+                    {plan.price !== 0 && <span class="text-sm font-bold text-bark-500"> {plan.unit}</span>}
+                  </p>
+                  {plan.largeDogSurcharge && (
+                    <p class="mt-1 text-xs font-bold text-honey-700">+{gbp(plan.largeDogSurcharge)} for large dogs</p>
+                  )}
+                  <p class="mt-3 text-sm leading-relaxed text-bark-700">{plan.bestFor}</p>
+                  <ul class="mt-4 flex-1 space-y-1.5 text-sm">
+                    {plan.features.slice(0, 3).map((f) => (
+                      <li class="paw-bullet flex items-start text-moss-600">
+                        <span class="text-bark-700">{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={plan.cta.href}
+                    class:list={['btn mt-6 w-full', plan.elevated ? 'btn-honey' : 'btn-moss']}
+                  >
+                    {plan.cta.label}
+                  </a>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CLOSING + ENQUIRY ============ -->
+    <section id="enquire" class="bg-pine-950" data-section="enquire">
+      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Still not sure?</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            A free call beats a <em class="squiggle not-italic">guess</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+            Fifteen minutes on the phone, no pressure and no cost. Tell us about your dog and we'll
+            point you to the honest best fit — or tell you straight if we're not the right people to
+            help.
+          </p>
+          <div class="mt-8 flex justify-center" data-reveal>
+            <a href={business.acuity.freeConsult} class="btn btn-honey">
+              Book a free phone consult <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="mx-auto mt-14 max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Or send us a note</p>
+          <h3 class="mt-3 font-display text-2xl font-bold text-cream-50 sm:text-3xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your dog</em>
+          </h3>
+        </div>
+        <div class="grain mt-8 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Training enquiry" page="/training-plans" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk it through?
+          <a
+            href={business.phones.main.whatsapp}
+            class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4"
+          >
+            WhatsApp us on {business.phones.main.display}
+          </a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* ---- Filter chips ---- */
+  .tp-chip {
+    border-radius: 9999px;
+    border: 1.5px solid var(--color-moss-300);
+    background: transparent;
+    color: var(--color-moss-800);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.4rem 0.95rem;
+    cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .tp-chip:hover {
+    background: var(--color-moss-100);
+  }
+  .tp-chip.is-active {
+    background: var(--color-moss-700);
+    border-color: var(--color-moss-700);
+    color: var(--color-cream-50);
+    transform: translateY(-1px);
+  }
+  .tp-clear {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    border: 1.5px solid var(--color-honey-500);
+    padding: 0.3rem 0.85rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-honey-700);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .tp-clear:hover {
+    background: var(--color-honey-200);
+  }
+
+  /* ---- Plan cards: soft-dim non-matches (class-driven, never inline opacity) ---- */
+  .plan-card {
+    transition:
+      opacity 0.4s ease,
+      transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+      filter 0.4s ease;
+  }
+  .plan-card.is-dimmed {
+    opacity: 0.28;
+    transform: scale(0.97);
+    filter: saturate(0.55);
+  }
+  /* A keyboard user tabbing to a dimmed card gets it back to full visibility
+     so the focus ring + text meet contrast (WCAG 2.4.7 / 1.4.3). */
+  .plan-card.is-dimmed:focus-within {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+  .plan-card:not(.is-dimmed):hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-polaroid);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tp-chip,
+    .plan-card {
+      transition: none;
+    }
+    .plan-card.is-dimmed {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initTrainingPlans() {
+    const root = document.querySelector('[data-page="training-plans"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    root.dataset.gsapInit = '1'; // set early: filter must work even under reduced motion
+
+    /* ---- Signature filter (progressive enhancement; works without motion) ---- */
+    const AXES = ['age', 'goal', 'format', 'budget'] as const;
+    const selected: Record<string, Set<string>> = { age: new Set(), goal: new Set(), format: new Set(), budget: new Set() };
+    const chips = Array.from(root.querySelectorAll<HTMLButtonElement>('.tp-chip'));
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-plan-card]'));
+    const countEl = root.querySelector<HTMLElement>('[data-plan-count]');
+    const clearBtn = root.querySelector<HTMLButtonElement>('[data-plan-clear]');
+    const emptyNote = root.querySelector<HTMLElement>('[data-plan-empty]');
+    const TOTAL = cards.length;
+
+    const cardMatches = (card: HTMLElement) => {
+      for (const axis of AXES) {
+        const sel = selected[axis];
+        if (sel.size === 0) continue;
+        const vals = (card.dataset[axis] || '').split(' ').filter(Boolean);
+        if (![...sel].some((v) => vals.includes(v))) return false;
+      }
+      return true;
+    };
+
+    const apply = () => {
+      const anyActive = AXES.some((a) => selected[a].size > 0);
+      let shown = 0;
+      let matchedReal = 0;
+      for (const card of cards) {
+        if (card.dataset.always === 'true') {
+          shown++;
+          continue;
+        }
+        const ok = cardMatches(card);
+        card.classList.toggle('is-dimmed', !ok);
+        if (ok) {
+          shown++;
+          matchedReal++;
+        }
+      }
+      if (countEl) {
+        countEl.textContent = !anyActive
+          ? `Showing all ${TOTAL} plans`
+          : matchedReal === 0
+            ? 'No plans match that mix — see the free consult below'
+            : `Showing ${shown} of ${TOTAL} plans`;
+      }
+      if (clearBtn) clearBtn.hidden = !anyActive;
+      if (emptyNote) emptyNote.hidden = !(anyActive && matchedReal === 0);
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const axis = chip.dataset.axis!;
+        const val = chip.dataset.value!;
+        const sel = selected[axis];
+        const nowActive = !sel.has(val);
+        if (nowActive) sel.add(val);
+        else sel.delete(val);
+        chip.classList.toggle('is-active', nowActive);
+        chip.setAttribute('aria-pressed', String(nowActive));
+        apply();
+      });
+    });
+
+    clearBtn?.addEventListener('click', () => {
+      AXES.forEach((a) => selected[a].clear());
+      chips.forEach((c) => {
+        c.classList.remove('is-active');
+        c.setAttribute('aria-pressed', 'false');
+      });
+      apply();
+    });
+
+    /* ---- Hero video: lazy-start after load; never for reduced-motion / data-saver ---- */
+    const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    if (video && !reduceMotion && !saveData) {
+      setTimeout(() => {
+        video.load();
+        video.play().catch(() => {});
+      }, 350);
+    }
+
+    if (reduceMotion) return; // static page — everything visible, filter already live
+
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* Hero entrance */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* Hero parallax */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* Generic reveals */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        });
+      });
+
+      /* Plan cards: stagger up on scroll-in. clearProps wipes the inline opacity GSAP
+         leaves behind, so the CSS .is-dimmed rule can own opacity afterwards
+         (the 2026-07-05 autoAlpha lesson). */
+      const grid = root.querySelector('[data-plan-grid]');
+      if (grid) {
+        gsap.from(grid.children, {
+          y: 34,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          stagger: 0.06,
+          clearProps: 'opacity,visibility,transform',
+          scrollTrigger: { trigger: grid, start: 'top 84%', once: true },
+        });
+      }
+    });
+  }
+
+  initTrainingPlans();
+  document.addEventListener('astro:page-load', initTrainingPlans);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>
