@@ -80,7 +80,7 @@
 ## Quality gates
 - `npm run build && npm run verify-urls` green; Lighthouse ≥90; reduced-motion pass; **desktop AND mobile visual check** before ship; live preview owner sign-off.
 
-## BUILD STATE (2026-07-08) — BUILT on preview, not yet deployed
+## BUILD STATE (2026-07-08) — BUILT + DEPLOYED + LIVE (commit `d523603`)
 
 Built as `src/pages/training-plans.astro` (mirrors `dog-boarding-school.astro`; frontend-design skill). **Final build decisions (owner 2026-07-08, on top of the locked table above):**
 - **Nav:** footer + homepage only — no nav item added (nav stays 6, one-line-locked). `Footer.astro` +Training Plans; `index.astro` #Trainingplans got a "Compare all training plans" honey CTA.
@@ -90,4 +90,4 @@ Built as `src/pages/training-plans.astro` (mirrors `dog-boarding-school.astro`; 
 - **Filter mechanic:** multi-select; AND across axes, OR within an axis; soft-dim = class `is-dimmed` (opacity .28 + `saturate(.55)` + `scale(.97)`, CSS-transitioned, no reflow); live count `aria-live`; empty note `role="status"`; `.is-dimmed:focus-within` restores full visibility for keyboard users; chip groups `role="group"`+`aria-labelledby`.
 - **Copy:** all DRAFT (headline, intro, each card's "best for", closing band) — owner corrects on preview. Prices in prose derived from data (`socialWalkPrice`), never hard-coded.
 - **Adversarial review:** 6-dimension workflow → 5 confirmed findings, all fixed (clearProps transform; focus-within; chip-group labelling; £20-from-data; empty-state announcement/count). Full list in `HANDOVER.md` 2026-07-08.
-- **Verified:** build 32 pages 0 errors; verify-urls 0 failures; filter logic + CTAs + soft-dim live-verified in-browser; no desktop overflow. **Mobile real-phone check + hero sign-off + copy corrections still owed by owner; not yet committed/deployed.**
+- **Verified:** build 32 pages 0 errors; verify-urls 0 failures; filter logic + CTAs + soft-dim live-verified in-browser; no desktop overflow. **DEPLOYED + LIVE 2026-07-08** (commit `d523603`, Hostinger deploy `28958184543` green first try; `verify-urls --live` → `/training-plans` 200, 0 failures; hero mp4 + poster 200; homepage CTA + footer link live). **Still owed by owner (on the live page): hero-cut sign-off + DRAFT-copy corrections + a real-phone/tablet layout check** (automation couldn't drive a 390px viewport — documented maximised no-op).
