@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import WholeDogFunnel from '../components/WholeDogFunnel.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 
@@ -302,9 +303,12 @@ const jsonLd = {
       </div>
     </section>
 
+    <!-- ============ THE WHOLE-DOG APPROACH — convergence animation ============ -->
+    <WholeDogFunnel />
+
     <!-- ============ THE WHOLE-DOG CLUB — the difference ============ -->
     <section class="bg-cream-100" data-section="club-difference">
-      <HillDivider class="bg-cream-50 text-cream-100" />
+      <HillDivider class="bg-pine-950 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <p class="eyebrow text-honey-600" data-reveal>Why Fairy Tails</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>

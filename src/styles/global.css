@@ -36,6 +36,12 @@
   --color-bark-700: #4a4036;
   --color-bark-900: #2b251e;
 
+  /* Clay — terracotta earth accent (added 2026-07-09 for the whole-dog convergence
+     section: a fourth hue that stays inside the countryside palette. Sits below moss
+     on the luminance staircase so the four wire colours separate for colour-blind
+     viewers on lightness, not hue alone). */
+  --color-clay-500: #c16a41;
+
   /* Honey — accent / CTA highlight */
   --color-honey-200: #f3dcae;
   --color-honey-300: #ecc27c;

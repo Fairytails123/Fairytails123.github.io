@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    html, body { margin: 0; background: #F2F2F7; }
+  </style>
+</helmet>
+<div data-screen-label="Funnel animation" style="width: 100%; height: 100vh; background: #F2F2F7;">
+  <x-import
+    component-from-global-scope="FunnelScene"
+    from="./animations.jsx ./image-slot.js ./funnel-scene.jsx"
+    extra-socialising="{{ extraSocialising }}"
+    extra-world="{{ extraWorld }}"
+    extra-people="{{ extraPeople }}"
+    extra-health="{{ extraHealth }}"
+    hint-size="100%,100%"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: &quot;100%&quot;, &quot;height&quot;: &quot;100%&quot; },
+  &quot;extraSocialising&quot;: {
+    &quot;editor&quot;: &quot;text&quot;,
+    &quot;default&quot;: &quot;Play with owner, Scatter feeding &amp; food games&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Extra input labels&quot;,
+    &quot;label&quot;: &quot;Daycare &amp; socialising (comma-separated)&quot;
+  },
+  &quot;extraWorld&quot;: {
+    &quot;editor&quot;: &quot;text&quot;,
+    &quot;default&quot;: &quot;&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Extra input labels&quot;,
+    &quot;label&quot;: &quot;Out in the world (comma-separated)&quot;
+  },
+  &quot;extraPeople&quot;: {
+    &quot;editor&quot;: &quot;text&quot;,
+    &quot;default&quot;: &quot;&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Extra input labels&quot;,
+    &quot;label&quot;: &quot;Handling &amp; people (comma-separated)&quot;
+  },
+  &quot;extraHealth&quot;: {
+    &quot;editor&quot;: &quot;text&quot;,
+    &quot;default&quot;: &quot;&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;section&quot;: &quot;Extra input labels&quot;,
+    &quot;label&quot;: &quot;Health &amp; wellbeing (comma-separated)&quot;
+  }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      extraSocialising: this.props.extraSocialising ?? 'Play with owner, Scatter feeding & food games',
+      extraWorld: this.props.extraWorld ?? '',
+      extraPeople: this.props.extraPeople ?? '',
+      extraHealth: this.props.extraHealth ?? '',
+    };
+  }
+}
+</script>
+</body>
+</html>

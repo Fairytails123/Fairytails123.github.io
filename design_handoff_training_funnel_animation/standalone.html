@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Training Funnel Animation — standalone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; height: 100%; background: #F4F5F7; }
+  #root { width: 100%; height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- 1. React + Babel (dev CDN; swap for your bundler in production) -->
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!-- 2. The puppy photo slot (self-registers the <image-slot> custom element) -->
+<script src="./src/image-slot.js"></script>
+
+<!-- 3. Engine + scene are loaded and transformed in-order by the boot script below -->
+
+<!-- 4. Mount -->
+<script>
+  (async function boot() {
+    // Load the two JSX modules in order, transforming with Babel standalone.
+    // (In a real bundler — Vite/webpack/Next — you'd just `import` them instead.)
+    async function run(url) {
+      const src = await (await fetch(url)).text();
+      const code = Babel.transform(src, {
+        presets: [['react', { runtime: 'classic' }]],
+      }).code;
+      (0, eval)(code);
+    }
+    await run('./src/animations.jsx');   // → window.Stage, Sprite, useTime, Easing…
+    await run('./src/funnel-scene.jsx');  // → window.FunnelScene
+
+    // Props are optional — they only APPEND extra labels on top of the built-in
+    // GROUPS in funnel-scene.jsx. Edit GROUPS directly for permanent changes.
+    const props = {
+      // extraSocialising: "Play with owner, Scatter feeding & food games",
+      // extraWorld: "", extraPeople: "", extraHealth: "",
+    };
+    ReactDOM.createRoot(document.getElementById('root'))
+      .render(React.createElement(window.FunnelScene, props));
+  })();
+</script>
+</body>
+</html>

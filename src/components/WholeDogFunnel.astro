@@ -1,0 +1,834 @@
+---
+/*
+  The whole-dog approach — "convergence core".
+
+  Twenty labelled inputs fan across four groups; a coloured wire cables down from every
+  one of them and converges on a glowing portrait of a real dog, which grows as the
+  streams connect. The message: behaviour training isn't one thing.
+
+  Ported from the owner's Claude-designed React prototype
+  (design_handoff_training_funnel_animation/) into this site's stack: no React, no fixed
+  1920x1080 canvas. The chips are real HTML (crisp type, selectable, screen-readable) and
+  the wires are an SVG overlay whose geometry is measured from the laid-out elements, so
+  the scene reflows at any width.
+
+  Motion has two independent halves:
+    - the NARRATIVE is scroll-scrubbed (pinned on desktop): heading, chips, wires,
+      portrait growth, then the outcome resolves.
+    - the AMBIENT life runs on its own rAF clock (particles down the wires, counter-
+      rotating orbital rings, ripples, halo pulse) so the scene stays alive when the
+      visitor stops scrolling. Gated on IntersectionObserver + tab visibility.
+
+  Reduced motion / no JS: wires are drawn statically, the portrait sits at full size and
+  everything is visible. Nothing is hidden by CSS.
+*/
+import { Image } from 'astro:assets';
+import HillDivider from './HillDivider.astro';
+import portrait from '../assets/pages/home/whole-dog-goldie.webp';
+
+// Group accents. These four hexes are the source of truth (the SVG reads them back off
+// each chip's `--accent`); `clay` is also recorded in global.css @theme as a palette entry.
+// Ordered so the wire colours descend the luminance staircase (cream > honey > moss > clay):
+// the four streams stay separable on lightness alone, not just hue.
+const GROUPS = [
+  {
+    name: 'Day school & socialising',
+    color: '#ecc27c', // honey-300
+    chips: [
+      'Dog day school',
+      'Play with other dogs',
+      'Reliable recall',
+      'Calm around other dogs',
+      'Confidence sessions',
+    ],
+  },
+  {
+    name: 'Out in the world',
+    color: '#8da272', // moss-400
+    chips: [
+      'Loose-lead walking',
+      'Calm in a café',
+      'Walking through town',
+      'Confident on the seafront',
+      'Settling away from home',
+    ],
+  },
+  {
+    name: 'Handling & people',
+    color: '#eadfc4', // cream-200
+    chips: [
+      'Gentle, calm handling',
+      'Happy at the groomer’s',
+      'Meeting new people',
+      'Owner coaching for you',
+      'Daily reports home',
+    ],
+  },
+  {
+    name: 'What we keep an eye on',
+    color: '#c16a41', // clay-500
+    chips: [
+      'Appetite & eating',
+      'Toilet habits',
+      'Energy & mood',
+      'Signs of discomfort',
+      'Anything that seems off',
+    ],
+  },
+];
+---
+
+<section
+  id="whole-dog"
+  class="relative bg-pine-950 text-cream-100"
+  data-section="whole-dog"
+  aria-labelledby="whole-dog-heading"
+>
+  <HillDivider class="bg-cream-50 text-pine-950" />
+
+  <div class="fnl" data-funnel>
+    <svg class="fnl__svg" data-funnel-svg aria-hidden="true" focusable="false"></svg>
+
+    <header class="fnl__head">
+      <p class="eyebrow text-honey-400" data-fnl-head>The whole-dog approach</p>
+      <h2 id="whole-dog-heading" class="fnl__h2 font-display font-bold text-cream-50" data-fnl-head>
+        Behaviour training <em class="squiggle not-italic">isn’t one thing</em>
+      </h2>
+      <p class="fnl__sub" data-fnl-head>
+        It’s dozens of small, connected things — skills taught, habits built, and a watchful eye on
+        the dog underneath.
+      </p>
+    </header>
+
+    <div class="fnl__field">
+      <div class="fnl__cols">
+        {
+          GROUPS.map((g, i) => (
+            <div class="fnl__col" style={`--accent:${g.color}`}>
+              <h3 class="fnl__grouphead" id={`whole-dog-g${i}`} data-fnl-group>
+                <span class="fnl__dot" aria-hidden="true" />
+                <span>{g.name}</span>
+              </h3>
+              <ul class="fnl__chips" aria-labelledby={`whole-dog-g${i}`}>
+                {g.chips.map((label) => (
+                  <li class="fnl__chip" data-fnl-chip>
+                    <span class="fnl__dot" aria-hidden="true" />
+                    <span>{label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="fnl__core">
+      <figure class="fnl__portrait">
+        <div class="fnl__slot" data-fnl-slot>
+          <div class="fnl__frame" data-fnl-frame>
+            <Image
+              src={portrait}
+              alt="Goldie, a golden cocker spaniel, resting calmly and looking straight at the camera"
+              widths={[240, 360, 480]}
+              sizes="(min-width: 1024px) 240px, 200px"
+              class="h-full w-full rounded-full object-cover"
+              loading="lazy"
+            />
+          </div>
+        </div>
+        <figcaption class="fnl__caption" data-fnl-caption>Goldie</figcaption>
+      </figure>
+    </div>
+
+    <div class="fnl__outcome">
+      <p class="fnl__eyebrow" data-fnl-out>What it all adds up to</p>
+      <p class="fnl__outh" data-fnl-out>A confident dog you can take anywhere</p>
+      <span class="fnl__rule" data-fnl-rule aria-hidden="true"></span>
+      <p class="fnl__outsub" data-fnl-out>
+        Not one lesson, but many — connected pieces, all working as one.
+      </p>
+      <div data-fnl-out>
+        <a href="#enquire" class="btn btn-honey">
+          Tell us about your dog <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Every vertical measure is svh-scaled: pinned, the whole scene has to live inside one
+     viewport, on a 1440x900 laptop as well as a 27" display. */
+  .fnl {
+    --core-size: clamp(140px, 19svh, 240px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.6rem, 1.4svh, 1.4rem);
+    padding-block: clamp(1.25rem, 2.6svh, 2.5rem) clamp(1.75rem, 3.6svh, 3rem);
+  }
+
+  /* Pinned stage on desktop, sized to the viewport MINUS the fixed header (which the
+     stage would otherwise slide underneath). `--fnl-top` is set from the header's real
+     height at init; the 76px is only a pre-JS fallback. The min-height gate must match the
+     JS matchMedia query exactly — a short window scrolls the section instead of pinning it,
+     because the scene cannot fit one viewport there. */
+  @media (min-width: 1024px) and (min-height: 800px) {
+    .fnl {
+      min-height: calc(100svh - var(--fnl-top, 76px));
+      justify-content: center;
+    }
+  }
+
+  /* User units = CSS px (no viewBox), origin at the stage's top-left corner. */
+  .fnl__svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Flex items take z-index without needing position, which keeps `.fnl` the
+     offsetParent of every chip — so wire anchors can be read from offsetLeft/offsetTop,
+     which (unlike getBoundingClientRect) ignore in-flight GSAP transforms. */
+  .fnl__head,
+  .fnl__field,
+  .fnl__core,
+  .fnl__outcome {
+    z-index: 1;
+    width: 100%;
+    max-width: 72rem;
+    padding-inline: 1rem;
+  }
+
+  .fnl__head {
+    text-align: center;
+  }
+  .fnl__h2 {
+    margin-top: 0.5rem;
+    font-size: clamp(1.45rem, 3svh, 2.2rem);
+    line-height: 1.15;
+  }
+  .fnl__sub {
+    margin: 0.55rem auto 0;
+    max-width: 46ch;
+    font-size: clamp(0.85rem, 1.5svh, 1rem);
+    line-height: 1.5;
+    color: var(--color-cream-200);
+  }
+
+  .fnl__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2.4svh, 1.75rem) 0.75rem;
+  }
+  @media (min-width: 1024px) {
+    .fnl__cols {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0 1.25rem;
+    }
+  }
+
+  .fnl__grouphead {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.55rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--color-cream-300);
+  }
+
+  .fnl__chips {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.25rem, 0.65svh, 0.45rem);
+  }
+
+  .fnl__chip {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: clamp(0.28rem, 0.7svh, 0.5rem) 0.7rem;
+    border-radius: 11px;
+    border-left: 3px solid var(--accent);
+    background: var(--color-pine-800);
+    color: var(--color-cream-100);
+    font-size: clamp(0.7rem, 1.35svh, 0.8125rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.35),
+      0 10px 22px -14px rgb(0 0 0 / 0.9);
+  }
+
+  .fnl__dot {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 10px -1px var(--accent);
+  }
+
+  .fnl__core {
+    display: flex;
+    justify-content: center;
+  }
+  .fnl__portrait {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .fnl__slot {
+    position: relative;
+    width: var(--core-size);
+    height: var(--core-size);
+  }
+  .fnl__frame {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--color-pine-900);
+    box-shadow:
+      0 0 0 8px #f7f2e6,
+      0 26px 70px -20px rgb(0 0 0 / 0.85);
+    will-change: transform;
+  }
+  .fnl__caption {
+    margin-top: 0.6rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    /* 0.75 alpha = 6.63:1 on pine-950. At 0.55 it was 4.15:1 and failed AA. */
+    color: rgb(220 201 163 / 0.75);
+  }
+
+  .fnl__outcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .fnl__eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    /* Sits over the halo, so keep margin above the 4.5:1 floor: 0.75 = 6.63:1 on pine-950. */
+    color: rgb(220 201 163 / 0.75);
+  }
+  .fnl__outh {
+    margin-top: 0.5rem;
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.25rem, 2.9svh, 2.1rem);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    /* Cream, not honey: the halo above and the CTA below are both honey, and a third
+       honey focal point in the resolution zone blunts the button. */
+    color: var(--color-cream-50);
+    text-wrap: balance;
+  }
+  .fnl__rule {
+    display: block;
+    width: 64px;
+    height: 2px;
+    margin-top: 0.7rem;
+    border-radius: 2px;
+    background: rgb(220 201 163 / 0.3);
+  }
+  .fnl__outsub {
+    margin-top: 0.6rem;
+    max-width: 60ch;
+    font-size: clamp(0.85rem, 1.5svh, 1rem);
+    line-height: 1.5;
+    color: var(--color-cream-200);
+  }
+  .fnl__outcome .btn {
+    margin-top: 0.8rem;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const DEG = Math.PI / 180;
+
+  const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
+  const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3);
+  const smoothstep = (x: number) => {
+    const c = clamp01(x);
+    return c * c * (3 - 2 * c);
+  };
+  // Position along a cubic Bézier — the wires are Béziers, so particles ride the same maths.
+  const bez = (t: number, a: number, b: number, c: number, d: number) => {
+    const u = 1 - t;
+    return u * u * u * a + 3 * u * u * t * b + 3 * u * t * t * c + t * t * t * d;
+  };
+
+  type Wire = {
+    x: number; // chip bottom-centre, stage coords
+    y: number;
+    ang: number; // fan angle onto the portrait's ring
+    drop: number; // first control point's reach below the chip
+    tuck: number; // second control point's distance outside the ring
+    start: number; // where in the draw tween this wire begins (0..1)
+    color: string;
+    draw: number; // 0..1, how much of this wire is drawn
+    ex: number; // current ring attach point
+    ey: number;
+    qx: number; // current outer control point
+    qy: number;
+    path: SVGPathElement;
+    bloom: SVGUseElement;
+    spark: SVGCircleElement;
+    parts: SVGCircleElement[];
+  };
+
+  const DRAW_SPAN = 0.22; // fraction of the draw tween one wire takes
+  const PARTICLES_PER_WIRE = 3;
+  const R_START = 0.075; // portrait scale at the very beginning
+
+  let cleanup: (() => void) | null = null;
+  let instances = 0;
+
+  function svgEl<K extends keyof SVGElementTagNameMap>(name: K, attrs: Record<string, string | number> = {}) {
+    const node = document.createElementNS(SVG_NS, name);
+    for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, String(v));
+    return node;
+  }
+
+  // The ambient loop repeats identical values constantly (a particle sits at opacity 0 for
+  // most of its cycle). Skipping the redundant setAttribute avoids ~half the per-frame writes.
+  const setAttrCached = (el: Element, name: string, value: string) => {
+    const key = '__' + name;
+    if ((el as any)[key] === value) return;
+    (el as any)[key] = value;
+    el.setAttribute(name, value);
+  };
+
+  function initFunnel(): (() => void) | null {
+    const stage = document.querySelector('[data-funnel]') as HTMLElement | null;
+    if (!stage || stage.dataset.fnlInit) return null;
+
+    const svg = stage.querySelector('[data-funnel-svg]') as SVGSVGElement | null;
+    const slot = stage.querySelector('[data-fnl-slot]') as HTMLElement | null;
+    const frame = stage.querySelector('[data-fnl-frame]') as HTMLElement | null;
+    const chipEls = Array.from(stage.querySelectorAll<HTMLElement>('[data-fnl-chip]'));
+    const groupEls = Array.from(stage.querySelectorAll<HTMLElement>('[data-fnl-group]'));
+    const headEls = Array.from(stage.querySelectorAll<HTMLElement>('[data-fnl-head]'));
+    const outEls = Array.from(stage.querySelectorAll<HTMLElement>('[data-fnl-out]'));
+    const ruleEl = stage.querySelector<HTMLElement>('[data-fnl-rule]');
+    const capEl = stage.querySelector<HTMLElement>('[data-fnl-caption]');
+    if (!svg || !slot || !frame || !chipEls.length) return null;
+
+    stage.dataset.fnlInit = '1';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+
+    /* ---------- build the SVG scene once ---------- */
+    // Ids are document-global. Namespace them per instance so a second mount can never
+    // steal this one's gradient or wire references.
+    const uid = 'fnl' + ++instances;
+    const defs = svgEl('defs');
+    const grad = svgEl('radialGradient', { id: `${uid}-glow` });
+    // The one gradient the brand allows: a functional warm halo, dissolving into pine
+    // with no hard edge (the last stops bridge to the section colour).
+    const GLOW_STOPS: Array<[string, string, number]> = [
+      ['0%', '#f3dcae', 0.62],
+      ['22%', '#ecc27c', 0.45],
+      ['46%', '#dfa854', 0.26],
+      ['72%', '#8f5d1d', 0.11],
+      ['88%', '#243023', 0.05],
+      ['100%', '#121a12', 0],
+    ];
+    const stopEls = GLOW_STOPS.map(([offset, color, op]) => {
+      const s = svgEl('stop', { offset, 'stop-color': color, 'stop-opacity': op });
+      grad.appendChild(s);
+      return s;
+    });
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+
+    const glow = svgEl('circle', { fill: `url(#${uid}-glow)` });
+    // Stroke geometry lives on the GROUPS so each bloom can be a live <use> of its wire —
+    // one `d` write per wire per tick instead of two, and the dash offset is shared.
+    const bloomG = svgEl('g', { fill: 'none', 'stroke-width': 7, 'stroke-opacity': 0.2, 'stroke-linecap': 'round' });
+    const wireG = svgEl('g', { fill: 'none', 'stroke-width': 1.6, 'stroke-linecap': 'round' });
+    const rippleG = svgEl('g');
+    const ringGA = svgEl('g');
+    const ringGB = svgEl('g');
+    const partG = svgEl('g');
+    const sparkG = svgEl('g');
+    svg.append(glow, bloomG, wireG, rippleG, ringGA, ringGB, partG, sparkG);
+
+    const ripples = [0, 1, 2].map(() => {
+      const c = svgEl('circle', { fill: 'none', stroke: '#dfa854', 'stroke-width': 1.5, opacity: 0 });
+      rippleG.appendChild(c);
+      return c;
+    });
+    const ringA = svgEl('ellipse', { fill: 'none', stroke: '#ecc27c', 'stroke-opacity': 0.42, 'stroke-width': 1.4 });
+    const ringB = svgEl('ellipse', { fill: 'none', stroke: '#8da272', 'stroke-opacity': 0.3, 'stroke-width': 1.4 });
+    ringGA.appendChild(ringA);
+    ringGB.appendChild(ringB);
+
+    const N = chipEls.length;
+    const wires: Wire[] = chipEls.map((el, i) => {
+      const color = getComputedStyle(el).getPropertyValue('--accent').trim() || '#ecc27c';
+      // `stroke` + dash live on the path; `stroke-width` is inherited from the parent group,
+      // which is what lets the bloom be a <use> of this same element at a fatter width.
+      const path = svgEl('path', {
+        id: `${uid}-w${i}`,
+        stroke: color,
+        pathLength: 1,
+        'stroke-dasharray': 1,
+        'stroke-dashoffset': 1,
+      });
+      // A fat, faint copy under each wire fakes a bloom without an SVG filter — filters over
+      // a full-viewport region are far too expensive on phones. As a <use> it tracks the
+      // original's `d` and dash offset for free.
+      const bloom = svgEl('use');
+      bloom.setAttribute('href', `#${uid}-w${i}`);
+      bloom.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', `#${uid}-w${i}`);
+      const spark = svgEl('circle', { r: 3.2, fill: color, opacity: 0 });
+      wireG.appendChild(path);
+      bloomG.appendChild(bloom);
+      sparkG.appendChild(spark);
+      const parts = Array.from({ length: PARTICLES_PER_WIRE }, () => {
+        const c = svgEl('circle', { fill: color, opacity: 0, r: 3 });
+        partG.appendChild(c);
+        return c;
+      });
+      return {
+        x: 0, y: 0, ang: 0, drop: 0, tuck: 0,
+        // stagger the draw so the last wire still completes inside the tween
+        start: i / (N + 6),
+        color,
+        draw: 0,
+        ex: 0, ey: 0, qx: 0, qy: 0,
+        path, bloom, spark, parts,
+      };
+    });
+
+    /* ---------- geometry ---------- */
+    const core = { x: 0, y: 0 };
+    let rMax = 100;
+    let ringR = 0;
+
+    const siteHeader = document.querySelector('header');
+    const headerH = () => (siteHeader instanceof HTMLElement ? siteHeader.offsetHeight : 0);
+
+    // Transform-independent: offsetLeft/offsetTop ignore GSAP's in-flight transforms,
+    // and `.fnl` is the offsetParent (it's the only positioned ancestor).
+    const measure = () => {
+      stage.style.setProperty('--fnl-top', headerH() + 'px');
+      core.x = slot.offsetLeft + slot.offsetWidth / 2;
+      core.y = slot.offsetTop + slot.offsetHeight / 2;
+      rMax = slot.offsetWidth / 2;
+
+      // Two chip columns instead of four (narrow screens) means groups 1 and 3 sit at the
+      // same x. A column-derived fan angle would give their wires identical bearings and
+      // collapse them into one rope, so each wire attaches at its OWN bearing from the
+      // core. That fans correctly at any layout and never lets two wires overlap.
+      // Ask the same question the stylesheet asks. `stage.offsetWidth < 1024` would disagree
+      // with the `(min-width: 1024px)` column rule whenever a classic scrollbar is present.
+      const narrow = !window.matchMedia('(min-width: 1024px)').matches;
+      const MAX_ANG = 72 * DEG;
+
+      chipEls.forEach((el, i) => {
+        const w = wires[i];
+        w.x = el.offsetLeft + el.offsetWidth / 2;
+        w.y = el.offsetTop + el.offsetHeight;
+        const dy = Math.max(1, core.y - w.y);
+        w.ang = Math.max(-MAX_ANG, Math.min(MAX_ANG, Math.atan2(w.x - core.x, dy)));
+        // The first control point hangs straight below the chip, so a wire leaves its card
+        // vertically before curving in — that's what makes it read as cable, not a spoke.
+        w.drop = Math.max(70, Math.min(narrow ? 160 : 260, dy * (narrow ? 0.34 : 0.5)));
+        w.tuck = Math.max(50, Math.min(160, dy * 0.22));
+      });
+    };
+
+    const ringX = (ang: number, r: number) => core.x + r * Math.sin(ang);
+    const ringY = (ang: number, r: number) => core.y - r * Math.cos(ang);
+
+    /* ---------- scrub-driven state ---------- */
+    const growT = { s: R_START };
+    const wireT = { p: 0 };
+    const coreT = { p: 0 };
+    const dimT = { p: 0 };
+
+    const render = () => {
+      const r = rMax * growT.s;
+      ringR = r + Math.max(9, r * 0.16);
+      gsap.set(frame, { scale: growT.s });
+
+      const dim = 1 - 0.55 * dimT.p;
+      wireG.setAttribute('opacity', String(dim));
+      bloomG.setAttribute('opacity', String(dim));
+
+      for (const w of wires) {
+        w.draw = easeOutCubic(clamp01((wireT.p - w.start) / DRAW_SPAN));
+        w.ex = ringX(w.ang, ringR);
+        w.ey = ringY(w.ang, ringR);
+        w.qx = ringX(w.ang, ringR + w.tuck);
+        w.qy = ringY(w.ang, ringR + w.tuck);
+        const d = `M${w.x} ${w.y}C${w.x} ${(w.y + w.drop).toFixed(1)} ${w.qx.toFixed(1)} ${w.qy.toFixed(1)} ${w.ex.toFixed(1)} ${w.ey.toFixed(1)}`;
+        w.path.setAttribute('d', d);
+        w.path.setAttribute('stroke-dashoffset', String(1 - w.draw));
+        // w.bloom is a <use> of w.path — it follows both automatically.
+      }
+
+      // The one permitted gradient: a functional halo. The bloom at the end lets it
+      // settle outwards rather than snap off.
+      const bloomAmt = dimT.p;
+      const glowR = ringR * (2.45 + 0.45 * bloomAmt);
+      glow.setAttribute('cx', String(core.x));
+      glow.setAttribute('cy', String(core.y));
+      glow.setAttribute('r', String(glowR));
+      const on = 0.3 + 0.7 * coreT.p;
+      stopEls.forEach((s, i) => s.setAttribute('stop-opacity', String(GLOW_STOPS[i][2] * on)));
+
+      const ringOp = coreT.p;
+      ringGA.setAttribute('opacity', String(ringOp * 0.9));
+      ringGB.setAttribute('opacity', String(ringOp * 0.9));
+      ringA.setAttribute('cx', String(core.x));
+      ringA.setAttribute('cy', String(core.y));
+      ringA.setAttribute('rx', String(ringR * 1.2));
+      ringA.setAttribute('ry', String(ringR * 1.2 * 0.34));
+      ringB.setAttribute('cx', String(core.x));
+      ringB.setAttribute('cy', String(core.y));
+      ringB.setAttribute('rx', String(ringR * 1.42));
+      ringB.setAttribute('ry', String(ringR * 1.42 * 0.3));
+    };
+
+    /* ---------- ambient life (own clock, so the scene breathes when scrolling stops) ---------- */
+    let raf = 0;
+    let running = false;
+    let inView = false;
+    let tabVisible = document.visibilityState !== 'hidden';
+    let t0 = 0;
+
+    const ambient = (now: number) => {
+      raf = requestAnimationFrame(ambient);
+      // The section is tall, so the IntersectionObserver fires long before the scrub lights
+      // anything up. Until the core has any charge there is literally nothing to draw.
+      if (coreT.p <= 0.01) return;
+
+      if (!t0) t0 = now;
+      const time = (now - t0) / 1000;
+      const pulse = 0.5 + 0.5 * Math.sin(time * 2.6);
+      const on = 0.3 + 0.7 * coreT.p;
+      const flow = 1 - 0.55 * dimT.p;
+      const rot = time * 26;
+      const cx = String(core.x);
+      const cy = String(core.y);
+
+      ringGA.setAttribute('transform', `rotate(${rot.toFixed(2)} ${cx} ${cy})`);
+      ringGB.setAttribute('transform', `rotate(${(-rot * 0.7 + 60).toFixed(2)} ${cx} ${cy})`);
+
+      for (let i = 0; i < ripples.length; i++) {
+        const ph = (time * 0.5 + i / ripples.length) % 1;
+        setAttrCached(ripples[i], 'cx', cx);
+        setAttrCached(ripples[i], 'cy', cy);
+        ripples[i].setAttribute('r', (ringR + ringR * 0.85 * ph).toFixed(1));
+        ripples[i].setAttribute('opacity', ((1 - ph) * on * 0.3).toFixed(3));
+      }
+
+      for (const w of wires) {
+        const live = w.draw > 0.98;
+        setAttrCached(w.spark, 'cx', w.ex.toFixed(1));
+        setAttrCached(w.spark, 'cy', w.ey.toFixed(1));
+        setAttrCached(w.spark, 'opacity', (w.draw * on * (0.5 + 0.5 * pulse) * flow).toFixed(3));
+        for (let k = 0; k < w.parts.length; k++) {
+          const c = w.parts[k];
+          if (!live) {
+            setAttrCached(c, 'opacity', '0');
+            continue;
+          }
+          let p = (time * 0.17 + w.start * 2.6 + k * 0.34) % 1;
+          if (p < 0) p += 1;
+          const a = smoothstep(p / 0.08) * (1 - smoothstep((p - 0.82) / 0.18)) * flow * 0.75;
+          if (a <= 0.02) {
+            setAttrCached(c, 'opacity', '0');
+            continue;
+          }
+          c.setAttribute('cx', bez(p, w.x, w.x, w.qx, w.ex).toFixed(1));
+          c.setAttribute('cy', bez(p, w.y, w.y + w.drop, w.qy, w.ey).toFixed(1));
+          setAttrCached(c, 'r', (2.6 + 1.6 * smoothstep(p)).toFixed(2));
+          c.setAttribute('opacity', a.toFixed(3));
+        }
+      }
+    };
+
+    const sync = () => {
+      // saveData also means battery/data saver — the site skips its hero videos there, so the
+      // ambient loop stays off too. The scrubbed narrative still runs.
+      const should = inView && tabVisible && !reduceMotion && !saveData;
+      if (should && !running) {
+        running = true;
+        t0 = 0;
+        raf = requestAnimationFrame(ambient);
+      } else if (!should && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    };
+    const onVis = () => {
+      tabVisible = document.visibilityState !== 'hidden';
+      sync();
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0]?.isIntersecting ?? false;
+        sync();
+      },
+      { threshold: 0 }
+    );
+
+    measure();
+
+    /* ---------- reduced motion: draw the finished scene, once, and stop ---------- */
+    if (reduceMotion) {
+      growT.s = 1;
+      wireT.p = 1 + DRAW_SPAN;
+      coreT.p = 1;
+      render();
+      const onResizeStatic = () => {
+        measure();
+        render();
+      };
+      window.addEventListener('resize', onResizeStatic);
+      return () => {
+        window.removeEventListener('resize', onResizeStatic);
+        delete stage.dataset.fnlInit;
+      };
+    }
+
+    render();
+    document.addEventListener('visibilitychange', onVis);
+    io.observe(stage);
+
+    /* ---------- the scrubbed narrative ---------- */
+    const mm = gsap.matchMedia();
+    mm.add(
+      {
+        // Keep in lockstep with the `min-height` media query in <style> above. `mobile` is
+        // the exact complement of `desktop` — a hand-written `(max-width: 1023.98px),
+        // (max-height: 799.98px)` leaves fractional viewports (1200 x 799.99, reachable by
+        // browser zoom) matching NEITHER, and no timeline would be built at all.
+        desktop: '(min-width: 1024px) and (min-height: 800px)',
+        mobile: 'not all and (min-width: 1024px) and (min-height: 800px)',
+      },
+      (ctx) => {
+        // Pinning a scene whose CONTENT is taller than the space under the header would
+        // strand its own outcome + CTA below the fold, unreachable. Scroll it instead.
+        // (Measure the content, not the stage box — the stage carries bottom padding that
+        // is allowed to hang off-screen.)
+        const outcomeEl = stage.querySelector<HTMLElement>('.fnl__outcome');
+        const contentH = outcomeEl ? outcomeEl.offsetTop + outcomeEl.offsetHeight : stage.offsetHeight;
+        const pinned = !!ctx.conditions?.desktop && contentH + 8 <= window.innerHeight - headerH();
+
+        // The proxies outlive this context (the ambient loop reads them). Rewind them, or a
+        // breakpoint flip after a full scrub would build `to(growT, {s: 1})` from s === 1
+        // and the portrait would never grow again.
+        growT.s = R_START;
+        wireT.p = 0;
+        coreT.p = 0;
+        dimT.p = 0;
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power3.out' },
+          scrollTrigger: {
+            trigger: stage,
+            start: pinned ? () => 'top ' + headerH() + 'px' : 'top 78%',
+            end: pinned ? () => '+=' + Math.round(window.innerHeight * 2) : 'bottom 72%',
+            scrub: 0.6,
+            pin: pinned ? stage : false,
+            anticipatePin: pinned ? 1 : 0,
+            // Deliberately NOT invalidateOnRefresh: it would re-record the proxy tweens'
+            // start values from whatever the scene currently shows. The function-based
+            // `end` is re-evaluated on every refresh anyway.
+          },
+        });
+        tl.eventCallback('onUpdate', render);
+
+        tl.from(headEls, { y: 26, autoAlpha: 0, duration: 0.6, stagger: 0.12 }, 0)
+          .from(groupEls, { y: 14, autoAlpha: 0, duration: 0.5, stagger: 0.08 }, 0.45)
+          .from(
+            chipEls,
+            { y: -14, autoAlpha: 0, scale: 0.96, transformOrigin: 'left center', duration: 0.5, stagger: 0.06 },
+            0.55
+          )
+          .to(growT, { s: 1, duration: 3.2, ease: 'sine.inOut' }, 0.6)
+          .to(wireT, { p: 1, duration: 2.6, ease: 'none' }, 0.75)
+          .to(coreT, { p: 1, duration: 2.4, ease: 'power2.out' }, 1.1)
+          .from(capEl, { y: 10, autoAlpha: 0, duration: 0.5 }, 3.4)
+          .to(dimT, { p: 1, duration: 0.9, ease: 'sine.inOut' }, 3.7)
+          // 0.6, not 0.4: the chips REST here, and at 0.4 their text fell to 3.16:1 and the
+          // group headings to 2.80:1 against pine-950. 0.6 keeps 5.38:1 / 4.70:1 and still
+          // reads as clearly receded.
+          .to([...chipEls, ...groupEls], { opacity: 0.6, duration: 0.9, ease: 'sine.inOut' }, 3.7)
+          .from(outEls, { y: 20, autoAlpha: 0, duration: 0.6, stagger: 0.18 }, 3.9)
+          .from(ruleEl, { scaleX: 0, transformOrigin: 'center', duration: 0.6 }, 4.2)
+          .to({}, { duration: 0.8 }, 5.2); // a beat to rest on the outcome
+
+        // Dev-only: lets the timeline be scrubbed by hand. A backgrounded automation tab
+        // gets zero rAF frames, so ScrollTrigger can never advance it for a screenshot.
+        if (import.meta.env.DEV) (window as any).__fnl = { tl, render, pinned };
+
+        // No explicit teardown: the matchMedia context reverts the timeline, its
+        // `from` states and the pinned ScrollTrigger when the breakpoint flips.
+      }
+    );
+
+    // Re-anchor the wires whenever ScrollTrigger recalculates (resize, font swap, pin).
+    const onRefresh = () => {
+      measure();
+      render();
+    };
+    ScrollTrigger.addEventListener('refreshInit', onRefresh);
+    (document as any).fonts?.ready?.then(() => ScrollTrigger.refresh());
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVis);
+      ScrollTrigger.removeEventListener('refreshInit', onRefresh);
+      mm.revert();
+      delete stage.dataset.fnlInit;
+    };
+  }
+
+  // Astro runs this module once on first load AND fires astro:page-load — only the call
+  // that actually initialises returns a teardown, so never clobber a live one with null.
+  const boot = () => {
+    const teardown = initFunnel();
+    if (teardown) cleanup = teardown;
+  };
+
+  boot();
+  document.addEventListener('astro:page-load', boot);
+  document.addEventListener('astro:before-swap', () => {
+    if (cleanup) {
+      cleanup();
+      cleanup = null;
+    }
+  });
+</script>
