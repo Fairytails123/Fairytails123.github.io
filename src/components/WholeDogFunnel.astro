@@ -318,6 +318,10 @@ const GROUPS = [
     flex-direction: column;
     align-items: center;
     text-align: center;
+    /* The block is faded in with opacity (not visibility) so screen readers still reach it.
+       That leaves an invisible-but-clickable CTA, so mouse input is blocked until the
+       timeline sets pointer-events:auto at the reveal. Keyboard focus is unaffected. */
+    pointer-events: none;
   }
   .fnl__eyebrow {
     font-size: 0.6875rem;
@@ -434,6 +438,7 @@ const GROUPS = [
     const headEls = Array.from(stage.querySelectorAll<HTMLElement>('[data-fnl-head]'));
     const outEls = Array.from(stage.querySelectorAll<HTMLElement>('[data-fnl-out]'));
     const ruleEl = stage.querySelector<HTMLElement>('[data-fnl-rule]');
+    const outcomeEl = stage.querySelector<HTMLElement>('.fnl__outcome');
     const capEl = stage.querySelector<HTMLElement>('[data-fnl-caption]');
     if (!svg || !slot || !frame || !chipEls.length) return null;
 
@@ -483,8 +488,10 @@ const GROUPS = [
       rippleG.appendChild(c);
       return c;
     });
-    const ringA = svgEl('ellipse', { fill: 'none', stroke: '#ecc27c', 'stroke-opacity': 0.42, 'stroke-width': 1.4 });
-    const ringB = svgEl('ellipse', { fill: 'none', stroke: '#8da272', 'stroke-opacity': 0.3, 'stroke-width': 1.4 });
+    // Kept faint on purpose: two crisp counter-rotating ellipses are the strongest
+    // "tech dashboard" signifier in the scene, and this is a countryside brand.
+    const ringA = svgEl('ellipse', { fill: 'none', stroke: '#ecc27c', 'stroke-opacity': 0.28, 'stroke-width': 1.2 });
+    const ringB = svgEl('ellipse', { fill: 'none', stroke: '#8da272', 'stroke-opacity': 0.2, 'stroke-width': 1.2 });
     ringGA.appendChild(ringA);
     ringGB.appendChild(ringB);
 
@@ -624,11 +631,18 @@ const GROUPS = [
     let tabVisible = document.visibilityState !== 'hidden';
     let t0 = 0;
 
+    const AMBIENT_MS = 1000 / 30; // the halo breathes slowly; 30fps is indistinguishable
+    let lastFrame = 0;
+
     const ambient = (now: number) => {
       raf = requestAnimationFrame(ambient);
       // The section is tall, so the IntersectionObserver fires long before the scrub lights
       // anything up. Until the core has any charge there is literally nothing to draw.
       if (coreT.p <= 0.01) return;
+      // Cap the ambient clock. Every frame is ~150 SVG attribute writes; at 60fps that is
+      // real battery on a mid-range phone, for motion nobody can see at double the rate.
+      if (now - lastFrame < AMBIENT_MS) return;
+      lastFrame = now;
 
       if (!t0) t0 = now;
       const time = (now - t0) / 1000;
@@ -683,6 +697,7 @@ const GROUPS = [
       if (should && !running) {
         running = true;
         t0 = 0;
+        lastFrame = 0;
         raf = requestAnimationFrame(ambient);
       } else if (!should && running) {
         running = false;
@@ -709,13 +724,20 @@ const GROUPS = [
       wireT.p = 1 + DRAW_SPAN;
       coreT.p = 1;
       render();
-      const onResizeStatic = () => {
+      let alive = true;
+      const redraw = () => {
+        if (!alive) return;
         measure();
         render();
       };
-      window.addEventListener('resize', onResizeStatic);
+      window.addEventListener('resize', redraw);
+      // Fraunces/Karla swap in AFTER first paint and reflow every chip. The animated path
+      // gets this for free via ScrollTrigger.refresh(); the static path must ask for itself,
+      // or its wires stay anchored to the pre-swap layout.
+      (document as any).fonts?.ready?.then(redraw);
       return () => {
-        window.removeEventListener('resize', onResizeStatic);
+        alive = false;
+        window.removeEventListener('resize', redraw);
         delete stage.dataset.fnlInit;
       };
     }
@@ -725,6 +747,16 @@ const GROUPS = [
     io.observe(stage);
 
     /* ---------- the scrubbed narrative ---------- */
+    // Keyboard escape hatch. The CTA is the only focusable thing in the section; if a user
+    // Tabs to it before the scrub has revealed it, jump the timeline to its end so the thing
+    // they just focused is actually on screen. Registered once, outside matchMedia, so a
+    // breakpoint flip cannot leave it pointing at a dead timeline.
+    let currentTl: gsap.core.Timeline | null = null;
+    const onFocusIn = () => {
+      if (currentTl && currentTl.progress() < 1) currentTl.progress(1);
+    };
+    stage.addEventListener('focusin', onFocusIn);
+
     const mm = gsap.matchMedia();
     mm.add(
       {
@@ -740,7 +772,6 @@ const GROUPS = [
         // strand its own outcome + CTA below the fold, unreachable. Scroll it instead.
         // (Measure the content, not the stage box — the stage carries bottom padding that
         // is allowed to hang off-screen.)
-        const outcomeEl = stage.querySelector<HTMLElement>('.fnl__outcome');
         const contentH = outcomeEl ? outcomeEl.offsetTop + outcomeEl.offsetHeight : stage.offsetHeight;
         const pinned = !!ctx.conditions?.desktop && contentH + 8 <= window.innerHeight - headerH();
 
@@ -784,13 +815,26 @@ const GROUPS = [
           // group headings to 2.80:1 against pine-950. 0.6 keeps 5.38:1 / 4.70:1 and still
           // reads as clearly receded.
           .to([...chipEls, ...groupEls], { opacity: 0.6, duration: 0.9, ease: 'sine.inOut' }, 3.7)
-          .from(outEls, { y: 20, autoAlpha: 0, duration: 0.6, stagger: 0.18 }, 3.9)
+          // `opacity`, NOT `autoAlpha`: autoAlpha adds visibility:hidden, which strips the
+          // payoff line and the primary CTA from the accessibility tree and the tab order for
+          // the whole first 65% of a two-viewport scrub. A screen reader driving a virtual
+          // cursor never scrolls, so it would never see them at all. Left in the tree, they
+          // are announced; `pointer-events` stops a mouse hitting the invisible link, and the
+          // focusin handler below reveals everything the instant a keyboard reaches it.
+          .from(outEls, { y: 20, opacity: 0, duration: 0.6, stagger: 0.18 }, 3.9)
           .from(ruleEl, { scaleX: 0, transformOrigin: 'center', duration: 0.6 }, 4.2)
+          .set(outcomeEl, { pointerEvents: 'auto' }, 4.4)
           .to({}, { duration: 0.8 }, 5.2); // a beat to rest on the outcome
+
+        currentTl = tl;
 
         // Dev-only: lets the timeline be scrubbed by hand. A backgrounded automation tab
         // gets zero rAF frames, so ScrollTrigger can never advance it for a screenshot.
         if (import.meta.env.DEV) (window as any).__fnl = { tl, render, pinned };
+
+        return () => {
+          currentTl = null;
+        };
 
         // No explicit teardown: the matchMedia context reverts the timeline, its
         // `from` states and the pinned ScrollTrigger when the breakpoint flips.
@@ -809,6 +853,7 @@ const GROUPS = [
       running = false;
       cancelAnimationFrame(raf);
       io.disconnect();
+      stage.removeEventListener('focusin', onFocusIn);
       document.removeEventListener('visibilitychange', onVis);
       ScrollTrigger.removeEventListener('refreshInit', onRefresh);
       mm.revert();
