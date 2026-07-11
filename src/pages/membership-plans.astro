@@ -1,0 +1,639 @@
+---
+// Page 6 — Membership Plans (/membership-plans). NEW page, no old-site equivalent
+// (the old site carried membership as a homepage section; /#MembershipPlans stays).
+// Spec: docs/page-specs/06-membership-plans.md (pre-build interview 2026-07-11).
+// Facts = pricing.json category "membership" (owner-corrected 2026-07-04 — the single
+// source of truth; T1 has NO free training session, T2 = TWO per cycle, free pick-ups
+// & drop-offs ARE a T1/T2/grooming-sub perk). Never hard-code money.
+// Copy is DRAFT — owner corrects on the live page.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+// Real photos only (owner rule) — all four verified in-repo shots from The Barn pool.
+import heroFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
+import imgBuddies from '../assets/pages/dog-day-school/regular-buddies-2880w.webp';
+import imgLoved from '../assets/pages/dog-day-school/we-love-dogs-2880w.webp';
+import imgBus from '../assets/pages/dog-day-school/on-the-bus-1920w.webp';
+
+const gbp = (n: number) => (Number.isInteger(n) ? `£${n.toLocaleString('en-GB')}` : `£${n.toFixed(2)}`);
+
+const offerings = pricing.offerings;
+const planHalf = offerings.find((o) => o.id === 'membership-half')!;
+const planT1 = offerings.find((o) => o.id === 'membership-full-t1')!;
+const planT2 = offerings.find((o) => o.id === 'membership-full-t2')!;
+const groomSub = offerings.find((o) => o.id === 'grooming-subscription')!;
+const dayFull = offerings.find((o) => o.id === 'day-full')!;
+const dayHalf = offerings.find((o) => o.id === 'day-half-am')!;
+const taster = offerings.find((o) => o.id === 'day-taster')!;
+
+// Savings vs paying day-by-day (spec formula, locked 2026-07-11): full-time =
+// 5 days/week averaged over the year, compared at the WEEKLY-DISCOUNT day rate
+// (the honest comparison), rounded DOWN to whole pounds — never overstate.
+const DAYS_PER_MONTH = 5 * (52 / 12); // ≈ 21.67
+const savingHalf = Math.floor(dayHalf.weeklyDiscountPrice * DAYS_PER_MONTH - planHalf.price); // vs £275
+const savingFull = Math.floor(dayFull.weeklyDiscountPrice * DAYS_PER_MONTH - planT1.price); // vs £375
+const t2MonthlyEquiv = planT2.price / 2; // £750 per 2-month cycle
+// Free pick-ups & drop-offs (T1/T2 perk) vs the pay-per-journey rate everyone else pays.
+const journeyRate = pricing.addOns.pickUpPerJourney; // £1 each way
+const pickupsWorth = Math.floor((pricing.addOns.pickUpPerJourney + pricing.addOns.dropOffPerJourney) * DAYS_PER_MONTH);
+
+// Per-card presentation (facts stay in pricing.json; this is layout + draft taglines).
+const cards = [
+  {
+    plan: planHalf,
+    displayName: 'Half Days',
+    tagline: 'Every weekday morning or afternoon — the gentlest full-time rhythm.',
+    saving: savingHalf,
+    featured: false,
+  },
+  {
+    plan: planT1,
+    displayName: 'Full Days — Tier 1',
+    tagline: 'Full days, every weekday — our most popular membership.',
+    saving: savingFull,
+    featured: true,
+  },
+  {
+    plan: planT2,
+    displayName: 'Full Days — Tier 2',
+    tagline: 'The same full-time school with the fullest set of perks, billed once every two months.',
+    saving: savingFull,
+    featured: false,
+  },
+];
+
+// Draft copy for the join path (mirrors the day-school admission facts).
+const joinSteps = [
+  {
+    title: 'Three taster sessions',
+    body: `Every dog starts with three tasters — an hour, then two, then three (${gbp(taster.price)} each), with a staff debrief after each one. It's how we keep the school calm, safe and happy.`,
+  },
+  {
+    title: 'Become a registered school dog',
+    body: "When your dog has settled in and loves it here, they're accepted into the school — a registered school dog with their own regular routine.",
+  },
+  {
+    title: 'Apply for membership',
+    body: "Already coming most days? Apply below and we'll move your routine onto a membership — one simple invoice, perks switched on.",
+  },
+];
+
+// The club perks, honestly tagged by tier — the tier boundaries come from
+// pricing.json features; don't blur them.
+const perkRows = [
+  {
+    title: 'Booked and invoiced for you',
+    tiers: 'All plans',
+    body: "Your dog's regular days are held for them and the invoicing is handled for you — no juggling bookings, no scrambling for slots.",
+  },
+  {
+    title: 'Monthly bath & brush with a maintenance trim',
+    tiers: 'All plans',
+    body: 'Once a month your dog goes home washed, brushed and tidied up — included in every plan.',
+  },
+  {
+    title: 'Priority boarding space',
+    tiers: 'All plans',
+    body: 'When boarding space is tight — school holidays especially — members come first.',
+  },
+  {
+    title: 'Free pick-ups & drop-offs',
+    tiers: 'Full-day plans',
+    body: `Our bus collects and drops off free on the full-day tiers — everyone else pays ${gbp(journeyRate)} a journey.`,
+  },
+  {
+    title: 'Grooming, cheaper or free',
+    tiers: 'By tier',
+    body: 'Half-price full grooms on Half Days and Tier 1 — and free full grooms on Tier 2.',
+  },
+  {
+    title: 'Hot towel wash after muddy days',
+    tiers: 'Half Days',
+    body: 'Muddy season happens. Half Days dogs get a hot towel wash before home time.',
+  },
+  {
+    title: 'Two free training sessions each cycle',
+    tiers: 'Tier 2',
+    body: 'Tier 2 includes two free training sessions in every two-month cycle — so the training never goes stale.',
+  },
+];
+---
+
+<Base
+  title="Membership Plans — Day School Membership | The Fairy Tails K9 Centre"
+  description={`Day-school membership for registered school dogs in Hastings — full-time care from ${gbp(planHalf.price)} a month, booked and invoiced for you, with grooming perks, priority boarding and free pick-ups on full-day tiers.`}
+  path="/membership-plans"
+>
+  <div data-page="membership-plans">
+    <!-- ============ HERO ============ -->
+    <!-- ═══ HERO ANIMATION SLOT: owner design handoff pending (2026-07-11) ═══
+         The owner is designing a hero animation with Claude design (same handoff
+         pattern as design_handoff_training_funnel_animation/ → native rebuild, per
+         WholeDogFunnel). Until it lands, this static photo band is the placeholder.
+         When the handoff arrives, replace ONLY the contents of [data-hero-slot] —
+         the section's svh sizing keeps the swap reflow-free. Do NOT invent a
+         bespoke hero animation here (locked interview decision #5). -->
+    <section class="relative isolate flex min-h-[82svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden" data-hero-slot>
+        <Image
+          src={heroFriends}
+          alt=""
+          widths={[768, 1440, 2560]}
+          sizes="100vw"
+          class="h-full w-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+          data-hero-media
+          aria-hidden="true"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/55 to-pine-950/25"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>The Fairy Tails club · for registered school dogs</p>
+        <h1
+          class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl"
+          data-hero-title
+        >
+          <span class="hero-line block">For dogs who are</span>
+          <span class="hero-line block"><em class="squiggle not-italic">already family</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Your dog's regular days, rolled into one simple plan — booked and invoiced for you, with
+          the club perks on top. Membership is our thank-you to the dogs who are here week in, week
+          out.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#apply" class="btn btn-honey">
+            Apply for membership <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href="#plans" class="btn btn-ghost-light"> See the plans </a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul
+        class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4"
+      >
+        <li class="paw-bullet flex items-center text-moss-700">Full-time day school, all on one plan</li>
+        <li class="paw-bullet flex items-center text-moss-700">Booked and invoiced for you</li>
+        <li class="paw-bullet flex items-center text-moss-700">Grooming perks &amp; priority boarding</li>
+        <li class="paw-bullet flex items-center text-moss-700">
+          Save {gbp(savingHalf)}–{gbp(savingFull)} a month vs day rates
+        </li>
+      </ul>
+    </div>
+
+    <!-- ============ INTRO — warm but gated ============ -->
+    <section class="mx-auto max-w-3xl px-4 py-20 text-center sm:py-24" data-section="intro">
+      <p class="eyebrow text-honey-600" data-reveal>What membership is</p>
+      <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+        The easiest way to be a <em class="squiggle not-italic">school dog</em>
+      </h2>
+      <p class="mt-6 text-lg leading-relaxed text-bark-700" data-reveal>
+        Membership takes your dog's regular days and rolls them into one simple plan — cheaper than
+        paying day by day, booked and invoiced for you, with the little club luxuries built in.
+        There's one honest rule, though: membership is only for registered school dogs who've been
+        through our introduction process. If your dog isn't one of ours yet, we'll show you exactly
+        where to start further down.
+      </p>
+    </section>
+
+    <!-- ============ SIGNATURE: THE THREE PLANS + SAVINGS COUNTERS ============ -->
+    <section class="bg-cream-100" data-section="plans">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div id="plans" class="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24 pt-12">
+        <div class="max-w-2xl">
+          <p class="eyebrow text-honey-600" data-reveal>The plans</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            Three ways to <em class="squiggle not-italic">belong</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Every plan covers full-time attendance — come as often as suits your dog, every weekday
+            if you like. Tier 2 doesn't buy more days than Tier 1: it's the same full-time school
+            with more perks on top, billed once every two months.
+          </p>
+        </div>
+
+        <div class="mt-10 grid items-start gap-6 lg:grid-cols-3" data-plan-grid>
+          {
+            cards.map(({ plan, displayName, tagline, saving, featured }) => (
+              <article
+                class:list={[
+                  'member-card relative flex h-full flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]',
+                  featured && 'ring-2 ring-honey-400',
+                ]}
+              >
+                {featured && (
+                  <p class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-honey-400 px-4 py-1 text-xs font-bold uppercase tracking-[0.14em] text-bark-900">
+                    Most popular
+                  </p>
+                )}
+                <h3 class="font-display text-xl font-bold text-moss-800">{displayName}</h3>
+                <p class="mt-3">
+                  <span class="font-display text-4xl font-bold text-moss-700">{gbp(plan.price)}</span>
+                  <span class="text-sm font-bold text-bark-500"> {plan.unit}</span>
+                </p>
+                {plan.id === 'membership-full-t2' && (
+                  <p class="mt-1 text-xs font-bold text-bark-500">— the same {gbp(t2MonthlyEquiv)} a month as Tier 1</p>
+                )}
+                {plan.largeDogSurcharge ? (
+                  <p class="mt-1 text-xs font-bold text-honey-700">+{gbp(plan.largeDogSurcharge)}/month for large dogs</p>
+                ) : plan.largeDogSurcharge === 0 ? (
+                  <p class="mt-1 text-xs font-bold text-moss-700">No large-dog surcharge</p>
+                ) : null}
+                <p class="mt-3 text-sm leading-relaxed text-bark-700">{tagline}</p>
+
+                <div class="mt-5 rounded-xl bg-moss-700/10 px-4 py-3.5">
+                  <p class="font-display text-2xl font-bold text-moss-700">
+                    {/* AT reads the static sr-only value; the counting span is aria-hidden so a
+                        screen reader can never catch it mid-count at £0 (a11y review 2026-07-11) */}
+                    Save £<span class="sr-only">{saving.toLocaleString('en-GB')}</span><span
+                      aria-hidden="true"
+                      data-count-to={saving}>{saving.toLocaleString('en-GB')}</span> a month
+                  </p>
+                  <p class="mt-0.5 text-xs leading-relaxed text-bark-500">
+                    vs paying day by day at our weekly rate
+                    {plan.id !== 'membership-half' &&
+                      ` — before free pick-ups & drop-offs, worth up to ${gbp(pickupsWorth)} a month on their own`}
+                  </p>
+                </div>
+
+                <ul class="mt-5 flex-1 space-y-1.5 text-sm">
+                  {plan.features.map((f) => (
+                    <li class="paw-bullet flex items-start text-moss-600">
+                      <span class="text-bark-700">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p class="mt-4 text-xs leading-relaxed text-bark-500">{plan.eligibility}</p>
+                <a href="#apply" class:list={['btn mt-6 w-full', featured ? 'btn-honey' : 'btn-moss']}>
+                  Apply for membership
+                </a>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 max-w-3xl text-xs leading-relaxed text-bark-500" data-reveal>
+          Savings compare full-time attendance — five days a week, averaged over the year (about
+          {DAYS_PER_MONTH.toFixed(1)} days a month) — with our weekly-booking day rates of
+          {gbp(dayFull.weeklyDiscountPrice)} a full day and {gbp(dayHalf.weeklyDiscountPrice)} a half
+          day, rounded down to the pound. Membership doesn't change your dog's routine — it just
+          makes it simpler and cheaper.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ HOW YOU JOIN — the honest gate ============ -->
+    <section class="bg-cream-50" data-section="join">
+      <HillDivider class="bg-cream-100 text-cream-50" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <p class="eyebrow text-honey-600" data-reveal>How you join</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          First, become <em class="squiggle not-italic">one of ours</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          We don't sell membership at the door — every member dog is a school dog first. That's what
+          keeps the club calm, safe and genuinely lovely to be part of.
+        </p>
+
+        <ol class="mt-12 grid gap-6 md:grid-cols-3" data-join-steps>
+          {
+            joinSteps.map((step, i) => (
+              <li class="join-step relative rounded-2xl border-2 border-cream-200 bg-cream-50 p-7">
+                <p class="flex h-11 w-11 items-center justify-center rounded-full bg-moss-700 font-display text-lg font-bold text-cream-50">
+                  {i + 1}
+                </p>
+                <h3 class="mt-4 font-display text-xl font-bold text-moss-800">{step.title}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-bark-700">{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="mt-10 flex flex-wrap items-center gap-4" data-reveal>
+          <a href="/dog-day-school" class="btn btn-moss">
+            Start with Day School <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <p class="text-sm text-bark-500">
+            Not one of ours yet? Taster sessions, the settling-in process and the day-to-day are all
+            there.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CLUB PERKS — the little luxuries ============ -->
+    <section class="bg-pine-900 text-cream-100" data-section="perks">
+      <HillDivider class="bg-cream-50 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>Club perks</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          Little luxuries, <em class="squiggle not-italic">built in</em>
+        </h2>
+
+        <div class="mt-12 grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-16">
+          <ul data-perk-list>
+            {
+              perkRows.map((perk) => (
+                <li class="perk-row border-b border-pine-800 py-5 first:pt-0">
+                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                    <h3 class="font-display text-lg font-bold text-cream-50">{perk.title}</h3>
+                    <span class="rounded-full border border-honey-400/40 px-2.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-honey-300">
+                      {perk.tiers}
+                    </span>
+                  </div>
+                  <p class="mt-2 max-w-xl text-sm leading-relaxed text-cream-200">{perk.body}</p>
+                </li>
+              ))
+            }
+          </ul>
+
+          <aside class="mx-auto flex w-full max-w-sm flex-col gap-8 lg:mt-2" data-perk-photos>
+            <figure class="polaroid -rotate-2">
+              <Image
+                src={imgBuddies}
+                alt="Two regular school dogs cuddled up together on the sofa at The Barn"
+                widths={[400, 800]}
+                sizes="(min-width: 1024px) 22rem, 24rem"
+                class="aspect-[4/5] w-full rounded-[2px] object-cover"
+              />
+              <figcaption class="mt-3 text-center font-display text-sm font-bold text-bark-700">
+                The regulars' sofa at The Barn
+              </figcaption>
+            </figure>
+            <figure class="polaroid rotate-[1.5deg]">
+              <Image
+                src={imgLoved}
+                alt="A staff member cuddling a small black dog at The Barn"
+                widths={[400, 800]}
+                sizes="(min-width: 1024px) 22rem, 24rem"
+                class="aspect-square w-full rounded-[2px] object-cover"
+              />
+              <figcaption class="mt-3 text-center font-display text-sm font-bold text-bark-700">
+                Looked after like our own
+              </figcaption>
+            </figure>
+            <figure class="polaroid -rotate-1">
+              <Image
+                src={imgBus}
+                alt="A dog sitting calmly on the school bus"
+                widths={[400, 800]}
+                sizes="(min-width: 1024px) 22rem, 24rem"
+                class="aspect-square w-full rounded-[2px] object-cover"
+              />
+              <figcaption class="mt-3 text-center font-display text-sm font-bold text-bark-700">
+                The school bus
+              </figcaption>
+            </figure>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FOR OUR GROOMING REGULARS ============ -->
+    <section class="bg-cream-100" data-section="grooming">
+      <HillDivider class="bg-pine-900 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div
+          class="grain flex flex-col gap-8 rounded-3xl bg-moss-700 p-8 text-cream-50 sm:p-10 lg:flex-row lg:items-center lg:justify-between"
+          data-reveal
+        >
+          <div class="max-w-xl">
+            <p class="eyebrow text-honey-300">For our grooming regulars</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50">{groomSub.name}</h2>
+            <p class="mt-4 leading-relaxed text-cream-100">
+              A different club for a different crowd — {groomSub.eligibility?.toLowerCase().replace(/\.$/, '')},
+              run with our sister salon,
+              <a
+                href={business.groomingSite}
+                class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4"
+                >Fairy Tails Dog Grooming</a
+              >. No school enrolment needed.
+            </p>
+            <ul class="mt-5 grid gap-x-8 gap-y-1.5 text-sm sm:grid-cols-2">
+              {
+                groomSub.features.map((f) => (
+                  <li class="paw-bullet flex items-start text-honey-300">
+                    <span class="text-cream-100">{f}</span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="shrink-0 text-left lg:text-center">
+            <p>
+              <span class="font-display text-5xl font-bold text-cream-50">{gbp(groomSub.price)}</span>
+              <span class="font-bold text-cream-200"> {groomSub.unit}</span>
+            </p>
+            <a href={business.acuity.grooming} class="btn btn-honey mt-5">
+              Book with the groomers <span class="btn-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APPLY ============ -->
+    <section id="apply" class="scroll-mt-24 bg-pine-950" data-section="apply">
+      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div id="enquire" class="mx-auto max-w-2xl scroll-mt-24 text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Apply for membership</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Tell us about <em class="squiggle not-italic">your dog</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+            If they're already one of ours, we'll sort the rest — your regular days, one simple
+            invoice and the perks switched on. Not a school dog yet? Say hello anyway and we'll
+            point you to the taster sessions.
+          </p>
+        </div>
+        <div class="grain mt-8 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Membership Plans" page="/membership-plans" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk it through?
+          <a
+            href={business.phones.main.whatsapp}
+            class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4"
+          >
+            WhatsApp us on {business.phones.main.display}
+          </a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .member-card {
+    transition:
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      box-shadow 0.35s ease;
+  }
+  .member-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-polaroid);
+  }
+
+  /* The perk polaroids tilt via Tailwind's standalone `rotate:` property (deliberate —
+     an inline transform tilt would be wiped by the stagger's clearProps). The global
+     .polaroid:hover only cancels `transform` rotations, so straighten-on-hover needs
+     the standalone property reset too (2026-07-11 review finding). */
+  [data-perk-photos] :global(.polaroid) {
+    transition:
+      transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+      rotate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  [data-perk-photos] :global(.polaroid:hover) {
+    rotate: 0deg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .member-card {
+      transition: none;
+    }
+    .member-card:hover {
+      transform: none;
+    }
+    [data-perk-photos] :global(.polaroid) {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Module-level so astro:before-swap can revert it: gsap.matchMedia() contexts
+  // persist for the whole session and RE-RUN whenever the media query re-matches —
+  // an unreverted context from a swapped-out page would replay its from() tweens
+  // against the new DOM after a reduced-motion OFF-toggle and strand content at
+  // opacity 0 (2026-07-11 review finding).
+  let mm: ReturnType<typeof gsap.matchMedia> | null = null;
+
+  function initMembershipPlans() {
+    const root = document.querySelector('[data-page="membership-plans"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    root.dataset.gsapInit = '1';
+
+    // Reduced motion → fully static page: counters keep their server-rendered
+    // final values, everything visible. (Animation contract.)
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return;
+
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* Hero entrance */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* Hero photo slow drift (lives on the placeholder slot — harmless to the
+         future animation swap, which replaces the slot's contents wholesale) */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* Generic reveals */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+        });
+      });
+
+      /* Staggered groups. clearProps wipes the inline opacity/transform GSAP leaves
+         behind so the CSS hover-lift keeps working afterwards (2026-07-08 lesson). */
+      const staggerGroups: Array<[string, string]> = [
+        ['[data-plan-grid]', ':scope > *'],
+        ['[data-join-steps]', ':scope > *'],
+        ['[data-perk-list]', ':scope > *'],
+        ['[data-perk-photos]', ':scope > *'],
+      ];
+      staggerGroups.forEach(([groupSel, childSel]) => {
+        const group = root.querySelector(groupSel);
+        if (!group) return;
+        gsap.from(group.querySelectorAll(childSel), {
+          y: 34,
+          autoAlpha: 0,
+          duration: 0.6,
+          ease: 'power3.out',
+          stagger: 0.08,
+          clearProps: 'opacity,visibility,transform',
+          scrollTrigger: { trigger: group, start: 'top 84%', once: true },
+        });
+      });
+
+      /* Savings counters — the signature. Server renders the FINAL values (so
+         no-JS and reduced-motion are always correct); with motion allowed we
+         re-wind to 0 and count up when the cards scroll in. */
+      const counters = gsap.utils.toArray<HTMLElement>('[data-count-to]');
+      counters.forEach((el) => {
+        const target = Number(el.dataset.countTo || '0');
+        const proxy = { v: 0 };
+        el.textContent = '0';
+        gsap.to(proxy, {
+          v: target,
+          duration: 1.6,
+          ease: 'power2.out',
+          snap: { v: 1 },
+          scrollTrigger: { trigger: el, start: 'top 90%', once: true },
+          onUpdate: () => {
+            el.textContent = Math.round(proxy.v).toLocaleString('en-GB');
+          },
+        });
+      });
+
+      /* If this media-query context ever reverts (user flips reduced-motion on
+         mid-visit), restore the true final values rather than a frozen count. */
+      return () => {
+        counters.forEach((el) => {
+          const target = Number(el.dataset.countTo || '0');
+          el.textContent = target.toLocaleString('en-GB');
+        });
+      };
+    });
+  }
+
+  initMembershipPlans();
+  document.addEventListener('astro:page-load', initMembershipPlans);
+  document.addEventListener('astro:before-swap', () => {
+    mm?.revert(); // also runs the counter-restoring cleanup
+    mm = null;
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  });
+</script>
