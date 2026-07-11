@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap">
+  <style>
+    html, body { margin: 0; padding: 0; background: #FFFFFF; height: 100%; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    a { color: #0090C8; }
+    a:hover { color: #006A94; }
+    ::selection { background: rgba(0,175,241,0.18); }
+    @keyframes ftIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+    @keyframes ftRipple { 0% { transform: translate(-50%,-50%) scale(0.15); opacity: 0.9; } 100% { transform: translate(-50%,-50%) scale(1); opacity: 0; } }
+    @keyframes ftBurst { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.15); opacity: 0; } }
+    @keyframes ftFloat { 0% { transform: translate(-50%, 0) scale(0.92); opacity: 0; } 14% { opacity: 1; transform: translate(-50%, -12px) scale(1); } 100% { transform: translate(-50%, -66px) scale(1); opacity: 0; } }
+    @keyframes ftPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    @keyframes ftGlint { 0% { transform: scale(0.2); opacity: 0.95; } 55% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(0.1); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</helmet>
+
+<section ref="{{ heroRef }}" data-screen-label="Service rain animation" aria-label="Falling words describing our daycare services, with a dog catching them" style="position: relative; width: 100%; height: 100%; min-height: 540px; background: #FFFFFF; overflow: hidden; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; color: #1C1C1E;">
+
+  <!-- Floor band -->
+  <div ref="{{ floorRef }}" style="position: absolute; left: 0; right: 0; bottom: 0; height: clamp(48px, 9%, 76px); background: #F8FBFE; border-top: 1px solid rgba(60,60,67,0.08); z-index: 0;"></div>
+
+  <!-- Word rain layer -->
+  <div ref="{{ rainRef }}" aria-hidden="true" style="position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;"></div>
+
+  <!-- Dog -->
+  <div ref="{{ dogWrapRef }}" aria-hidden="true" style="position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; will-change: transform; visibility: hidden;">
+    <svg ref="{{ dogSvgRef }}" width="210" height="148" viewBox="-75 -100 150 106" fill="none" style="display: block; overflow: visible; will-change: transform;">
+      <defs>
+        <linearGradient id="ftdgB" x1="0" y1="-95" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#1C1C22"></stop>
+          <stop offset="1" stop-color="#0C0C10"></stop>
+        </linearGradient>
+      </defs>
+      <ellipse data-part="shadow" cx="-2" cy="0" rx="46" ry="6" fill="rgba(17,17,17,0.09)"></ellipse>
+      <g data-part="root">
+        <g data-part="ffU">
+          <path d="M8 -47 L10 -36" stroke="#34343C" stroke-width="12" stroke-linecap="round"></path>
+          <path d="M9.6 -38 L12 -25" stroke="#34343C" stroke-width="9" stroke-linecap="round"></path>
+          <g data-part="ffL">
+            <path d="M12 -25 L14 -9" stroke="#34343C" stroke-width="7.5" stroke-linecap="round"></path>
+            <path d="M10.5 -8 C9.5 -3.5 11 -1 15 -0.8 C18.5 -0.6 21.5 -1.6 22 -3.6 C22.5 -5.4 20.5 -6.5 18 -7 C15.5 -7.5 12.5 -8.5 10.5 -8 Z" fill="#34343C"></path>
+          </g>
+        </g>
+        <g data-part="hfU">
+          <path d="M-16 -41 L-19 -31" stroke="#34343C" stroke-width="15" stroke-linecap="round"></path>
+          <path d="M-18.5 -33 L-22 -20" stroke="#34343C" stroke-width="10" stroke-linecap="round"></path>
+          <g data-part="hfL">
+            <path d="M-22 -20 L-18 -9" stroke="#34343C" stroke-width="7.5" stroke-linecap="round"></path>
+            <path d="M-21 -8 C-22 -3.5 -20.5 -1 -16.5 -0.8 C-13 -0.6 -10 -1.6 -9.5 -3.6 C-9 -5.4 -11 -6.5 -13.5 -7 C-16 -7.5 -19 -8.5 -21 -8 Z" fill="#34343C"></path>
+          </g>
+        </g>
+        <g data-part="tail">
+          <path d="M-32 -40 C-45 -46 -54 -58 -52 -72 C-51 -80 -44 -85 -39 -80 C-36 -77 -37 -72 -40 -69 C-42 -63 -41 -57 -35 -51 C-31 -47 -30.5 -43 -32 -40 Z" fill="url(#ftdgB)"></path>
+          <path d="M-46 -74 C-44 -78 -40 -78.5 -39.5 -75" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round" fill="none"></path>
+        </g>
+        <path data-part="body" d="M29 -60 C34 -56 36.5 -48 34.5 -42 C36 -40.5 36 -38.5 33.8 -37.5 C32 -31.5 26 -28 19 -27.5 C11 -27 5 -27.8 -3 -28.3 C-11 -28.8 -17 -27.6 -23 -27.2 C-33 -26.8 -39.5 -31 -41.5 -39 C-43.5 -47.5 -40 -55 -33 -58.5 C-25 -62 -15 -61 -6 -61 C3 -61 12 -63.5 19 -65 C25 -66 27.5 -63 29 -60 Z" fill="url(#ftdgB)"></path>
+        <path d="M-30 -57 C-20 -60.5 -5 -60.3 6 -60.7 C13 -61.3 19 -63.6 24 -64.8" stroke="rgba(255,255,255,0.08)" stroke-width="2" stroke-linecap="round" fill="none"></path>
+        <g data-part="hnU">
+          <path d="M-24 -41 L-27 -31" stroke="#14141A" stroke-width="16" stroke-linecap="round"></path>
+          <path d="M-26.5 -33 L-30 -20" stroke="#14141A" stroke-width="10.5" stroke-linecap="round"></path>
+          <g data-part="hnL">
+            <path d="M-30 -20 L-26 -9" stroke="#14141A" stroke-width="8" stroke-linecap="round"></path>
+            <path d="M-29 -8 C-30 -3.5 -28.5 -1 -24.5 -0.8 C-21 -0.6 -18 -1.6 -17.5 -3.6 C-17 -5.4 -19 -6.5 -21.5 -7 C-24 -7.5 -27 -8.5 -29 -8 Z" fill="#101015"></path>
+          </g>
+        </g>
+        <g data-part="fnU">
+          <path d="M16 -47 L18 -36" stroke="#14141A" stroke-width="13" stroke-linecap="round"></path>
+          <path d="M17.6 -38 L20 -25" stroke="#14141A" stroke-width="9.5" stroke-linecap="round"></path>
+          <g data-part="fnL">
+            <path d="M20 -25 L22 -9" stroke="#14141A" stroke-width="8" stroke-linecap="round"></path>
+            <path d="M19 -8 C18 -3.5 19.5 -1 23.5 -0.8 C27 -0.6 30 -1.6 30.5 -3.6 C31 -5.4 29 -6.5 26.5 -7 C24 -7.5 21 -8.5 19 -8 Z" fill="#101015"></path>
+          </g>
+        </g>
+        <g data-part="head">
+          <g data-part="jaw">
+            <path d="M36 -70 C42 -71.5 48 -72 53 -72.5 C55 -69 53 -66 48 -64.5 C42 -63 36 -63.5 33 -65.5 C31.5 -67.5 33 -69.5 36 -70 Z" fill="url(#ftdgB)"></path>
+            <path data-part="tongue" d="M41 -66 C44.5 -65.5 46.5 -63.5 47 -60.5 C47.3 -58.3 45.5 -57.2 43.5 -58 C41.2 -58.8 40 -61 40 -63.8 C40 -65.2 40.2 -66 41 -66 Z" fill="#F09CA9" opacity="0"></path>
+          </g>
+          <path d="M11 -55 C11 -64 13 -72 16 -79 C18 -88 24 -94 30 -94 C36 -94 41 -90 43 -85 C43.5 -83.5 44 -83 45 -82.5 C48 -81.5 52 -80.5 54 -79 C56 -78 56.5 -75 55.5 -73 C55 -71.5 53 -70.5 50 -70.5 C46 -70.5 41 -69.5 38 -68.5 C33 -66.5 30 -61 28 -56 C25 -49 15 -48 11 -55 Z" fill="url(#ftdgB)"></path>
+          <path d="M20 -85 C23.5 -91.5 30 -93.6 36 -90.5" stroke="rgba(255,255,255,0.07)" stroke-width="2" stroke-linecap="round" fill="none"></path>
+          <circle cx="54.2" cy="-77.6" r="0.9" fill="rgba(255,255,255,0.5)"></circle>
+          <g data-part="ear"><path d="M24 -92 C12 -96 1 -88 0 -75 C-0.5 -65 5 -57 12 -60 C17 -62.5 20 -71 21 -80 C21.5 -86 22.5 -90 24 -92 Z" fill="#2A2A33"></path></g>
+          <g data-part="eyeG">
+            <ellipse cx="35" cy="-79" rx="3.1" ry="3.3" fill="#FFFFFF"></ellipse>
+            <circle data-part="pupil" cx="35.8" cy="-78.4" r="1.7" fill="#0C0C10"></circle>
+            <circle cx="36.7" cy="-80.2" r="0.7" fill="#FFFFFF" opacity="0.95"></circle>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <!-- FX layer: ripples, bursts, float labels, fairy -->
+  <div ref="{{ fxRef }}" aria-hidden="true" style="position: absolute; inset: 0; z-index: 4; pointer-events: none; overflow: hidden;">
+    <svg ref="{{ fairyRef }}" width="44" height="34" viewBox="-20 -16 40 30" style="display: none; position: absolute; left: 0; top: 0; overflow: visible; will-change: transform;">
+      <g data-part="wingA"><ellipse cx="1" cy="-9" rx="7.5" ry="3.1" fill="rgba(28,28,30,0.20)"></ellipse></g>
+      <g data-part="wingB"><ellipse cx="-1" cy="-6" rx="6.2" ry="2.5" fill="rgba(28,28,30,0.16)"></ellipse></g>
+      <path d="M8.5 -4.5 C5 -2 0 0 -5 4 C-9 7 -12 10 -15 13 C-13 8 -9 4 -5 1 C-1 -2 4 -5 7 -6 Z" fill="#111111"></path>
+      <circle cx="10" cy="-6" r="2.9" fill="#111111"></circle>
+      <path d="M9 -4 L15 -8" stroke="#111111" stroke-width="1.5" stroke-linecap="round"></path>
+      <path d="M16 -11.5 L16 -6.5 M13.5 -9 L18.5 -9" stroke="#00AFF1" stroke-width="1.3" stroke-linecap="round"></path>
+    </svg>
+  </div>
+
+  <!-- Catch hint -->
+  <sc-if value="{{ showHint }}" hint-placeholder-val="{{ true }}">
+    <div style="position: absolute; left: 0; right: 0; bottom: clamp(16px, 3%, 28px); z-index: 3; display: flex; align-items: center; justify-content: center; gap: 8px; pointer-events: none; animation: ftIn 500ms ease 1200ms both;">
+      <span style="width: 6px; height: 6px; border-radius: 9999px; background: #00AFF1; animation: ftPulse 2s ease-in-out infinite;"></span>
+      <span style="font-size: 13px; font-weight: 600; color: rgba(28,28,30,0.42);">{{ hintText }}</span>
+    </div>
+  </sc-if>
+
+  <!-- Caught counter -->
+  <sc-if value="{{ caughtAny }}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; right: clamp(14px, 2%, 24px); bottom: clamp(16px, 3%, 28px); z-index: 3; font-size: 12.5px; font-weight: 600; color: rgba(28,28,30,0.5); font-variant-numeric: tabular-nums; white-space: nowrap; pointer-events: none;">{{ caught }} of {{ servicesCount }} services caught</div>
+  </sc-if>
+
+  <!-- Accessible service list -->
+  <div style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;">
+    <h2>Our daycare services</h2>
+    <ul>
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
+        <li>{{ s }}</li>
+      </sc-for>
+    </ul>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 1440, &quot;height&quot;: 780 },
+  &quot;rainDensity&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.4, &quot;max&quot;: 1.8, &quot;step&quot;: 0.1, &quot;section&quot;: &quot;Rain&quot;, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;fallSpeed&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.5, &quot;max&quot;: 1.6, &quot;step&quot;: 0.05, &quot;section&quot;: &quot;Rain&quot;, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;autoCatch&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;section&quot;: &quot;Dog&quot;, &quot;tsType&quot;: &quot;boolean&quot; },
+  &quot;dogScale&quot;: { &quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 1, &quot;min&quot;: 0.7, &quot;max&quot;: 1.3, &quot;step&quot;: 0.05, &quot;section&quot;: &quot;Dog&quot;, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;showHint&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;section&quot;: &quot;Extras&quot;, &quot;tsType&quot;: &quot;boolean&quot; }
+}">
+const SERVICES = [
+  "Carefully managed dog socialisation","Positive human interaction","Supervised group play","Rules-based daycare",
+  "Strict introduction and assessment sessions","Careful matching of dogs by size, age, confidence, temperament and play style",
+  "Safety-focused pack management","Controlled entrances and exits","Gate and door protocols","Calm movement between daycare areas",
+  "Structured daily routines","Regular rest periods","Quiet settling time","Individual downtime","Outdoor play","Indoor play",
+  "Free movement in supervised areas","Small group play","One-to-one staff interaction","Puppy socialisation",
+  "Support for nervous dogs","Support for older dogs","Support for dogs new to daycare","Confidence-building activities",
+  "Impulse-control exercises","Basic obedience practice","Sit practice","Down practice","Settle practice","Waiting calmly",
+  "Name-response practice","Lead handling","Structured walks","Outdoor toilet access","Mental enrichment","Food puzzles",
+  "Problem-solving activities","Simple training games","Interactive play with staff","Calm play sessions","Play breaks",
+  "Behaviour monitoring","Body-language monitoring","Energy-level monitoring","Appetite monitoring","Toileting monitoring",
+  "Mobility monitoring","Health and wellbeing checks","Coat checks","Paw checks","Basic grooming familiarisation",
+  "Brushing where appropriate","Gentle body handling","Harness and collar handling","Lead attachment practice",
+  "Feeding at scheduled times","Separate feeding where required","Puppy meal routines","Special dietary care",
+  "Fresh water provision","Medication administration","Monitoring dogs after medication","Recording feeding information",
+  "Recording medication information","Recording behavioural observations","Cleaning and hygiene routines",
+  "Immediate cleaning of accidents","Disinfection of daycare areas","Cleaning food and water bowls","Cleaning bedding and rest areas",
+  "Safe transport","Loading dogs into vehicles","Unloading dogs from vehicles","Individual travel compartments",
+  "Ventilated travel areas","Bedding during transport","Collection from home","Return home after daycare",
+  "Controlled van transitions","Managing dogs around barriers","Managing dogs in confined spaces",
+  "Managing excitement around arrivals","Managing excitement around collection times","Calm greetings","Calm departures",
+  "Staff-led pack movement","Supervised interaction with different handlers","Exposure to different people",
+  "Exposure to different dogs","Exposure to different surfaces","Exposure to different sounds","Exposure to different environments",
+  "Supporting independence from owners","Helping dogs settle away from home","Maintaining familiar routines",
+  "Adapting activities to needs","Additional rest when required","Separating dogs when necessary","Redirecting inappropriate play",
+  "Interrupting overexcited behaviour","Preventing bullying","Preventing repetitive chasing","Managing behaviour",
+  "Reinforcing everyday manners","Supporting puppies' development","Balanced mix of activity and rest"
+];
+
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const rnd = (a, b) => a + Math.random() * (b - a);
+const damp = (rate, dt) => 1 - Math.exp(-rate * dt);
+const SVG_K = 1.4; // svg local unit -> px at scale 1
+const TAU = Math.PI * 2;
+
+class Component extends DCLogic {
+  state = { caught: 0, isTouch: false };
+
+  constructor(props) {
+    super(props);
+    this.heroRef = React.createRef();
+    this.rainRef = React.createRef();
+    this.fxRef = React.createRef();
+    this.dogWrapRef = React.createRef();
+    this.dogSvgRef = React.createRef();
+    this.floorRef = React.createRef();
+    this.fairyRef = React.createRef();
+  }
+
+  renderVals() {
+    return {
+      heroRef: this.heroRef, rainRef: this.rainRef, fxRef: this.fxRef,
+      dogWrapRef: this.dogWrapRef, dogSvgRef: this.dogSvgRef, floorRef: this.floorRef, fairyRef: this.fairyRef,
+      services: SERVICES, servicesCount: SERVICES.length,
+      caught: this.state.caught, caughtAny: this.state.caught > 0,
+      showHint: this.props.showHint ?? true,
+      hintText: (this.state.isTouch ? "Tap" : "Click") + " a falling word — the dog will catch it",
+    };
+  }
+
+  componentDidMount() {
+    this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this.setState({ isTouch: window.matchMedia("(pointer: coarse)").matches });
+
+    this.W = 0; this.H = 0; this.groundY = 0; this.respScale = 1;
+    this.drops = [];
+    this.queue = [];
+    this.pointer = { x: -9999, y: -9999, on: false };
+    this.elapsed = 0;
+    this.lastNow = performance.now() / 1000;
+    this.nextSpawnAt = 0.4;
+    this.nextAutoAt = 5;
+    this.nextFairyAt = 8;
+    this.nextWanderAt = 12;
+    this.lastInteractAt = 0;
+    this.nextBlinkAt = rnd(2, 5);
+    this.blinkUntil = 0;
+    this.fairy = null;
+    this.prevHeadRot = 0;
+
+    this.dog = {
+      x: 400, tx: 400, vx: 0, face: 1, faceK: 1, state: "enter", t: 0,
+      target: null, pending: null, leap: null, air: 0, sniffNext: false,
+      gaitPh: 0, earR: 0, earV: 0, tailA: 0,
+      pose: { bodyY: 0, pitch: 0, sy: 1, sx: 1, headRot: 0, jaw: 0, fnU: 2, fnL: -2, ffU: -3, ffL: 1, hnU: 3, hnL: -2, hfU: -4, hfL: 2 },
+    };
+
+    this.collectParts();
+
+    window.__ftHero = this;
+    this.measure();
+    this.ro = new ResizeObserver(() => this.measure());
+    this.ro.observe(this.heroRef.current);
+
+    const hero = this.heroRef.current;
+    this.onMove = (e) => {
+      const r = hero.getBoundingClientRect();
+      this.pointer.x = e.clientX - r.left; this.pointer.y = e.clientY - r.top; this.pointer.on = true;
+    };
+    this.onLeave = () => { this.pointer.on = false; this.pointer.x = -9999; this.pointer.y = -9999; };
+    hero.addEventListener("pointermove", this.onMove);
+    hero.addEventListener("pointerleave", this.onLeave);
+
+    this.dog.x = this.W + 180; this.dog.tx = this.W * 0.62;
+
+    if (this.reduced) { this.staticScene(); return; }
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf);
+    if (this.ro) this.ro.disconnect();
+    const hero = this.heroRef.current;
+    if (hero) { hero.removeEventListener("pointermove", this.onMove); hero.removeEventListener("pointerleave", this.onLeave); }
+  }
+
+  collectParts() {
+    const svg = this.dogSvgRef.current; if (!svg) return;
+    const q = (n) => svg.querySelector('[data-part="' + n + '"]');
+    this.parts = {
+      root: q("root"), head: q("head"), ear: q("ear"), jaw: q("jaw"), tail: q("tail"), shadow: q("shadow"),
+      eyeG: q("eyeG"), pupil: q("pupil"), tongue: q("tongue"),
+      fnU: q("fnU"), fnL: q("fnL"), ffU: q("ffU"), ffL: q("ffL"), hnU: q("hnU"), hnL: q("hnL"), hfU: q("hfU"), hfL: q("hfL"),
+    };
+  }
+
+  measure() {
+    const hero = this.heroRef.current, floor = this.floorRef.current;
+    if (!hero || !floor) return;
+    this.W = hero.clientWidth; this.H = hero.clientHeight;
+    this.groundY = floor.offsetTop + 1;
+    this.respScale = this.W < 640 ? 0.7 : this.W < 1000 ? 0.85 : 1;
+    if (this.dog.state === "enter") { this.dog.x = this.W + 180; this.dog.tx = this.W * 0.62; }
+    this.dog.x = clamp(this.dog.x, -200, this.W + 200);
+  }
+
+  // ---------- word queue ----------
+  nextWordIndex() {
+    if (!this.queue.length) {
+      const onscreen = new Set(this.drops.map((d) => d.wi));
+      this.queue = SERVICES.map((_, i) => i).filter((i) => !onscreen.has(i));
+      for (let i = this.queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [this.queue[i], this.queue[j]] = [this.queue[j], this.queue[i]];
+      }
+    }
+    return this.queue.pop();
+  }
+
+  spawnDrop(presetY) {
+    const wi = this.nextWordIndex();
+    const word = SERVICES[wi];
+    const d = Math.random() ** 0.8;
+    const mobile = this.W < 640;
+    let fs = lerp(12.5, 25, d) * (mobile ? 0.78 : 1);
+    if (word.length > 30) fs *= 0.82;
+    if (word.length > 55) fs *= 0.78;
+    const baseOpacity = lerp(0.3, 0.92, d ** 1.3).toFixed(2);
+    const el = document.createElement("span");
+    el.textContent = word;
+    const s = el.style;
+    s.position = "absolute"; s.left = "0"; s.top = "0"; s.whiteSpace = "nowrap";
+    s.fontWeight = "600"; s.fontSize = fs.toFixed(1) + "px"; s.letterSpacing = "-0.01em";
+    s.color = "#00AFF1"; s.opacity = baseOpacity;
+    if (d < 0.4) s.filter = "blur(" + lerp(1.8, 0.4, d / 0.4).toFixed(1) + "px)";
+    s.padding = "8px 10px"; s.margin = "-8px -10px";
+    s.pointerEvents = "auto"; s.cursor = "pointer"; s.userSelect = "none";
+    s.willChange = "transform"; s.transition = "color 200ms ease, opacity 200ms ease";
+    // pick an x away from recent spawns to avoid clumping
+    let x0 = rnd(this.W * 0.04, this.W * 0.96);
+    this.recentX = this.recentX || [];
+    for (let tries = 0; tries < 7; tries++) {
+      if (this.recentX.every((rx) => Math.abs(rx - x0) > Math.min(120, this.W * 0.12))) break;
+      x0 = rnd(this.W * 0.04, this.W * 0.96);
+    }
+    this.recentX.push(x0);
+    if (this.recentX.length > 4) this.recentX.shift();
+    const drop = {
+      el, wi, word, depth: d, fs, baseOpacity,
+      x0, y: presetY !== undefined ? presetY : -rnd(30, 240),
+      v: lerp(26, 78, d), ox: 0, hover: false,
+      swayA: rnd(5, 13) * (1 - d * 0.35), swayF: rnd(0.18, 0.42), swayP: rnd(0, TAU),
+      state: "fall", scale: 1,
+    };
+    el.addEventListener("pointerenter", () => { drop.hover = true; el.style.opacity = "1"; el.style.color = "#0090C8"; });
+    el.addEventListener("pointerleave", () => { drop.hover = false; if (drop.state === "fall") { el.style.opacity = baseOpacity; el.style.color = "#00AFF1"; } });
+    el.addEventListener("click", () => this.requestCatch(drop, true));
+    this.rainRef.current.appendChild(el);
+    this.drops.push(drop);
+    return drop;
+  }
+
+  removeDrop(drop, fade) {
+    const i = this.drops.indexOf(drop);
+    if (i >= 0) this.drops.splice(i, 1);
+    if (fade) {
+      drop.el.style.transition = "opacity 240ms ease";
+      drop.el.style.opacity = "0";
+      setTimeout(() => drop.el.remove(), 280);
+    } else drop.el.remove();
+  }
+
+  // ---------- fx ----------
+  ripple(x, y, big) {
+    const fx = this.fxRef.current; if (!fx) return;
+    const w = big ? 62 : rnd(26, 44);
+    const el = document.createElement("div");
+    const s = el.style;
+    s.position = "absolute"; s.left = x + "px"; s.top = y + "px";
+    s.width = w + "px"; s.height = w * 0.32 + "px";
+    s.border = "1.5px solid rgba(0,175,241," + (big ? 0.55 : 0.38) + ")";
+    s.borderRadius = "50%";
+    s.animation = "ftRipple " + (big ? 600 : 720) + "ms ease-out both";
+    el.addEventListener("animationend", () => el.remove());
+    fx.appendChild(el);
+  }
+
+  burst(x, y) {
+    const fx = this.fxRef.current; if (!fx) return;
+    const colors = ["#00AFF1", "#5AC8FA", "#0090C8", "#00AFF1", "#B7E9FC"];
+    for (let i = 0; i < 10; i++) {
+      const el = document.createElement("div");
+      const a = rnd(-Math.PI * 1.05, 0.05), r = rnd(26, 66), sz = rnd(3, 6);
+      const s = el.style;
+      s.position = "absolute"; s.left = x + "px"; s.top = y + "px";
+      s.width = sz + "px"; s.height = sz + "px"; s.borderRadius = "50%";
+      s.background = colors[i % colors.length];
+      s.setProperty("--dx", (Math.cos(a) * r).toFixed(0) + "px");
+      s.setProperty("--dy", (Math.sin(a) * r - 8).toFixed(0) + "px");
+      s.animation = "ftBurst " + rnd(420, 620).toFixed(0) + "ms cubic-bezier(0.17,0.67,0.4,1) both";
+      el.addEventListener("animationend", () => el.remove());
+      fx.appendChild(el);
+    }
+  }
+
+  floatLabel(x, y, text) {
+    const fx = this.fxRef.current; if (!fx) return;
+    const el = document.createElement("div");
+    el.textContent = text;
+    const s = el.style;
+    s.position = "absolute"; s.left = clamp(x, 80, this.W - 80) + "px"; s.top = (y - 26) + "px";
+    s.fontSize = "15px"; s.fontWeight = "700"; s.color = "#0090C8"; s.whiteSpace = "nowrap";
+    s.animation = "ftFloat 1300ms ease-out both";
+    el.addEventListener("animationend", () => el.remove());
+    fx.appendChild(el);
+  }
+
+  glint(x, y) {
+    const fx = this.fxRef.current; if (!fx) return;
+    const el = document.createElement("div");
+    const s = el.style;
+    s.position = "absolute"; s.left = x + "px"; s.top = y + "px"; s.width = "7px"; s.height = "7px";
+    s.background = "radial-gradient(circle, rgba(0,175,241,0.95) 0%, rgba(0,175,241,0) 70%)";
+    s.borderRadius = "50%";
+    s.animation = "ftGlint " + rnd(550, 950).toFixed(0) + "ms ease-out both";
+    el.addEventListener("animationend", () => el.remove());
+    fx.appendChild(el);
+  }
+
+  // ---------- catching ----------
+  requestCatch(drop, isUser) {
+    if (this.reduced || drop.state !== "fall") return;
+    this.lastInteractAt = this.elapsed;
+    const dg = this.dog;
+    if (dg.state === "leap" || dg.state === "land" || dg.state === "celebrate") {
+      if (isUser && !dg.pending) { dg.pending = drop; drop.el.style.opacity = "1"; drop.el.style.color = "#0090C8"; }
+      return;
+    }
+    if (dg.target) {
+      if (!isUser) return;
+      const t = dg.target; t.state = "fall"; t.el.style.color = "#00AFF1"; t.el.style.opacity = t.baseOpacity;
+    }
+    drop.state = "target";
+    drop.el.style.opacity = "1"; drop.el.style.color = "#0090C8";
+    dg.target = drop;
+    dg.sniffNext = false;
+    dg.state = "run"; dg.t = 0;
+  }
+
+  dogScaleK() { return SVG_K * this.respScale * (this.props.dogScale ?? 1); }
+  mouthWorld() {
+    const k = this.dogScaleK(), dg = this.dog;
+    return { x: dg.x + dg.face * 49 * k, y: this.groundY - 70 * k - dg.air };
+  }
+
+  doCatch(drop) {
+    const m = this.mouthWorld();
+    this.removeDrop(drop, false);
+    this.burst(m.x, m.y);
+    this.ripple(m.x, m.y, true);
+    this.floatLabel(m.x, m.y - 8, drop.word);
+    this.setState((st) => ({ caught: st.caught + 1 }));
+    this.dog.target = null;
+  }
+
+  // ---------- main loop ----------
+  tick = () => {
+    this.raf = requestAnimationFrame(this.tick);
+    const now = performance.now() / 1000;
+    const dt = clamp(now - this.lastNow, 0.001, 0.05);
+    this.lastNow = now;
+    this.elapsed += dt;
+    const t = this.elapsed;
+
+    const density = this.props.rainDensity ?? 1;
+    const targetCount = Math.round(clamp(this.W / 46, 10, 38) * density * clamp(t / 5, 0.18, 1));
+    if (this.drops.length < targetCount && t > this.nextSpawnAt) {
+      this.spawnDrop();
+      this.nextSpawnAt = t + rnd(0.12, 0.5) / density;
+    }
+
+    this.updateDrops(dt, t);
+    this.updateDog(dt, t);
+    this.updateFairy(dt, t);
+
+    if ((this.props.autoCatch ?? true) && (this.dog.state === "idle" || this.dog.state === "sit") && t > this.nextAutoAt) {
+      const c = this.drops.filter((d) => d.state === "fall" && d.depth > 0.5 && d.y > 60 && d.y < this.groundY - 260 && d.x0 > 90 && d.x0 < this.W - 90);
+      if (c.length) { this.requestCatch(c[Math.floor(Math.random() * c.length)], false); this.nextAutoAt = t + rnd(7, 12); }
+      else this.nextAutoAt = t + 2;
+    }
+  };
+
+  updateDrops(dt, t) {
+    const speedProp = this.props.fallSpeed ?? 1;
+    const p = this.pointer;
+    const dg = this.dog;
+    for (let i = this.drops.length - 1; i >= 0; i--) {
+      const d = this.drops[i];
+      let mul = speedProp;
+      if (d.hover) mul *= 0.22;
+      else if (d.state === "target") mul *= 0.45;
+      let oxT = 0;
+      if (p.on) {
+        const dx = d.x0 + d.ox - p.x, dy = d.y - p.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 150) {
+          const f = (1 - dist / 150) ** 2;
+          oxT = Math.sign(dx || 1) * f * 62;
+          mul *= 1 - f * 0.55;
+        }
+      }
+      d.ox += (oxT - d.ox) * damp(4, dt);
+      d.y += d.v * mul * dt;
+      const sc = d.hover ? 1.14 : d.state === "target" ? 1.07 : 1;
+      d.scale += (sc - d.scale) * damp(14, dt);
+
+      if (d.state === "target" && dg.state === "leap" && dg.leap && dg.leap.p > 0.26) {
+        const m = this.mouthWorld();
+        const g = clamp((dg.leap.p - 0.26) / 0.22, 0, 1) * damp(26, dt);
+        d.x0 += (m.x - d.x0) * g;
+        d.y += (m.y - d.y) * g;
+        d.ox *= 1 - g;
+      }
+
+      const sway = Math.sin(t * d.swayF * TAU + d.swayP) * d.swayA;
+      d.el.style.transform = "translate(" + (d.x0 + d.ox + sway).toFixed(1) + "px," + d.y.toFixed(1) + "px) translateX(-50%) scale(" + d.scale.toFixed(3) + ")";
+
+      if (d.y >= this.groundY - 4) {
+        const wasTarget = d.state === "target";
+        this.ripple(d.x0 + d.ox + sway, this.groundY + 2, false);
+        this.removeDrop(d, true);
+        if (wasTarget && dg.target === d) {
+          dg.target = null;
+          if (dg.state === "run" || dg.state === "wait") {
+            dg.sniffNext = true;
+            dg.state = "run"; dg.tx = clamp(d.x0 + d.ox, 90, this.W - 90);
+          }
+        }
+        if (dg.pending === d) dg.pending = null;
+      }
+    }
+  }
+
+  // ---------- dog ----------
+  updateDog(dt, t) {
+    const dg = this.dog, P = dg.pose;
+    dg.t += dt;
+    const k = this.dogScaleK();
+    const mouthUp = 66 * k;
+    const tgt = { bodyY: 0, pitch: 0, sy: 1, sx: 1, headRot: 0, jaw: -6.5, fnU: 2, fnL: -2, ffU: -3, ffL: 1, hnU: 3, hnL: -2, hfU: -4, hfL: 2 };
+    let wagHz = 1.6, wagAmp = 8, wagBase = 0;
+    let poseRate = 10, legRate = 14;
+    let maxV = 300;
+
+    // interest point for head tracking
+    let interest = null;
+    if (dg.target) interest = { x: dg.target.x0 + dg.target.ox, y: dg.target.y };
+    else if (this.pointer.on) interest = { x: this.pointer.x, y: this.pointer.y };
+    else {
+      let best = null, bd = 1e9;
+      for (const d of this.drops) {
+        if (d.depth < 0.45) continue;
+        const dist = Math.abs(d.x0 - dg.x) + Math.abs(d.y - (this.groundY - 200));
+        if (dist < bd) { bd = dist; best = d; }
+      }
+      if (best) interest = { x: best.x0, y: best.y };
+    }
+
+    // ----- state behaviours -----
+    if (dg.state === "enter") {
+      maxV = 430;
+      if (Math.abs(dg.tx - dg.x) < 16) { dg.state = "idle"; dg.t = 0; }
+    } else if (dg.state === "idle") {
+      tgt.bodyY = Math.sin(t * 1.7) * 1.4;
+      wagHz = 1.7; wagAmp = 8;
+      if (this.props.autoCatch === false && t > this.nextWanderAt) {
+        dg.tx = clamp(dg.x + rnd(-1, 1) * rnd(140, 320), 100, this.W - 100);
+        dg.state = "run"; dg.t = 0;
+        this.nextWanderAt = t + rnd(7, 11);
+      }
+      if (dg.t > 7.5) { dg.state = "sit"; dg.t = 0; }
+      if (t - this.lastInteractAt > 18 && dg.t > 4) { dg.state = "bow"; dg.t = 0; this.lastInteractAt = t; }
+    } else if (dg.state === "sit") {
+      const sIn = clamp(dg.t / 0.5, 0, 1);
+      tgt.bodyY = 9 * sIn + Math.sin(t * 1.6) * 1.3;
+      tgt.pitch = -14 * sIn;
+      tgt.headRot = 4 * sIn;
+      tgt.fnU = 2 + 13 * sIn; tgt.fnL = -2 - 7 * sIn; tgt.ffU = -3 + 12 * sIn; tgt.ffL = 1 - 6 * sIn;
+      tgt.hnU = 3 - 54 * sIn; tgt.hnL = -2 + 62 * sIn; tgt.hfU = -4 - 48 * sIn; tgt.hfL = 2 + 56 * sIn;
+      wagHz = 1.3; wagAmp = 10; wagBase = 16 * sIn;
+      if (this.props.autoCatch === false && t > this.nextWanderAt) {
+        dg.tx = clamp(dg.x + rnd(-1, 1) * rnd(140, 320), 100, this.W - 100);
+        dg.state = "run"; dg.t = 0;
+        this.nextWanderAt = t + rnd(7, 11);
+      }
+      if (t - this.lastInteractAt > 18 && dg.t > 5) { dg.state = "bow"; dg.t = 0; this.lastInteractAt = t; }
+    } else if (dg.state === "run") {
+      maxV = dg.target ? 560 : 340;
+      if (dg.target) dg.tx = clamp(dg.target.x0 + dg.target.ox, 80, this.W - 80);
+      const dx = dg.tx - dg.x;
+      if (Math.abs(dx) < 16 && Math.abs(dg.vx) < 60) {
+        if (dg.sniffNext) { dg.state = "sniff"; dg.t = 0; dg.sniffNext = false; }
+        else if (dg.target) { dg.state = "wait"; dg.t = 0; }
+        else { dg.state = "idle"; dg.t = 0; }
+      }
+      // dive early if target already low and close
+      if (dg.target) {
+        const d = dg.target;
+        const hNeed = (this.groundY - d.y) - mouthUp;
+        if (hNeed < 60 && Math.abs(dg.x - d.x0) < 130) this.startLeap(0.42);
+      }
+    } else if (dg.state === "wait") {
+      wagHz = 3.2; wagAmp = 13; wagBase = -2;
+      if (!dg.target) { dg.state = "idle"; dg.t = 0; }
+      else {
+        const d = dg.target;
+        const rel = (d.x0 + d.ox) - dg.x;
+        if (Math.abs(rel) > 14) dg.face = rel > 0 ? 1 : -1;
+        const vEff = d.v * 0.45 * (this.props.fallSpeed ?? 1);
+        const hNow = (this.groundY - d.y) - mouthUp;
+        const prox = clamp(1 - hNow / 320, 0, 1);
+        tgt.bodyY = prox * 4; tgt.hnU = 3 + prox * 9; tgt.hnL = -2 - prox * 5; tgt.hfU = -4 + prox * 9;
+        const py = d.y + vEff * 0.3;
+        const hNeed = (this.groundY - py) - mouthUp;
+        if (hNeed <= 170) this.startLeap(hNeed < 45 ? 0.42 : 0.56);
+        if (Math.abs((d.x0 + d.ox) - dg.x) > 60) { dg.state = "run"; dg.t = 0; }
+      }
+    } else if (dg.state === "leap") {
+      const L = dg.leap;
+      L.p = clamp((t - L.t0) / L.T, 0, 1);
+      const pr = L.p;
+      dg.air = L.h * 4 * pr * (1 - pr);
+      dg.x = lerp(L.x0, L.x1, pr);
+      tgt.pitch = lerp(-13, 9, pr);
+      tgt.fnU = -46; tgt.fnL = -26; tgt.ffU = -38; tgt.ffL = -20;
+      tgt.hnU = 38; tgt.hnL = 26; tgt.hfU = 31; tgt.hfL = 21;
+      tgt.jaw = pr < 0.52 ? 21 : -6;
+      tgt.sy = pr < 0.45 ? 1.07 : pr > 0.72 ? 0.98 : 1.03;
+      tgt.sx = 1 - (tgt.sy - 1) * 0.7;
+      wagHz = 2; wagAmp = 5; wagBase = -16;
+      poseRate = 17; legRate = 19;
+      if (pr >= 0.5 && !L.done) {
+        L.done = true;
+        if (dg.target) this.doCatch(dg.target);
+      }
+      if (pr >= 1) { dg.air = 0; dg.state = "land"; dg.t = 0; }
+    } else if (dg.state === "land") {
+      tgt.sy = 0.92; tgt.sx = 1.06; tgt.bodyY = 2;
+      tgt.fnU = 6; tgt.fnL = -8; tgt.ffU = 2; tgt.ffL = -5; tgt.hnU = 10; tgt.hnL = -8; tgt.hfU = 4; tgt.hfL = -5;
+      poseRate = 16;
+      if (dg.t > 0.16) { dg.state = dg.leapCaught ? "celebrate" : "idle"; dg.leapCaught = false; dg.t = 0; }
+    } else if (dg.state === "celebrate") {
+      const decay = 1 - clamp(dg.t / 1.0, 0, 1);
+      tgt.bodyY = -6 * Math.abs(Math.sin(dg.t * 9)) * decay;
+      tgt.headRot = -8 * decay;
+      tgt.jaw = dg.t < 0.4 ? 9 : 0;
+      wagHz = 4.5; wagAmp = 17; wagBase = -6;
+      if (dg.t > 1.0) {
+        dg.state = "idle"; dg.t = 0;
+        if (dg.pending) { const pd = dg.pending; dg.pending = null; if (pd.state === "fall") this.requestCatch(pd, true); }
+      }
+    } else if (dg.state === "sniff") {
+      tgt.headRot = 36; tgt.bodyY = 2.5; tgt.pitch = 5;
+      tgt.fnU = 8; tgt.ffU = -8;
+      wagHz = 1; wagAmp = 4;
+      if (dg.t > 1.25) { dg.state = "idle"; dg.t = 0; }
+    } else if (dg.state === "bow") {
+      const inb = clamp(dg.t / 0.28, 0, 1), outb = clamp((dg.t - 1.35) / 0.3, 0, 1);
+      const bw = inb * (1 - outb);
+      tgt.pitch = 16 * bw; tgt.bodyY = 4 * bw;
+      tgt.fnU = 2 - 38 * bw; tgt.fnL = -2 - 16 * bw; tgt.ffU = -3 - 32 * bw; tgt.ffL = 1 - 12 * bw;
+      tgt.headRot = -12 * bw;
+      wagHz = 4.5; wagAmp = 18; wagBase = -8;
+      if (dg.t > 1.75) { dg.state = "idle"; dg.t = 0; }
+    }
+
+    // ----- locomotion (not during leap) -----
+    if (dg.state !== "leap") {
+      const dx = dg.tx - dg.x;
+      const moving = dg.state === "run" || dg.state === "enter";
+      const desired = moving ? clamp(dx * 6, -maxV, maxV) : 0;
+      dg.vx += (desired - dg.vx) * damp(6, dt);
+      dg.x += dg.vx * dt;
+      if (moving && Math.abs(dx) > 12) dg.face = dx > 0 ? 1 : -1;
+      const sr = clamp(Math.abs(dg.vx) / 520, 0, 1);
+      if (sr > 0.04) {
+        dg.gaitPh += Math.abs(dg.vx) * dt / 30;
+        const ph = dg.gaitPh;
+        const aU = lerp(10, 27, sr), aL = lerp(9, 22, sr);
+        tgt.fnU = Math.sin(ph) * aU;
+        tgt.fnL = -Math.max(0, Math.sin(ph + 0.7)) * aL;
+        tgt.hfU = Math.sin(ph + 0.25) * aU * 0.92;
+        tgt.hfL = Math.max(0, Math.sin(ph + 0.95)) * aL * 0.85;
+        tgt.ffU = Math.sin(ph + Math.PI) * aU;
+        tgt.ffL = -Math.max(0, Math.sin(ph + Math.PI + 0.7)) * aL;
+        tgt.hnU = Math.sin(ph + Math.PI + 0.25) * aU * 0.92;
+        tgt.hnL = Math.max(0, Math.sin(ph + Math.PI + 0.95)) * aL * 0.85;
+        tgt.bodyY = (tgt.bodyY || 0) - Math.abs(Math.sin(ph)) * 2.8 * sr;
+        tgt.pitch = (tgt.pitch || 0) + clamp(dg.vx * dg.face * 0.004, -2, 4);
+        tgt.headRot = -3 * sr;
+        wagHz = 2.4; wagAmp = 9; wagBase = -5 * sr;
+      }
+    }
+
+    // head tracking + eye look
+    if (interest && (dg.state === "idle" || dg.state === "sit" || dg.state === "wait" || dg.state === "run" || dg.state === "enter")) {
+      const hx = dg.x + dg.face * 24 * k, hy = this.groundY - 62 * k - dg.air;
+      const ang = Math.atan2(interest.y - hy, (interest.x - hx) * dg.face) * 180 / Math.PI;
+      const moving = Math.abs(dg.vx) > 60;
+      const w = dg.state === "wait" ? 1 : dg.state === "sit" ? 0.8 : moving ? 0.32 : 0.55;
+      tgt.headRot += clamp(ang * 0.55, -30, moving ? 12 : 26) * w;
+      dg.lookX = clamp(((interest.x - hx) * dg.face) / 260, -1, 1);
+      dg.lookY = clamp((interest.y - hy) / 260, -1, 1.2);
+    } else { dg.lookX = (dg.lookX || 0) * 0.92; dg.lookY = (dg.lookY || 0) * 0.92; }
+
+    // ear flick (idle / sit)
+    if (dg.state === "idle" || dg.state === "sit") {
+      if (this.nextFlickAt === undefined) this.nextFlickAt = t + 3;
+      if (t > this.nextFlickAt) { dg.earV -= 300; this.nextFlickAt = t + rnd(4, 8); }
+    }
+
+    // clamp inside stage
+    dg.x = clamp(dg.x, 70, Math.max(90, this.W - 70));
+
+    // ----- smooth pose -----
+    for (const key in tgt) {
+      const r = (key.length === 3 && key !== "jaw") ? legRate : poseRate; // leg keys are 3 chars (fnU..)
+      P[key] += (tgt[key] - P[key]) * damp(r, dt);
+    }
+
+    // tail wag
+    dg.tailA += ((wagBase + Math.sin(t * TAU * wagHz) * wagAmp) - dg.tailA) * damp(12, dt);
+
+    // ear spring (lags head)
+    const headVel = (P.headRot - this.prevHeadRot) / Math.max(dt, 1e-4);
+    this.prevHeadRot = P.headRot;
+    const earTgt = 4 + clamp(-headVel * 0.06, -18, 18) + (dg.state === "leap" ? -30 : 0) - dg.air * 0.06 - clamp(Math.abs(dg.vx) * 0.02, 0, 9);
+    this.dog.earV += ((earTgt - this.dog.earR) * 90 - this.dog.earV * 11) * dt;
+    this.dog.earR += this.dog.earV * dt;
+    this.dog.earR = clamp(this.dog.earR, -55, 30);
+
+    // face flip easing
+    dg.faceK += (dg.face - dg.faceK) * damp(17, dt);
+    const fk = Math.abs(dg.faceK) < 0.06 ? 0.06 * Math.sign(dg.faceK || 1) : dg.faceK;
+
+    // blink
+    if (t > this.nextBlinkAt) { this.blinkUntil = t + 0.12; this.nextBlinkAt = t + rnd(2.4, 6); }
+
+    this.applyDog(fk, k);
+  }
+
+  startLeap(T) {
+    const dg = this.dog;
+    if (!dg.target || dg.state === "leap") return;
+    const d = dg.target;
+    const k = this.dogScaleK();
+    const vEff = d.v * 0.45 * (this.props.fallSpeed ?? 1);
+    const py = d.y + vEff * (T / 2);
+    const h = clamp((this.groundY - py) - 66 * k, 26, 175);
+    dg.leap = { t0: this.elapsed, T, h, x0: dg.x, x1: clamp(d.x0 + d.ox, 70, this.W - 70), p: 0, done: false };
+    dg.face = dg.leap.x1 >= dg.x - 2 ? 1 : -1;
+    dg.leapCaught = true;
+    dg.state = "leap"; dg.t = 0;
+  }
+
+  applyDog(faceK, k) {
+    const dg = this.dog, P = dg.pose, parts = this.parts;
+    const svgW = 210 * 0.5, groundPx = 139.6; // svg y0 line in px from top
+    const wrap = this.dogWrapRef.current, svg = this.dogSvgRef.current;
+    if (!wrap || !svg) return;
+    const scl = this.respScale * (this.props.dogScale ?? 1);
+    wrap.style.visibility = "visible";
+    wrap.style.transform = "translate3d(" + (dg.x - svgW).toFixed(1) + "px," + (this.groundY - groundPx).toFixed(1) + "px,0)";
+    svg.style.transformOrigin = "50% 94.3%";
+    svg.style.transform = "scale(" + (faceK * scl).toFixed(3) + "," + scl.toFixed(3) + ")";
+
+    if (!parts || !parts.root || !parts.root.isConnected) { this.collectParts(); if (!this.parts.root) return; }
+    const pp = this.parts;
+    pp.root.setAttribute("transform", "translate(0 " + (P.bodyY - dg.air / (k || 1)).toFixed(2) + ") scale(" + (P.sx || 1).toFixed(3) + " " + P.sy.toFixed(3) + ") rotate(" + P.pitch.toFixed(2) + " 0 -40)");
+    pp.head.setAttribute("transform", "rotate(" + P.headRot.toFixed(2) + " 20 -58)");
+    pp.ear.setAttribute("transform", "rotate(" + dg.earR.toFixed(2) + " 24 -92)");
+    pp.jaw.setAttribute("transform", "rotate(" + P.jaw.toFixed(2) + " 34 -66)");
+    pp.tail.setAttribute("transform", "rotate(" + dg.tailA.toFixed(2) + " -33 -44)");
+    pp.fnU.setAttribute("transform", "rotate(" + P.fnU.toFixed(2) + " 16 -47)");
+    pp.fnL.setAttribute("transform", "rotate(" + P.fnL.toFixed(2) + " 20 -25)");
+    pp.ffU.setAttribute("transform", "rotate(" + P.ffU.toFixed(2) + " 8 -47)");
+    pp.ffL.setAttribute("transform", "rotate(" + P.ffL.toFixed(2) + " 12 -25)");
+    pp.hnU.setAttribute("transform", "rotate(" + P.hnU.toFixed(2) + " -24 -40)");
+    pp.hnL.setAttribute("transform", "rotate(" + P.hnL.toFixed(2) + " -30 -20)");
+    pp.hfU.setAttribute("transform", "rotate(" + P.hfU.toFixed(2) + " -16 -40)");
+    pp.hfL.setAttribute("transform", "rotate(" + P.hfL.toFixed(2) + " -22 -20)");
+    this.blinkK = this.blinkK === undefined ? 1 : this.blinkK;
+    const bT = this.elapsed < this.blinkUntil ? 0.12 : 1;
+    this.blinkK += (bT - this.blinkK) * 0.45;
+    pp.eyeG.setAttribute("transform", "translate(0 " + (-79 * (1 - this.blinkK)).toFixed(2) + ") scale(1 " + this.blinkK.toFixed(3) + ")");
+    pp.pupil.setAttribute("transform", "translate(" + ((dg.lookX || 0) * 1.3).toFixed(2) + " " + ((dg.lookY || 0) * 1.1).toFixed(2) + ")");
+    const tOp = clamp((P.jaw - 5) / 14, 0, 1) * ((dg.state === "celebrate" || dg.state === "leap") ? 1 : 0);
+    pp.tongue.setAttribute("opacity", tOp.toFixed(2));
+    const sh = clamp(1 - dg.air / 260, 0.45, 1);
+    pp.shadow.setAttribute("rx", (46 * sh).toFixed(1));
+    pp.shadow.setAttribute("opacity", (sh).toFixed(2));
+  }
+
+  // ---------- fairy ----------
+  updateFairy(dt, t) {
+    const svg = this.fairyRef.current; if (!svg) return;
+    if (!this.fairyParts || !this.fairyParts.wingA || !this.fairyParts.wingA.isConnected) {
+      this.fairyParts = { wingA: svg.querySelector('[data-part="wingA"]'), wingB: svg.querySelector('[data-part="wingB"]') };
+      if (!this.fairyParts.wingA) return;
+    }
+    if (!this.fairy) {
+      if (t > this.nextFairyAt) {
+        this.fairy = { p: 0, T: rnd(6.5, 9), y0: this.H * rnd(0.1, 0.2), dir: Math.random() < 0.5 ? 1 : -1, lastGlint: 0 };
+        svg.style.display = "block";
+      }
+      return;
+    }
+    const f = this.fairy;
+    f.p += dt / f.T;
+    const x = f.dir > 0 ? lerp(-70, this.W + 70, f.p) : lerp(this.W + 70, -70, f.p);
+    const y = f.y0 + Math.sin(f.p * Math.PI) * -26 + Math.sin(t * 2.6) * 6;
+    svg.style.transform = "translate(" + (x - 22).toFixed(1) + "px," + (y - 16).toFixed(1) + "px) scaleX(" + f.dir + ") rotate(" + (Math.sin(t * 2.6) * 4).toFixed(1) + "deg)";
+    const fl = Math.sin(t * 52) * 16;
+    this.fairyParts.wingA.setAttribute("transform", "rotate(" + (-30 + fl) + " 1 -9)");
+    this.fairyParts.wingB.setAttribute("transform", "rotate(" + (-8 - fl * 0.7) + " -1 -6)");
+    if (t - f.lastGlint > 0.14) { f.lastGlint = t; this.glint(x - f.dir * rnd(10, 22), y + rnd(-4, 10)); }
+    if (f.p >= 1) { this.fairy = null; svg.style.display = "none"; this.nextFairyAt = t + rnd(22, 36); }
+  }
+
+  // ---------- reduced motion ----------
+  staticScene() {
+    const n = Math.round(clamp(this.W / 60, 8, 24));
+    for (let i = 0; i < n; i++) {
+      const d = this.spawnDrop(rnd(40, this.groundY - 90));
+      d.el.style.transform = "translate(" + d.x0.toFixed(0) + "px," + d.y.toFixed(0) + "px) translateX(-50%)";
+      d.el.style.pointerEvents = "none";
+    }
+    this.dog.x = this.W * 0.62; this.dog.air = 0; this.dog.faceK = 1;
+    this.applyDog(1, this.dogScaleK());
+  }
+}
+</script>
+</body>
+</html>
