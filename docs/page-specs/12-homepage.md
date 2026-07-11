@@ -154,3 +154,5 @@ Per the owner's process and the standing rule *"never present a bare structure p
 ## ADDENDUM (2026-07-11) — whole-dog portrait swapped to the malamute
 
 The owner's new `Master images/` pool (gitignored, repo root) supplied its first placement: image `087` — a smiling malamute sitting on the seafront boardwalk — **replaces Goldie** at the WholeDogFunnel core (`src/assets/pages/home/whole-dog-malamute.webp`, 400px-square face-centred cut from a 600×400 source; goldie asset deleted). Caption = "On the seafront" until the owner supplies the dog's first name; alt text describes the malamute. Commit `426ac50`, live-verified.
+
+**Second master-pool placement (2026-07-11, `149460e`):** image `2` — the golden-hour playground shot — into the club-difference section ("One place for the whole of their life"), which gained the standard text+polaroid split header (copy left, polaroid right at +2°, caption "The playground at golden hour"; the 5-stop journey grid unchanged below). Asset `src/assets/pages/home/club-playground.webp` (600×800 full frame from `Master images/2.jpg`). Live-verified, 390px stack checked.
