@@ -10,6 +10,9 @@
     "price": 99.95,
     "validityDays": 30
   },
+  "grooming": {
+    "averageFullGroomPrice": 35
+  },
   "offerings": [
     {
       "id": "board-train-puppy",
@@ -245,8 +248,7 @@
         "Free pick-ups & drop-offs",
         "Monthly bath and brush with a maintenance trim included",
         "Priority boarding space",
-        "Free Full Dog Grooming",
-        "Two free dog training sessions each cycle"
+        "Free Full Dog Grooming"
       ],
       "acuityUrl": null,
       "order": 16
