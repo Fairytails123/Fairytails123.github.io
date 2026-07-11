@@ -349,9 +349,11 @@ const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
   const INK_BARK = '#4a4036'; // bark-700
   const INK_HOVER = '#8f5d1d'; // honey-700 — the one warm accent, under the cursor only
 
-  // Tuning — the prototype's rain config, frozen for this mid-page placement
+  // Tuning — the prototype's rain config, adjusted for this mid-page placement
   const RAIN_DENSITY = 1;
-  const FALL_SPEED = 1;
+  // 1.5× the hero prototype: at 1 the far words took ~16s to cross the stage and the
+  // owner read the whole scene as "too slow" (2026-07-11).
+  const FALL_SPEED = 1.5;
 
   type Drop = {
     el: HTMLSpanElement;
@@ -434,7 +436,10 @@ const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
       return S.queue.pop() as number;
     };
 
-    const spawnDrop = (): Drop => {
+    // How many drops the sky holds at this width (the sparser-than-the-prototype cap).
+    const capCount = () => Math.round(clamp(S.W / 56, 6, 26) * RAIN_DENSITY);
+
+    const spawnDrop = (presetY?: number): Drop => {
       const wi = nextWordIndex();
       const word = WORDS[wi];
       const d = Math.random() ** 0.8;
@@ -470,7 +475,7 @@ const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
         baseOpacity,
         baseColor,
         x0,
-        y: -rnd(30, 240),
+        y: presetY !== undefined ? presetY : -rnd(30, 240),
         v: lerp(26, 78, d),
         ox: 0,
         hover: false,
@@ -479,6 +484,10 @@ const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
         swayP: rnd(0, TAU),
         scale: 1,
       };
+      // Position at creation, not on the first tick — pre-filled drops must paint in
+      // place even before a single frame has run (and while the IO gate holds the
+      // engine paused off-screen).
+      s.transform = 'translate(' + x0.toFixed(1) + 'px,' + drop.y.toFixed(1) + 'px) translateX(-50%) scale(1)';
       el.addEventListener('pointerenter', () => {
         drop.hover = true;
         el.style.opacity = '1';
@@ -558,8 +567,8 @@ const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
       S.elapsed += dt;
       const t = S.elapsed;
 
-      const targetCount = Math.round(clamp(S.W / 56, 6, 26) * RAIN_DENSITY * clamp(t / 5, 0.18, 1));
-      if (S.drops.length < targetCount && t > S.nextSpawnAt) {
+      // No ramp-in: the sky is pre-filled at init, so this only tops up after landings.
+      if (S.drops.length < capCount() && t > S.nextSpawnAt) {
         spawnDrop();
         S.nextSpawnAt = t + rnd(0.14, 0.55) / RAIN_DENSITY;
       }
@@ -621,6 +630,14 @@ const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
     stage.addEventListener('pointerleave', onLeave);
 
     measure();
+
+    // Pre-fill the whole sky mid-fall — the rain has "always been falling", so a fast
+    // scroll can never catch an empty stage (owner, 2026-07-11). Spread from just
+    // above the frame down to the meadow.
+    for (let i = 0, n = capCount(); i < n; i++) {
+      spawnDrop(rnd(-120, S.groundY - 30));
+    }
+
     const ro = new ResizeObserver(() => measure());
     ro.observe(stage);
     document.addEventListener('visibilitychange', onVis);
