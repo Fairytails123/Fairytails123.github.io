@@ -1,0 +1,667 @@
+---
+/*
+  The curriculum rain — day-school section 4.
+
+  Every one of the school's hundred small daily services falls like gentle rain over a
+  cream-paper meadow. Depth drives size, ink strength, blur and fall speed; words sway
+  as they fall, part around the cursor, slow and warm to honey under it, and land on
+  the grass with a soft ripple. Nothing else — the rain is the whole show.
+
+  Distilled from the owner's Claude-designed prototype
+  (Dog Daycare Animation Concept/design_handoff_service_rain_hero/) per the
+  WholeDogFunnel precedent: no design-tool runtime, vanilla module script. The drop
+  physics (depth model, sway, cursor repel, hover, landing ripples) are the
+  prototype's; the skin is re-drawn for the countryside editorial system (cream sky,
+  moss meadow + hills, Fraunces words in moss/bark inks, honey hover). The prototype's
+  dog mascot, fairy flyby and catch-game were REMOVED at owner instruction 2026-07-11
+  ("just a rain — the dog animation doesn't suit the brand's premium look"); don't
+  reintroduce a character without asking.
+
+  Fallbacks: the static scatter below is SERVER-RENDERED, so no-JS,
+  prefers-reduced-motion and save-data all see the same designed still scene. The live
+  engine removes it and takes over. The whole stage is aria-hidden; the full word list
+  ships as visible-to-AT text after it.
+
+  The word list is the owner's 106-service handoff list, editorially tightened for
+  falling-type legibility (long clauses shortened, true duplicates merged) plus a few
+  real captions from this page (school bus, beach days, climbing frames). DRAFT — owner
+  reviews wording like all page copy.
+*/
+
+const WORDS = [
+  // Play & friends
+  'Supervised group play',
+  'Small-group play',
+  'Carefully managed socialisation',
+  'Puppy socialisation',
+  'Carefully matched play groups',
+  'Indoor play',
+  'Outdoor play',
+  'Room to roam, supervised',
+  'Calm play sessions',
+  'Play breaks',
+  'Play with our team',
+  'Meeting different dogs',
+  'Meeting different people',
+  'Positive human interaction',
+  'One-to-one time with staff',
+  'Firm friendships',
+  // Learning & enrichment
+  'Basic obedience practice',
+  'Sit practice',
+  'Down practice',
+  'Settle practice',
+  'Waiting calmly',
+  'Name recognition',
+  'Impulse-control exercises',
+  'Everyday manners',
+  'Lead handling',
+  'Structured walks',
+  'Sniffari walks',
+  'Training games',
+  'Problem-solving games',
+  'Food puzzles',
+  'Mental enrichment',
+  'Enrichment equipment',
+  'Climbing frames',
+  'Confidence-building activities',
+  'Beach days',
+  // Care & watching
+  'Health & wellbeing checks',
+  'Coat checks',
+  'Paw checks',
+  'Reading body language',
+  'Energy levels watched',
+  'Appetites watched',
+  'Toileting checks',
+  'Mobility checks',
+  'Medication given on time',
+  'Watched after medication',
+  'Gentle body handling',
+  'Gentle brushing',
+  'Grooming familiarisation',
+  'Harness & collar practice',
+  'Support for nervous dogs',
+  'Support for older dogs',
+  'Extra help for first-timers',
+  'Puppy development support',
+  'Growing independence',
+  'Settling away from home',
+  'Extra rest when needed',
+  'Activities adapted to needs',
+  // Routine & structure
+  'Structured daily routines',
+  'Familiar routines kept',
+  'Regular rest periods',
+  'Quiet settling time',
+  'Individual downtime',
+  'Balance of action & rest',
+  'Regular toilet breaks',
+  'Lunch at set times',
+  'Separate feeding if needed',
+  'Puppy meal routines',
+  'Special diets catered for',
+  'Fresh water, always',
+  'Daily reports home',
+  // Safety & housekeeping
+  'Rules-based daycare',
+  'Strict entrance criteria',
+  'Safety-first pack management',
+  'Staff-led pack movement',
+  'Controlled entrances & exits',
+  'Gate & door protocols',
+  'Calm moves between areas',
+  'Calm greetings',
+  'Calm departures',
+  'No bullying, ever',
+  'Play gently redirected',
+  'Overexcitement calmed',
+  'Chasing kept in check',
+  'Space apart when needed',
+  'Daily cleaning routines',
+  'Areas disinfected daily',
+  'Bowls washed daily',
+  'Fresh bedding',
+  'Accidents cleaned right away',
+  // The school bus & the wider world
+  'The school bus',
+  'Pick-up from home',
+  'Dropped back home',
+  'Safe, calm transport',
+  'Own travel compartments',
+  'Ventilated vans',
+  'Cosy travel bedding',
+  'Headcounts done',
+  'New surfaces underfoot',
+  'New sounds, made easy',
+  'New places, taken gently',
+];
+
+// Server-rendered static scatter (no-JS / reduced-motion / save-data). The size, ink
+// and opacity formulas MUST match the engine's spawnDrop() so both modes look alike.
+const INK_MOSS = '#39482d'; // moss-800 — the page's heading ink
+const INK_BARK = '#4a4036'; // bark-700 — the page's body ink, the warm minority
+const ink = (label: string) => (WORDS.indexOf(label) % 4 === 3 ? INK_BARK : INK_MOSS);
+const fontPx = (label: string, d: number) => {
+  let fs = 13.5 + (27 - 13.5) * d;
+  if (label.length > 26) fs *= 0.85;
+  return +fs.toFixed(1);
+};
+const wordOpacity = (d: number) => +(0.34 + 0.62 * Math.pow(d, 1.25)).toFixed(2);
+
+const SCATTER: Array<{ label: string; x: number; y: number; d: number }> = [
+  { label: 'Supervised group play', x: 13, y: 16, d: 0.62 },
+  { label: 'Fresh water, always', x: 24, y: 44, d: 0.38 },
+  { label: 'Sit practice', x: 17, y: 68, d: 0.8 },
+  { label: 'Beach days', x: 34, y: 24, d: 0.85 },
+  { label: 'Reading body language', x: 45, y: 55, d: 0.5 },
+  { label: 'Daily reports home', x: 55, y: 14, d: 0.65 },
+  { label: 'The school bus', x: 66, y: 40, d: 0.9 },
+  { label: 'Calm greetings', x: 76, y: 18, d: 0.45 },
+  { label: 'Food puzzles', x: 85, y: 55, d: 0.7 },
+  { label: 'Quiet settling time', x: 90, y: 30, d: 0.35 },
+  { label: 'Structured walks', x: 11, y: 42, d: 0.5 },
+  { label: 'Puppy socialisation', x: 38, y: 72, d: 0.4 },
+  { label: 'Gentle brushing', x: 60, y: 70, d: 0.55 },
+  { label: 'New places, taken gently', x: 87, y: 72, d: 0.3 },
+];
+---
+
+<section class="bg-cream-100" data-section="curriculum" data-rain-section aria-labelledby="curriculum-heading">
+  <div class="mx-auto max-w-6xl px-4 pb-20 sm:pb-28">
+    <p class="eyebrow text-honey-600" data-reveal>The whole curriculum</p>
+    <h2 id="curriculum-heading" class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+      Everything we pour into a <em class="squiggle not-italic">school day</em>
+    </h2>
+    <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+      A day here is built from {WORDS.length} small, deliberate things — and every word in this
+      gentle downpour is one of them.
+    </p>
+
+    <!-- The diorama. Decorative: hidden from AT wholesale; the full word list follows
+         as real text. -->
+    <div class="dsr grain mt-10" data-rain-stage aria-hidden="true" data-reveal>
+      <!-- Distant meadow hills -->
+      <svg class="dsr-hills" viewBox="0 0 1440 120" preserveAspectRatio="none">
+        <path d="M0 120 L0 78 C220 38 470 30 720 60 C980 92 1210 44 1440 70 L1440 120 Z" fill="#cdd9b9" opacity="0.7"></path>
+        <path d="M0 120 L0 96 C260 66 520 62 780 84 C1040 106 1260 78 1440 92 L1440 120 Z" fill="#aebf93" opacity="0.55"></path>
+      </svg>
+
+      <!-- Meadow floor band — its top edge is the ground line the rain lands on -->
+      <div class="dsr-floor" data-rain-floor></div>
+
+      <!-- Word rain -->
+      <div class="dsr-rain" data-rain-layer>
+        <div data-rain-static>
+          {
+            SCATTER.map((s) => (
+              <span
+                class="dsr-word dsr-static"
+                style={`left:${s.x}%; top:${s.y}%; --fs:${fontPx(s.label, s.d)}px; opacity:${wordOpacity(s.d)}; color:${ink(s.label)};`}
+              >
+                {s.label}
+              </span>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- FX layer: landing ripples -->
+      <div class="dsr-fx" data-rain-fx></div>
+    </div>
+
+    <!-- The real content of the scene, for everyone the diorama is hidden from -->
+    <div class="sr-only">
+      <h3>Some of what fills a school day</h3>
+      <ul data-rain-words>
+        {WORDS.map((w) => <li>{w}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* Runtime-spawned spans can't receive Astro's scoped attribute, so this block is
+     global with a `dsr-` namespace. */
+  .dsr {
+    --dsr-floor-h: clamp(48px, 10.5%, 76px);
+    position: relative;
+    height: clamp(400px, 55svh, 540px);
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: linear-gradient(to bottom, #fdfbf3, #fbf7ed 45%, #f6efdd);
+    box-shadow: var(--shadow-polaroid);
+  }
+  /* Soft daylight from above — same honey radial the day-in-the-life section uses */
+  .dsr::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(58% 42% at 50% 0%, rgb(243 220 174 / 0.38), transparent 70%);
+  }
+  /* Lift the paper grain over the whole scene so every layer sits in the same print */
+  .dsr.grain::after {
+    z-index: 7;
+  }
+
+  .dsr-hills {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: calc(var(--dsr-floor-h) - 2px);
+    height: clamp(60px, 16%, 110px);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .dsr-floor {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--dsr-floor-h);
+    z-index: 2;
+    background: linear-gradient(to bottom, #cdd9b9, #b9c9a2);
+    border-top: 1px solid rgb(57 72 45 / 0.16);
+    pointer-events: none;
+  }
+  .dsr-floor::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -13px;
+    height: 14px;
+    pointer-events: none;
+    /* Uneven tuft clusters on a wide tile — an even 160px repeat read as machine-made */
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='14'%3E%3Cg stroke='%23596f44' stroke-width='1.6' stroke-linecap='round' fill='none' opacity='.45'%3E%3Cpath d='M18 14C17 9 18 6 16 3'/%3E%3Cpath d='M22 14C22 8 24 6 25 4'/%3E%3Cpath d='M20 14C20 9 20 7 20 5'/%3E%3Cpath d='M55 14C54 10 55 9 53 7'/%3E%3Cpath d='M59 14C59 10 60 8 61 7'/%3E%3Cpath d='M128 14C127 9 128 6 126 4'/%3E%3Cpath d='M132 14C132 8 134 6 135 5'/%3E%3Cpath d='M130 14C130 10 130 8 130 6'/%3E%3Cpath d='M198 14C197 11 198 9 196 8'/%3E%3Cpath d='M202 14C202 10 203 9 204 8'/%3E%3Cpath d='M236 14C235 9 236 7 234 4'/%3E%3Cpath d='M240 14C240 9 241 7 242 5'/%3E%3C/g%3E%3Ccircle cx='88' cy='11' r='1.3' fill='%23dfa854' opacity='.65'/%3E%3Ccircle cx='262' cy='12' r='1.1' fill='%23dfa854' opacity='.5'/%3E%3C/svg%3E") repeat-x bottom / 280px 14px;
+  }
+
+  .dsr-rain {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .dsr-word {
+    position: absolute;
+    left: 0;
+    top: 0;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    /* Fraunces tuned for mid-size type: keep the softness, drop the display wonk */
+    font-variation-settings: 'SOFT' 55, 'WONK' 0, 'opsz' 34, 'wght' 585;
+    letter-spacing: -0.01em;
+    padding: 8px 10px;
+    margin: -8px -10px;
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: transform;
+    transition: color 200ms ease, opacity 200ms ease;
+  }
+  .dsr-static {
+    font-size: var(--fs);
+    transform: translateX(-50%);
+    pointer-events: none;
+    will-change: auto;
+  }
+  @media (max-width: 639px) {
+    .dsr-static {
+      font-size: calc(var(--fs) * 0.78);
+    }
+  }
+
+  .dsr-fx {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  @keyframes dsrRipple {
+    0% { transform: translate(-50%, -50%) scale(0.15); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+  }
+</style>
+
+<script>
+  /*
+    The rain engine — drop physics only (depth model, sway, cursor repel, hover,
+    landing ripples), ported from the handoff prototype's <script data-dc-script>
+    block. New here: the countryside skin constants, IntersectionObserver + visibility
+    gating, ClientRouter teardown, and the SSR static-scatter handover.
+  */
+
+  const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+  const rnd = (a: number, b: number) => a + Math.random() * (b - a);
+  const damp = (rate: number, dt: number) => 1 - Math.exp(-rate * dt);
+  const TAU = Math.PI * 2;
+
+  // Skin
+  const INK_MOSS = '#39482d'; // moss-800 — keep in sync with the SSR scatter above
+  const INK_BARK = '#4a4036'; // bark-700
+  const INK_HOVER = '#8f5d1d'; // honey-700 — the one warm accent, under the cursor only
+
+  // Tuning — the prototype's rain config, frozen for this mid-page placement
+  const RAIN_DENSITY = 1;
+  const FALL_SPEED = 1;
+
+  type Drop = {
+    el: HTMLSpanElement;
+    wi: number;
+    word: string;
+    depth: number;
+    baseOpacity: string;
+    baseColor: string;
+    x0: number;
+    y: number;
+    v: number;
+    ox: number;
+    hover: boolean;
+    swayA: number;
+    swayF: number;
+    swayP: number;
+    scale: number;
+  };
+
+  let cleanup: (() => void) | null = null;
+
+  function initRain(): (() => void) | null {
+    const section = document.querySelector('[data-rain-section]') as HTMLElement | null;
+    if (!section || section.dataset.rainInit) return null;
+
+    const stage = section.querySelector('[data-rain-stage]') as HTMLElement | null;
+    const rainLayer = section.querySelector('[data-rain-layer]') as HTMLElement | null;
+    const fxLayer = section.querySelector('[data-rain-fx]') as HTMLElement | null;
+    const floor = section.querySelector('[data-rain-floor]') as HTMLElement | null;
+    const staticLayer = section.querySelector('[data-rain-static]') as HTMLElement | null;
+    const WORDS = Array.from(section.querySelectorAll('[data-rain-words] li')).map((li) => li.textContent || '');
+
+    if (!stage || !rainLayer || !fxLayer || !floor || !WORDS.length) return null;
+    section.dataset.rainInit = '1';
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+
+    // Reduced motion / data saver: the server-rendered scatter IS the experience.
+    // Nothing to run, nothing to undo.
+    if (reduceMotion || saveData) {
+      return () => {
+        delete section.dataset.rainInit;
+      };
+    }
+
+    // Live mode: the engine owns the scene from here.
+    staticLayer?.remove();
+
+    /* ---------- state ---------- */
+    const S = {
+      W: 0,
+      H: 0,
+      groundY: 0,
+      drops: [] as Drop[],
+      queue: [] as number[],
+      recentX: [] as number[],
+      pointer: { x: -9999, y: -9999, on: false },
+      elapsed: 0,
+      lastNow: performance.now() / 1000,
+      nextSpawnAt: 0.4,
+    };
+
+    const measure = () => {
+      S.W = stage.clientWidth;
+      S.H = stage.clientHeight;
+      S.groundY = floor.offsetTop + 1;
+    };
+
+    /* ---------- word queue: every word falls once before any repeats ---------- */
+    const nextWordIndex = () => {
+      if (!S.queue.length) {
+        const onscreen = new Set(S.drops.map((d) => d.wi));
+        S.queue = WORDS.map((_, i) => i).filter((i) => !onscreen.has(i));
+        for (let i = S.queue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [S.queue[i], S.queue[j]] = [S.queue[j], S.queue[i]];
+        }
+      }
+      return S.queue.pop() as number;
+    };
+
+    const spawnDrop = (): Drop => {
+      const wi = nextWordIndex();
+      const word = WORDS[wi];
+      const d = Math.random() ** 0.8;
+      const mobile = S.W < 640;
+      let fs = lerp(13.5, 27, d) * (mobile ? 0.78 : 1);
+      if (word.length > 26) fs *= 0.85;
+      const baseOpacity = lerp(0.34, 0.96, d ** 1.25).toFixed(2);
+      const baseColor = wi % 4 === 3 ? INK_BARK : INK_MOSS;
+      const el = document.createElement('span');
+      el.className = 'dsr-word';
+      el.textContent = word;
+      const s = el.style;
+      s.fontSize = fs.toFixed(1) + 'px';
+      s.color = baseColor;
+      s.opacity = baseOpacity;
+      if (d < 0.4) s.filter = 'blur(' + lerp(1.8, 0.4, d / 0.4).toFixed(1) + 'px)';
+      s.pointerEvents = 'auto';
+      // pick an x away from recent spawns to avoid clumping — a longer memory and a
+      // wider gap than the prototype: serif words muddy each other faster than its
+      // sans, and the sparser look is the premium one
+      let x0 = rnd(S.W * 0.04, S.W * 0.96);
+      for (let tries = 0; tries < 9; tries++) {
+        if (S.recentX.every((rx) => Math.abs(rx - x0) > Math.min(150, S.W * 0.2))) break;
+        x0 = rnd(S.W * 0.04, S.W * 0.96);
+      }
+      S.recentX.push(x0);
+      if (S.recentX.length > 6) S.recentX.shift();
+      const drop: Drop = {
+        el,
+        wi,
+        word,
+        depth: d,
+        baseOpacity,
+        baseColor,
+        x0,
+        y: -rnd(30, 240),
+        v: lerp(26, 78, d),
+        ox: 0,
+        hover: false,
+        swayA: rnd(5, 13) * (1 - d * 0.35),
+        swayF: rnd(0.18, 0.42),
+        swayP: rnd(0, TAU),
+        scale: 1,
+      };
+      el.addEventListener('pointerenter', () => {
+        drop.hover = true;
+        el.style.opacity = '1';
+        el.style.color = INK_HOVER;
+      });
+      el.addEventListener('pointerleave', () => {
+        drop.hover = false;
+        el.style.opacity = baseOpacity;
+        el.style.color = baseColor;
+      });
+      rainLayer.appendChild(el);
+      S.drops.push(drop);
+      return drop;
+    };
+
+    const removeDrop = (drop: Drop) => {
+      const i = S.drops.indexOf(drop);
+      if (i >= 0) S.drops.splice(i, 1);
+      drop.el.style.transition = 'opacity 240ms ease';
+      drop.el.style.opacity = '0';
+      setTimeout(() => drop.el.remove(), 280);
+    };
+
+    /* ---------- fx: the soft ring where a word meets the meadow ---------- */
+    const ripple = (x: number, y: number) => {
+      const w = rnd(26, 44);
+      const el = document.createElement('div');
+      const s = el.style;
+      s.position = 'absolute';
+      s.left = x + 'px';
+      s.top = y + 'px';
+      s.width = w + 'px';
+      s.height = w * 0.32 + 'px';
+      s.border = '1.5px solid rgba(89,111,68,0.4)';
+      s.borderRadius = '50%';
+      s.animation = 'dsrRipple 720ms ease-out both';
+      el.addEventListener('animationend', () => el.remove());
+      fxLayer.appendChild(el);
+    };
+
+    /* ---------- the rain ---------- */
+    const updateDrops = (dt: number, t: number) => {
+      const p = S.pointer;
+      for (let i = S.drops.length - 1; i >= 0; i--) {
+        const d = S.drops[i];
+        let mul = FALL_SPEED;
+        if (d.hover) mul *= 0.22;
+        let oxT = 0;
+        if (p.on) {
+          const dx = d.x0 + d.ox - p.x,
+            dy = d.y - p.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 150) {
+            const f = (1 - dist / 150) ** 2;
+            oxT = Math.sign(dx || 1) * f * 62;
+            mul *= 1 - f * 0.55;
+          }
+        }
+        d.ox += (oxT - d.ox) * damp(4, dt);
+        d.y += d.v * mul * dt;
+        const sc = d.hover ? 1.14 : 1;
+        d.scale += (sc - d.scale) * damp(14, dt);
+
+        const sway = Math.sin(t * d.swayF * TAU + d.swayP) * d.swayA;
+        d.el.style.transform =
+          'translate(' + (d.x0 + d.ox + sway).toFixed(1) + 'px,' + d.y.toFixed(1) + 'px) translateX(-50%) scale(' + d.scale.toFixed(3) + ')';
+
+        if (d.y >= S.groundY - 4) {
+          ripple(d.x0 + d.ox + sway, S.groundY + 2);
+          removeDrop(d);
+        }
+      }
+    };
+
+    /* ---------- main loop ---------- */
+    const advance = (dt: number) => {
+      S.elapsed += dt;
+      const t = S.elapsed;
+
+      const targetCount = Math.round(clamp(S.W / 56, 6, 26) * RAIN_DENSITY * clamp(t / 5, 0.18, 1));
+      if (S.drops.length < targetCount && t > S.nextSpawnAt) {
+        spawnDrop();
+        S.nextSpawnAt = t + rnd(0.14, 0.55) / RAIN_DENSITY;
+      }
+
+      updateDrops(dt, t);
+    };
+
+    let raf = 0;
+    let running = false;
+    let inView = false;
+    let tabVisible = document.visibilityState !== 'hidden';
+
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick);
+      const nowS = now / 1000;
+      const dt = clamp(nowS - S.lastNow, 0.001, 0.05);
+      S.lastNow = nowS;
+      advance(dt);
+    };
+
+    // The whole engine is rAF-driven, so it costs nothing while paused. Run only while
+    // the stage is actually on screen in a visible tab (same gate as the funnel's
+    // ambient clock).
+    const sync = () => {
+      const should = inView && tabVisible;
+      if (should && !running) {
+        running = true;
+        S.lastNow = performance.now() / 1000;
+        raf = requestAnimationFrame(tick);
+      } else if (!should && running) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    };
+    const onVis = () => {
+      tabVisible = document.visibilityState !== 'hidden';
+      sync();
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        inView = entries[0]?.isIntersecting ?? false;
+        sync();
+      },
+      { threshold: 0 }
+    );
+
+    const onMove = (e: PointerEvent) => {
+      const r = stage.getBoundingClientRect();
+      S.pointer.x = e.clientX - r.left;
+      S.pointer.y = e.clientY - r.top;
+      S.pointer.on = true;
+    };
+    const onLeave = () => {
+      S.pointer.on = false;
+      S.pointer.x = -9999;
+      S.pointer.y = -9999;
+    };
+    stage.addEventListener('pointermove', onMove);
+    stage.addEventListener('pointerleave', onLeave);
+
+    measure();
+    const ro = new ResizeObserver(() => measure());
+    ro.observe(stage);
+    document.addEventListener('visibilitychange', onVis);
+    io.observe(stage);
+
+    // Backgrounded automation tabs get ZERO rAF frames, so the scene cannot be advanced
+    // by waiting. This hook drives the simulation synchronously for screenshots.
+    if (import.meta.env.DEV) {
+      (window as any).__rain = {
+        step: (seconds = 1, fps = 60) => {
+          const n = Math.max(1, Math.round(seconds * fps));
+          for (let i = 0; i < n; i++) advance(1 / fps);
+        },
+        S,
+      };
+    }
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+      document.removeEventListener('visibilitychange', onVis);
+      stage.removeEventListener('pointermove', onMove);
+      stage.removeEventListener('pointerleave', onLeave);
+      delete section.dataset.rainInit;
+    };
+  }
+
+  // Astro runs this module once on first load AND fires astro:page-load — only the call
+  // that actually initialises returns a teardown, so never clobber a live one with null.
+  const boot = () => {
+    const teardown = initRain();
+    if (teardown) cleanup = teardown;
+  };
+
+  boot();
+  document.addEventListener('astro:page-load', boot);
+  document.addEventListener('astro:before-swap', () => {
+    if (cleanup) {
+      cleanup();
+      cleanup = null;
+    }
+  });
+</script>
