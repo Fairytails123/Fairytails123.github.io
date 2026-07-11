@@ -32,23 +32,25 @@ const dayHalf = offerings.find((o) => o.id === 'day-half-am')!;
 const taster = offerings.find((o) => o.id === 'day-taster')!;
 
 // Savings vs paying as you go (spec formula 2026-07-11, extended same day at owner
-// instruction to count the grooming perk): full-time = 5 days/week averaged over the
-// year, compared at the WEEKLY-DISCOUNT day rate (the honest comparison), PLUS the
-// monthly full-groom perk (average full groom = pricing.json grooming value; Half Days
-// + Tier 1 get it half-price, Tier 2 free). Rounded DOWN to whole pounds at the end —
-// never overstate. Pick-ups & drop-offs stay deliberately UNcounted (extra headroom).
+// instruction — twice): full-time = 5 days/week averaged over the year, compared at
+// the WEEKLY-DISCOUNT day rate (the honest comparison), PLUS the monthly full-groom
+// perk (average full groom = pricing.json grooming value; Half Days + Tier 1 get it
+// half-price, Tier 2 free), PLUS — full-day tiers only — free pick-ups & drop-offs at
+// £2 a day (£1 each way, the rate everyone else pays). Rounded DOWN to whole pounds
+// at the end — never overstate.
 const DAYS_PER_MONTH = 5 * (52 / 12); // ≈ 21.67
 const groomAvg = pricing.grooming.averageFullGroomPrice; // £35 average full groom
 const groomHalfPriceWorth = groomAvg / 2; // £17.50 saved on a half-price groom
+const busPerDay = pricing.addOns.pickUpPerJourney + pricing.addOns.dropOffPerJourney; // £2/day
+const busMonthlyWorth = busPerDay * DAYS_PER_MONTH; // ≈ £43.33 — T1/T2 perk only
 const dayFeeSavingHalf = dayHalf.weeklyDiscountPrice * DAYS_PER_MONTH - planHalf.price; // vs £275
 const dayFeeSavingFull = dayFull.weeklyDiscountPrice * DAYS_PER_MONTH - planT1.price; // vs £375
 const savingHalf = Math.floor(dayFeeSavingHalf + groomHalfPriceWorth); // £67
-const savingT1 = Math.floor(dayFeeSavingFull + groomHalfPriceWorth); // £75
-const savingT2 = Math.floor(dayFeeSavingFull + groomAvg); // £93
+const savingT1 = Math.floor(dayFeeSavingFull + groomHalfPriceWorth + busMonthlyWorth); // £118
+const savingT2 = Math.floor(dayFeeSavingFull + groomAvg + busMonthlyWorth); // £136
 const t2MonthlyEquiv = planT2.price / 2; // £750 per 2-month cycle
-// Free pick-ups & drop-offs (T1/T2 perk) vs the pay-per-journey rate everyone else pays.
-const journeyRate = pricing.addOns.pickUpPerJourney; // £1 each way
-const pickupsWorth = Math.floor((pricing.addOns.pickUpPerJourney + pricing.addOns.dropOffPerJourney) * DAYS_PER_MONTH);
+const journeyRate = pricing.addOns.pickUpPerJourney; // £1 each way (perk-row copy)
+const pickupsWorth = Math.floor(busMonthlyWorth); // £43 — the methodology line
 
 // Per-card presentation (facts stay in pricing.json; this is layout + draft taglines).
 const cards = [
@@ -65,7 +67,7 @@ const cards = [
     displayName: 'Full Days — Tier 1',
     tagline: 'Full days, every weekday — our most popular membership.',
     saving: savingT1,
-    groomNote: 'with your monthly full groom half-price',
+    groomNote: 'with the school bus free every day and your monthly full groom half-price',
     featured: true,
   },
   {
@@ -73,7 +75,7 @@ const cards = [
     displayName: 'Full Days — Tier 2',
     tagline: 'The same full-time school with the fullest set of perks, billed once every two months.',
     saving: savingT2,
-    groomNote: 'with your monthly full groom free',
+    groomNote: 'with the school bus free every day and your monthly full groom free',
     featured: false,
   },
 ];
@@ -274,8 +276,6 @@ const perkRows = [
                   </p>
                   <p class="mt-0.5 text-xs leading-relaxed text-bark-500">
                     vs paying day by day at our weekly rate, {groomNote}
-                    {plan.id !== 'membership-half' &&
-                      ` — and before free pick-ups & drop-offs, worth up to ${gbp(pickupsWorth)} a month on their own`}
                   </p>
                 </div>
 
@@ -301,7 +301,9 @@ const perkRows = [
           {gbp(dayFull.weeklyDiscountPrice)} a full day and {gbp(dayHalf.weeklyDiscountPrice)} a half
           day, plus the grooming perk: a full groom averages {gbp(groomAvg)}, so the monthly
           half-price groom on Half Days and Tier 1 counts as {gbp(groomHalfPriceWorth)} and Tier 2's
-          free groom as {gbp(groomAvg)}. Everything is rounded down to the pound. Membership doesn't
+          free groom as {gbp(groomAvg)}. The full-day tiers also count their free pick-ups &amp;
+          drop-offs at {gbp(busPerDay)} a day — around {gbp(pickupsWorth)} a month with the bus
+          running every school day. Everything is rounded down to the pound. Membership doesn't
           change your dog's routine — it just makes it simpler and cheaper.
         </p>
       </div>
