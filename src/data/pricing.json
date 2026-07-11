@@ -11,7 +11,8 @@
     "validityDays": 30
   },
   "grooming": {
-    "averageFullGroomPrice": 35
+    "averageFullGroomPrice": 35,
+    "averageHalfGroomPrice": 25
   },
   "offerings": [
     {
@@ -249,7 +250,7 @@
         "Free pick-ups & drop-offs",
         "Monthly bath and brush with a maintenance trim included",
         "Priority boarding space",
-        "Free Full Dog Grooming"
+        "Free grooming — Full Groom one month, Half Groom the next"
       ],
       "acuityUrl": null,
       "order": 16
