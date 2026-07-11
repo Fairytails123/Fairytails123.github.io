@@ -17,3 +17,6 @@ tools/breed-matcher/backups/*
 *.log
 .DS_Store
 Thumbs.db
+
+# Owner-supplied master image pool (source files; processed copies go to src/assets)
+Master images/

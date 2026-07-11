@@ -24,7 +24,10 @@
 */
 import { Image } from 'astro:assets';
 import HillDivider from './HillDivider.astro';
-import portrait from '../assets/pages/home/whole-dog-goldie.webp';
+// Owner-approved master image 087 (swapped in for Goldie at owner instruction,
+// 2026-07-11): a malamute on the seafront boardwalk. 400px square is the source's
+// full height — ask the owner for a larger original before re-cutting bigger.
+import portrait from '../assets/pages/home/whole-dog-malamute.webp';
 
 // Group accents. These four hexes are the source of truth (the SVG reads them back off
 // each chip's `--accent`); `clay` is also recorded in global.css @theme as a palette entry.
@@ -129,15 +132,16 @@ const GROUPS = [
           <div class="fnl__frame" data-fnl-frame>
             <Image
               src={portrait}
-              alt="Goldie, a golden cocker spaniel, resting calmly and looking straight at the camera"
-              widths={[240, 360, 480]}
+              alt="An Alaskan Malamute in a harness sitting on the seafront boardwalk, smiling at the camera"
+              widths={[240, 400]}
               sizes="(min-width: 1024px) 240px, 200px"
               class="h-full w-full rounded-full object-cover"
               loading="lazy"
             />
           </div>
         </div>
-        <figcaption class="fnl__caption" data-fnl-caption>Goldie</figcaption>
+        {/* TODO(owner): the malamute's first name — captioned by place until supplied */}
+        <figcaption class="fnl__caption" data-fnl-caption>On the seafront</figcaption>
       </figure>
     </div>
 
