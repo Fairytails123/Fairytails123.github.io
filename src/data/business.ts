@@ -60,7 +60,9 @@ export const business = {
     oneToOne: 'https://app.acuityscheduling.com/schedule.php?owner=13914499&appointmentType=51989230',
     puppyClassesCart: 'https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469464',
     trainingClassesCart: 'https://app.acuityscheduling.com/catalog.php?owner=13914499&action=addCart&clear=1&id=1469467',
-    grooming: 'https://thefairytailsdoggrooming.as.me/schedule.php',
+    // ⚠️ Not Acuity any more: the grooming Acuity account was DISABLED and bookings
+    // moved to the salon's JotForm system (owner, 2026-07-11). Key kept for stability.
+    grooming: 'https://pci.jotform.com/form/251190647924057',
   },
 
   groomingSite: 'https://fairytailsdoggrooming.co.uk/',
