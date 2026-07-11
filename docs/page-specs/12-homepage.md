@@ -150,3 +150,7 @@ Per the owner's process and the standing rule *"never present a bare structure p
 - **Copy finalised + Goldie approved 2026-07-09.** Group 4 rewritten to warm lay observation (`How they’re eating` / `Toilet habits` / `Energy and mood` / `Any sign of discomfort` / `Anything out of character`) — never diagnosis or treatment; `Dog Day School` uses the verbatim product name. **Owner still owes:** the grooming-chip question (`Happy at the groomer’s` vs `Happy being brushed`) · a real trackpad/phone check of the 2-viewport pin length · confirming the added homepage scroll depth.
 
 **Remaining to reach sign-off:** swap all *[OWNER]* placeholders (founder/team, transformation, exact credentials/numbers/reviews) → pick hero headline + approve SEO → the OG card → polish pass (Lighthouse ≥ 90 / a11y / reduced-motion audit) → live enquiry-form n8n test → owner sign-off → tick `WEBSITE-PLAN.md` row 12 → **site feature-complete → Stage 5 cutover**.
+
+## ADDENDUM (2026-07-11) — whole-dog portrait swapped to the malamute
+
+The owner's new `Master images/` pool (gitignored, repo root) supplied its first placement: image `087` — a smiling malamute sitting on the seafront boardwalk — **replaces Goldie** at the WholeDogFunnel core (`src/assets/pages/home/whole-dog-malamute.webp`, 400px-square face-centred cut from a 600×400 source; goldie asset deleted). Caption = "On the seafront" until the owner supplies the dog's first name; alt text describes the malamute. Commit `426ac50`, live-verified.
