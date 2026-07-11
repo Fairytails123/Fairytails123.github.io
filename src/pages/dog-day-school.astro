@@ -38,6 +38,10 @@ const addOns = pricing.addOns;
 const flexi = pricing.flexiPass;
 const taster = pricing.offerings.find((o) => o.id === 'day-taster');
 const cbs = pricing.offerings.find((o) => o.id === 'cbs');
+// Membership counterparts for the estimator's "membership would be cheaper" nudge
+// (owner, 2026-07-11): full days compare against Tier 1, half days against Half Days.
+const memFull = pricing.offerings.find((o) => o.id === 'membership-full-t1');
+const memHalf = pricing.offerings.find((o) => o.id === 'membership-half');
 
 // Pennies shown only when present (£24.99, £12.50) — whole pounds stay clean (£15).
 const gbp = (n) => `£${Number.isInteger(n) ? n.toLocaleString('en-GB') : n.toFixed(2)}`;
@@ -551,6 +555,10 @@ const kitList = [
           data-sniffari={addOns.sniffariPerDay}
           data-pickup={addOns.pickUpPerJourney}
           data-dropoff={addOns.dropOffPerJourney}
+          data-mem-full={memFull.price}
+          data-mem-full-large={memFull.largeDogSurcharge}
+          data-mem-half={memHalf.price}
+          data-mem-half-large={memHalf.largeDogSurcharge}
           data-reveal
         >
           <p class="eyebrow text-honey-600">Plan your week</p>
@@ -640,6 +648,25 @@ const kitList = [
                   passes as you like.
                 </p>
               </div>
+              <a
+                href="/membership-plans"
+                class="mt-4 block rounded-xl border border-honey-300/60 bg-honey-400/15 p-4 text-sm leading-relaxed text-cream-100 transition-colors duration-300 hover:bg-honey-400/25"
+                data-est-member
+                style="display: none;"
+              >
+                <p class="font-bold text-honey-300">
+                  Coming this often? Membership is cheaper.
+                </p>
+                <p class="mt-1">
+                  <strong data-est-member-plan>Full Days membership</strong> covers full-time
+                  attendance for <strong data-est-member-price>£375</strong> a month — with free
+                  pick-ups &amp; drop-offs included — saving you about
+                  <strong data-est-member-save>£0</strong> a month on this estimate.
+                </p>
+                <span class="mt-2 inline-flex items-center gap-1.5 font-bold text-honey-300">
+                  See membership plans <span aria-hidden="true">→</span>
+                </span>
+              </a>
               <p class="mt-3 text-[0.7rem] leading-relaxed text-cream-200/70">
                 An estimate only — final pricing is confirmed when your dog joins. Confidence
                 Building Sessions are booked separately.
@@ -977,6 +1004,30 @@ const kitList = [
       if (flexiNote) {
         flexiNote.style.display = weekly ? 'none' : '';
         flexiNote.style.opacity = type === 'half' ? '0.3' : '1';
+      }
+
+      // Membership nudge (owner, 2026-07-11): show when the matching membership plan
+      // beats this configuration. Compared per month on the fees membership replaces —
+      // day fees + pick-up/drop-off (free on every membership plan). Sniffari isn't a
+      // membership perk, so it's excluded from BOTH sides (it cancels out either way).
+      const memBox = get('[data-est-member]');
+      if (memBox) {
+        const memMonthly =
+          (type === 'full' ? Number(d.memFull) : Number(d.memHalf)) +
+          (size === 'large' ? (type === 'full' ? Number(d.memFullLarge) : Number(d.memHalfLarge)) : 0);
+        const transportPerDay = (pickup ? Number(d.pickup) : 0) + (dropoff ? Number(d.dropoff) : 0);
+        const comparableMonthly = ((perDay + transportPerDay) * days * 52) / 12;
+        const saving = comparableMonthly - memMonthly;
+        const show = saving >= 1;
+        memBox.style.display = show ? '' : 'none';
+        if (show) {
+          const planOut = get('[data-est-member-plan]');
+          const priceOut = get('[data-est-member-price]');
+          const saveOut = get('[data-est-member-save]');
+          if (planOut) planOut.textContent = type === 'full' ? 'Full Days membership' : 'Half Days membership';
+          if (priceOut) priceOut.textContent = money(memMonthly);
+          if (saveOut) saveOut.textContent = `£${Math.floor(saving).toLocaleString('en-GB')}`;
+        }
       }
 
       const daysOut = get('[data-est-days-out]');
