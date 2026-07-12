@@ -20,3 +20,6 @@ Thumbs.db
 
 # Owner-supplied master image pool (source files; processed copies go to src/assets)
 Master images/
+
+# SEO operating system — public repo: strategy/KPIs/competitor data stay out (OneDrive syncs it across machines)
+SEO.md

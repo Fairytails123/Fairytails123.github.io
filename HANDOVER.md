@@ -1,5 +1,7 @@
 # HANDOVER — Fairy Tails main-website rebuild
 
+**SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
+
 ## ⏸️ PAUSE POINT 2026-07-12 — read this first
 
 > ### ▶ PICK UP HERE
