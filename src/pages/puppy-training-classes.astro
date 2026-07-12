@@ -199,7 +199,7 @@ const faqs = [
     <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="welcome">
       <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-          <p class="eyebrow text-honey-600" data-reveal>Small group evening classes</p>
+          <p class="eyebrow text-honey-700" data-reveal>Small group evening classes</p>
           <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
             For your puppy — <em class="squiggle not-italic">and for you</em>
           </h2>
@@ -234,7 +234,7 @@ const faqs = [
     <section class="bg-cream-100" data-section="why">
       <HillDivider class="bg-cream-50 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Why choose group classes</p>
+        <p class="eyebrow text-honey-700" data-reveal>Why choose group classes</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Puppies are <em class="squiggle not-italic">sponges</em> — let’s make it count
         </h2>
@@ -311,7 +311,7 @@ const faqs = [
     <section data-section="weeks">
       <HillDivider class="bg-cream-100 text-cream-50" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>The course, week by week</p>
+        <p class="eyebrow text-honey-700" data-reveal>The course, week by week</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           One month, four evenings — <em class="squiggle not-italic">a plan that builds</em>
         </h2>
@@ -324,7 +324,7 @@ const faqs = [
                   <div class="flex items-baseline gap-4">
                     <p class="font-display text-5xl font-bold leading-none text-honey-400/80">{i + 1}</p>
                     <div>
-                      <p class="eyebrow text-honey-600">{w.week}</p>
+                      <p class="eyebrow text-honey-700">{w.week}</p>
                       <h3 class="mt-1 font-display text-xl font-bold text-moss-800">{w.title}</h3>
                     </div>
                   </div>
@@ -418,7 +418,7 @@ const faqs = [
     <section data-section="benefits">
       <HillDivider class="bg-pine-950 text-cream-50" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Beyond the commands</p>
+        <p class="eyebrow text-honey-700" data-reveal>Beyond the commands</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           How will your pup <em class="squiggle not-italic">benefit?</em>
         </h2>
@@ -546,7 +546,7 @@ const faqs = [
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <p class="eyebrow text-honey-600" data-reveal>Booking</p>
+            <p class="eyebrow text-honey-700" data-reveal>Booking</p>
             <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
               How to book <em class="squiggle not-italic">your place</em>
             </h2>
@@ -634,7 +634,7 @@ const faqs = [
     <section class="bg-cream-100" data-section="faq">
       <HillDivider class="bg-cream-50 text-cream-100" />
       <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Good to know</p>
+        <p class="eyebrow text-honey-700" data-reveal>Good to know</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Puppy class <em class="squiggle not-italic">questions</em>
         </h2>
@@ -674,7 +674,7 @@ const faqs = [
     <section data-section="pathways">
       <HillDivider class="bg-cream-100 text-cream-50" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>More puppy pathways</p>
+        <p class="eyebrow text-honey-700" data-reveal>More puppy pathways</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Not quite the right fit? <em class="squiggle not-italic">There’s a route for every pup</em>
         </h2>
@@ -787,6 +787,10 @@ const faqs = [
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Reverted on astro:before-swap — matchMedia contexts otherwise leak across
+  // ClientRouter navigations (membership-review fix, applied site-wide at polish).
+  let mm = null;
+
   function initPuppyClasses() {
     const root = document.querySelector('[data-page="puppy-classes"]') as HTMLElement | null;
     if (!root || root.dataset.gsapInit) return;
@@ -806,7 +810,7 @@ const faqs = [
     if (reduceMotion) return; // static page — everything already visible
     root.dataset.gsapInit = '1';
 
-    const mm = gsap.matchMedia();
+    mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       /* --- Hero entrance --- */
       gsap
@@ -896,5 +900,9 @@ const faqs = [
   document.addEventListener('astro:page-load', initPuppyClasses);
   document.addEventListener('astro:before-swap', () => {
     ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
   });
 </script>

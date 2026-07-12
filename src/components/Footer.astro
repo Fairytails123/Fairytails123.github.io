@@ -64,7 +64,9 @@ const year = new Date().getFullYear();
     </div>
     <div>
       <p class="eyebrow text-honey-400">Explore</p>
-      <ul class="mt-4 space-y-2.5 text-sm">
+      <!-- Two sub-columns, filled top-to-bottom (owner, 2026-07-12: one column had
+           grown too long). grid-rows-5 fits up to 10 links — bump it if more ship. -->
+      <ul class="mt-4 grid grid-flow-col grid-rows-5 gap-x-6 gap-y-2.5 text-sm">
         <li>
           <a href="/dog-boarding-school" class="transition-colors hover:text-honey-300">Board &amp; Train</a>
         </li>

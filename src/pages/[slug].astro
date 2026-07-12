@@ -163,7 +163,7 @@ const jsonLd = {
     {
       related.length > 0 && (
         <section class="mx-auto max-w-6xl px-4 pb-8">
-          <p class="eyebrow text-honey-600" data-reveal>Keep reading</p>
+          <p class="eyebrow text-honey-700" data-reveal>Keep reading</p>
           <h2 class="mt-3 font-display text-2xl font-bold text-moss-800 sm:text-3xl" data-reveal>
             More from the <em class="squiggle not-italic">advice hub</em>
           </h2>
@@ -180,7 +180,7 @@ const jsonLd = {
                   />
                 </div>
                 <div class="p-5">
-                  <p class="text-xs font-bold uppercase tracking-wide text-honey-600">
+                  <p class="text-xs font-bold uppercase tracking-wide text-honey-700">
                     {r.data.category}
                     <span class="mx-1.5 text-bark-400" aria-hidden="true">•</span>
                     <time datetime={r.data.pubDate.toISOString()} class="normal-case tracking-normal text-bark-500">
@@ -209,12 +209,17 @@ const jsonLd = {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Reverted on astro:before-swap — matchMedia contexts otherwise leak across
+  // ClientRouter navigations (membership-review fix, applied site-wide at polish).
+  let mm = null;
+
   function init() {
     const root = document.querySelector('[data-page="blog-post"]') as HTMLElement | null;
     if (!root || root.dataset.gsapInit) return;
     root.dataset.gsapInit = '1';
 
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
       // Header entrance
       gsap.from(['[data-post-eyebrow]', '[data-post-title]', '[data-post-byline]', '[data-post-hero]'], {
         opacity: 0,
@@ -250,5 +255,9 @@ const jsonLd = {
   document.addEventListener('astro:page-load', init);
   document.addEventListener('astro:before-swap', () => {
     ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
   });
 </script>

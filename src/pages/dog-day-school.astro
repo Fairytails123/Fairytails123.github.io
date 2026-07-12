@@ -205,7 +205,7 @@ const kitList = [
     <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="welcome">
       <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-          <p class="eyebrow text-honey-600" data-reveal>Welcome to day school</p>
+          <p class="eyebrow text-honey-700" data-reveal>Welcome to day school</p>
           <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
             A proper day out — for <em class="squiggle not-italic">dogs</em>
           </h2>
@@ -241,7 +241,7 @@ const kitList = [
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <div class="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <p class="eyebrow text-honey-600" data-reveal>Why day school</p>
+            <p class="eyebrow text-honey-700" data-reveal>Why day school</p>
             <h2 class="mt-3 max-w-xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
               Dogs were built for a <em class="squiggle not-italic">busier world</em>
             </h2>
@@ -301,7 +301,7 @@ const kitList = [
 
         <!-- The walk: a trail fills + a paw walks down it as you scroll -->
         <div class="relative mt-14 overflow-x-clip" data-day-list>
-          <div class="absolute bottom-4 left-[7px] top-2 w-0.5 sm:left-[166px]" aria-hidden="true">
+          <div class="absolute bottom-4 left-[15px] top-2 w-0.5 sm:left-[166px]" aria-hidden="true">
             <div class="absolute inset-0 rounded bg-pine-800"></div>
             <div class="day-trail absolute inset-0 origin-top rounded" data-trail-fill></div>
             <span class="day-sun absolute -left-[15px] top-0 block h-8 w-8" data-trail-sun>
@@ -350,7 +350,7 @@ const kitList = [
     <section data-section="choose">
       <HillDivider class="bg-pine-950 text-cream-50" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Why people choose us</p>
+        <p class="eyebrow text-honey-700" data-reveal>Why people choose us</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           The little things that <em class="squiggle not-italic">add up</em>
         </h2>
@@ -374,7 +374,7 @@ const kitList = [
     <section class="overflow-hidden bg-cream-100" data-section="proof">
       <HillDivider class="bg-cream-50 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Proof, not promises</p>
+        <p class="eyebrow text-honey-700" data-reveal>Proof, not promises</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Don’t just take our <em class="squiggle not-italic">word for it</em>
         </h2>
@@ -504,7 +504,7 @@ const kitList = [
     <section data-section="pricing">
       <HillDivider class="bg-pine-900 text-cream-50" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Day-school plans</p>
+        <p class="eyebrow text-honey-700" data-reveal>Day-school plans</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Plans to suit <em class="squiggle not-italic">your week</em>
         </h2>
@@ -561,7 +561,7 @@ const kitList = [
           data-mem-half-large={memHalf.largeDogSurcharge}
           data-reveal
         >
-          <p class="eyebrow text-honey-600">Plan your week</p>
+          <p class="eyebrow text-honey-700">Plan your week</p>
           <h3 class="mt-2 font-display text-2xl font-bold text-moss-800">Estimate your cost</h3>
           <div class="mt-7 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
             <div class="space-y-6">
@@ -695,7 +695,7 @@ const kitList = [
     <section class="bg-cream-100" data-section="joining">
       <HillDivider class="bg-cream-50 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
-        <p class="eyebrow text-honey-600" data-reveal>Joining the school</p>
+        <p class="eyebrow text-honey-700" data-reveal>Joining the school</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           How your dog <em class="squiggle not-italic">joins us</em>
         </h2>
@@ -816,7 +816,7 @@ const kitList = [
     transition: opacity 0.45s ease;
   }
   [data-gsap-init] .day-step:not(.is-active) {
-    opacity: 0.38;
+    opacity: 0.55;
   }
 
   /* Day timeline — dawn-to-dusk trail + travelling sun */
@@ -935,6 +935,10 @@ const kitList = [
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
   gsap.registerPlugin(ScrollTrigger);
+
+  // Reverted on astro:before-swap — matchMedia contexts otherwise leak across
+  // ClientRouter navigations (membership-review fix, applied site-wide at polish).
+  let mm = null;
 
   // ---- Interactive cost estimator (core functionality — runs regardless of motion pref) ----
   function initEstimator(root: HTMLElement) {
@@ -1108,7 +1112,7 @@ const kitList = [
     if (reduceMotion) return; // static page — everything already visible
     root.dataset.gsapInit = '1';
 
-    const mm = gsap.matchMedia();
+    mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       /* --- Hero entrance --- */
       gsap
@@ -1183,8 +1187,9 @@ const kitList = [
           onToggle: (self) => step.classList.toggle('is-active', self.isActive),
         });
         gsap.from(step, {
+          // x-only: the step CSS owns opacity (dim rule) — autoAlpha here left
+          // inline opacity:1 behind and silently defeated the dim (2026-07-05 lesson).
           x: 40,
-          autoAlpha: 0,
           duration: 0.7,
           ease: 'power3.out',
           scrollTrigger: { trigger: step, start: 'top 88%', once: true },
@@ -1197,5 +1202,9 @@ const kitList = [
   document.addEventListener('astro:page-load', initDaySchool);
   document.addEventListener('astro:before-swap', () => {
     ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
   });
 </script>

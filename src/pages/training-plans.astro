@@ -261,7 +261,7 @@ const axes = [
 
     <!-- ============ INTRO ============ -->
     <section class="mx-auto max-w-3xl px-4 py-20 text-center sm:py-24" data-section="intro">
-      <p class="eyebrow text-honey-600" data-reveal>Where to start</p>
+      <p class="eyebrow text-honey-700" data-reveal>Where to start</p>
       <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
         There's no single right way — <em class="squiggle not-italic">just the right one for your dog</em>
       </h2>
@@ -278,7 +278,7 @@ const axes = [
       <HillDivider class="bg-cream-50 text-cream-100" />
       <div id="plans" class="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24 pt-12">
         <div class="max-w-2xl">
-          <p class="eyebrow text-honey-600" data-reveal>Find your fit</p>
+          <p class="eyebrow text-honey-700" data-reveal>Find your fit</p>
           <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
             Filter to <em class="squiggle not-italic">your dog</em>
           </h2>
@@ -535,6 +535,10 @@ const axes = [
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Reverted on astro:before-swap — matchMedia contexts otherwise leak across
+  // ClientRouter navigations (membership-review fix, applied site-wide at polish).
+  let mm = null;
+
   function initTrainingPlans() {
     const root = document.querySelector('[data-page="training-plans"]') as HTMLElement | null;
     if (!root || root.dataset.gsapInit) return;
@@ -623,7 +627,7 @@ const axes = [
 
     if (reduceMotion) return; // static page — everything visible, filter already live
 
-    const mm = gsap.matchMedia();
+    mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       /* Hero entrance */
       gsap
@@ -680,5 +684,9 @@ const axes = [
   document.addEventListener('astro:page-load', initTrainingPlans);
   document.addEventListener('astro:before-swap', () => {
     ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
   });
 </script>

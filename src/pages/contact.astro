@@ -179,7 +179,7 @@ const jsonLd = {
       <HillDivider class="bg-pine-950 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
         <div class="mx-auto max-w-2xl text-center">
-          <p class="eyebrow text-honey-600" data-reveal>Send us a message</p>
+          <p class="eyebrow text-honey-700" data-reveal>Send us a message</p>
           <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
             Tell us about <em class="squiggle not-italic">your dog</em>
           </h2>
@@ -197,7 +197,7 @@ const jsonLd = {
     <!-- ============ Meet the team ============ -->
     <section class="mx-auto max-w-6xl px-4 py-16 sm:py-20" data-section="team">
       <div class="mx-auto max-w-3xl text-center">
-        <p class="eyebrow text-honey-600" data-reveal>The humans behind the dogs</p>
+        <p class="eyebrow text-honey-700" data-reveal>The humans behind the dogs</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Meet some of The Fairy Tails <em class="squiggle not-italic">team!</em>
         </h2>
@@ -224,12 +224,17 @@ const jsonLd = {
 
   gsap.registerPlugin(ScrollTrigger);
 
+  // Reverted on astro:before-swap — matchMedia contexts otherwise leak across
+  // ClientRouter navigations (membership-review fix, applied site-wide at polish).
+  let mm = null;
+
   function initContact() {
     const root = document.querySelector('[data-page="contact"]') as HTMLElement | null;
     if (!root || root.dataset.gsapInit) return;
     root.dataset.gsapInit = '1';
 
-    gsap.matchMedia().add('(prefers-reduced-motion: no-preference)', () => {
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from(['[data-hero-eyebrow]', '[data-hero-title]', '[data-hero-sub]'], {
         opacity: 0,
         y: 24,
@@ -263,5 +268,9 @@ const jsonLd = {
   document.addEventListener('astro:page-load', initContact);
   document.addEventListener('astro:before-swap', () => {
     ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
   });
 </script>
