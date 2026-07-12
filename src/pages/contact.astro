@@ -1,9 +1,11 @@
 ---
 // Page 10 — /contact (legacy URL). Baseline per WEBSITE-PLAN: main line +
-// WhatsApp prominent, collapsible direct-lines directory, full enquiry form,
-// address + hours + real Maps link. Trust centrepiece (owner, 2026-07-04):
-// the framed council licence certificate + verify link to the Hastings BC
-// public register. Meet-the-team names/roles still owner-pending — photo only.
+// WhatsApp prominent, full enquiry form, address + hours + real Maps link.
+// Trust centrepiece (owner, 2026-07-04): the framed council licence
+// certificate + verify link to the Hastings BC public register. Meet-the-team
+// names/roles still owner-pending — photo only. The old collapsible
+// direct-lines directory was REMOVED 2026-07-12 (owner: the business has ONE
+// public number, the main line — the old direct lines no longer exist).
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import CouncilRating from '../components/CouncilRating.astro';
@@ -16,14 +18,6 @@ import teamPhoto from '../assets/pages/contact/the-fairy-tails-team.webp';
 import contactDoggy from '../assets/pages/contact/contact-doggy.png';
 
 const councilRegister = 'https://www.hastings.gov.uk/licensing/animal/register/';
-
-const directLines = [
-  { ...business.phones.emergency, note: 'Out-of-hours only — WhatsApp preferred, phone signal is patchy at the barn' },
-  { ...business.phones.opsManager, note: 'Weekday working hours' },
-  { ...business.phones.grooming, note: 'Weekday working hours' },
-  { ...business.phones.training, note: 'Weekday working hours' },
-  { ...business.phones.pickups, note: 'Pick-up & driving enquiries — weekday working hours' },
-];
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -121,31 +115,12 @@ const jsonLd = {
               <a href={business.mapsUrl} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">Find us on Google Maps</a>
             </p>
             <p><strong class="text-moss-800">Hours:</strong> {business.hours.display}. We close on Bank Holidays.</p>
+            <p>
+              <strong class="text-moss-800">{business.phones.emergency.label}:</strong>
+              <a href={business.phones.emergency.tel} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">{business.phones.emergency.display}</a>
+              <span class="text-sm"> (out-of-hours emergencies only — during opening hours, use the main line)</span>
+            </p>
           </div>
-
-          <!-- Direct lines directory (collapsible per plan) -->
-          <details class="group mt-8 rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]" data-reveal>
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-7 py-5">
-              <span class="font-display text-lg font-bold text-moss-800">Direct lines — grooming, training, pick-ups &amp; out-of-hours</span>
-              <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd"></path>
-              </svg>
-            </summary>
-            <div class="accordion-body">
-              <div class="overflow-hidden">
-                <ul class="space-y-3.5 px-7 pb-7">
-                  {
-                    directLines.map((line) => (
-                      <li class="text-sm text-bark-700">
-                        <a href={line.tel} class="font-bold text-moss-800">{line.label}: {line.display}</a>
-                        <span class="block text-bark-500">{line.note}</span>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
-            </div>
-          </details>
         </div>
 
         <figure class="mx-auto w-full max-w-sm lg:mt-2" data-reveal>

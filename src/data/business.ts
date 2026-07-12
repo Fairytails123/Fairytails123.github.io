@@ -22,14 +22,15 @@ export const business = {
     jsonLd: { opens: '08:00', closes: '17:30', days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] },
   },
 
-  // Corrected wa.me forms (live site's links are malformed — audit 2026-06-11)
+  // Corrected wa.me form (live site's links are malformed — audit 2026-06-11).
+  // ⚠️ TWO public phone numbers only (owner, 2026-07-12): the main line, plus
+  // the out-of-hours EMERGENCY number ("out-of-hours numbers stays for
+  // emergency contact only. only other number than the main line"). The old
+  // direct lines (ops manager, grooming, training, pick-ups) are GONE — never
+  // re-add another number here or render one anywhere without asking first.
   phones: {
     main: { label: 'Main line', display: '01424 300668', tel: 'tel:+441424300668', whatsapp: 'https://wa.me/441424300668' },
-    emergency: { label: 'Emergency', display: '07517 405466', tel: 'tel:+447517405466' },
-    opsManager: { label: 'Ops Manager', display: '07719 739556', tel: 'tel:+447719739556' },
-    grooming: { label: 'Dog Grooming', display: '07355 878680', tel: 'tel:+447355878680' },
-    training: { label: 'Dog Training', display: '07719 563524', tel: 'tel:+447719563524' },
-    pickups: { label: 'Pick-up Enquiries', display: '07803 357262', tel: 'tel:+447803357262' },
+    emergency: { label: 'Out-of-hours emergency', display: '07517 405466', tel: 'tel:+447517405466' },
   },
 
   emails: {
