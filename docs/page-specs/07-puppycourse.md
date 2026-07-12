@@ -41,4 +41,8 @@ its 5 hidden popup subpages (`/puppy-week-1`, `/week-2-puppy`, `/puppy-week-3`,
 5. All light-tidy calls (backyard→garden, leash→lead, etc.) — revert any you don't want.
 
 ## BUILD STATE
-- 2026-07-12: interviewed → spec locked → built same session (see HANDOVER).
+- **2026-07-12: interviewed → spec locked → BUILT + DEPLOYED + LIVE-VERIFIED same session** (commit `acf4361`, Hostinger deploy green first try; `verify-urls --live` 48/0/0 — with this page, EVERY manifest URL is built). All wiring flips landed (six deep-linking stubs, both pathway cards, footer link, blog Puppies CTA, verify-urls built, WEBSITE-PLAN row 7).
+- **QA:** build 34 pages 0 errors · toilet tool functionally verified (age switch → values + bar widths; SSR default correct) · all anchors incl. `ConditionedEmotionalResponse` exact-case · desktop screenshots of every section · mobile 375px whole-document `overflowX = 0` + hero/weeks/nudges screenshots · zero console errors. ⚠️ The daily-rhythm rows + toilet-tool card at phone width were verified by overflow-probe + pattern-parity only (backgrounded-tab harness limits) — **on the owner's real-phone list**.
+- **Lighthouse (first audit, same day):** desktop perf 100 (LCP 0.8s) · a11y 94 · BP 100 · SEO 100 — gate met. Throttled-mobile perf 84 (full-bleed hero LCP — shared by all hero pages; logged follow-up). The two a11y flags are scroll-reveal audit-state artifacts (see HANDOVER 2026-07-12 polish bullet).
+- **Same-day polish pass touched this page too:** both trail tracks moved to `left-[15px]` (marker clip fix).
+- **Owner review queue:** see the spec section above + HANDOVER 2026-07-12 — hero photo, light-tidy calls, nudge/pathway copy, golden-pup loop reuse, real-phone pass.

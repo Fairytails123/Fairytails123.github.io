@@ -22,11 +22,9 @@ The business's n8n is moving from n8n Cloud (`ftmanager.app.n8n.cloud`) to a **s
 - Credential IDs and data-table IDs are DIFFERENT on the VPS vs cloud (maps: `Hostinger_n8n\cloud-export-2026-07-04\cred-id-map-batch*.json`). Data Table nodes reference tables BY ID — never copy cloud IDs into VPS workflows.
 - Any external caller (web page, script, form, bot, dashboard) still pointing at `ftmanager.app.n8n.cloud` must be repointed to `https://auto.thefairytails.co.uk` when its workflow flips — and must never be newly written against the cloud URL.
 
-### n8n touchpoints in this project (scanned 2026-07-04)
+### n8n touchpoints in this project (repoint COMPLETE)
 
-- `src\data\business.ts:77` — `enquiryWebhook: 'https://ftmanager.app.n8n.cloud/webhook/website-enquiry'` — the single source of truth the site-wide EnquiryForm POSTs to; must repoint to `https://auto.thefairytails.co.uk/webhook/website-enquiry` when the "Website Enquiry" workflow flips (then rebuild/redeploy + live-test end-to-end incl. CORS from a real browser, per the n8n enquiry rule below).
-- `HANDOVER.md:400` — status note recording the "Website Enquiry" workflow (`qVpPqijvyEqWiPwy`) as LIVE on `ftmanager.app.n8n.cloud` — update this status entry when the workflow flips to the VPS.
-- `HANDOVER.md:401` — documents the cloud webhook URL `https://ftmanager.app.n8n.cloud/webhook/website-enquiry` and its CORS setup — rewrite to the `auto.thefairytails.co.uk` URL when flipped (CORS allowlist must be reproduced on the VPS workflow).
+- `src\data\business.ts` `enquiryWebhook` — the single source of truth the site-wide EnquiryForm POSTs to — **already points at the VPS: `https://auto.thefairytails.co.uk/webhook/website-enquiry`** (the "Website Enquiry" workflow `qVpPqijvyEqWiPwy` runs on the VPS with the rest of the 32-workflow cutover). Nothing in this repo references `ftmanager.app.n8n.cloud` any more — keep it that way. Any future enquiry-workflow change: live-test end-to-end from a real browser (CORS) per the n8n enquiry rule below.
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -34,7 +32,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Rebuild of **www.thefairytails.co.uk** (Fairy Tails K9 Centre, a dog-training business) — replacing a rented Duda-builder site with an owner-controlled static **Astro 6** site. **Production host since 2026-07-04 = Hostinger** (push to `main` → GitHub Actions → FTPS deploy → LIVE at www.thefairytails.co.uk; GitHub Pages is a manual-only preview). Premium GSAP animation and one Three.js homepage showpiece.
 
-**Current state: building (started 2026-06-12), inside-out, paused between pages.** Foundation is live and pages are shipping to the preview in the `WEBSITE-PLAN.md` tracker order (Board & Train and Dog Day School are already on the preview). **Check `HANDOVER.md` first in every session for the live build status, the exact pick-up point, and next actions** — it is the single source of truth for status, updated when a session ends; do not trust any hard-coded state here.
+**Current state (2026-07-12): EVERY page in the URL manifest is BUILT and LIVE on production** (started 2026-06-12, built inside-out; the last page, `/puppycourse`, shipped 2026-07-12, and the site-wide polish pass cleared the logged a11y/GSAP debts the same day). The phase now is **owner reviews + per-page sign-offs, logged follow-ups (mobile hero-LCP perf, the y-only-reveals a11y decision) and the Ahrefs SEO workover** (subscription bought; London-first targeting for Board & Train). **Check `HANDOVER.md` first in every session for the exact pick-up point and next actions** — it is the single source of truth for status, updated when a session ends; do not trust any hard-coded state here.
 
 ## Commands
 
