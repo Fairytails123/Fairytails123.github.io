@@ -1,0 +1,1249 @@
+---
+// Page 7 — /puppycourse — the FREE DIY Puppy Course hub (spec: docs/page-specs/07-puppycourse.md).
+// Absorbs the legacy /puppycourse page + its 5 hidden popup subpages (weeks 1–4 +
+// toilet schedule) + the non-duplicate /resources-collection copy. Body copy is the
+// harvest text with the owner-locked LIGHT TIDY-UP (2026-07-12): voice and jokes kept,
+// typos/times fixed, zero fact changes.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+// Media (reused site assets — owner may swap on review; no new binaries)
+import heroPup from '../assets/pages/dog-boarding-school/Puppy-Training-1920w.webp';
+import goldenPup from '../assets/pages/dog-boarding-school/Golden-Puppy-cut-out-1920w.webp';
+import terrierGrass from '../assets/pages/puppy-training-classes/puppy-terrier-grass.webp';
+
+const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+
+const puppyClasses = pricing.offerings.find((o) => o.id === 'puppy-classes')!;
+const puppyIntensive = pricing.offerings.find((o) => o.id === 'puppy-intensive')!;
+const dayFull = pricing.offerings.find((o) => o.id === 'day-full')!;
+
+// --- Aims (verbatim-tidied) ---
+const aims = [
+  'Socialisation (at-home exercises)',
+  'Toilet training',
+  'Alone/separation training',
+  'Sleep training',
+  'Enrichment',
+  'Playing, chewing, tugging and sniffing',
+  'Walks and socialisation field trips',
+  'Life skills and obedience training',
+];
+
+// --- Management methods (verbatim-tidied) ---
+const management = [
+  {
+    title: 'A crate',
+    body: 'Getting a crate for your puppy to keep them secure.',
+  },
+  {
+    title: 'A baby gate',
+    body: "Using a baby gate to keep your puppy from entering an area or room where we don't want them.",
+  },
+  {
+    title: 'A lead',
+    body: 'A leash and lead to keep their muddy paws from leaping up on humans.',
+  },
+];
+
+// --- The six daily training touchpoints (verbatim-tidied) ---
+const touchpoints = [
+  'First thing in the morning',
+  'Following their post-breakfast wee',
+  'Following their mid-morning sleep',
+  'Before lunch (about 1pm)',
+  'Following their midday nap',
+  'Before dinner (about 7pm)',
+];
+
+// --- The daily schedule (all 27 rows, times tidied "7.3" → 7:30am), grouped into
+//     4 phases for the sun-arc timeline. kind drives the dot colour. ---
+type Row = { time: string; label: string; note?: string; kind: 'wake' | 'toilet' | 'meal' | 'train' | 'nap' };
+const dayPhases: { title: string; span: string; rows: Row[] }[] = [
+  {
+    title: 'Early morning',
+    span: '5:00 – 8:30am',
+    rows: [
+      {
+        time: '5–7am',
+        label: 'Wake up and toilet time!',
+        note: "We've put these in the same box because they'll happen almost at the same time. As soon as your eyes open, go straight to your puppy's toilet area — take your puppy with you, of course (we know the struggles of a sleepy head on these early mornings).",
+        kind: 'wake',
+      },
+      {
+        time: '5–7am',
+        label: 'Back to sleep?',
+        note: 'See if your puppy will go back to sleep after their early toilet break. If not — well, get the coffee on to start your day as well.',
+        kind: 'nap',
+      },
+      { time: '7:00am', label: 'Breakfast', note: 'In an activity feeder or Kong to keep them busy and unbloated.', kind: 'meal' },
+      { time: '7:15am', label: 'Toilet break', kind: 'toilet' },
+      { time: '7:30am', label: 'Play and training', kind: 'train' },
+      { time: '8:15am', label: 'Toilet break', kind: 'toilet' },
+      { time: '8:30am', label: 'Naptime', kind: 'nap' },
+    ],
+  },
+  {
+    title: 'Mid-morning to lunch',
+    span: '10:30am – 12:30pm',
+    rows: [
+      { time: '10:30am', label: 'Toilet break', kind: 'toilet' },
+      { time: '10:45am', label: 'Training', kind: 'train' },
+      { time: '11:00am', label: 'Brunch', kind: 'meal' },
+      { time: '11:15am', label: 'Toilet break', kind: 'toilet' },
+      { time: '11:30am', label: 'Play and training', kind: 'train' },
+      { time: '11:45am', label: 'Toilet break', kind: 'toilet' },
+      { time: '12:00pm', label: 'Play and training', kind: 'train' },
+      { time: '12:30pm', label: 'Naptime', kind: 'nap' },
+    ],
+  },
+  {
+    title: 'Afternoon',
+    span: '2:30 – 4:00pm',
+    rows: [
+      { time: '2:30pm', label: 'Toilet break', kind: 'toilet' },
+      { time: '2:45pm', label: 'Play and training', kind: 'train' },
+      { time: '3:00pm', label: 'Dinner time', kind: 'meal' },
+      { time: '3:15pm', label: 'Toilet break', kind: 'toilet' },
+      { time: '3:30pm', label: 'Play and training', kind: 'train' },
+      { time: '3:45pm', label: 'Toilet break', kind: 'toilet' },
+      { time: '4:00pm', label: 'Naptime', kind: 'nap' },
+    ],
+  },
+  {
+    title: 'Evening and wind-down',
+    span: '6:00 – 8:00pm',
+    rows: [
+      { time: '6:00pm', label: 'Toilet break', kind: 'toilet' },
+      { time: '6:15pm', label: 'Training', kind: 'train' },
+      { time: '7:00pm', label: 'Supper time', kind: 'meal' },
+      { time: '7:15pm', label: 'Toilet break', kind: 'toilet' },
+      { time: '7:30pm', label: 'Play and training', kind: 'train' },
+      { time: '7:45pm', label: 'Toilet break', kind: 'toilet' },
+      { time: '8:00pm', label: 'Relaxation and wind-down', kind: 'wake' },
+    ],
+  },
+];
+
+const dotClass: Record<Row['kind'], string> = {
+  wake: 'bg-honey-300',
+  toilet: 'bg-moss-400',
+  meal: 'bg-honey-500',
+  train: 'bg-cream-200',
+  nap: 'bg-pine-400',
+};
+
+// --- Toilet schedule (verbatim from /puppy-toilet-schdule) — SSR default = 8 weeks ---
+const toiletTable = [
+  { age: '8 weeks', day: '2 hours', night: '5 hours', dayPct: 25, nightPct: 62.5 },
+  { age: '12 weeks', day: '3 hours', night: '7 hours', dayPct: 37.5, nightPct: 87.5 },
+  { age: '16 weeks', day: '4 hours', night: '8 hours', dayPct: 50, nightPct: 100 },
+];
+
+// --- Weeks 1–4 (the 5 hidden popups, verbatim-tidied; labels parsed from the run-on
+//     sentences — presentation only, wording preserved) ---
+const weeks = [
+  {
+    id: 'week-1',
+    num: 'Week 1',
+    title: 'Fundamental skills and initial exposure',
+    blocks: [
+      {
+        name: 'Socialisation exercises',
+        items: [
+          ['Daily', 'Let the puppy explore the garden, encouraging them to interact with different natural stimuli.'],
+          ['Every other day', 'Watch the world from a safe spot outside the house; gradually increase the duration as the puppy becomes more comfortable.'],
+          ['Twice this week', 'Introduce the puppy to friends visiting your home, ensuring each meeting is controlled and positive.'],
+          ['Weekend', 'First car trip — short and sweet, to a nearby quiet location.'],
+        ],
+      },
+      {
+        name: 'Life skills training',
+        items: [
+          ['Daily', 'Name-recognition exercises during routine activities; begin with a basic “sit” and introduce “recall” in a secure indoor environment.'],
+          ['Twice daily', 'Crate-training sessions, starting with short intervals and increasing the duration.'],
+          ['Every feeding time', 'Toilet training coinciding with natural schedules to establish a routine.'],
+        ],
+      },
+      {
+        name: 'Husbandry tasks',
+        items: [
+          ['Daily', 'Gentle brushing, making it a positive experience.'],
+          ['Every other day', 'Begin familiarisation with handling, focusing on ears, paws and tail.'],
+        ],
+      },
+    ],
+  },
+  {
+    id: 'week-2',
+    num: 'Week 2',
+    title: 'Building confidence and expanding skills',
+    blocks: [
+      {
+        name: 'Socialisation exercises',
+        items: [
+          ['Daily', 'Sessions of “watching the world”, introducing more varied environments like parks or outside shops.'],
+          ['Twice this week', 'Introduce the vacuum cleaner and play recordings of fireworks to desensitise sounds.'],
+          ['Weekend', 'Visit a pet-friendly store to expose the puppy to different people and animals.'],
+        ],
+      },
+      {
+        name: 'Life skills training',
+        items: [
+          ['Daily', 'Reinforce “recall” and “sit” with added cue words; introduce the “down” command.'],
+          ['Ongoing', 'Continue crate and toilet training with the aim of reducing accidents.'],
+          ['This week', 'Introduce lead basics in the garden or another safe area.'],
+        ],
+      },
+      {
+        name: 'Husbandry tasks',
+        items: [
+          ['Daily', 'Continue brushing and handling; start basic grooming like paw handling.'],
+          ['Twice this week', 'Practise pretend nail clips to desensitise the sensation.'],
+        ],
+      },
+    ],
+  },
+  {
+    id: 'week-3',
+    num: 'Week 3',
+    title: 'Socialisation and command consolidation',
+    blocks: [
+      {
+        name: 'Socialisation exercises',
+        items: [
+          ['This week', 'Attend a puppy class to interact with other puppies.'],
+          ['Outings', 'Visit different public settings like a café or a quieter pub to observe more complex human interactions.'],
+          ['Regularly', 'Regular car trips to new destinations for varied environmental exposure.'],
+        ],
+      },
+      {
+        name: 'Life skills training',
+        items: [
+          ['Daily', 'Practise commands in different settings to generalise the behaviour.'],
+          ['Ongoing', 'Introduce more complex lead-walking techniques and continue improving recall with distractions.'],
+          ['Play', 'Engage in interactive play like tug and fetch to enhance learning and the bond.'],
+        ],
+      },
+      {
+        name: 'Husbandry tasks',
+        items: [
+          ['Daily', 'Continue daily grooming routines.'],
+          ['This week', 'Start introducing elements like harness fitting and pretend ear/eye drops to prepare for real scenarios.'],
+        ],
+      },
+    ],
+  },
+  {
+    id: 'week-4',
+    num: 'Week 4',
+    title: 'Advanced training and behavioural fine-tuning',
+    blocks: [
+      {
+        name: 'Socialisation exercises',
+        items: [
+          ['Often', 'Frequent visits to populated areas to familiarise with varied stimuli, including joggers, cyclists and other dynamic elements.'],
+          ['Play dates', 'Engage in structured play dates with well-behaved adult dogs to teach appropriate social behaviour.'],
+        ],
+      },
+      {
+        name: 'Life skills training',
+        items: [
+          ['Daily', 'Solidify all learned commands by practising in highly distracting environments and with different family members.'],
+          ['Focus', 'Focus on precision and responsiveness, introducing nose work to start scent-discrimination tasks.'],
+          ['Off lead', 'Implement off-lead training in secure areas to test recall and control.'],
+        ],
+      },
+      {
+        name: 'Husbandry tasks',
+        items: [
+          ['Daily', 'Nail trimming as real grooming needs arise, ensuring the puppy remains calm and cooperative.'],
+          ['Regularly', 'Regular practice of vet-like examinations on a table, to acclimatise to real-life vet visits.'],
+        ],
+      },
+    ],
+  },
+];
+
+// --- Education band (absorbed from /resources-collection, verbatim-tidied) ---
+const education = [
+  {
+    title: 'Training the whole family',
+    body: 'As a dog parent, your role goes beyond just training your dog — you’re also teaching the rest of your family how to help. Everyone in the household needs to be on the same page when it comes to setting rules and encouraging positive behaviour. It’s especially important to create an environment where teasing, bullying or inconsistent training are avoided. The key is motivating every family member to stick to the plan and help train the dog consistently.',
+  },
+  {
+    title: 'Using data to train effectively',
+    body: 'The principles of dog training, such as reinforcement and positive reinforcement schedules, are backed by solid data and research. For owners, this means applying proven methods that foster trust and cooperation with your dog. Knowing how to reward good behaviour at the right time helps build a strong, positive bond between you and your pet.',
+  },
+  {
+    title: 'Creating positive change through knowledge',
+    body: 'Educating yourself on dog training not only improves your relationship with your dog but also helps you better navigate the world of dog ownership. By staying informed and open to learning, you’re better equipped to handle challenges, avoid common mistakes, and ensure your dog’s well-being. The more you know, the more confident you’ll feel as a dog parent.',
+  },
+  {
+    title: 'The importance of puppy classes',
+    body: 'Puppy classes are more than just an opportunity for your puppy to learn basic commands — they’re an essential tool for socialisation. These classes should be fun, off-leash experiences where your puppy is exposed to different environments, people and other dogs. The goal is to prepare your puppy for all the unexpected situations life might throw their way, making sure they grow into a well-rounded and confident adult dog.',
+  },
+  {
+    title: 'Why dog training is different today',
+    body: 'Today’s dog training is much more diverse than the traditional methods used for working or competition dogs. Pet dogs come in all shapes, sizes and temperaments, and the training methods you use should reflect that. Modern training isn’t about rigid commands — it’s about teaching your dog to behave well in real-life situations, covering all aspects of your dog’s behaviour.',
+  },
+  {
+    title: 'Building a strong relationship with your dog',
+    body: 'At the heart of dog training is the goal of building a lasting, positive relationship with your dog. By taking the time to educate yourself, your family and your dog, you’re setting the foundation for a life filled with mutual respect and understanding. Training isn’t just about your dog following commands — it’s about communication, trust, and making sure your dog is a well-adjusted, happy part of your family.',
+  },
+];
+
+// --- "Get a head start" (the resources-collection 4-step block, duplicates MERGED) ---
+const headStart = [
+  { title: 'Before getting your puppy', body: 'Contact us by phone, email or via the contact form. Tell us your needs by describing your puppy’s struggles, and tell us your aim.' },
+  { title: 'On puppy arrival', body: 'We’ll prepare a plan for you to review and approve.' },
+  { title: 'The DIY home course', body: 'Once we’ve agreed on all the details, we’ll get started!' },
+  { title: 'Training — maintain it', body: 'Training ends on time, and when you’re satisfied, you take over.' },
+];
+
+// JSON-LD — a free online course
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: 'The Fairy Tails DIY Puppy Course',
+  description:
+    'A free, four-week, force-free puppy training course you can follow at home: socialisation, toilet training, life skills, enrichment and husbandry — written by the trainers at The Fairy Tails K9 Centre.',
+  provider: { '@type': 'Organization', name: business.name, url: business.domain },
+  isAccessibleForFree: true,
+  hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'Online', courseWorkload: 'P4W' },
+};
+---
+
+<Base
+  title="Free DIY Puppy Training Course | The Fairy Tails K9 Centre"
+  description="Our free, force-free DIY puppy course: four structured weeks of socialisation, life skills and husbandry, a full daily schedule and a toilet-training guide — written by our trainers, free to every puppy parent."
+  path="/puppycourse"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+  <div data-page="puppycourse">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <Image
+          src={heroPup}
+          alt=""
+          class="h-full w-full object-cover object-[50%_35%]"
+          widths={[768, 1280, 1920]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          data-hero-media
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/50 to-pine-950/25"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>Free course · Do it yourself at home</p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">The DIY</span>
+          <span class="hero-line block"><em class="squiggle not-italic">Puppy Course</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Everything you need to raise a calm, confident puppy — socialisation, toilet training,
+          sleep, life skills and more. Four structured weeks, written by our trainers, free to
+          every puppy parent.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#start" class="btn btn-honey">
+            Start the course <span class="btn-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a href={business.acuity.freeConsult} class="btn btn-ghost-light">Talk to a trainer — free</a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
+        <li class="paw-bullet flex items-center text-moss-700">100% free — no sign-up, no catch</li>
+        <li class="paw-bullet flex items-center text-moss-700">Force-free &amp; science-backed</li>
+        <li class="paw-bullet flex items-center text-moss-700">Four structured weeks</li>
+        <li class="paw-bullet flex items-center text-moss-700">Written by our qualified trainers</li>
+      </ul>
+    </div>
+
+    <!-- ============ AIMS ============ -->
+    <section id="start" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-20 sm:py-28" data-section="aims">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <p class="eyebrow text-honey-700" data-reveal>What you'll cover</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            The aims of <em class="squiggle not-italic">the course</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Puppies learn fastest in their first few months — and the habits you build now last a
+            lifetime. Over four weeks, this course walks you through:
+          </p>
+          <ul class="mt-7 flex flex-wrap gap-2.5" data-stagger>
+            {
+              aims.map((aim) => (
+                <li class="rounded-full border-2 border-moss-200 bg-cream-100 px-4 py-2 text-sm font-bold text-moss-800 transition-colors duration-200 hover:border-honey-400 hover:bg-honey-200/40">
+                  {aim}
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mt-7 text-bark-700" data-reveal>
+            Work through it at your puppy's pace — and if you get stuck,
+            <a href="#enquire" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">ask us anything</a>.
+            It's what we're here for.
+          </p>
+        </div>
+        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(2deg);" data-reveal>
+          <Image
+            src={goldenPup}
+            alt="A golden retriever puppy sitting attentively"
+            class="aspect-[4/5] w-full rounded-[2px] bg-cream-100 object-cover"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Start them young — but there's never a wrong time
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ METHODS ============ -->
+    <section class="bg-cream-100" data-section="methods">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-700" data-reveal>Our methods</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How we'll train — <em class="squiggle not-italic">kindly</em>
+        </h2>
+        <div class="mt-6 grid gap-10 lg:grid-cols-2">
+          <div class="space-y-4 text-lg leading-relaxed text-bark-700" data-reveal>
+            <p>
+              Positive reinforcement training, in conjunction with management methods, is the
+              simplest and most current training method. It is the one we will use to guide you —
+              allow us to explain why we have confidence in it.
+            </p>
+            <p>
+              More excellent dogs, more happy humans! The reward-based technique of positive
+              reinforcement training has been scientifically demonstrated to effectively encourage
+              the behaviours you want your puppy to exhibit, and to instil confidence in them when
+              entering a new environment. To put it plainly: greater incentives result in more
+              positive behaviour.
+            </p>
+            <p>
+              When we say "good behaviour", we may mean anything — having our puppies sit, lie
+              down, settle, or return when we call their name.
+            </p>
+          </div>
+          <div data-reveal>
+            <div class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]">
+              <h3 class="font-display text-xl font-bold text-moss-800">Rewards can take several forms</h3>
+              <ul class="mt-4 space-y-2.5 text-bark-700">
+                <li class="paw-bullet flex items-start">Treats</li>
+                <li class="paw-bullet flex items-start">Toys</li>
+                <li class="paw-bullet flex items-start">Praise</li>
+                <li class="paw-bullet flex items-start">…or anything else your dog enjoys</li>
+              </ul>
+              <p class="mt-4 text-sm leading-relaxed text-bark-500">
+                However, let's not make it about money — that has not worked out well for humans.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="mt-14 font-display text-2xl font-bold text-moss-800" data-reveal>
+          Management methods in training
+        </h3>
+        <p class="mt-4 max-w-3xl leading-relaxed text-bark-700" data-reveal>
+          Management is about regulating the setting and surroundings around your puppy to keep
+          them from making errors or getting themselves into trouble. You may believe management
+          makes you look like the fun police — the reality is quite the reverse. It helps them
+          become acquainted with the rights and wrongs by setting them up for success, rather than
+          learning by trial and error. A few ways to practise it:
+        </p>
+        <div class="mt-7 grid gap-6 md:grid-cols-3" data-stagger>
+          {
+            management.map((m) => (
+              <article class="rounded-2xl border-2 border-cream-200 bg-cream-50 p-7 transition-colors duration-300 hover:border-moss-300">
+                <h4 class="font-display text-xl font-bold text-moss-700">{m.title}</h4>
+                <p class="mt-3 leading-relaxed text-bark-700">{m.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <!-- Straight talk: punishment -->
+        <div class="grain mt-12 rounded-3xl bg-pine-900 p-8 sm:p-10" data-reveal>
+          <p class="eyebrow text-honey-400">Straight talk — the use of punishment</p>
+          <p class="mt-4 max-w-3xl text-lg leading-relaxed text-cream-100">
+            Punishment may get you quick results for a behaviour, but it will also create
+            generalised anxiety, fears, phobias, and a lack of confidence to cope with the wider
+            world. It can lead to an anxious or reactive dog. That's why nothing in this course —
+            and nothing in our school — ever relies on it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DAILY RHYTHM — sun-arc timeline (signature) ============ -->
+    <section class="bg-pine-950 text-cream-100" data-section="rhythm">
+      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>A puppy's day</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          The daily rhythm, <em class="squiggle not-italic">sunrise to wind-down</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-cream-200" data-reveal>
+          Aim for six little training touchpoints a day, woven around food, naps and toilet breaks:
+        </p>
+        <ol class="mt-7 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-3" data-stagger>
+          {
+            touchpoints.map((t, i) => (
+              <li class="flex items-start gap-3 rounded-2xl bg-pine-900 p-4 ring-1 ring-cream-100/10">
+                <span class="font-display text-2xl font-bold leading-none text-honey-400/80">{i + 1}</span>
+                <span class="text-sm leading-relaxed text-cream-100">{t}</span>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="mt-6 max-w-3xl rounded-2xl bg-pine-900 p-5 text-sm leading-relaxed text-cream-200" data-reveal>
+          <strong class="text-honey-300">Food is training fuel:</strong> use part of breakfast,
+          lunch and dinner as a food treat — utilise some of their feeding time to train, and use
+          some of their food to reward them.
+        </p>
+
+        <!-- The sun rises and sets down the schedule -->
+        <div class="relative mt-14 overflow-x-clip" data-rhythm-list>
+          <div class="absolute bottom-4 left-[7px] top-2 w-0.5 sm:left-[126px]" aria-hidden="true">
+            <div class="absolute inset-0 rounded bg-pine-800"></div>
+            <div class="pc-trail absolute inset-0 origin-top rounded" data-trail-fill></div>
+            <span class="pc-sun absolute -left-[15px] top-0 block h-8 w-8" data-trail-sun>
+              <svg viewBox="0 0 32 32" fill="none" class="h-full w-full">
+                <circle cx="16" cy="16" r="6" fill="var(--color-honey-300)"></circle>
+                <g stroke="var(--color-honey-300)" stroke-width="2" stroke-linecap="round">
+                  <line x1="16" y1="2" x2="16" y2="5.5"></line>
+                  <line x1="16" y1="26.5" x2="16" y2="30"></line>
+                  <line x1="2" y1="16" x2="5.5" y2="16"></line>
+                  <line x1="26.5" y1="16" x2="30" y2="16"></line>
+                  <line x1="6.3" y1="6.3" x2="8.8" y2="8.8"></line>
+                  <line x1="23.2" y1="23.2" x2="25.7" y2="25.7"></line>
+                  <line x1="6.3" y1="25.7" x2="8.8" y2="23.2"></line>
+                  <line x1="23.2" y1="8.8" x2="25.7" y2="6.3"></line>
+                </g>
+              </svg>
+            </span>
+          </div>
+
+          <ol class="space-y-12 sm:space-y-14">
+            {
+              dayPhases.map((phase) => (
+                <li class="pc-step relative grid gap-3 pl-9 sm:grid-cols-[110px_1fr] sm:gap-10 sm:pl-0" data-rhythm-step>
+                  <p class="font-display text-base font-bold uppercase tracking-wide text-honey-400 sm:text-right">
+                    {phase.span}
+                  </p>
+                  <div class="sm:pl-12">
+                    <h3 class="font-display text-2xl font-bold text-cream-50">{phase.title}</h3>
+                    <ul class="mt-4 grid gap-x-8 gap-y-2.5 md:grid-cols-2">
+                      {phase.rows.map((row) => (
+                        <li class="text-sm leading-relaxed text-cream-200">
+                          <span class="flex items-baseline gap-2.5">
+                            <span class={`mt-1 inline-block h-2 w-2 shrink-0 self-center rounded-full ${dotClass[row.kind]}`} aria-hidden="true" />
+                            <span class="font-bold text-cream-100">{row.time}</span>
+                            <span>{row.label}</span>
+                          </span>
+                          {row.note && <span class="mt-1 block pl-[1.15rem] text-cream-200/80">{row.note}</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <p class="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-bold text-cream-200/80" data-reveal aria-hidden="true">
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-cream-200"></span> Play &amp; training</span>
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-moss-400"></span> Toilet break</span>
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-honey-500"></span> Meals</span>
+          <span class="inline-flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-pine-400"></span> Naps</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ TOILET TRAINING + the age tool (signature) ============ -->
+    <section id="toilet-training" class="scroll-mt-24" data-section="toilet">
+      <HillDivider class="bg-pine-950 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-start gap-12 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <p class="eyebrow text-honey-700" data-reveal>Toilet training</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+              Little bladders, <em class="squiggle not-italic">big wins</em>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+              If you have them outside of their crate or confinement area, we recommend starting
+              with a toilet break every 15 minutes. Don't worry — you won't be doing this for very
+              long. Toilet breaks become less frequent as they grow older and smarter. But for the
+              time being, let's keep them as consistent as possible to avoid stinky mishaps.
+            </p>
+            <figure class="polaroid mx-auto mt-10 w-full max-w-[15rem]" style="transform: rotate(-2deg);" data-reveal>
+              <Image
+                src={terrierGrass}
+                alt="A young terrier puppy sitting on the grass"
+                class="aspect-square w-full rounded-[2px] object-cover"
+                widths={[360, 720]}
+                sizes="15rem"
+              />
+              <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+                Out on the grass — right where the wins happen
+              </figcaption>
+            </figure>
+          </div>
+
+          <!-- The tool (content JS — works for reduced-motion users too; no-JS gets the table below) -->
+          <div class="grain rounded-2xl bg-cream-100 p-7 shadow-[var(--shadow-lift)] sm:p-8" data-tt data-reveal>
+            <h3 class="font-display text-2xl font-bold text-moss-800">How long can they hold it?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-bark-700">Pick your puppy's age:</p>
+            <div class="pc-seg mt-3" role="radiogroup" aria-label="Puppy age">
+              {
+                toiletTable.map((row, i) => (
+                  <label class="pc-seg-opt">
+                    <input type="radio" name="tt-age" value={i} checked={i === 0} />
+                    <span>{row.age}</span>
+                  </label>
+                ))
+              }
+            </div>
+            <div class="mt-6 space-y-5" aria-live="polite">
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <p class="font-display text-lg font-bold text-moss-800">In the day</p>
+                  <p class="font-display text-3xl font-bold text-moss-700" data-tt-day>{toiletTable[0].day}</p>
+                </div>
+                <p class="text-xs font-bold text-bark-400">Maximum they can hold it for</p>
+                <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-cream-200">
+                  <div class="pc-bar h-full rounded-full bg-honey-500" data-tt-day-bar style={`width: ${toiletTable[0].dayPct}%`}></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex items-baseline justify-between">
+                  <p class="font-display text-lg font-bold text-moss-800">Overnight</p>
+                  <p class="font-display text-3xl font-bold text-moss-700" data-tt-night>{toiletTable[0].night}</p>
+                </div>
+                <p class="text-xs font-bold text-bark-400">They might hold it for</p>
+                <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-cream-200">
+                  <div class="pc-bar h-full rounded-full bg-moss-600" data-tt-night-bar style={`width: ${toiletTable[0].nightPct}%`}></div>
+                </div>
+              </div>
+            </div>
+            <p class="mt-5 text-sm leading-relaxed text-bark-500">
+              Out of the crate, still start with a break every 15 minutes — these numbers are the
+              most a little bladder can manage, not a target.
+            </p>
+          </div>
+        </div>
+
+        <details class="group mt-12 rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]" data-reveal>
+          <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+            The full toilet schedule table
+            <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </summary>
+          <div class="accordion-body">
+            <div class="overflow-hidden">
+              <div class="overflow-x-auto px-7 pb-7">
+                <table class="w-full min-w-[28rem] text-left text-bark-700">
+                  <thead>
+                    <tr class="border-b-2 border-cream-200 font-display text-sm text-moss-800">
+                      <th class="py-2.5 pr-4">Age of the puppy</th>
+                      <th class="py-2.5 pr-4">Maximum they can hold it for</th>
+                      <th class="py-2.5">At night they might hold it for</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      toiletTable.map((row) => (
+                        <tr class="border-b border-cream-200 text-sm">
+                          <td class="py-2.5 pr-4 font-bold text-moss-800">{row.age}</td>
+                          <td class="py-2.5 pr-4">{row.day}</td>
+                          <td class="py-2.5">{row.night}</td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ THE FOUR WEEKS — chapter trail (signature) ============ -->
+    <section class="bg-cream-100" data-section="weeks">
+      <HillDivider class="bg-cream-50 text-cream-100" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-700" data-reveal>The course itself</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Four weeks, <em class="squiggle not-italic">week by week</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Each week builds on the last across three strands: socialisation, life skills, and
+          husbandry (the handling, grooming and vet-prep work most people forget). Take it at your
+          puppy's pace — a "week" can happily take ten days.
+        </p>
+
+        <div class="relative mt-14 overflow-x-clip" data-week-list>
+          <div class="absolute bottom-4 left-[7px] top-2 w-0.5 sm:left-[104px]" aria-hidden="true">
+            <div class="absolute inset-0 rounded bg-moss-200"></div>
+            <div class="pc-week-trail absolute inset-0 origin-top rounded" data-week-fill></div>
+            <span class="paw-bullet absolute -left-[9px] top-0 block h-5 w-5 text-honey-600" data-week-paw></span>
+          </div>
+
+          <ol class="space-y-14">
+            {
+              weeks.map((week, wi) => (
+                <li id={week.id} class="pc-step relative grid scroll-mt-28 gap-3 pl-9 sm:grid-cols-[88px_1fr] sm:gap-10 sm:pl-0" data-week-step>
+                  <p class="font-display text-lg font-bold uppercase tracking-wide text-honey-700 sm:text-right">
+                    {week.num}
+                  </p>
+                  <div class="sm:pl-12">
+                    <h3 class="font-display text-2xl font-bold text-moss-800 sm:text-3xl">{week.title}</h3>
+                    <div class="mt-5 grid gap-5 lg:grid-cols-3">
+                      {week.blocks.map((block) => (
+                        <article class="grain flex flex-col rounded-2xl bg-cream-50 p-6 shadow-[var(--shadow-lift)]">
+                          <h4 class="font-display text-lg font-bold text-moss-700">{block.name}</h4>
+                          <ul class="mt-3 space-y-3">
+                            {block.items.map(([label, text]) => (
+                              <li class="text-sm leading-relaxed text-bark-700">
+                                <span class="mr-1.5 inline-block rounded-full bg-honey-200/60 px-2 py-0.5 text-[0.7rem] font-bold uppercase tracking-wide text-honey-700">
+                                  {label}
+                                </span>
+                                {text}
+                              </li>
+                            ))}
+                          </ul>
+                        </article>
+                      ))}
+                    </div>
+
+                    {wi === 1 && (
+                      <aside class="mt-6 flex flex-col items-start gap-4 rounded-2xl border-2 border-honey-400/50 bg-cream-50 p-6 sm:flex-row sm:items-center">
+                        <p class="flex-1 text-sm leading-relaxed text-bark-700">
+                          <strong class="text-moss-800">Socialisation, done for you:</strong> our Dog
+                          Day School gives puppies safe play, new friends and new experiences every
+                          day — from {gbp(dayFull.weeklyDiscountPrice!)} a day on a weekly booking,
+                          with daily reports home.
+                        </p>
+                        <a href="/dog-day-school" class="btn btn-moss shrink-0 !px-4 !py-2.5 text-sm">
+                          Explore Day School <span class="btn-arrow" aria-hidden="true">→</span>
+                        </a>
+                      </aside>
+                    )}
+                    {wi === 2 && (
+                      <aside class="mt-6 flex flex-col items-start gap-4 rounded-2xl border-2 border-honey-400/50 bg-cream-50 p-6 sm:flex-row sm:items-center">
+                        <p class="flex-1 text-sm leading-relaxed text-bark-700">
+                          <strong class="text-moss-800">"Attend a puppy class" — that's us:</strong>
+                          {' '}{gbp(puppyClasses.price)} for four Thursday-evening sessions in
+                          St Leonards, plus three Day School intro sessions.
+                        </p>
+                        <a href="/puppy-training-classes" class="btn btn-moss shrink-0 !px-4 !py-2.5 text-sm">
+                          Puppy Training Classes <span class="btn-arrow" aria-hidden="true">→</span>
+                        </a>
+                      </aside>
+                    )}
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+
+        <!-- Golden pup, out doing the homework -->
+        <figure class="polaroid mx-auto mt-14 w-full max-w-[17rem] sm:max-w-xs" style="transform: rotate(1.8deg);" data-reveal>
+          <video
+            class="aspect-[9/16] w-full rounded-[2px] object-cover"
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="/media/puppy-walk-poster.jpg"
+            data-src="/media/puppy-walk-loop.mp4"
+            aria-label="A golden retriever puppy trotting happily on a loose lead through the park"
+          ></video>
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            The homework, out in the real world
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ EDUCATION (absorbed from the old resources page) ============ -->
+    <section data-section="education">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-700" data-reveal>Beyond the exercises</p>
+        <h2 class="mt-3 max-w-3xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Empowering dog owners through <em class="squiggle not-italic">education</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          At the core of successful dog ownership lies understanding — learning how to effectively
+          train your dog and create a happy, healthy relationship. It's not just about teaching
+          your dog commands; it's about educating yourself and your family on how to communicate
+          with your dog, set boundaries, and ensure everyone in the household is involved in the
+          training process.
+        </p>
+        <div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-stagger>
+          {
+            education.map((card) => (
+              <article class="rounded-2xl border-2 border-cream-200 bg-cream-50 p-7 transition-colors duration-300 hover:border-moss-300">
+                <h3 class="font-display text-lg font-bold text-moss-700">{card.title}</h3>
+                <p class="mt-3 text-sm leading-relaxed text-bark-700">{card.body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CER — preserved anchor (exact case) ============ -->
+    <section id="ConditionedEmotionalResponse" class="scroll-mt-24 bg-pine-900 text-cream-100" data-section="cer">
+      <HillDivider class="bg-cream-50 text-pine-900" flip />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-400" data-reveal>The science bit</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+          Conditioned Emotional Response — <em class="squiggle not-italic">what it is</em>
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+          What exactly is CER, and what effect does it have on your dog?
+        </p>
+        <div class="mt-8 space-y-4 leading-relaxed text-cream-200" data-reveal>
+          <p>
+            You may not have heard of the phrase "Conditioned Emotional Response", abbreviated as
+            CER, but if you own a dog, you have most definitely observed this phenomenon. If your
+            dog pricks his ears and comes racing joyfully in anticipation of a walk every time you
+            grasp the leash, he has formed a CER — but let's take a deeper look at this and how it
+            unfolds from a scientific standpoint.
+          </p>
+          <p>
+            Animals, like humans, are born with a biological system that allows them to experience
+            pleasure and pain, eliciting emotional reactions. In humans, the sound of a drill may
+            create goose bumps if you had a bad dental experience, or the sound of the phone
+            ringing may make your heart race if you link it with the voice of a loved one. These
+            emotional responses occur swiftly and automatically, with little rational thought
+            involved.
+          </p>
+          <p>
+            Similar reactions occur in dogs. Your dog's eyes may light up when he hears the click
+            of a clicker because he has learnt to link its sound with rewards — or he may come to
+            fear the beeping noise that warns him that if he moves ahead, he will be shocked for
+            breaching the border of an electronic fence.
+          </p>
+          <p>
+            Pleasure-related reactions (appetitive) stimulate approach and contact, but
+            fear-related responses (aversive) urge retreat and avoidance, according to James
+            O'Heare. From an evolutionary standpoint, this all makes sense: in order to survive, we
+            should seek life-sustaining reinforcers and avoid life-threatening events.
+          </p>
+        </div>
+
+        <h3 class="mt-10 font-display text-2xl font-bold text-cream-50" data-reveal>
+          The construction of a Conditioned Emotional Response
+        </h3>
+        <div class="mt-5 space-y-4 leading-relaxed text-cream-200" data-reveal>
+          <p>
+            Conditioned emotional reactions are based on associative learning (classical
+            conditioning). In the instance of Pavlov's dogs, a dog learns that a leash = a walk, a
+            clicker equals a treat, and a white coat equals food, through connections. A dog also
+            learns via connections that a skunk may discharge a nasty odour that hurts the eyes.
+            The brain, neurological system and endocrine system are all implicated in a
+            conditioned emotional response.
+          </p>
+          <p>
+            <strong class="text-honey-300">Neuronal activity:</strong> several electrical and
+            chemical communications occur in the brain via neurons, and these transmissions
+            influence how the dog learns, memorises, feels emotions, and ultimately acts. Dogs may
+            recall prior events and behave (without cognitive engagement) in a reflex-like manner
+            that has proven advantageous in the past, because neurons make such connections.
+          </p>
+          <p>
+            <strong class="text-honey-300">Amygdala activity:</strong> the amygdala is involved in
+            the processing of memories and emotional reactions. Often known as the "smoke detector
+            of the brain", it is in charge of signalling the adrenal cortex to release hormones
+            (cortisol, adrenaline) that prepare for the fight-or-flight response, which is critical
+            for life.
+          </p>
+          <p>
+            The dog's brain is thought to operate in a "hardwired", reflex-like manner in reaction
+            to each individual event, based on earlier learning via association. This explains why
+            standard training approaches aren't very effective in changing behaviour — we are
+            functioning on an emotional rather than a cognitive level.
+          </p>
+          <p>
+            Instead, behaviour modification works because we change emotions through
+            counterconditioning: one conditioned response to the same conditioned stimulus is
+            replaced by another. The good emotional response eventually clashes with terror.
+            During counterconditioning, neurons are rejoined in such a way that the nervous
+            system's adaptability improves. We are essentially changing past connections between
+            neurons — transforming a frightened response into a pleasant, pleasurable one.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HEAD START + PATHWAYS (soft upsell) ============ -->
+    <section data-section="pathways">
+      <HillDivider class="bg-pine-900 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-700" data-reveal>Want us alongside you?</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Get a <em class="squiggle not-italic">head start</em>
+        </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          The course is free, and it always will be. If you'd like our trainers hands-on too,
+          here's how a guided start works:
+        </p>
+        <ol class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4" data-stagger>
+          {
+            headStart.map((step, i) => (
+              <li class="relative rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-honey-400">
+                <p class="font-display text-6xl font-bold leading-none text-honey-400/80">{i + 1}</p>
+                <h3 class="mt-4 font-display text-xl font-bold text-moss-800">{step.title}</h3>
+                <p class="mt-2.5 text-sm leading-relaxed text-bark-700">{step.body}</p>
+              </li>
+            ))
+          }
+        </ol>
+
+        <h3 class="mt-16 font-display text-2xl font-bold text-moss-800" data-reveal>
+          Three ways we can take the load
+        </h3>
+        <div class="mt-6 grid gap-6 md:grid-cols-3" data-stagger>
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h4 class="font-display text-xl font-bold text-moss-800">{puppyClasses.name}</h4>
+            <p class="mt-3">
+              <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyClasses.price)}</span>
+              <span class="font-bold text-bark-500"> {puppyClasses.unit}</span>
+            </p>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
+              Four evening sessions with our trainers — the guided version of everything in this
+              course, plus three Day School intro sessions.
+            </p>
+            <a href="/puppy-training-classes" class="btn btn-moss mt-6 w-full">Explore the classes</a>
+          </article>
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h4 class="font-display text-xl font-bold text-moss-800">{puppyIntensive.name}</h4>
+            <p class="mt-3">
+              <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyIntensive.price)}</span>
+              <span class="font-bold text-bark-500"> {puppyIntensive.unit}</span>
+            </p>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
+              The trainer-led month: we do this whole curriculum for you, full days with overnight
+              stays, then hand it over with coaching.
+            </p>
+            <a href="/comprehensive-puppy-training" class="btn btn-moss mt-6 w-full">Explore Puppy School</a>
+          </article>
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h4 class="font-display text-xl font-bold text-moss-800">Dog Day School</h4>
+            <p class="mt-3">
+              <span class="font-display text-3xl font-bold text-moss-700">{gbp(dayFull.weeklyDiscountPrice!)}</span>
+              <span class="font-bold text-bark-500"> a day on a weekly booking</span>
+            </p>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
+              Daily socialisation, enrichment and light training around your work week — with the
+              school bus and daily reports home.
+            </p>
+            <a href="/dog-day-school" class="btn btn-moss mt-6 w-full">Explore Day School</a>
+          </article>
+        </div>
+        <p class="mt-8 text-center text-bark-700" data-reveal>
+          Not sure what fits? <a href={business.acuity.freeConsult} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4">Book a free phone consultation</a> — no charge, no strings.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY ============ -->
+    <section id="enquire" class="scroll-mt-20 bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-50 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Stuck on something?</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Ask us about <em class="squiggle not-italic">your puppy</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            The course is free — and so is asking. Tell us where you've got stuck, or what's going
+            better than expected, and we'll point you the right way.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="General enquiry" page="/puppycourse" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk?
+          <a href={business.acuity.freeConsult} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            Book a free phone consultation
+          </a>
+          or WhatsApp us on
+          <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
+            {business.phones.main.display}
+          </a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* Chapter/phase steps: dimmed until active (JS adds .is-active). Entrances are
+     x-only so this CSS keeps owning opacity (the classes-page fix — never add
+     autoAlpha to these steps' entrance tweens). No-JS/reduced-motion = full. */
+  .pc-step {
+    transition: opacity 0.45s ease;
+  }
+  [data-gsap-init] .pc-step:not(.is-active) {
+    opacity: 0.55;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-gsap-init] .pc-step:not(.is-active) {
+      opacity: 1;
+    }
+  }
+
+  /* Daily-rhythm trail (dark section) + travelling sun */
+  .pc-trail {
+    background: linear-gradient(to bottom, var(--color-honey-200), var(--color-honey-400) 45%, var(--color-honey-700));
+  }
+  .pc-sun {
+    filter: drop-shadow(0 0 8px rgb(236 194 124 / 0.55));
+  }
+
+  /* Weeks trail (light section) */
+  .pc-week-trail {
+    background: linear-gradient(to bottom, var(--color-honey-400), var(--color-honey-600));
+  }
+
+  /* Toilet-tool segmented control (sibling of the day-school estimator's .seg) */
+  .pc-seg {
+    display: inline-flex;
+    gap: 0.4rem;
+    padding: 0.3rem;
+    border-radius: 9999px;
+    background: var(--color-cream-200);
+  }
+  .pc-seg-opt {
+    position: relative;
+  }
+  .pc-seg-opt input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .pc-seg-opt span {
+    display: block;
+    cursor: pointer;
+    border-radius: 9999px;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-bark-700);
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
+  }
+  .pc-seg-opt input:checked + span {
+    background: var(--color-moss-700);
+    color: var(--color-cream-50);
+  }
+  .pc-seg-opt input:focus-visible + span {
+    outline: 2px solid var(--color-honey-600);
+    outline-offset: 2px;
+  }
+
+  /* Toilet-tool bars animate between ages */
+  .pc-bar {
+    transition: width 0.6s cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initVideoLoops } from '../scripts/videoLoops';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  let mm: any = null;
+
+  function initPuppyCourse() {
+    const root = document.querySelector('[data-page="puppycourse"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    initVideoLoops(root);
+
+    /* --- Toilet tool: content, not motion — runs for reduced-motion users too. --- */
+    const tool = root.querySelector('[data-tt]') as HTMLElement | null;
+    if (tool && !tool.dataset.ttInit) {
+      tool.dataset.ttInit = '1';
+      // Mirrors the SSR toiletTable (verbatim from the legacy toilet-schedule page).
+      const DATA = [
+        { day: '2 hours', night: '5 hours', dayPct: 25, nightPct: 62.5 },
+        { day: '3 hours', night: '7 hours', dayPct: 37.5, nightPct: 87.5 },
+        { day: '4 hours', night: '8 hours', dayPct: 50, nightPct: 100 },
+      ];
+      const dayEl = tool.querySelector('[data-tt-day]') as HTMLElement;
+      const nightEl = tool.querySelector('[data-tt-night]') as HTMLElement;
+      const dayBar = tool.querySelector('[data-tt-day-bar]') as HTMLElement;
+      const nightBar = tool.querySelector('[data-tt-night-bar]') as HTMLElement;
+      tool.querySelectorAll<HTMLInputElement>('input[name="tt-age"]').forEach((input) => {
+        input.addEventListener('change', () => {
+          const d = DATA[Number(input.value)];
+          if (!d) return;
+          dayEl.textContent = d.day;
+          nightEl.textContent = d.night;
+          dayBar.style.width = `${d.dayPct}%`;
+          nightBar.style.width = `${d.nightPct}%`;
+        });
+      });
+    }
+
+    // Hero image parallax needs no video wiring; motion below is gated.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* --- Hero entrance --- */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* --- Hero parallax drift --- */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* --- Generic reveals --- */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Staggered groups --- */
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          scrollTrigger: { trigger: group, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Signature 1: the daily rhythm — sun rises and sets down the schedule --- */
+      const rhythmList = root.querySelector('[data-rhythm-list]') as HTMLElement | null;
+      const rhythmFill = root.querySelector('[data-trail-fill]');
+      const sun = root.querySelector('[data-trail-sun]') as HTMLElement | null;
+      if (rhythmList && rhythmFill) {
+        const trail = { trigger: rhythmList, start: 'top 62%', end: 'bottom 55%', scrub: 0.5 };
+        gsap.fromTo(rhythmFill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: trail });
+        if (sun) {
+          gsap.fromTo(
+            sun,
+            { y: 0, rotation: 0 },
+            {
+              y: () => (sun.parentElement?.offsetHeight ?? 0) - 24,
+              rotation: 60,
+              ease: 'none',
+              scrollTrigger: trail,
+            }
+          );
+        }
+      }
+
+      /* --- Signature 2: the four-week chapter trail --- */
+      const weekList = root.querySelector('[data-week-list]') as HTMLElement | null;
+      const weekFill = root.querySelector('[data-week-fill]');
+      const paw = root.querySelector('[data-week-paw]') as HTMLElement | null;
+      if (weekList && weekFill) {
+        const trail = { trigger: weekList, start: 'top 62%', end: 'bottom 55%', scrub: 0.5 };
+        gsap.fromTo(weekFill, { scaleY: 0 }, { scaleY: 1, ease: 'none', scrollTrigger: trail });
+        if (paw) {
+          gsap.fromTo(
+            paw,
+            { y: 0, rotation: -8 },
+            {
+              y: () => (paw.parentElement?.offsetHeight ?? 0) - 12,
+              rotation: 8,
+              ease: 'none',
+              scrollTrigger: trail,
+            }
+          );
+        }
+      }
+
+      /* Step activation + entrances. X-ONLY entrances: the .pc-step dim CSS owns
+         opacity — adding autoAlpha here would leave inline opacity:1 behind and
+         silently defeat the dim forever (2026-07-05 lesson). */
+      gsap.utils.toArray<HTMLElement>('[data-rhythm-step], [data-week-step]').forEach((step) => {
+        ScrollTrigger.create({
+          trigger: step,
+          start: 'top 68%',
+          end: 'bottom 40%',
+          onToggle: (self) => step.classList.toggle('is-active', self.isActive),
+        });
+        gsap.from(step, {
+          x: 40,
+          duration: 0.7,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: step, start: 'top 88%', once: true },
+        });
+      });
+    });
+  }
+
+  initPuppyCourse();
+  document.addEventListener('astro:page-load', initPuppyCourse);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
+  });
+</script>

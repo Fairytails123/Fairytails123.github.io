@@ -14,19 +14,18 @@ export default defineConfig({
   trailingSlash: 'never',
   build: { format: 'file' },
   redirects: {
-    // ⚠ TEMP targets (owner 2026-07-04): /puppycourse is not built yet, so its six
-    // legacy stub URLs would land on a 404. FLIP BACK when page 7 ships: the six
-    // '/blog' stubs below -> '/puppycourse'.
     '/puppy-classes': '/puppy-training-classes',
     '/training-stages': '/dog-boarding-school',
     '/admission-process': '/dog-day-school',
     '/boarding-information': '/dog-boarding-school',
-    '/resources-collection': '/blog',
-    '/puppy-week-1': '/blog',
-    '/week-2-puppy': '/blog',
-    '/puppy-week-3': '/blog',
-    '/puppy-week-4': '/blog',
-    '/puppy-toilet-schdule': '/blog',
+    // Page 7 shipped 2026-07-12: the DIY-course stubs deep-link into their chapter
+    // anchors on /puppycourse (ids exist on the page — keep them in sync).
+    '/resources-collection': '/puppycourse',
+    '/puppy-week-1': '/puppycourse#week-1',
+    '/week-2-puppy': '/puppycourse#week-2',
+    '/puppy-week-3': '/puppycourse#week-3',
+    '/puppy-week-4': '/puppycourse#week-4',
+    '/puppy-toilet-schdule': '/puppycourse#toilet-training',
   },
   integrations: [
     sitemap({

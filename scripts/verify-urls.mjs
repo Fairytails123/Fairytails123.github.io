@@ -23,7 +23,7 @@ const MANIFEST = [
   { path: '/comprehensive-puppy-training', type: 'page', status: 'built' }, // built 2026-07-06 (off-nav; surfaced from homepage options + puppy-classes cross-sell)
   { path: '/training-plans', type: 'page', status: 'built' }, // built 2026-07-08
   { path: '/membership-plans', type: 'page', status: 'built' }, // built 2026-07-11
-  { path: '/puppycourse', type: 'page', status: 'planned' },
+  { path: '/puppycourse', type: 'page', status: 'built' }, // built 2026-07-12 (free DIY course hub)
   { path: '/blog', type: 'page', status: 'built' }, // advice hub (built 2026-07-04)
   { path: '/gallery', type: 'page', status: 'built' },
   { path: '/contact', type: 'page', status: 'built' }, // built 2026-07-04
