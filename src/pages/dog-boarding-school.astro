@@ -133,11 +133,18 @@ const clientCards = [
 ];
 
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+
+// Long-distance pick-up & drop-off (London & the South of England) — the rate and the
+// illustrative London mileage live in pricing.json; never hard-code them in copy.
+// Charged per journey on the ONE-WAY distance from our postcode (owner, 2026-07-12).
+const perMile = pricing.transport.longDistancePerMile;
+const londonMiles = pricing.transport.exampleMilesCentralLondon;
+const londonJourney = perMile * londonMiles;
 ---
 
 <Base
   title="Dog Boarding School — Board & Train | The Fairy Tails K9 Centre"
-  description="Residential dog training for dogs and puppies in the heart of the Sussex countryside. Let us do the hard work and you enjoy the benefits of our training."
+  description="Residential dog training in the Sussex countryside, with door-to-door pick-up and drop-off from London and across the South of England. We do the hard work — you enjoy the results."
   path="/dog-boarding-school"
 >
   <div data-page="board-train">
@@ -589,9 +596,87 @@ const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
       </div>
     </section>
 
+    <!-- ============ LONDON & SOUTH-EAST PICK-UP ============ -->
+    <section id="london-pickup" class="scroll-mt-24 bg-pine-900 text-cream-100" data-section="london">
+      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <p class="eyebrow text-honey-400" data-reveal>From further afield</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+              Coming from London? <em class="squiggle not-italic">We'll come to you</em>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+              Board &amp; Train families join us from right across London and the South of England —
+              and you don't need to do the motorway runs. We offer door-to-door pick-up and drop-off
+              for boarding dogs: we collect your dog from your home at the start of the course, and
+              bring them back to you when they graduate.
+            </p>
+            <ol class="mt-9 space-y-6" data-stagger>
+              <li class="flex items-start gap-4">
+                <span class="font-display text-4xl font-bold leading-none text-honey-400/80" aria-hidden="true">1</span>
+                <div>
+                  <h3 class="font-display text-xl font-bold text-cream-50">Tell us your postcode</h3>
+                  <p class="mt-1.5 leading-relaxed text-cream-200">
+                    We'll send your exact door-to-door figure along with your dog's programme plan.
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="font-display text-4xl font-bold leading-none text-honey-400/80" aria-hidden="true">2</span>
+                <div>
+                  <h3 class="font-display text-xl font-bold text-cream-50">We collect your dog</h3>
+                  <p class="mt-1.5 leading-relaxed text-cream-200">
+                    Your dog travels door to door with our own team — from your home straight to the barn.
+                  </p>
+                </div>
+              </li>
+              <li class="flex items-start gap-4">
+                <span class="font-display text-4xl font-bold leading-none text-honey-400/80" aria-hidden="true">3</span>
+                <div>
+                  <h3 class="font-display text-xl font-bold text-cream-50">Home again at graduation</h3>
+                  <p class="mt-1.5 leading-relaxed text-cream-200">
+                    When the course wraps up, we bring them back to your door — ready to show you what
+                    they've learned.
+                  </p>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <aside class="grain rounded-2xl bg-cream-50 p-7 text-bark-700 shadow-[var(--shadow-polaroid)] sm:p-8" data-reveal>
+            <h3 class="font-display text-2xl font-bold text-moss-800">
+              Pick-up &amp; drop-off — London &amp; the South East
+            </h3>
+            <p class="mt-4">
+              <span class="font-display text-5xl font-bold text-moss-700">{gbp(perMile)}</span>
+              <span class="font-bold text-bark-500"> per mile, door to door</span>
+            </p>
+            <p class="mt-4 leading-relaxed">
+              Counted one way, from our postcode ({business.address.postcode}) to yours, for each
+              journey. As a guide, central London is about {londonMiles} miles — around
+              <strong>{gbp(londonJourney)}</strong> for pick-up, and the same again for the journey
+              home at the end of the course. We'll confirm your exact figure when you enquire.
+            </p>
+            <p class="mt-3 text-sm leading-relaxed text-bark-500">
+              The same simple rate applies anywhere across the South of England.
+            </p>
+            <div class="mt-7 flex flex-col gap-3">
+              <a href="#enquire" class="btn btn-honey w-full">
+                Get your door-to-door quote <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+              <a href={business.phones.pickups.tel} class="btn btn-moss w-full">
+                Pick-up line · {business.phones.pickups.display}
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ LIMITATIONS & ELIGIBILITY ============ -->
     <section data-section="limitations">
-      <HillDivider class="bg-cream-100 text-cream-50" />
+      <HillDivider class="bg-pine-900 text-cream-50" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <p class="eyebrow text-honey-600" data-reveal>Straight talk</p>
         <h2 class="mt-3 max-w-3xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>

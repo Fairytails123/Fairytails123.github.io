@@ -176,7 +176,9 @@ const jsonLd = {
     },
   ],
   sameAs: [business.socials.facebook, business.socials.instagram],
-  areaServed: 'Hastings & 1066 Country, East Sussex',
+  // Board & Train serves the whole South of England (London-led) via the £2/mile
+  // door-to-door collection service; day-to-day services remain Hastings-local.
+  areaServed: ['Hastings & 1066 Country, East Sussex', 'London', 'South East England'],
   priceRange: '££',
 };
 ---
@@ -410,6 +412,24 @@ const jsonLd = {
             ))
           }
         </div>
+
+        <!-- London & South-East pick-up — the Board & Train collection service (£/mile from pricing.json) -->
+        <aside
+          class="mt-6 flex flex-col items-start gap-6 rounded-2xl bg-pine-900 p-7 ring-1 ring-honey-400/40 sm:p-8 lg:flex-row lg:items-center"
+          data-reveal
+        >
+          <div class="flex-1">
+            <h3 class="font-display text-2xl font-bold text-cream-50">Coming from London?</h3>
+            <p class="mt-2 max-w-3xl leading-relaxed text-cream-200">
+              Board &amp; Train families join us from all over London and the South of England — we
+              collect your dog from your door and bring them home again when they graduate, at
+              {gbp(pricing.transport.longDistancePerMile)} a mile from our postcode to yours.
+            </p>
+          </div>
+          <a href="/dog-boarding-school#london-pickup" class="btn btn-ghost-light shrink-0">
+            How pick-up works <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+        </aside>
 
         <!-- The rest of the training range -->
         <h3 class="mt-16 font-display text-2xl font-bold text-cream-50" data-reveal>The full training range</h3>

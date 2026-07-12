@@ -620,6 +620,28 @@ const faqs = [
             </div>
           </div>
         </details>
+
+        <!-- London & South-East pick-up — your puppy boards with us, so the same door-to-door
+             collection service as Board & Train applies (£/mile from pricing.json). -->
+        <aside
+          class="mt-6 flex flex-col items-start gap-6 rounded-2xl bg-pine-950/40 p-7 ring-1 ring-honey-400/40 sm:p-8 lg:flex-row lg:items-center"
+          data-reveal
+        >
+          <div class="flex-1">
+            <h3 class="font-display text-2xl font-bold text-cream-50">Coming from London or the South East?</h3>
+            <p class="mt-2 max-w-3xl leading-relaxed text-cream-200">
+              Your puppy boards with us — so we offer door-to-door pick-up and drop-off at
+              {gbp(pricing.transport.longDistancePerMile)} a mile, counted one way from our postcode
+              to yours per journey. As a guide, central London is about
+              {pricing.transport.exampleMilesCentralLondon} miles — around
+              {gbp(pricing.transport.longDistancePerMile * pricing.transport.exampleMilesCentralLondon)}
+              each way. We'll confirm your exact figure when you enquire.
+            </p>
+          </div>
+          <a href="#enquire" class="btn btn-honey shrink-0">
+            Ask about pick-up <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+        </aside>
       </div>
     </section>
 

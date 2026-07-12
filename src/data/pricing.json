@@ -4,6 +4,10 @@
     "pickUpPerJourney": 1,
     "dropOffPerJourney": 1
   },
+  "transport": {
+    "longDistancePerMile": 2,
+    "exampleMilesCentralLondon": 65
+  },
   "flexiPass": {
     "name": "Five Days Flexi Pass",
     "days": 5,
