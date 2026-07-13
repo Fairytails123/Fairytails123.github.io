@@ -2,6 +2,19 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
+## ⏸️ PAUSE POINT 2026-07-13 — read this first
+
+> ### ▶ PICK UP HERE
+> **SEO Stage 2 COMPLETE in one session — full record in `SEO.md` (STATUS banner + newest §6 ledger entry), the ONLY SEO status source.** Owner decisions LOCKED in SEO.md §1 (the primary D-track term for the B&T pillar + the catchment-page shortlist), the cluster map is built (SEO.md §2), and the two owner-lane packs (GBP owner-pack + review-velocity design) are HANDED OVER in SEO.md §9 — the owner executes those on their own time.
+> **One site change shipped: `/dog-boarding-school` title/H1/eyebrow re-targeted to the signed-off primary term** ("board & train" kept as the secondary mention; slug untouched per house rules; §4 SEO gate + the mandatory desktop AND mobile visual test passed; the hero sub-line now carries the old H1's "Your dog boards and trains with us" so no phrase was lost).
+> **NEXT SESSION — in order: (1) SEO.md banner NEXT** (GSC baseline pull once Ahrefs' import lands; then the top ungated backlog items — `/london` is first, owner pre-build interview required); **(2) the owner review queues in the 2026-07-12 blocks below** (unchanged); **(3) logged follow-ups** (unchanged: mobile hero-LCP perf project; y-only-reveals a11y decision; ~10 Master-pool images owner-directed).
+
+## ⏸️ PAUSE POINT 2026-07-12 (later — the first Ahrefs SEO session)
+
+> ### ▶ PICK UP HERE
+> **Same-day follow-on session, SEO-only: ZERO site/code changes (tree clean, nothing deployed) — all work happened in the Ahrefs API/UI + Google Search Console and is recorded in `SEO.md` (STATUS banner + newest §6 ledger entry), the ONLY SEO status source.** One-line headlines: Ahrefs MCP live on Lite (the session restart fixed the connector — a mid-session reconnect is never picked up) · **Stage 1 COMPLETE** — baseline pulled, Rank Tracker seeded (60 keywords incl. London), GSC connected (data import still processing at close), homepage recrawl requested, duplicate Ahrefs project deleted, stale GSC sitemap removed. The block below's item (1) is now fully DONE. (Positions/KPIs live in SEO.md only — never in this committed file.)
+> **NEXT SESSION — in order: (1) SEO.md banner NEXT** (GSC baseline pull once the import lands → then **Stage 2: pre-register the term-gate criteria BEFORE touching keyword data** — the day-one term-gate signal is recorded in SEO.md); **(2) the owner review queues in the block below** (London-offer DRAFT copy + £130 sanity-check; puppycourse DRAFTs + real-phone pass; standing 07-11 queue: rain copy + word list, malamute's name, counters glance); **(3) logged follow-ups** (mobile hero-LCP perf project; y-only-reveals a11y decision; ~10 Master-pool images owner-directed).
+
 ## ⏸️ PAUSE POINT 2026-07-12 — read this first
 
 > ### ▶ PICK UP HERE
