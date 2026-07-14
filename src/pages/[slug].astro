@@ -222,7 +222,6 @@ const jsonLd = {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       // Header entrance
       gsap.from(['[data-post-eyebrow]', '[data-post-title]', '[data-post-byline]', '[data-post-hero]'], {
-        opacity: 0,
         y: 24,
         duration: 0.7,
         ease: 'power2.out',
@@ -231,7 +230,6 @@ const jsonLd = {
       // Scroll reveals
       root.querySelectorAll('[data-reveal]').forEach((el) => {
         gsap.from(el, {
-          opacity: 0,
           y: 28,
           duration: 0.7,
           ease: 'power2.out',
@@ -240,7 +238,6 @@ const jsonLd = {
       });
       root.querySelectorAll('[data-stagger]').forEach((group) => {
         gsap.from(group.children, {
-          opacity: 0,
           y: 28,
           duration: 0.6,
           ease: 'power2.out',

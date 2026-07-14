@@ -11,6 +11,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "verify-urls": "node scripts/verify-urls.mjs",
+    "verify-reveals": "node scripts/verify-reveals.mjs",
     "test:breed-matcher": "node tools/breed-matcher/test/engine.test.mjs"
   },
   "dependencies": {

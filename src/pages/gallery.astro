@@ -813,10 +813,10 @@ const photoCount = photos.length;
       // Hero entrance
       gsap
         .timeline({ defaults: { ease: 'power3.out' } })
-        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
-        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
-        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
-        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72);
+        .from('[data-hero-eyebrow]', { y: 24, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 24, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, duration: 0.55, stagger: 0.1 }, 0.72);
 
       // Hero Ken Burns + parallax
       gsap.fromTo('[data-hero-media]', { scale: 1.12 }, { scale: 1.2, ease: 'none', scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true } });
@@ -825,7 +825,6 @@ const photoCount = photos.length;
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
         gsap.from(el, {
           y: 34,
-          autoAlpha: 0,
           duration: 0.8,
           ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 88%', once: true },
@@ -839,7 +838,6 @@ const photoCount = photos.length;
         onEnter: (batch) =>
           gsap.from(batch, {
             y: 40,
-            autoAlpha: 0,
             duration: 0.7,
             ease: 'power3.out',
             stagger: { each: 0.06, from: 'start' },

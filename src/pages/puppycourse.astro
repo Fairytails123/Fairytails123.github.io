@@ -1133,11 +1133,11 @@ const jsonLd = {
       /* --- Hero entrance --- */
       gsap
         .timeline({ defaults: { ease: 'power3.out' } })
-        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
-        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
-        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
-        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
-        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-eyebrow]', { y: 24, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 24, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, duration: 0.7 }, 0.85)
         .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
 
       /* --- Hero parallax drift --- */
@@ -1156,7 +1156,6 @@ const jsonLd = {
       gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
         gsap.from(el, {
           y: 36,
-          autoAlpha: 0,
           duration: 0.85,
           ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 86%', once: true },
@@ -1167,7 +1166,6 @@ const jsonLd = {
       gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
         gsap.from(group.children, {
           y: 28,
-          autoAlpha: 0,
           duration: 0.7,
           ease: 'power3.out',
           stagger: 0.07,
