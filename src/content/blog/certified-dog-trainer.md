@@ -1,6 +1,6 @@
 ---
 title: "Certified Dog Trainer?"
-description: "Dog training courses are an important aspect of professional dog trainers. However, education providers have yet to offer OFQUAL-registered courses for dog trainers despite this growth."
+description: "There are no OFQUAL-regulated courses for dog trainers — what 'certified dog trainer' really means, and what to look for when choosing one."
 pubDate: 2023-02-08T14:34:33
 updatedDate: 2023-12-28T15:31:26
 category: Training Methods
@@ -10,7 +10,7 @@ heroAlt: "Qualification of a dog trainer"
 
 ### Am I a qualified, accredited, registered, approved, certified, and listed dog trainer?
 
-![](../../assets/blog/certified-dog-trainer/what-is-ofqual.webp)
+![What is OFQUAL? An explainer: the Office of Qualifications and Examinations Regulation is the UK's national qualification regulator](../../assets/blog/certified-dog-trainer/what-is-ofqual.webp)
 
 ### What does it mean?
 

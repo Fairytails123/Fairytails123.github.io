@@ -10,7 +10,7 @@ heroAlt: "Building a relationship with your dog"
 
 ### Building relationships
 
-![](../../assets/blog/building-a-relationship-with-your-dog/building-a-relationship.webp)
+![A dog standing on its hind legs to give a high five to a smiling woman crouched on a cobbled street](../../assets/blog/building-a-relationship-with-your-dog/building-a-relationship.webp)
 
 #### 7 core emotions that you should nurture or avoid - positive (+) or negative (-):
 

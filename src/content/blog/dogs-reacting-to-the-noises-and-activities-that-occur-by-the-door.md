@@ -1,6 +1,6 @@
 ---
 title: "Dogs reacting to the noises and activities that occur by the door"
-description: "Some dogs that are unable to be left alone become worried if there is any activity at the door. Some fearfully aggressive, protective, or territorial doggies will respond when someone rings the doorbell or knocks on the door. This post describes the protocol for desensitisation and counterconditioning in dogs to noises and activities that can occur by the door."
+description: "Does your dog erupt at the doorbell or a knock? A step-by-step desensitisation and counterconditioning protocol for noises and activity at the door."
 pubDate: 2022-12-13T15:22:28
 updatedDate: 2023-07-24T14:32:49
 category: Behaviour
@@ -10,7 +10,7 @@ heroAlt: "Dog reacting at the door"
 
 ## Protocol for desensitisation and counterconditioning to noises and activities that occur by the door
 
-![](../../assets/blog/dogs-reacting-to-the-noises-and-activities-that-occur-by-the-door/dog-reacting-2.webp)
+![A small white dog sitting inside the front door, looking up towards the doorbell](../../assets/blog/dogs-reacting-to-the-noises-and-activities-that-occur-by-the-door/dog-reacting-2.webp)
 
 Some dogs that are unable to be left alone become worried if there is any activity at the door. Some fearfully aggressive, protective, or territorial doggies will respond when someone rings the doorbell or knocks on the door. Because the reaction level at the door is a crucial factor in the dog's escalating anxiety, clients must frequently work independently on desensitising and counterconditioning the dogs to noises and activities at the door. This protocol is intended to assist you in teaching your dog to relax and remain calm in such situations. As with the other protocols, you should have finished "Protocol for Basics and Relaxation" before proceeding.
 

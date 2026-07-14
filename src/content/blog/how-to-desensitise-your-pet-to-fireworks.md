@@ -1,6 +1,6 @@
 ---
 title: "How to desensitise your pet to fireworks"
-description: "As their hearing is so acute, dogs can find fireworks and other unexpected loud noises stressful. Fireworks go off at irregular intervals, with no warning and no way of knowing how long the loud bangs and whistles will go on for. All of this triggers disorientation, anxiety and distress."
+description: "Dogs hear fireworks far more acutely than we do — why the random bangs are so distressing, and how to desensitise your dog before fireworks season."
 pubDate: 2021-12-27T12:30:05
 updatedDate: 2023-07-24T11:31:48
 category: Behaviour

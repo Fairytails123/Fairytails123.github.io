@@ -1,6 +1,6 @@
 ---
 title: "Dog Parks in London: A Dog's Guide to the City's Green Spaces"
-description: "London's Top Dog Parks"
+description: "A dog's guide to London's best parks and green spaces — where to walk, sniff and play across the city, from the royal parks to local favourites."
 pubDate: 2023-12-17T19:03:57
 updatedDate: 2023-12-24T20:25:28
 category: Health & Care

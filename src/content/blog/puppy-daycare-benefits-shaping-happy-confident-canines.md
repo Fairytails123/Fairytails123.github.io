@@ -1,6 +1,6 @@
 ---
 title: "Puppy Daycare Benefits: Shaping Happy, Confident Canines"
-description: "Introducing a puppy to daycare at a young age is a crucial step in nurturing well-rounded, sociable and joyful canine companions — building routine, socialisation, confidence and adaptability."
+description: "Why starting daycare young matters — building routine, socialisation, confidence and adaptability for a well-rounded, joyful puppy."
 pubDate: 2023-11-22T11:21:37
 updatedDate: 2023-11-26T15:36:52
 category: Puppies

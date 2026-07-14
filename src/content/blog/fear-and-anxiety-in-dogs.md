@@ -1,6 +1,6 @@
 ---
 title: "Fear and anxiety in dogs"
-description: "Fear is essential for survival. In a famine, the resource-guarding dog would live. The chaser can hunt more effectively. The territorial dog would guard the puppies. The fearful dog is the first to notify the group of danger. It flees, enhancing its chances of survival. Fearless wild creatures do not survive. We believe that \"they should not be afraid,\" and we wish to \"teach\" the dog not to be afraid."
+description: "Fear is essential for survival — but in a family home it becomes anxiety. What fear is for, how it works in dogs, and how to help a fearful dog."
 pubDate: 2022-10-20T10:47:58
 updatedDate: 2023-07-24T14:34:09
 category: Behaviour

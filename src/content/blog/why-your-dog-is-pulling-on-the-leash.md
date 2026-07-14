@@ -1,6 +1,6 @@
 ---
 title: "Why your dog is pulling on the leash"
-description: "What's a dog's opposition reflex? You may have heard that dogs have an opposition reflex but may be wondering what it's all about. To better understand this, let's take a trip back in history."
+description: "What is a dog's opposition reflex? Why dogs pull on the leash, the history behind the reflex, and what it means for your walks."
 pubDate: 2020-04-16T13:33:59
 updatedDate: 2023-07-24T13:37:13
 category: Training Methods

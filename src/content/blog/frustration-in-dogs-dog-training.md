@@ -1,6 +1,6 @@
 ---
 title: "Frustration in dogs - dog training"
-description: "Frustration is a negative emotional state implicated in a range of canine behaviour problems."
+description: "Frustration is a negative emotional state implicated in a range of canine behaviour problems — what causes it, how to spot it, and how training helps."
 pubDate: 2022-11-06T10:16:34
 updatedDate: 2023-07-20T10:34:55
 category: Behaviour

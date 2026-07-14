@@ -1,6 +1,6 @@
 ---
 title: "15 Food items to avoid"
-description: "As dog owners, it is our responsibility to educate ourselves on foods that may be beneficial to humans but are detrimental to our dogs — this list details the fifteen most frequent foods to avoid giving your dog."
+description: "Fifteen everyday foods that are fine for humans but harmful to dogs — the most frequent items to avoid giving your dog, and why."
 pubDate: 2020-04-15T14:02:12
 updatedDate: 2023-07-24T14:07:00
 category: Health & Care
