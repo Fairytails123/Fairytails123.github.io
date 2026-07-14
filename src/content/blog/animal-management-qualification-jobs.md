@@ -1,5 +1,6 @@
 ---
 title: "What Jobs Can You Actually Get With an Animal Management Qualification? An Employer's Honest View"
+seoTitle: "Animal Management Qualification: What Jobs Can You Get?"
 description: "An employer's honest view of animal management qualifications: where the animal care jobs really are, and the laws every dog professional works under."
 pubDate: 2026-07-04T15:45:00
 category: Careers

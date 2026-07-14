@@ -1,5 +1,6 @@
 ---
 title: "Puppy Daycare Benefits: Shaping Happy, Confident Canines"
+seoTitle: "Puppy Daycare Benefits: Happy, Confident Puppies"
 description: "Why starting daycare young matters — building routine, socialisation, confidence and adaptability for a well-rounded, joyful puppy."
 pubDate: 2023-11-22T11:21:37
 updatedDate: 2023-11-26T15:36:52

@@ -9,6 +9,11 @@ const blog = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      // Optional <title>-tag override (used verbatim, no brand suffix) for posts
+      // whose display title exceeds ~60 chars — keeps the SERP title tidy while
+      // the visible H1 (title) stays as the original. Added 2026-07-14 (Ahrefs
+      // "Title too long" batch). Falls back to `${title} | The Fairy Tails K9 Centre`.
+      seoTitle: z.string().optional(),
       description: z.string(),
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),

@@ -2,7 +2,15 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
-## ⏸️ PAUSE POINT 2026-07-14 (SESSION CLOSE) — 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-07-14 (evening) — 🔴 START HERE NEXT SESSION
+
+> ### ▶ PICK UP HERE — AHREFS CRAWL-FIX PASS DONE · GSC IMPORT LANDED
+> **⏰ STILL DUE 2026-07-15: star the 3 GA4 key events** (GA4 Admin → Data display → Events → star `enquiry_submitted`, `contact_click`, `tool_engagement`). Unchanged from the block below — do this first; 3 clicks.
+> **Ahrefs Site Audit crawl (project 10083937) worked end-to-end — full record in `SEO.md` §6 (newest) + refreshed STATUS banner.** Only ONE real defect: blog **"Title too long" ×7** — FIXED via a new optional `seoTitle` frontmatter (verbatim `<title>`, no brand suffix) + 7 keyword-first titles ≤55 chars; **visible H1 + BlogPosting headline untouched**. **Built + gate-green (verify-urls 49/0, verify-reveals ✓) but NOT deployed — awaiting owner go (push = live).** Files: `content.config.ts`, `[slug].astro`, 7 posts in `src/content/blog/`. Everything else was verified false-positive/transient **on the live wire**: 11 `/_astro` 404s = stale hashes from crawling across the 07-14 deploy (live serves 200); 11 external 4XX = bot-blocked citations (legislation.gov.uk is really 200); Acuity 302s must stay; SERP-title mismatches = recrawl lag from our own 07-14 title edits. `/breed-matcher/` low-word-count deferred to an owner UX call.
+> **🟢 GSC IMPORT HAS LANDED in Ahrefs** (was blocked/"cooking" every prior 07-14 session) — `gsc-*` tools now return data, so **the Stage-1 GSC baseline pull into `SEO.md` §2 is unblocked** and is the natural next SEO step (read alongside GA4 + the B&T recovery).
+> **NEXT (ordered list in SEO.md banner):** (1) deploy the title batch on owner OK → re-crawl to confirm Title-too-long → 0; (2) pull the GSC baseline into §2; (3) the queues below (unchanged), incl. `/london` indexation + the 07-15 key-events star.
+
+## ⏸️ PAUSE POINT 2026-07-14 (SESSION CLOSE) — earlier the same day
 
 > ### ▶ PICK UP HERE — TWO THINGS SHIPPED TODAY, ONE DATED ACTION TOMORROW
 >

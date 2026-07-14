@@ -1,5 +1,6 @@
 ---
 title: "Dogs reacting to the noises and activities that occur by the door"
+seoTitle: "Dogs Reacting to Noises at the Door: What to Do"
 description: "Does your dog erupt at the doorbell or a knock? A step-by-step desensitisation and counterconditioning protocol for noises and activity at the door."
 pubDate: 2022-12-13T15:22:28
 updatedDate: 2023-07-24T14:32:49

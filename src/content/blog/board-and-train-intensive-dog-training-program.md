@@ -1,5 +1,6 @@
 ---
 title: "Board and Train (Intensive Dog Training) Program"
+seoTitle: "Board and Train Intensive Dog Training Program"
 description: "Why the Fairy Tails board and train programme is your dog's best path to success — consistency, repetition and a balanced, reward-based approach."
 pubDate: 2024-10-12T12:51:01
 updatedDate: 2024-10-12T12:53:08

@@ -1,5 +1,6 @@
 ---
 title: "Force-free trainers v Balanced dog trainers"
+seoTitle: "Force-Free v Balanced Dog Trainers: What Matters"
 description: "Why are dog trainers confined to two camps? Force-free v balanced dog training — what each label means, and what actually matters for your dog."
 pubDate: 2022-09-10T10:30:16
 updatedDate: 2023-07-24T14:45:58
