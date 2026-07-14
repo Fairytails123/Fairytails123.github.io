@@ -2,6 +2,12 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
+## ⏸️ PAUSE POINT 2026-07-14 — read this first
+
+> ### ▶ PICK UP HERE
+> **SEO backlog execution session (owner-directed): TWO batches SHIPPED + LIVE-VERIFIED (13/13 live checks), tree clean.** (1) **Hastings on-page pass** `e5459c8` — the four L-track money pages re-targeted to their local terms (training-plans gained "Dog Training in Hastings" title + "to train in Hastings" H1 — it had NO location at all; day-school/classes titles re-led + trimmed ≤60; intensive trimmed; H1s only touched where the conversion copy survived — owner may review on the live pages). (2) **Metadata polish batch** `01636ba` — every over/under-length meta description fixed site-wide (zero >160 remain), homepage title 80→53 (brand-first), all 7 empty image alts given photo-accurate text, 5 dead/redirected outbound links fixed (curl-verified), breed-matcher got its missing h1 (sr-only; test 17/17). Full record + deliberate leftovers in `SEO.md` (§6 ledger 2026-07-14 + the two CLOSED §7 rows). **GSC import: still cooking** — connection verified healthy in the Ahrefs UI; nudge with a disconnect/reconnect if still dry ~17 July.
+> **NEXT SESSION — in order: (1) SEO.md banner NEXT** (GSC baseline pull when the import lands → then `/london` — owner pre-build interview merged with the London-offer copy review); **(2) the owner review queues in the blocks below** (unchanged, plus: glance at the four re-titled hero headlines on real pages); **(3) owner-lane: execute the SEO.md §9a GBP pack + confirm the §9b review ask-flow.**
+
 ## ⏸️ PAUSE POINT 2026-07-13 — read this first
 
 > ### ▶ PICK UP HERE
