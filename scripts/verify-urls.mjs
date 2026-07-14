@@ -24,6 +24,7 @@ const MANIFEST = [
   { path: '/training-plans', type: 'page', status: 'built' }, // built 2026-07-08
   { path: '/membership-plans', type: 'page', status: 'built' }, // built 2026-07-11
   { path: '/puppycourse', type: 'page', status: 'built' }, // built 2026-07-12 (free DIY course hub)
+  { path: '/london', type: 'page', status: 'built' }, // built 2026-07-14 (D-track catchment page: London Board & Train collection)
   { path: '/blog', type: 'page', status: 'built' }, // advice hub (built 2026-07-04)
   { path: '/gallery', type: 'page', status: 'built' },
   { path: '/contact', type: 'page', status: 'built' }, // built 2026-07-04

@@ -1,0 +1,953 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import CouncilRating from '../components/CouncilRating.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import pricing from '../data/pricing.json';
+
+import atTheBarn from '../assets/pages/dog-boarding-school/At-The-Barn-2880w.webp';
+import dogWalk from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
+// Real-world training-in-action photos (from our own training reports; head-collar/muzzle screened)
+import rwMaxTown from '../assets/pages/training-real-world/rw-town-max-881650.webp';
+import rwNeoTown from '../assets/pages/training-real-world/rw-town-neo-599854.webp';
+import rwRigsbyTown from '../assets/pages/training-real-world/rw-town-rigsby-191827.webp';
+import rwRiverTown from '../assets/pages/training-real-world/rw-town-river-894739.webp';
+import rwRubyTown from '../assets/pages/training-real-world/rw-town-ruby-774448.webp';
+import rwRoccoTown from '../assets/pages/training-real-world/rw-town-rocco-736596.webp';
+import rwTillyTown from '../assets/pages/training-real-world/rw-town-tilly-368642.webp';
+import rwAprilCafe from '../assets/pages/training-real-world/rw-cafe-april-207446.webp';
+import rwHenryCafe from '../assets/pages/training-real-world/rw-cafe-henry-301777.webp';
+import rwRubyCafe from '../assets/pages/training-real-world/rw-cafe-ruby-495919.webp';
+import rwDiegoSea from '../assets/pages/training-real-world/rw-sea-diego-534158.webp';
+import rwBettySea from '../assets/pages/training-real-world/rw-sea-betty-015232.webp';
+
+const boardTrain = pricing.offerings
+  .filter((o) => o.category === 'board-train')
+  .sort((a, b) => a.order - b.order);
+
+const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+
+// Long-distance pick-up & drop-off (London & the South of England) — the rate and the
+// illustrative London mileage live in pricing.json; never hard-code them in copy.
+// Charged per journey on the ONE-WAY distance from our postcode (owner, 2026-07-12).
+const perMile = pricing.transport.longDistancePerMile;
+const londonMiles = pricing.transport.exampleMilesCentralLondon;
+const londonJourney = perMile * londonMiles;
+
+// The realities of a dog's life in the city — the things a Hastings-only page
+// would never need to say. DRAFT copy (owner review).
+const cityRealities = [
+  'Pavements with no escape route',
+  'Flat living — no garden to decompress in',
+  'Lifts, stairwells and communal doors',
+  'Buses, the tube and black cabs',
+  'Cafés, pubs and shop floors',
+  'Parks that are never empty',
+  'Traffic, sirens and roadworks',
+  'Dogs passing nose-to-nose on a narrow path',
+  'Foxes at night',
+  'Deliveries and buzzers, all day',
+];
+
+// The real-world places we train, and what each one teaches a city dog.
+const realWorldPlaces = [
+  {
+    title: 'The high street',
+    body: 'Hastings town centre on a busy Saturday — narrow pavements, prams, shopping bags, dogs passing close. The same pressure as a London street, at a scale a learning dog can cope with.',
+  },
+  {
+    title: 'Cafés and pubs',
+    body: 'Settling under a table while life carries on around them. It is the single skill that decides whether your dog gets to come with you or gets left at home.',
+  },
+  {
+    title: 'The seafront promenade',
+    body: 'Wide open, hugely distracting, and full of joggers, bikes, gulls and other dogs — the closest thing we have to a park on a sunny Sunday.',
+  },
+  {
+    title: 'Loading up and travelling',
+    body: 'Our own school bus is a moving, rattling, unfamiliar box. Dogs who load and settle calmly on it are the dogs who travel calmly — the first skill any city dog needs, and the one you will use on day one.',
+  },
+];
+
+// Collection logistics — every figure derives from pricing.json.
+const collectionSteps = [
+  {
+    title: 'Tell us your postcode',
+    body: 'We work out the door-to-door figure and send it with your dog’s programme plan — before you commit to anything.',
+  },
+  {
+    title: 'We drive to you',
+    body: 'Our own team collects your dog from your home — not a courier, not a pet-transport firm you have never spoken to. You will know who is coming, and they will know your dog’s plan before they knock.',
+  },
+  {
+    title: 'Home again, trained',
+    body: 'At the end of the course we bring your dog back to your door, and show you — in your own street, on your own stairs — what they can now do.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'How much is collection from London?',
+    a: `${gbp(perMile)} a mile, counted one way from our postcode (${business.address.postcode}) to yours, charged per journey. Central London is roughly ${londonMiles} miles, so about ${gbp(londonJourney)} to collect your dog, and the same again to bring them home at the end of the course. We confirm your exact figure when you enquire — it is a straightforward sum, not an estimate we revise later.`,
+  },
+  {
+    q: 'Isn’t Hastings a long way to send my dog?',
+    a: 'It is about an hour and a half from London by train, and you are welcome to visit at any point during the course — we don’t keep visiting hours, and there is nothing we would rather you didn’t see. Every family gets daily reports and body-cam video of their dog’s sessions in the meantime.',
+  },
+  {
+    q: 'My dog has never lived outside a flat. Will the countryside overwhelm them?',
+    a: 'Usually it does the opposite. A dog who cannot switch off in the city often sleeps properly for the first time in weeks once the noise stops. Space and quiet are what make learning possible — and we then take that calmer dog back into towns, cafés and traffic, deliberately, before they go home to you.',
+  },
+  {
+    q: 'Will countryside training actually hold up on a London street?',
+    a: 'Only if the training happens in real places, which is why it does. From week 5 your dog works in Hastings town centre, along the seafront promenade, in cafés and around traffic. What we cannot replicate is your street, your stairwell and your neighbours — which is exactly why parent training exists, and why we hand the dog back to you in person.',
+  },
+  {
+    q: 'What happens during the mid-course week off?',
+    a: 'Dogs on the full 8–10 week course go home for a week part-way through — rest is part of learning, and it lets you see the progress first-hand. (The 4-week puppy course and Holiday Board & Train run straight through.) How your dog gets home is your choice: we can drive them, charged the same way as any other journey, or you can come and collect them. You can also combine that trip with a parent-training session, so one drive does two jobs.',
+  },
+  {
+    q: 'How does parent training work if I live in London?',
+    a: 'Parent training starts in week 4, and for London families it starts remotely — we run your first sessions by video, so you are learning your dog’s new language from your sofa rather than a motorway. Then, ideally, you come to Hastings for the mid-course break: a Friday session together in person, and you take your dog home for the week. If travelling really is not possible, we can send a trainer to you: same rate per mile, and they deliver your dog and train you in your own home.',
+  },
+  {
+    q: 'Do you only take dogs from London?',
+    a: 'No. The same rate applies anywhere across the South of England — Kent, Surrey, Sussex, Essex, wherever you are. London is simply where most of our travelling families come from.',
+  },
+];
+
+---
+
+<Base
+  title="Residential Dog Training for London Dogs | The Fairy Tails"
+  description={`Residential dog training for London dogs — we collect from your door at ${gbp(perMile)} a mile, train in the Sussex countryside, and bring back a dog who handles the city.`}
+  path="/london"
+>
+  <div data-page="london">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        {/* Purpose-cut hero loop (12.4 s / 1.85 MB / 1280x720 / +faststart), per
+            docs/video-hero-pipeline.md. NEVER point this at bt-town-training.mp4 — that is
+            the 27 MB click-to-play film on the B&T page, not a background loop. (Non-rendering
+            comment: this guard must not ship to visitors.) */}
+        <video
+          class="h-full w-full object-cover"
+          poster="/media/london-poster.jpg"
+          muted
+          loop
+          playsinline
+          preload="none"
+          data-hero-video
+          data-hero-media
+          aria-hidden="true"
+        >
+          <source src="/media/london-hero.mp4" type="video/mp4" />
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/45 to-pine-950/30"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-24 pt-36 sm:pb-28">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>
+          London &amp; the South East · we come to you
+        </p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.6rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">Residential dog training</span>
+          <span class="hero-line block">for <em class="squiggle not-italic whitespace-nowrap">London dogs</em></span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          We collect your dog from your door, they live and learn with us in the Sussex countryside —
+          and we bring back a dog who can handle the pavement, the café and the crowded park.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#enquire" class="btn btn-honey">
+            Get your door-to-door quote <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+          <a href="#collection" class="btn btn-ghost-light"> How collection works </a>
+        </div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
+        <li class="paw-bullet flex items-center text-moss-700">{gbp(perMile)} a mile, door to door</li>
+        <li class="paw-bullet flex items-center text-moss-700">5-star council-licensed premises</li>
+        <li class="paw-bullet flex items-center text-moss-700">Visit your dog any time you like</li>
+        <li class="paw-bullet flex items-center text-moss-700">Daily reports + body-cam video</li>
+      </ul>
+    </div>
+
+    <!-- ============ THE CITY DOG ============ -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="city-dog">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <p class="eyebrow text-honey-700" data-reveal>The London dog</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            A city dog lives a <em class="squiggle not-italic">different life</em>
+          </h2>
+          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-bark-700" data-reveal>
+            Your dog does not get to choose their distance from anything. There is no far side of the
+            field to walk to, no quiet lane to duck down, no garden to decompress in. Every walk starts
+            in a hallway and ends on a pavement — and a dog who cannot cope with that gets more anxious,
+            not less, the more you walk them.
+          </p>
+          <p class="mt-4 max-w-2xl leading-relaxed text-bark-700" data-reveal>
+            None of that makes you a bad owner, and it does not make your dog a bad dog. It makes them a
+            dog whose training has to work in the hardest environment there is. These are the things our
+            London families are living with:
+          </p>
+          <ul class="mt-7 flex flex-wrap gap-2.5" data-stagger>
+            {
+              cityRealities.map((item) => (
+                <li class="rounded-full border-2 border-cream-200 px-4 py-2 text-sm font-bold text-bark-700">
+                  {item}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <figure class="polaroid mx-auto w-full max-w-sm" style="transform: rotate(2deg);" data-reveal>
+          <Image
+            src={rwRigsbyTown}
+            alt="Rigsby, a white bull terrier, standing attentively on his lead in a pedestrianised shopping street"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[480, 960]}
+            sizes="(min-width: 1024px) 24rem, 90vw"
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Rigsby · Steady in the Old Town
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ WILL IT TRANSFER? ============ -->
+    <section class="bg-cream-100" data-section="transfer">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-honey-700" data-reveal>The honest question</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            “Will countryside training hold up on a <em class="squiggle not-italic">London street?</em>”
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            It is the right question to ask, and the answer is: only if the training happens in real
+            places. A dog taught to be perfect in an empty field is a dog who has learned to be perfect
+            in an empty field. So we don’t do that.
+          </p>
+          <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+            The quiet countryside is where your dog <strong>sleeps, settles and learns</strong> — the
+            conditions that make learning possible in the first place. Then, deliberately, we take that
+            calmer dog back into the noise. From week 5 the work moves out into the real world:
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 sm:grid-cols-2" data-stagger>
+          {
+            realWorldPlaces.map((place) => (
+              <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-2xl font-bold text-moss-700">{place.title}</h3>
+                <p class="mt-3 leading-relaxed text-bark-700">{place.body}</p>
+              </article>
+            ))
+          }
+        </div>
+
+        <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4" data-stagger>
+          <Image
+            src={rwMaxTown}
+            alt="Max, a husky in a backpack harness, sitting on the seafront promenade beside the ice-cream kiosk"
+            class="aspect-square w-full rounded-2xl object-cover"
+            widths={[320, 640]}
+            sizes="(min-width: 640px) 22vw, 45vw"
+          />
+          <Image
+            src={rwAprilCafe}
+            alt="April, in a red coat, standing among the tables and chairs inside a café"
+            class="aspect-square w-full rounded-2xl object-cover"
+            widths={[320, 640]}
+            sizes="(min-width: 640px) 22vw, 45vw"
+          />
+          <Image
+            src={rwNeoTown}
+            alt="Neo, a black Labrador, sitting on a shop-lined Old Town street and looking up at his handler"
+            class="aspect-square w-full rounded-2xl object-cover"
+            widths={[320, 640]}
+            sizes="(min-width: 640px) 22vw, 45vw"
+          />
+          <Image
+            src={rwDiegoSea}
+            alt="Diego, a collie, standing on the seafront green beside the car park"
+            class="aspect-square w-full rounded-2xl object-cover"
+            widths={[320, 640]}
+            sizes="(min-width: 640px) 22vw, 45vw"
+          />
+        </div>
+        <p class="mt-4 text-sm font-bold text-bark-500" data-reveal>
+          Real dogs, real sessions — Max, April, Neo and Diego, out in the world with our trainers.
+        </p>
+
+        <div class="grain mt-12 rounded-3xl bg-pine-900 p-8 text-cream-100 sm:p-10" data-reveal>
+          <p class="text-lg leading-relaxed text-cream-200">
+            And here is what we <strong class="text-cream-50">cannot</strong> replicate: the Tube, your
+            street, your stairwell, your lift and your neighbours. Hastings has no Underground, and we will
+            not pretend otherwise. That gap is not something we paper over — it is exactly why parent
+            training exists, why we hand your dog back to you in person, and why the course is only
+            finished when <strong class="text-cream-50">you</strong> can do it too.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW COLLECTION WORKS ============ -->
+    <section id="collection" class="scroll-mt-24 bg-pine-950 text-cream-100" data-section="collection">
+      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <p class="eyebrow text-honey-400" data-reveal>Door to door</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+              Residential dog training, without the <em class="squiggle not-italic">motorway runs</em>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-cream-200" data-reveal>
+              Board &amp; Train families join us from right across London and the South of England. We
+              collect your dog from your home at the start of the course, and bring them back to you when
+              they graduate — driven by our own team, not a courier.
+            </p>
+            <ol class="mt-9 space-y-6" data-stagger>
+              {
+                collectionSteps.map((step, i) => (
+                  <li class="flex items-start gap-4">
+                    <span class="font-display text-4xl font-bold leading-none text-honey-400/80" aria-hidden="true">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <h3 class="font-display text-xl font-bold text-cream-50">{step.title}</h3>
+                      <p class="mt-1.5 leading-relaxed text-cream-200">{step.body}</p>
+                    </div>
+                  </li>
+                ))
+              }
+            </ol>
+          </div>
+
+          <aside class="grain rounded-2xl bg-cream-50 p-7 text-bark-700 shadow-[var(--shadow-polaroid)] sm:p-8" data-reveal>
+            <h3 class="font-display text-2xl font-bold text-moss-800">What the journey costs</h3>
+            <p class="mt-4">
+              <span class="font-display text-5xl font-bold text-moss-700">{gbp(perMile)}</span>
+              <span class="font-bold text-bark-500"> per mile, door to door</span>
+            </p>
+            <p class="mt-4 leading-relaxed">
+              Counted one way, from our postcode ({business.address.postcode}) to yours, for each
+              journey. As a guide, central London is about {londonMiles} miles — around
+              <strong>{gbp(londonJourney)}</strong> to collect your dog, and the same again to bring
+              them home at the end of the course.
+            </p>
+            <p class="mt-3 leading-relaxed">
+              It is a sum, not a quote that grows. Tell us your postcode and we’ll confirm your exact
+              figure before you commit to anything.
+            </p>
+            <p class="mt-3 text-sm leading-relaxed text-bark-500">
+              The same simple rate applies anywhere across the South of England.
+            </p>
+            <div class="mt-7 flex flex-col gap-3">
+              <a href="#enquire" class="btn btn-honey w-full">
+                Get your door-to-door quote <span class="btn-arrow" aria-hidden="true">→</span>
+              </a>
+              <a href={business.phones.main.tel} class="btn btn-moss w-full">
+                Call us · {business.phones.main.display}
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE BITS NOBODY ELSE EXPLAINS ============ -->
+    <section data-section="logistics">
+      <HillDivider class="bg-pine-950 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-honey-700" data-reveal>The bits nobody else explains</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            The week off, and <em class="squiggle not-italic">the Fridays</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Two parts of our course assume you live down the road. You don’t — so here is exactly how they
+            work when home is a two-hour drive away. Neither is an afterthought, and neither costs you a
+            surprise.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 lg:grid-cols-2" data-stagger>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] sm:p-8">
+            <h3 class="font-display text-2xl font-bold text-moss-800">The week off — your way</h3>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              Dogs on the full 8–10 week course go home for a week part-way through. Rest is part of
+              learning, and it is your first chance to feel the difference for yourself. How your dog gets
+              home is entirely your call:
+            </p>
+            <ul class="mt-5 space-y-3 text-bark-700">
+              <li class="paw-bullet flex items-start">
+                <span>
+                  <strong>We drive them.</strong> Same rate, same way — {gbp(perMile)} a mile, counted one
+                  way, per journey.
+                </span>
+              </li>
+              <li class="paw-bullet flex items-start">
+                <span>
+                  <strong>You collect them.</strong> Some families prefer the excuse to come and see the
+                  place their dog has been living.
+                </span>
+              </li>
+            </ul>
+            <p class="mt-5 text-sm leading-relaxed text-bark-500">
+              You can combine the collection trip with a parent-training session — one drive, two jobs. See
+              the next card. (The 4-week puppy course and Holiday Board &amp; Train run straight through,
+              with no week off.)
+            </p>
+          </article>
+
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] sm:p-8">
+            <h3 class="font-display text-2xl font-bold text-moss-800">Parent training, from London</h3>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              From week 4, Fridays are yours — the sessions where you learn to speak your dog’s new
+              language. A dog trained without their family is a dog who unlearns it in a fortnight. So
+              for London families we run it in three stages:
+            </p>
+            <ol class="mt-5 space-y-4 text-bark-700">
+              <li class="flex items-start gap-3">
+                <span class="font-display text-2xl font-bold leading-none text-honey-700" aria-hidden="true">1</span>
+                <span><strong>Start remotely.</strong> Your week-4 sessions run by video — no drive, no day off work, and no waiting until the handover to start learning.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="font-display text-2xl font-bold leading-none text-honey-700" aria-hidden="true">2</span>
+                <span><strong>Come down for the break.</strong> Ideally you travel to us for the mid-course week off: a Friday session together in person, then you take your dog home for their rest week. One trip, both jobs done.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <span class="font-display text-2xl font-bold leading-none text-honey-700" aria-hidden="true">3</span>
+                <span><strong>Or we come to you.</strong> If travelling really isn’t possible, we’ll send a trainer to London at {gbp(perMile)} a mile — they bring your dog home and train you in the place it actually has to work: your street.</span>
+              </li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CLOSER THAN IT FEELS ============ -->
+    <section class="bg-cream-100" data-section="distance">
+      <HillDivider class="bg-cream-50 text-cream-100" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <figure class="polaroid mx-auto w-full max-w-sm lg:order-2" style="transform: rotate(-1.8deg);" data-reveal>
+            <Image
+              src={atTheBarn}
+              alt="The barn at Fairlight Place, where boarding dogs live during their course"
+              class="aspect-[4/5] w-full rounded-[2px] object-cover"
+              widths={[480, 960]}
+              sizes="(min-width: 1024px) 24rem, 90vw"
+            />
+            <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+              The barn — where your dog will be living
+            </figcaption>
+          </figure>
+
+          <div class="lg:order-1">
+            <p class="eyebrow text-honey-700" data-reveal>Closer than it feels</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+              You are always <em class="squiggle not-italic">welcome</em>
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+              Sending your dog away is a big thing to do. We don’t pretend otherwise, and we don’t manage
+              it with reassurance — we manage it with access.
+            </p>
+            <ul class="mt-7 space-y-4 text-bark-700" data-stagger>
+              <li class="paw-bullet flex items-start">
+                <span>
+                  <strong>Open visits, no appointment.</strong> Come and see your dog whenever you like.
+                  We have no visiting hours, and nothing we would rather you didn’t see.
+                </span>
+              </li>
+              <li class="paw-bullet flex items-start">
+                <span>
+                  <strong>About ninety minutes by train.</strong> Hastings is a direct run from London —
+                  closer than most people assume when they first look at the map.
+                </span>
+              </li>
+              <li class="paw-bullet flex items-start">
+                <span>
+                  <strong>Daily reports, and body-cam video of the sessions.</strong> You watch the actual
+                  training, not a summary of it, every day your dog is with us.
+                </span>
+              </li>
+              <li class="paw-bullet flex items-start">
+                <span>
+                  <strong>No kennels.</strong> Your dog lives with us, in the house and around the barn —
+                  which is the whole reason a countryside course settles a city dog in the first place.
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grain mt-14 rounded-3xl bg-pine-900 p-8 sm:p-10" data-reveal>
+          <div class="flex flex-col items-center gap-8 lg:flex-row lg:items-center">
+            <CouncilRating size="lg" licence align="center" class="lg:border-r lg:border-cream-100/15 lg:pr-10" />
+            <p class="flex-1 text-center leading-relaxed text-cream-200 lg:text-left">
+              We are licensed by {business.licence.authority} and inspected against the Animal Welfare
+              (Licensing of Activities Involving Animals) Regulations — with the highest rating they can
+              award. If you are handing your dog to strangers two hours from home, that licence is the
+              floor you should be checking, wherever you send them.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section data-section="pricing">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-honey-700" data-reveal>The programmes</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            What your dog <em class="squiggle not-italic">actually does</em> on a residential course
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            The course itself is the same one every boarding dog does — the collection service simply gets
+            your dog to it. Travel is charged separately, at {gbp(perMile)} a mile per journey, so you can
+            always see exactly what you are paying for.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-3" data-stagger>
+          {
+            boardTrain.map((plan, i) => (
+              <article
+                class:list={[
+                  'grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5',
+                  i === 1 && 'ring-2 ring-honey-400 md:-mt-4 md:mb-4',
+                ]}
+              >
+                {i === 1 && <p class="eyebrow mb-3 text-honey-700">Our flagship programme</p>}
+                <h3 class="font-display text-2xl font-bold text-moss-800">{plan.name}</h3>
+                <p class="mt-4">
+                  <span class="font-display text-4xl font-bold text-moss-700">{gbp(plan.price)}</span>
+                  <span class="font-bold text-bark-500"> {plan.unit}</span>
+                </p>
+                {plan.largeDogSurcharge && (
+                  <p class="mt-1.5 text-sm font-bold text-honey-700">
+                    +{gbp(plan.largeDogSurcharge)} for large dogs
+                  </p>
+                )}
+                {plan.eligibility && <p class="mt-2 text-sm font-bold text-bark-500">{plan.eligibility}</p>}
+                <ul class="mt-5 flex-1 space-y-2.5 text-[0.95rem] text-bark-700">
+                  {plan.features.map((f) => (
+                    <li class="paw-bullet flex items-start">{f}</li>
+                  ))}
+                </ul>
+                <a href="#enquire" class:list={['btn mt-7 w-full', i === 1 ? 'btn-honey' : 'btn-moss']}>
+                  Enquire about this programme
+                </a>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 text-center text-sm leading-relaxed text-bark-500" data-reveal>
+          Every one of these programmes is explained in full on our
+          <a
+            href="/dog-boarding-school"
+            class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4"
+          >
+            Board &amp; Train page
+          </a>
+          — the week-by-week regime, the kit list, and the dogs we turn away.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ PROOF ============ -->
+    <section class="bg-cream-100 pb-20 sm:pb-28" data-section="proof">
+      <HillDivider class="bg-cream-50 text-cream-100" flip />
+      <div class="mx-auto max-w-6xl px-4 pt-12">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-honey-700" data-reveal>Proof, not promises</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            Dogs who now <em class="squiggle not-italic">go everywhere</em>
+          </h2>
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            Every photo below is a real client dog in a real session — no stock, no staging. Families come
+            to us from across London and the South of England, and their dogs go home to pavements, cafés
+            and crowded parks.
+          </p>
+        </div>
+
+        <!-- TODO(owner): name 1–3 consented London / South-East client dogs and we'll add their
+             stories here as a proper case-study panel (page spec open item, 2026-07-14). -->
+      </div>
+
+      <h3 class="mx-auto mt-4 max-w-6xl px-4 font-display text-xl font-bold text-moss-700">Out in the world</h3>
+      <p class="mx-auto mt-1 max-w-6xl px-4 text-sm font-bold text-bark-500">
+        Drag to explore <span aria-hidden="true">⟷</span>
+      </p>
+      <!-- tabindex+role+label: an overflow-x scroll region with no focusable children is a
+           WCAG 2.1.1 keyboard trap for scroll (axe: scrollable-region-focusable). -->
+      <div
+        class="drag-track mt-6 flex snap-x snap-mandatory gap-7 overflow-x-auto px-[max(1rem,calc((100vw-72rem)/2+1rem))] pb-6 pt-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-moss-600"
+        data-drag-track
+        tabindex="0"
+        role="group"
+        aria-label="Photos of our dogs out in the world — scroll, or use the arrow keys"
+      >
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(-1.6deg);">
+          <Image
+            src={rwRubyTown}
+            alt="Ruby, a Jack Russell, lying in a down-stay on shaded paving beside her handler's foot"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Ruby · A down-stay in the shade
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(1.4deg);">
+          <Image
+            src={rwHenryCafe}
+            alt="Henry, a golden cocker spaniel, lying settled beside a café table"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Henry · Settled at the café
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(-2.1deg);">
+          <Image
+            src={rwRoccoTown}
+            alt="Rocco, a Rottweiler, lying in a down-stay on a shop-lined pavement, looking up at his handler"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Rocco · A down-stay on the high street
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(1.9deg);">
+          <Image
+            src={rwBettySea}
+            alt="Betty, a small white chihuahua, walking on her lead across the seafront green"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Betty · Small dog, big seafront
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(-1.3deg);">
+          <Image
+            src={rwRiverTown}
+            alt="River, a brown labradoodle, sitting on a lead on a shop-lined pedestrian street"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            River · Sitting outside the café
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(2.2deg);">
+          <Image
+            src={rwRubyCafe}
+            alt="Ruby sitting on the wooden step of a café doorway, looking back over her shoulder"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Ruby · On the café step
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(-1.7deg);">
+          <Image
+            src={rwTillyTown}
+            alt="Tilly, a long-haired German shepherd, lying calmly on the pavement beside parked cars and an amusement arcade"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            Tilly · Settled beside the traffic
+          </figcaption>
+        </figure>
+        <figure class="polaroid w-64 shrink-0 snap-start sm:w-72" style="transform: rotate(1.5deg);">
+          <Image
+            src={dogWalk}
+            alt="A trainer walking four dogs together up a wooded countryside path"
+            class="aspect-[4/5] w-full rounded-[2px] object-cover"
+            widths={[288, 576]}
+            sizes="18rem"
+            draggable={false}
+          />
+          <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
+            And the quiet lanes in between
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Back home: the London parks guide -->
+      <div class="mx-auto max-w-6xl px-4">
+        <aside
+          class="mt-10 flex flex-col items-start gap-6 rounded-2xl border-2 border-cream-200 bg-cream-50 p-7 sm:p-8 lg:flex-row lg:items-center"
+          data-reveal
+        >
+          <div class="flex-1">
+            <h3 class="font-display text-2xl font-bold text-moss-800">And when they’re home again?</h3>
+            <p class="mt-2 leading-relaxed text-bark-700">
+              We wrote a guide to London’s dog parks and green spaces — the places to actually use all
+              that new training, from the royal parks to the local favourites.
+            </p>
+          </div>
+          <a href="/dog-parks-in-london-a-dog-s-guide-to-the-city-s-green-spaces" class="btn btn-moss shrink-0">
+            Read the London parks guide <span class="btn-arrow" aria-hidden="true">→</span>
+          </a>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section data-section="faq">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-28">
+        <div class="text-center">
+          <p class="eyebrow text-honey-700" data-reveal>Straight answers</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            The questions London families <em class="squiggle not-italic">actually ask</em>
+          </h2>
+        </div>
+
+        <div class="mt-10 space-y-4" data-stagger>
+          {
+            faqs.map((faq) => (
+              <details class="group rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+                  {faq.q}
+                  <svg
+                    class="accordion-chevron h-5 w-5 shrink-0 text-honey-600"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M4 7l6 6 6-6"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </summary>
+                <div class="accordion-body">
+                  <div class="overflow-hidden">
+                    <div class="px-7 pb-7">
+                      <p class="leading-relaxed text-bark-700">{faq.a}</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY FORM ============ -->
+    <section id="enquire" class="bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-50 text-pine-900" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Let’s talk</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Tell us your <em class="squiggle not-italic">postcode</em>
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Send us the issues you’re facing and where you are, and we’ll come back with an honest plan
+            for your dog — and the exact door-to-door figure, worked out from your postcode.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="Board & Train" page="/london" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk it through first?
+          <a
+            href={business.acuity.freeConsult}
+            class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4"
+          >
+            Book a free phone consultation
+          </a>
+          or WhatsApp us on
+          <a
+            href={business.phones.main.whatsapp}
+            class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4"
+          >
+            {business.phones.main.display}
+          </a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { initVideoLoops } from '../scripts/videoLoops';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Reverted on astro:before-swap — matchMedia contexts otherwise leak across
+  // ClientRouter navigations (membership-review fix, applied site-wide at polish).
+  let mm = null;
+
+  function initLondon() {
+    const root = document.querySelector('[data-page="london"]') as HTMLElement | null;
+    if (!root || root.dataset.gsapInit) return;
+    initVideoLoops(root);
+
+    // Hero video: lazy-start after load; never for reduced-motion or data-saver users.
+    const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const saveData = (navigator as any).connection?.saveData === true;
+    if (video && !reduceMotion && !saveData) {
+      setTimeout(() => {
+        video.load();
+        video.play().catch(() => {});
+      }, 350);
+    }
+
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      /* --- Hero entrance --- */
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, autoAlpha: 0, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 54, autoAlpha: 0, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, autoAlpha: 0, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, autoAlpha: 0, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, autoAlpha: 0, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      /* --- Hero parallax drift --- */
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      /* --- Generic reveals --- */
+      gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((el) => {
+        gsap.from(el, {
+          y: 36,
+          autoAlpha: 0,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+        });
+      });
+
+      /* --- Staggered groups --- */
+      gsap.utils.toArray<HTMLElement>('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, {
+          y: 28,
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: 'power3.out',
+          stagger: 0.07,
+          scrollTrigger: { trigger: group, start: 'top 86%', once: true },
+        });
+      });
+    });
+
+    /* --- Drag-to-scroll polaroid rail (mouse; touch uses native scroll) --- */
+    const track = root.querySelector('[data-drag-track]') as HTMLElement | null;
+    if (track) {
+      let down = false;
+      let moved = false;
+      let startX = 0;
+      let startScroll = 0;
+      track.addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        down = true;
+        moved = false;
+        startX = e.clientX;
+        startScroll = track.scrollLeft;
+        track.classList.add('dragging');
+        track.setPointerCapture(e.pointerId);
+      });
+      track.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        track.scrollLeft = startScroll - dx;
+      });
+      const release = () => {
+        down = false;
+        track.classList.remove('dragging');
+      };
+      track.addEventListener('pointerup', release);
+      track.addEventListener('pointercancel', release);
+      track.addEventListener(
+        'click',
+        (e) => {
+          if (moved) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        },
+        true
+      );
+    }
+  }
+
+  initLondon();
+  document.addEventListener('astro:page-load', initLondon);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) {
+      mm.revert();
+      mm = null;
+    }
+  });
+</script>
