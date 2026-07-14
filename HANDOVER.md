@@ -2,6 +2,14 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
+## ⏸️ PAUSE POINT 2026-07-14 (SESSION CLOSE) — 🔴 START HERE NEXT SESSION
+
+> ### ▶ PICK UP HERE — ONE THING FIRST, NOTHING ELSE
+> **🔴 GSC is flagging a 71% CLICK DROP on `/dog-boarding-school` — our pillar money page.** Owner instruction at session close (2026-07-14): **investigate this before any other SEO work, fresh, next session.** The exact method, the disambiguation logic and the timeline live in **`SEO.md`'s STATUS banner** (the SEO source of truth) — read it first.
+> **The one thing not to get wrong:** do **NOT** assume yesterday's B&T title/H1 rewrite (`fe7fee1`, 2026-07-13 ~17:30) caused it. **GSC data lags ~2–3 days, so the drop may predate the change entirely.** Prove it from the numbers: in GSC → Performance, filter Page = `/dog-boarding-school`, compare 7d vs prev-7d **and** 28d vs prev-28d, and read **clicks / impressions / CTR / position separately** — *impressions steady + CTR down* ⇒ the title is the suspect; *impressions + position down* ⇒ ranking loss (not the title); *all flat but clicks down* ⇒ seasonality or an AI Overview eating the clicks. If the rewrite IS the cause, the term decision still stands (the residential cluster is ≈1,920/mo vs 350) but the **title may need to carry BOTH** terms rather than trade one for the other.
+>
+> **THEN, in this order (owner-set):** (2) **the ANALYTICS FOUNDATION** — recon is already done and written up in **`SEO.md` §10**, so don't redo it; the owner **deferred the 4 build decisions**, so re-ask them first. Headline from the recon: **the site has NEVER collected analytics** — GSC is healthy (domain property, 2,692 clicks) but **there is no GA4 website property at all** (only two auto-generated junk ones with zero data), GTM holds only a Google Ads tag, and `business.ts` `tracking.ga4` is empty. ⚠️ **The `<ClientRouter />` trap:** a naive GA4 install fires `page_view` ONCE and then goes silent — it *looks* installed while under-reporting massively; bind it to `astro:page-load`. (3) pillar deepening · (4) Stage-3 schema · (5) site-wide a11y batch · (6) og:image/LCP batch.
+
 ## ⏸️ PAUSE POINT 2026-07-14 (later) — PAGE 13 `/london` IS LIVE
 
 > ### ▶ PICK UP HERE
