@@ -65,6 +65,17 @@ const labelClass = 'field-label';
       <input id="ef-phone" name="phone" type="tel" autocomplete="tel" class={inputClass} />
     </div>
     <div>
+      <label for="ef-postcode" class={labelClass}>Postcode or area</label>
+      <input
+        id="ef-postcode"
+        name="postcode"
+        type="text"
+        autocomplete="postal-code"
+        placeholder="e.g. TN35 5DT, or London"
+        class={inputClass}
+      />
+    </div>
+    <div>
       <label for="ef-service" class={labelClass}>What are you interested in?</label>
       <select id="ef-service" name="service" class={inputClass}>
         {services.map((s) => <option value={s} selected={s === service}>{s}</option>)}
@@ -144,6 +155,8 @@ const labelClass = 'field-label';
 </form>
 
 <script>
+  import { toAreaDistrict } from '../scripts/analytics';
+
   const form = document.getElementById('enquiry-form') as HTMLFormElement | null;
   if (form) {
     const startedAt = Date.now();
@@ -176,6 +189,8 @@ const labelClass = 'field-label';
         name: fd.get('name'),
         email: fd.get('email'),
         phone: fd.get('phone'),
+        // FULL postcode — private n8n path ONLY. Never goes to analytics (decision #6).
+        postcode: fd.get('postcode'),
         service: fd.get('service'),
         dogName: fd.get('dogName'),
         breed: fd.get('breed'),
@@ -202,7 +217,15 @@ const labelClass = 'field-label';
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         (window as any).dataLayer = (window as any).dataLayer || [];
-        (window as any).dataLayer.push({ event: 'enquiry_submitted', service: payload.service });
+        // 🔒 Decision #6: the DISTRICT only ("SW1A", "TN35") — never the full postcode,
+        // which identifies a household. toAreaDistrict() is the single place that reduction
+        // happens; the full value went to n8n above and goes nowhere else.
+        (window as any).dataLayer.push({
+          event: 'enquiry_submitted',
+          service: payload.service,
+          page: payload.page,
+          area_district: toAreaDistrict((fd.get('postcode') as string) || ''),
+        });
         showSuccess();
       } catch {
         button.disabled = false;

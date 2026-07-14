@@ -70,9 +70,12 @@ export const business = {
 
   tracking: {
     gtm: 'GTM-W93L9XK5',
-    metaPixel: '612955530110673', // migrates into GTM at Stage 4 (consent-gated)
+    metaPixel: '612955530110673', // NOT on the site — adding it would turn Meta tracking ON (owner: no, 2026-07-14)
     adsConversion: 'AW-822632954',
-    ga4: '', // created with the owner at Stage 4
+    // GA4 property "The Fairy Tails — Website" (2026-07-14, owner-approved): UK tz, GBP,
+    // 14-month retention. The tag itself is fired by GTM, not from this id — it is recorded
+    // here as the source of truth. See src/scripts/analytics.ts for the ClientRouter trap.
+    ga4: 'G-TPBSKV29CJ',
   },
 
   // n8n "Website Enquiry" production webhook (workflow qVpPqijvyEqWiPwy) —

@@ -87,5 +87,13 @@ const gtmId = business.tracking.gtm;
     </main>
     <Footer />
     <ConsentBanner />
+
+    <script>
+      // GA4 measurement. Reports what GTM cannot see by itself — above all the page_view
+      // for Astro view transitions, which a stock GA4 install silently misses.
+      // Read the header comment in src/scripts/analytics.ts before touching this.
+      import { initAnalytics } from '../scripts/analytics';
+      initAnalytics();
+    </script>
   </body>
 </html>
