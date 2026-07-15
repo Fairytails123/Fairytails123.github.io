@@ -63,7 +63,7 @@ SEO is part of EVERY main-website task from now on, not a separate project.
 - **Every website change** must pass the SEO gate (`SEO.md` §4, ~2 min) — run it at the same moment as the mandatory desktop+mobile visual test, before commit.
 - **Session close** (any session that touched the site): append a §6 ledger entry — even two lines ("Gate: n/a — nothing SEO-relevant") — and refresh the banner.
 - SEO status/next-actions live ONLY in `SEO.md`. HANDOVER may say "see SEO.md", never restate them.
-- Absolutes (detail in `SEO.md` §8): never rename slugs · never noindex/Disallow · never doorway/location-spam pages · facts only from `business.ts`/`pricing.json`.
+- Absolutes (detail in `SEO.md` §8): never rename slugs · never noindex/Disallow · never doorway/location-spam pages · facts only from `business.ts`/`pricing.json` · **never frame training as countryside-only → city-ready** — dogs *settle/board* at the Sussex countryside base but we *deliberately train in busy real-world places* (Hastings town, cafés, traffic, seafront) so it transfers to the city (owner, 2026-07-15: the honest differentiator is the countryside *setting* + real-world training, not countryside training alone).
 - **If `SEO.md` is missing on this machine, OneDrive hasn't synced yet — STOP and say so; never recreate it from memory.**
 
 ## The owner's process (explicit instructions — do not shortcut)
