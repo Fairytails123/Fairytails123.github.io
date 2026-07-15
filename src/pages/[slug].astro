@@ -60,7 +60,7 @@ const ctas = {
   },
   'Training Methods': {
     heading: 'Want training done properly?',
-    line: 'Our Board & Train programme immerses your dog in kind, force-free, real-world training in the Sussex countryside.',
+    line: 'Our Board & Train programme settles your dog in the calm of the Sussex countryside, then builds kind, force-free skills out in real, busy places — town, cafés and traffic.',
     href: '/dog-boarding-school',
     label: 'Explore Board & Train',
   },
@@ -77,7 +77,9 @@ const ctas = {
     label: 'See our Dog Day School',
   },
 } as const;
-const cta = ctas[category];
+// A post may override its category-default CTA (frontmatter ctaOverride) to route
+// into a more relevant money funnel — e.g. the London dog-parks post → /london.
+const cta = post.data.ctaOverride ?? ctas[category];
 
 const heroOg = await getImage({ src: heroImage, width: 1200 });
 

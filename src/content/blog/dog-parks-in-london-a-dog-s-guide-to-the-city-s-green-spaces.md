@@ -5,6 +5,11 @@ description: "A dog's guide to London's best parks and green spaces — where to
 pubDate: 2023-12-17T19:03:57
 updatedDate: 2023-12-24T20:25:28
 category: Health & Care
+ctaOverride:
+  heading: "Struggling to actually enjoy these parks?"
+  line: "If every London walk means lunging, pulling and barking, our residential dog training collects your dog from your door, trains them out in real, busy towns, cafés and traffic — not just a quiet field — and brings back a dog who can handle the city."
+  href: "/london"
+  label: "Residential training for London dogs"
 heroImage: ../../assets/blog/dog-parks-in-london-a-dog-s-guide-to-the-city-s-green-spaces/45.jpg
 heroAlt: "View across Greenwich Park towards the Old Royal Naval College and the Canary Wharf skyline"
 ---
@@ -174,4 +179,4 @@ For cute dog photos and videos, check out our Facebook and Instagram. Our [Googl
 
 Contact us at 01424 300668 or [info@thefairytails.co.uk](mailto:info@thefairytails.co.uk) for residential dog training. Schedule a free phone consultation on our website.
 
-If your dog can't yet enjoy parks like these — the lunging, the pulling, the barking at every passing dog — we run [residential dog training for London dogs](/london): we collect your dog from your door, they live and learn with us in the Sussex countryside, and we bring back a dog who can handle the city.
+If your dog can't yet enjoy parks like these — the lunging, the pulling, the barking at every passing dog — we run [residential dog training for London dogs](/london): we [collect your dog from your door](/dog-boarding-school#london-pickup), they settle at our Sussex countryside base and train out in real, busy towns, cafés and traffic, and we bring back a dog who can handle the city.

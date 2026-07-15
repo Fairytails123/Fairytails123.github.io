@@ -18,6 +18,20 @@ const blog = defineCollection({
       pubDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       category: z.enum(['Puppies', 'Behaviour', 'Training Methods', 'Health & Care', 'Careers']),
+      // Optional per-post override for the foot-of-post service CTA card. Replaces
+      // the category-default CTA (ctas[category] in [slug].astro) so a post can be
+      // routed into a more relevant money funnel than its category implies — e.g.
+      // the London dog-parks post (category Health & Care, which defaults to day
+      // school) routes to /london instead. Added 2026-07-15 (SEO money-funnel
+      // routing); mirrors the seoTitle override pattern. All four fields required.
+      ctaOverride: z
+        .object({
+          heading: z.string(),
+          line: z.string(),
+          href: z.string(),
+          label: z.string(),
+        })
+        .optional(),
       heroImage: image(),
       heroAlt: z.string().default(''),
     }),
