@@ -2,7 +2,19 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
-## ⏸️ PAUSE POINT 2026-07-16 (later) — 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-07-16 (evening) — 🔴 START HERE NEXT SESSION
+
+> ### ▶ PICK UP HERE — THE og:image + HERO-LCP IMAGE BATCH IS LIVE (the last Stage-3 item)
+> **SEO status + next actions live ONLY in `SEO.md`** (banner + newest §6 ledger). Shipped `385bb6c` (Hostinger run 29506973537):
+> **✅ og:image exists site-wide at last** — before this only blog posts had one; every money page shared to WhatsApp/Facebook imageless. Now: a site default (`/og-default.jpg` — your chosen homepage hero photo, 1200×630) + every hero page passes its own hero rendition + the breed-matcher got og/canonical tags. **36/36 real pages carry og:image** in the built dist.
+> **✅ The mobile-LCP mystery is solved and mostly fixed — it was the FILM, not the image.** The hero videos' 350 ms autoplay let the film's first frame become the recorded LCP, so Lighthouse (and real-user CrUX) priced the **1.8 MB mp4** as the LCP resource. All 7 video-hero pages now: responsive AVIF underlay (the true LCP) + **the film starts on your first touch/scroll/mouse-move** (15 s fallback if you never move) + below-fold posters lazied/optimised. **Pillar mobile 78→88 on identical hardware (LCP 5.5 s→3.7 s), intensive →85.**
+> **👀 OWNER — three things (5 min):**
+> 1. **Real-phone feel check:** open any hero page — the film should start the moment you touch/scroll (it no longer autoplays on a timer). Tell me if the still-until-first-touch feels wrong anywhere.
+> 2. **The homepage is the one hero page still low (mobile 65) and BOTH causes are yours to call:** (a) its hero photo is **800×800** (`gallery-15`) — too small to beat the film's frame for LCP and soft on desktop: got a higher-res version of that trainer-cradling-dog shot (or a replacement)? (b) shall I gate the homepage film-fade the same way (starts on first interaction)? The 3-step storm sequence stays either way.
+> 3. **Cream nav links over dark heroes** (this morning's a11y batch) — glance and approve/veto.
+> **⏳ Unchanged waits:** the 3-page indexation experiment (re-inspect ~23–30 Jul, decision fork in the block below) · pillar on-page frozen until drop-recovery reads clean.
+
+## ⏸️ PAUSE POINT 2026-07-16 (later) — earlier the same day
 
 > ### ▶ PICK UP HERE — SCHEMA RRT-VALIDATED + THE SITE-WIDE A11Y BATCH IS LIVE
 > **SEO status + next actions live ONLY in `SEO.md`** (banner + newest §6 ledger). Two things this session, both DONE:
