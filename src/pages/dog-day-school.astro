@@ -439,7 +439,7 @@ const serviceLd = buildServiceSchema({
         <h3 class="mx-auto max-w-6xl px-4 font-display text-2xl font-bold text-moss-800">
           A few of our day-school regulars
         </h3>
-        <p class="mx-auto mt-1 max-w-6xl px-4 text-sm font-bold text-bark-400">
+        <p class="mx-auto mt-1 max-w-6xl px-4 text-sm font-bold text-bark-500">
           Drag to explore <span aria-hidden="true">⟷</span>
         </p>
         <div
@@ -530,7 +530,7 @@ const serviceLd = buildServiceSchema({
             dayPlans.map((plan) => (
               <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
                 <h3 class="font-display text-2xl font-bold text-moss-800">{plan.name}</h3>
-                {plan.eligibility && <p class="mt-1 text-sm font-bold text-bark-400">{plan.eligibility}</p>}
+                {plan.eligibility && <p class="mt-1 text-sm font-bold text-bark-500">{plan.eligibility}</p>}
                 <p class="mt-4">
                   <span class="font-display text-4xl font-bold text-moss-700">{gbp(plan.price)}</span>
                   <span class="font-bold text-bark-500"> {plan.unit}</span>

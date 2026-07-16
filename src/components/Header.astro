@@ -170,6 +170,7 @@ const nav = [
     position: relative;
     padding-bottom: 2px;
     white-space: nowrap; /* one-line desktop nav (owner rule) — labels never wrap internally */
+    transition: color 0.3s ease;
   }
   .nav-link::after {
     content: '';
@@ -243,6 +244,16 @@ const nav = [
     [data-header-logo] {
       transition: none;
     }
+  }
+</style>
+
+<style is:global>
+  /* Every [data-hero] page opens on a bg-pine-950 hero, where the bark-700 nav
+     links fail contrast at scroll-0 (axe resolves them against the dark section).
+     Flip them to cream until the scrolled cream backdrop appears. :has() keeps it
+     CSS-only, so the no-JS render is correct too. */
+  html:has([data-hero]) [data-header]:not(.is-scrolled) .nav-link {
+    color: var(--color-cream-50);
   }
 </style>
 
