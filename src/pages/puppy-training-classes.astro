@@ -1,6 +1,14 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image, Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+// Hero + loop posters live in src/assets so astro:assets can optimise them — the
+// hero underlay <Picture> is this page's LCP element (2026-07-16 image batch).
+import heroPoster from '../assets/pages/puppy-training-classes/puppy-classes-poster.jpg';
+import walkLoopPoster from '../assets/pages/puppy-training-classes/puppy-walk-poster.jpg';
+import settleLoopPoster from '../assets/pages/puppy-training-classes/puppy-settle-poster.jpg';
+const walkLoopPosterOpt = await getImage({ src: walkLoopPoster, width: 560, format: 'webp' });
+const settleLoopPosterOpt = await getImage({ src: settleLoopPoster, width: 560, format: 'webp' });
+const ogHero = await getImage({ src: heroPoster, width: 1200, format: 'jpeg' });
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
@@ -158,6 +166,7 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
   title="Puppy Classes in Hastings & St Leonards | The Fairy Tails"
   description="Small group puppy training evening classes based in Hastings for your pup and you! The experienced trainers will help you give your puppy the best start."
   path="/puppy-training-classes"
+  ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
@@ -167,9 +176,25 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
       <div class="absolute inset-0 -z-10 overflow-hidden">
         <!-- Hero loop cut from the owner's reserved puppy-class clip (real class
              night in the hall); poster doubles as the reduced-motion/fallback state. -->
-        <video
+        <Picture
+          src={heroPoster}
+          alt=""
+          {/* Mobile sizes deliberately caps phones at the 828w rendition (~half the
+              bytes): a dimmed background doesn't need full-DPR pixels, and this
+              image is the LCP. Don't "correct" it to 100vw. */}
+          widths={[828, 1280, 1600, 1920]}
+          sizes="(max-width: 767px) 314px, 100vw"
+          formats={['avif', 'webp']}
+          pictureAttributes={{ class: 'contents' }}
           class="h-full w-full object-cover"
-          poster="/media/puppy-classes-poster.jpg"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          aria-hidden="true"
+          data-hero-media
+        />
+        <video
+          class="absolute inset-0 h-full w-full object-cover"
           muted
           loop
           playsinline
@@ -364,7 +389,7 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
               loop
               playsinline
               preload="none"
-              poster="/media/puppy-walk-poster.jpg"
+              poster={walkLoopPosterOpt.src}
               data-src="/media/puppy-walk-loop.mp4"
               aria-label="A golden retriever puppy trotting happily on a loose lead through the park"
             ></video>
@@ -533,7 +558,7 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
               loop
               playsinline
               preload="none"
-              poster="/media/puppy-settle-poster.jpg"
+              poster={settleLoopPosterOpt.src}
               data-src="/media/puppy-settle-loop.mp4"
               aria-label="A golden retriever puppy settling calmly under a café table, then sitting for eye contact on a countryside walk"
             ></video>
@@ -824,10 +849,36 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const saveData = (navigator as any).connection?.saveData === true;
     if (video && !reduceMotion && !saveData) {
-      setTimeout(() => {
-        video.load();
-        video.play().catch(() => {});
-      }, 350);
+      // The film must not paint a frame before the user's first interaction: Chrome
+      // records a video's first frame as an LCP candidate that REPLACES the poster
+      // image's, making the mp4 the page's LCP resource in Lighthouse and in CrUX.
+      const underlay = root.querySelector('[data-hero] img') as HTMLImageElement | null;
+      let filmStarted = false;
+      const startFilm = () => {
+        if (filmStarted || !video.isConnected) return;
+        filmStarted = true;
+        setTimeout(() => {
+          // The loading video paints black without a poster — reuse the underlay's
+          // already-fetched rendition (same URL, cache hit).
+          if (underlay?.currentSrc) video.poster = underlay.currentSrc;
+          video.load();
+          video.play().catch(() => {});
+        }, 350);
+      };
+      let filmArmed = false;
+      const armFilm = () => {
+        if (filmArmed) return;
+        filmArmed = true;
+        ['pointerdown', 'pointermove', 'touchstart', 'scroll', 'keydown'].forEach((t) =>
+          window.addEventListener(t, startFilm, { once: true, passive: true })
+        );
+        setTimeout(startFilm, 15000); // motionless visitor — start the film anyway
+      };
+      if (!underlay || underlay.complete) armFilm();
+      else {
+        underlay.addEventListener('load', armFilm, { once: true });
+        setTimeout(armFilm, 2500); // image stalled/erred — the film must still arm
+      }
     }
 
     if (reduceMotion) return; // static page — everything already visible

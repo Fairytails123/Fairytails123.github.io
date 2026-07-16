@@ -1,5 +1,7 @@
 ---
 import { Image, getImage } from 'astro:assets';
+// The hero photo doubles as this page's og:image (2026-07-16 image batch).
+const ogHero = await getImage({ src: heroImg, width: 1200, format: 'jpeg' });
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
@@ -189,6 +191,7 @@ const photoCount = photos.length;
   title="Gallery — Happy Dogs at The Fairy Tails K9 Centre | Hastings"
   description="A peek at daily life at our countryside dog school near Hastings — playtimes, countryside walks, training wins and quiet cuddles with our doggy clients."
   path="/gallery"
+  ogImage={`${business.domain}${ogHero.src}`}
 >
   <div data-page="gallery">
     <!-- ============ HERO ============ -->

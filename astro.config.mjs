@@ -12,7 +12,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.thefairytails.co.uk',
   trailingSlash: 'never',
-  build: { format: 'file' },
+  // inlineStylesheets 'always': the site's whole CSS is ~12 KB per page — inlining it
+  // removes a render-blocking round trip on 4G (2026-07-16 image batch, LCP work).
+  build: { format: 'file', inlineStylesheets: 'always' },
   redirects: {
     '/puppy-classes': '/puppy-training-classes',
     '/training-stages': '/dog-boarding-school',

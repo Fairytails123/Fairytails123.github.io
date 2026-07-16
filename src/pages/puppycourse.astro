@@ -4,7 +4,12 @@
 // toilet schedule) + the non-duplicate /resources-collection copy. Body copy is the
 // harvest text with the owner-locked LIGHT TIDY-UP (2026-07-12): voice and jokes kept,
 // typos/times fixed, zero fact changes.
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
+// Loop poster (shared with /puppy-training-classes) served optimised; the hero
+// photo doubles as this page's og:image (2026-07-16 image batch).
+import walkLoopPoster from '../assets/pages/puppy-training-classes/puppy-walk-poster.jpg';
+const walkLoopPosterOpt = await getImage({ src: walkLoopPoster, width: 560, format: 'webp' });
+const ogHero = await getImage({ src: heroPup, width: 1200, format: 'jpeg' });
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
@@ -340,6 +345,7 @@ const jsonLd = {
   title="Free DIY Puppy Training Course | The Fairy Tails K9 Centre"
   description="Our free DIY puppy course: four structured weeks of socialisation, life skills and husbandry, a daily schedule and a toilet-training guide from our trainers."
   path="/puppycourse"
+  ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 
@@ -801,7 +807,7 @@ const jsonLd = {
             loop
             playsinline
             preload="none"
-            poster="/media/puppy-walk-poster.jpg"
+            poster={walkLoopPosterOpt.src}
             data-src="/media/puppy-walk-loop.mp4"
             aria-label="A golden retriever puppy trotting happily on a loose lead through the park"
           ></video>

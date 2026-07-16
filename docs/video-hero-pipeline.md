@@ -56,8 +56,12 @@ VF="${TM},${GA},scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1
 "$FF" -hide_banner -y -i master720.mp4 -c:v libx264 -profile:v high -preset slow -b:v 1200k -pass 2 -passlogfile pl \
   -color_primaries bt709 -color_trc bt709 -colorspace bt709 -movflags +faststart -an public/media/board-train-hero.mp4
 
-# 6) POSTER (a strong still; matches a hero frame). 1600x900, optimized JPEG
-"$FF" -hide_banner -y -ss <T> -i input.MOV -frames:v 1 -vf "${TM},${GA},scale=1600:900" -q:v 6 public/media/board-train-poster.jpg
+# 6) POSTER (a strong still; matches a hero frame). 1920x1080, optimized JPEG
+# ⚠️ Since the 2026-07-16 image batch the poster goes in src/assets/pages/<slug>/,
+# NOT public/media/: the page renders it as a responsive AVIF/WebP <Picture>
+# underlay (the page's LCP element) instead of a poster= attribute, and the film
+# only starts on first user interaction. Follow any hero page's markup.
+"$FF" -hide_banner -y -ss <T> -i input.MOV -frames:v 1 -vf "${TM},${GA},scale=1920:1080" -q:v 6 "src/assets/pages/<slug>/<name>-poster.jpg"
 ```
 
 ## Output target for a website hero
@@ -74,7 +78,9 @@ VF="${TM},${GA},scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1
 - **Source clips & all working files:** `Videos\` (gitignored — never committed; too large for GitHub).
   - `Videos\_work\` — frames, segments, candidate encodes, final masters in `Videos\_work\out\`.
   - `Videos\_owner-dropins\` — preserved raw drop-ins the owner had placed in `public/media`.
-- **Shipped hero + poster:** `public/media/` (committed; served at `/media/...`).
+- **Shipped hero video:** `public/media/` (committed; served at `/media/...`).
+- **Poster/underlay stills:** `src/assets/pages/<slug>/` (committed; astro:assets serves
+  responsive renditions — moved out of `public/media/` in the 2026-07-16 image batch).
 
 ## Quickest way to reuse
 

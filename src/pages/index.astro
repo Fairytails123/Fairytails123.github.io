@@ -1,5 +1,9 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
+// Loop poster lives in src/assets so astro:assets can optimise it — poster=
+// attributes download eagerly and compete with the hero LCP (2026-07-16 batch).
+import reassuranceLoopPoster from '../assets/pages/index/home-reassurance-loop-poster.jpg';
+const reassuranceLoopPosterOpt = await getImage({ src: reassuranceLoopPoster, width: 560, format: 'webp' });
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
@@ -273,7 +277,7 @@ const clubLife = [
             loop
             playsinline
             preload="none"
-            poster="/media/home-reassurance-loop-poster.jpg"
+            poster={reassuranceLoopPosterOpt.src}
             data-src="/media/home-reassurance-loop.mp4"
             aria-label="Dogs like yours in training: a steady sit-stay, calm by the sea, settling quietly at a café"
           ></video>

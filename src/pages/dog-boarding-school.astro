@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image, Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import CouncilRating from '../components/CouncilRating.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
@@ -7,6 +7,13 @@ import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 import { buildServiceSchema, AREA_DESTINATION } from '../data/schema';
+
+// Video posters live in src/assets so astro:assets can optimise them — the hero
+// underlay <Picture> is this page's LCP element (see the 2026-07-16 image batch).
+import heroPoster from '../assets/pages/dog-boarding-school/board-train-poster.jpg';
+import townFilmPoster from '../assets/pages/dog-boarding-school/bt-town-training-poster.jpg';
+import ownerLoopPoster from '../assets/pages/dog-boarding-school/bt-owner-loop-poster.jpg';
+const ogHero = await getImage({ src: heroPoster, width: 1200, format: 'jpeg' });
 
 import puppyTraining from '../assets/pages/dog-boarding-school/Puppy-Training-1920w.webp';
 import puppySquare from '../assets/pages/dog-boarding-school/Puppy-Training-square-2880w.webp';
@@ -161,17 +168,37 @@ const serviceLd = buildServiceSchema({
   title="Residential Dog Training — Board & Train | The Fairy Tails"
   description="Residential dog training (board & train) in the Sussex countryside, with door-to-door collection from London. We do the hard work — you enjoy the results."
   path="/dog-boarding-school"
+  ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="board-train">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
       <div class="absolute inset-0 -z-10 overflow-hidden">
-        <!-- Live-site film, compressed; poster doubles as the reduced-motion/fallback state.
-             TODO(owner): swap in your chosen hero clip when ready (page spec open item). -->
-        <video
+        <!-- Responsive poster underlay: this page's LCP element. The film sits over it,
+             transparent until it plays — play() is gated on this image having painted
+             (see initBoardTrain), or the 1.8 MB mp4 becomes the recorded LCP resource. -->
+        <Picture
+          src={heroPoster}
+          alt=""
+          {/* The mobile sizes value deliberately caps phones at the 828w rendition
+              (~half the bytes): a dimmed, gradient-covered background doesn't need
+              full-DPR pixels, and the LCP is this image. Don't "correct" it to 100vw. */}
+          widths={[828, 1280, 1600, 1920]}
+          sizes="(max-width: 767px) 314px, 100vw"
+          formats={['avif', 'webp']}
+          pictureAttributes={{ class: 'contents' }}
           class="h-full w-full object-cover"
-          poster="/media/board-train-poster.jpg"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          aria-hidden="true"
+          data-hero-media
+        />
+        <!-- Live-site film, compressed; the underlay doubles as the reduced-motion/fallback
+             state. TODO(owner): swap in your chosen hero clip when ready (page spec open item). -->
+        <video
+          class="absolute inset-0 h-full w-full object-cover"
           muted
           loop
           playsinline
@@ -383,13 +410,27 @@ const serviceLd = buildServiceSchema({
           <!-- Real town-training film (owner's edit, 2026-07-04). Click-to-play with
                sound; preload=none so the 27 MB file only loads on demand. -->
           <article class="grain overflow-hidden rounded-2xl border-2 border-cream-200 bg-cream-100">
-            <video
-              class="aspect-video w-full bg-pine-950"
-              controls
-              preload="none"
-              poster="/media/bt-town-training-poster.jpg"
-              src="/media/bt-town-training.mp4"
-            ></video>
+            {/* Poster is a lazy underlay <Image>, not a poster= attribute: poster
+                attributes download eagerly at page load and compete with the hero
+                LCP image on mobile bandwidth (2026-07-16 image batch). */}
+            <div class="relative aspect-video w-full bg-pine-950">
+              <Image
+                src={townFilmPoster}
+                alt=""
+                widths={[640, 960, 1280]}
+                sizes="(min-width: 1024px) 560px, 92vw"
+                loading="lazy"
+                decoding="async"
+                class="absolute inset-0 h-full w-full object-cover"
+                aria-hidden="true"
+              />
+              <video
+                class="absolute inset-0 h-full w-full"
+                controls
+                preload="none"
+                src="/media/bt-town-training.mp4"
+              ></video>
+            </div>
             <div class="p-6">
               <h3 class="font-display text-2xl font-bold text-moss-800">Watch us work</h3>
               <p class="mt-2 leading-relaxed text-bark-700">
@@ -532,16 +573,27 @@ const serviceLd = buildServiceSchema({
       <HillDivider class="bg-pine-950 text-cream-50" />
       <div class="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-20 pt-12 sm:pb-28 lg:grid-cols-2">
         <figure class="polaroid mx-auto w-full max-w-[17rem] sm:max-w-xs" style="transform: rotate(-2deg);" data-reveal>
-          <video
-            class="aspect-[9/16] w-full rounded-[2px] object-cover"
-            muted
-            loop
-            playsinline
-            preload="none"
-            poster="/media/bt-owner-loop-poster.jpg"
-            data-src="/media/bt-owner-loop.mp4"
-            aria-label="A family practising loose-lead walking with their Rottweiler during a handover session"
-          ></video>
+          <div class="relative aspect-[9/16] w-full">
+            <Image
+              src={ownerLoopPoster}
+              alt=""
+              widths={[420, 640]}
+              sizes="(min-width: 640px) 20rem, 68vw"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 h-full w-full rounded-[2px] object-cover"
+              aria-hidden="true"
+            />
+            <video
+              class="absolute inset-0 h-full w-full rounded-[2px] object-cover"
+              muted
+              loop
+              playsinline
+              preload="none"
+              data-src="/media/bt-owner-loop.mp4"
+              aria-label="A family practising loose-lead walking with their Rottweiler during a handover session"
+            ></video>
+          </div>
           <figcaption class="px-1 pt-3 text-center font-display text-sm font-bold text-bark-700">
             Parents learning the ropes at handover
           </figcaption>
@@ -895,15 +947,59 @@ const serviceLd = buildServiceSchema({
     if (!root || root.dataset.gsapInit) return;
     initVideoLoops(root);
 
+    // The click-to-play town film paints an opaque black box (controls + inline src,
+    // no poster) over its lazy underlay image — borrow the underlay's rendition as
+    // the poster the moment it loads (same URL, cache hit).
+    const film = root.querySelector('video[controls]') as HTMLVideoElement | null;
+    const filmUnderlay = film?.parentElement?.querySelector('img') as HTMLImageElement | null;
+    if (film && filmUnderlay) {
+      const setFilmPoster = () => {
+        if (filmUnderlay.currentSrc) film.poster = filmUnderlay.currentSrc;
+      };
+      if (filmUnderlay.complete) setFilmPoster();
+      else filmUnderlay.addEventListener('load', setFilmPoster, { once: true });
+    }
+
     // Hero video: lazy-start after load; never for reduced-motion or data-saver users.
     const video = root.querySelector('[data-hero-video]') as HTMLVideoElement | null;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const saveData = (navigator as any).connection?.saveData === true;
     if (video && !reduceMotion && !saveData) {
-      setTimeout(() => {
-        video.load();
-        video.play().catch(() => {});
-      }, 350);
+      // Start the film only after the poster underlay has painted: if the video's
+      // first frame wins that race, Chrome records the 1.8 MB mp4 as the LCP
+      // resource and throttled-mobile LCP collapses (measured 5.5 s before this).
+      // The film must not paint a frame before the user's first interaction: Chrome
+      // records a video's first frame as an LCP candidate that REPLACES the poster
+      // image's, so an early frame makes the 1.8 MB mp4 the page's LCP resource — in
+      // Lighthouse (measured 5.5 s) AND in real-user CrUX. LCP observation stops at
+      // the first input/scroll, so a film that starts on interaction never counts.
+      const underlay = root.querySelector('[data-hero] img') as HTMLImageElement | null;
+      let filmStarted = false;
+      const startFilm = () => {
+        if (filmStarted || !video.isConnected) return;
+        filmStarted = true;
+        setTimeout(() => {
+          // The loading video paints black without a poster — reuse the underlay's
+          // already-fetched rendition (same URL, cache hit).
+          if (underlay?.currentSrc) video.poster = underlay.currentSrc;
+          video.load();
+          video.play().catch(() => {});
+        }, 350);
+      };
+      let filmArmed = false;
+      const armFilm = () => {
+        if (filmArmed) return;
+        filmArmed = true;
+        ['pointerdown', 'pointermove', 'touchstart', 'scroll', 'keydown'].forEach((t) =>
+          window.addEventListener(t, startFilm, { once: true, passive: true })
+        );
+        setTimeout(startFilm, 15000); // motionless visitor — start the film anyway
+      };
+      if (!underlay || underlay.complete) armFilm();
+      else {
+        underlay.addEventListener('load', armFilm, { once: true });
+        setTimeout(armFilm, 2500); // image stalled/erred — the film must still arm
+      }
     }
 
     if (reduceMotion) return; // static page — everything already visible

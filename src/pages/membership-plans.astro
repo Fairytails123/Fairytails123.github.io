@@ -8,7 +8,9 @@
 // ⚠️ Training is NOT part of membership — the owner REMOVED the last training perk
 // (T2's two sessions/cycle) on 2026-07-11; don't reintroduce it. Never hard-code money.
 // Copy is DRAFT — owner corrects on the live page.
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
+// The hero photo doubles as this page's og:image (2026-07-16 image batch).
+const ogHero = await getImage({ src: heroFriends, width: 1200, format: 'jpeg' });
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
@@ -159,6 +161,7 @@ const serviceLd = buildServiceSchema({
   title="Day School Membership in Hastings | The Fairy Tails"
   description={`Day-school membership for registered school dogs in Hastings — from ${gbp(planHalf.price)} a month, with free pick-ups & drop-offs, grooming perks and priority boarding.`}
   path="/membership-plans"
+  ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="membership-plans">

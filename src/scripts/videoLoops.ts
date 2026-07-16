@@ -15,6 +15,11 @@ export function initVideoLoops(scope: ParentNode = document): void {
         for (const e of entries) {
           if (e.isIntersecting) {
             if (!v.src) {
+              // A loading <video> with no poster paints an opaque black box over any
+              // underlay image — borrow the underlay's already-fetched rendition as
+              // the poster (same URL, cache hit; 2026-07-16 image batch).
+              const underlay = v.parentElement?.querySelector('img');
+              if (!v.poster && underlay?.currentSrc) v.poster = underlay.currentSrc;
               v.src = v.dataset.src || '';
               v.load();
             }

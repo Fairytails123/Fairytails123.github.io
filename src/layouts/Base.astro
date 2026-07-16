@@ -40,7 +40,13 @@ const siteGraph = buildSiteGraph();
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    {/* Pages with a hero pass their own ogImage; everything else gets the site
+        default (a stable public/ file — /og-default.jpg — so the URL never
+        changes with build hashes; owner-chosen photo, 2026-07-16). */}
+    <meta property="og:image" content={ogImage ?? `${business.domain}/og-default.jpg`} />
+    {!ogImage && <meta property="og:image:width" content="1200" />}
+    {!ogImage && <meta property="og:image:height" content="630" />}
+    <meta property="og:site_name" content={business.name} />
     <meta name="twitter:card" content="summary_large_image" />
     <!-- Brand favicon set (owner, 2026-07-12: the logo, not a placeholder — Google
          needs a ≥48px multiple to show it beside the URL in search results). -->
