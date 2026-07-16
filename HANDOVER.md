@@ -2,7 +2,17 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
-## ⏸️ PAUSE POINT 2026-07-16 — 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-07-16 (later) — 🔴 START HERE NEXT SESSION
+
+> ### ▶ PICK UP HERE — SCHEMA RRT-VALIDATED + THE SITE-WIDE A11Y BATCH IS LIVE
+> **SEO status + next actions live ONLY in `SEO.md`** (banner + newest §6 ledger). Two things this session, both DONE:
+> **✅ (1) Stage-3 schema VALIDATED in Google's own Rich Results Test** (the prior session's NEXT #2): `/dog-boarding-school` + `/comprehensive-puppy-training` = **LocalBusiness ✓ + Organisation ✓, 0 issues**; the London-parks blog post = **Article ✓** with the publisher/`isPartOf` `@id` references resolving to the single business entity exactly as designed. Sole finding = the **optional** `author.url` field (there is no author page to point it at — logged in SEO.md's schema inventory, not actionable). FAQ missing from RRT output is **expected** (Google removed FAQ from reported types for non-gov/health sites in the 2023 deprecation); Service isn't an RRT-reportable type. Also fixed: SEO.md's banner still said Stage 3 was "NOT deployed" — stale; it went live as `baeaf5b` at the end of the prior session (live curl re-confirmed).
+> **✅ (2) The site-wide a11y batch (backlog P 6.0) SHIPPED + LIVE-VERIFIED — `9b5ba86`, Hostinger run 29502639884 green first try.** (a) `text-bark-400` (3.84:1 on cream, fails AA) → `bark-500` (5.55:1) across **all 17 uses / 9 files** (eligibility lines, drag-rail hints, blog date dots, toilet-tool labels, gallery count). (b) **Header nav links now render cream-50 at scroll-0 on all 11 `[data-hero]` pages** (every one opens on a `bg-pine-950` hero where `bark-700` was dark-on-dark) via a CSS-only `html:has()` rule in `Header.astro` — the scrolled cream backdrop restores bark-700; light-top pages (blog/contact/terms) are untouched; works with zero JS. **Pillar Lighthouse a11y 94 → 97** — the remaining 3 points are the owner-accepted regime-step spotlight dim (logged 2026-07-12), not these issues. Verified: computed styles asserted in both scroll states on live AND preview, desktop 1568 + true-390 iframe (overflowX 0), gates green (build 35 · verify-urls 49/0/0 · verify-reveals ✓).
+> **👀 OWNER GLANCE (1 min): the cream nav links over dark heroes are a visible (deliberate, better) change** — eyeball the top of any hero page on desktop; shout if you want a different treatment.
+> **⏳ Unchanged waits:** the 3-page indexation experiment (re-inspect in GSC ~23–30 Jul — the decision fork in the block below) · pillar on-page still frozen until the drop recovery reads clean · GA4 key-events star if not yet done.
+> **NEXT (per SEO.md):** the **og:image + hero-LCP image batch** is now the top open X item (also the last Stage-3 criterion; clears the throttled-mobile-84 house-rule violation) · then the experiment read · pillar deepening stays gated.
+
+## ⏸️ PAUSE POINT 2026-07-16 — earlier the same day
 
 > ### ▶ PICK UP HERE — STAGE-3 SCHEMA IS LIVE + THE INDEXATION DIAGNOSIS + STRATEGY LOCKED INTO THE PLAN
 > **SEO status + next actions live ONLY in `SEO.md`** (banner + newest §6 ledger). Summary of this session:
