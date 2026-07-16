@@ -6,6 +6,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
 
 import doggyFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
 // Owner's master pool image 4 (2026-07-11): a birthday party in the playroom — the
@@ -136,6 +137,20 @@ const kitList = [
   'Treats: plain boiled chicken only (no other treats, due to allergies)',
   'Registration form, signed and submitted before the first full day',
 ];
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/dog-day-school',
+  name: 'Dog Day School & Doggy Day Care',
+  description:
+    'Enrichment-led day school for dogs in Hastings and St Leonards: structured play, socialisation and training through the day, with daily reports and local pick-up and drop-off.',
+  serviceType: 'Dog day care',
+  offerings: dayPlans,
+  areaServed: AREA_LOCAL,
+});
 ---
 
 <Base
@@ -143,6 +158,7 @@ const kitList = [
   description="Enrichment-led doggy day care near Hastings Country Park — structured play, socialisation and daily reports. Full & half days, local pick-up & drop-off."
   path="/dog-day-school"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="day-school">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>

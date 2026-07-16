@@ -10,6 +10,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
 
 // Real training-in-action photos (our own training reports; head-collar/muzzle screened).
 import imgBoardPuppy from '../assets/pages/training-real-world/rw-park-frankie-278656.webp';
@@ -187,6 +188,20 @@ const axes = [
     ],
   },
 ];
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/training-plans',
+  name: 'Dog Training in Hastings',
+  description:
+    'Every way to train with The Fairy Tails K9 Centre in Hastings and St Leonards, from group social walks and one-to-one sessions to residential Board & Train.',
+  serviceType: 'Dog training',
+  offerings: plans,
+  areaServed: AREA_LOCAL,
+});
 ---
 
 <Base
@@ -194,6 +209,7 @@ const axes = [
   description={`Compare every way to train in Hastings & St Leonards — from ${socialWalkPrice} social walks to live-in Board & Train. Filter by age, goal, format and budget.`}
   path="/training-plans"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="training-plans">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[86svh] items-end overflow-hidden bg-pine-950" data-hero>

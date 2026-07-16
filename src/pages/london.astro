@@ -6,6 +6,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, buildFaqSchema, AREA_DESTINATION } from '../data/schema';
 
 import atTheBarn from '../assets/pages/dog-boarding-school/At-The-Barn-2880w.webp';
 import dogWalk from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
@@ -118,6 +119,24 @@ const faqs = [
   },
 ];
 
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/london',
+  name: 'Residential Dog Training for London Dogs',
+  description:
+    'Residential dog training for London dogs. We collect from your door, your dog settles at our Sussex countryside base and trains in real streets, cafes and traffic, then comes home ready for the city.',
+  serviceType: 'Residential dog training',
+  offerings: boardTrain,
+  areaServed: AREA_DESTINATION,
+});
+
+// FAQPage from the REAL rendered Q&A above — never from the kit-list or
+// entry-criteria <details> blocks, which are labels rather than questions.
+const faqLd = buildFaqSchema('/london', faqs);
 ---
 
 <Base
@@ -125,6 +144,8 @@ const faqs = [
   description={`Residential dog training for London dogs — we collect at ${gbp(perMile)} a mile, train in real streets, cafés and traffic, and bring back a dog who handles the city.`}
   path="/london"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
   <div data-page="london">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>

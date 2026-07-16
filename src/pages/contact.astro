@@ -19,29 +19,12 @@ import contactDoggy from '../assets/pages/contact/contact-doggy.png';
 
 const councilRegister = 'https://www.hastings.gov.uk/licensing/animal/register/';
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: business.name,
-  url: `${business.domain}/contact`,
-  telephone: business.phones.main.display.replace(/\s/g, ''),
-  email: business.emails.info,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: `${business.address.line1}, ${business.address.line2}`,
-    addressLocality: business.address.town,
-    postalCode: business.address.postcode,
-    addressCountry: business.address.countryCode,
-  },
-  geo: { '@type': 'GeoCoordinates', latitude: business.geo.lat, longitude: business.geo.lng },
-  openingHoursSpecification: {
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: business.hours.jsonLd.days,
-    opens: business.hours.jsonLd.opens,
-    closes: business.hours.jsonLd.closes,
-  },
-  sameAs: [business.socials.facebook, business.socials.instagram],
-};
+// NOTE: this page used to emit its OWN LocalBusiness node — a second, subtly
+// different copy of the one on the homepage (different url, telephone format
+// and openingHours shape), which read to Google as a separate organisation.
+// Both were replaced on 2026-07-16 by the single @id-anchored entity in the
+// site-wide @graph (src/data/schema.ts, emitted by Base.astro). Do not re-add
+// a LocalBusiness node here — reference ORG_ID instead.
 ---
 
 <Base
@@ -49,8 +32,6 @@ const jsonLd = {
   description="Get in touch with The Fairy Tails K9 Centre in Hastings — call 01424 300668, send an enquiry, or visit the barn on Barley Lane. Open Mon–Fri, 8am–5.30pm."
   path="/contact"
 >
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
-
   <div data-page="contact">
     <!-- ============ Header ============ -->
     <header class="bg-moss-900 pb-16 pt-32 sm:pb-20 sm:pt-40">

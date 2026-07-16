@@ -6,6 +6,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, AREA_DESTINATION } from '../data/schema';
 
 import puppyTraining from '../assets/pages/dog-boarding-school/Puppy-Training-1920w.webp';
 import puppySquare from '../assets/pages/dog-boarding-school/Puppy-Training-square-2880w.webp';
@@ -140,6 +141,20 @@ const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
 const perMile = pricing.transport.longDistancePerMile;
 const londonMiles = pricing.transport.exampleMilesCentralLondon;
 const londonJourney = perMile * londonMiles;
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/dog-boarding-school',
+  name: 'Residential Dog Training (Board & Train)',
+  description:
+    'Residential dog training in the Sussex countryside: your dog boards and trains with us, then we hand the training over to you. Door-to-door collection across the South of England.',
+  serviceType: 'Residential dog training',
+  offerings: boardTrain,
+  areaServed: AREA_DESTINATION,
+});
 ---
 
 <Base
@@ -147,6 +162,7 @@ const londonJourney = perMile * londonMiles;
   description="Residential dog training (board & train) in the Sussex countryside, with door-to-door collection from London. We do the hard work — you enjoy the results."
   path="/dog-boarding-school"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="board-train">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>

@@ -5,6 +5,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
 
 import countryPark from '../assets/pages/intensive-dog-training/Intensive-Training-in-the-Country-Park-2880w.webp';
 import puppyTown from '../assets/pages/intensive-dog-training/Puppy-Training-in-Town-2880w.webp';
@@ -125,6 +126,20 @@ const clientCards = [
 ];
 
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/intensive-dog-training',
+  name: 'Intensive Dog Training',
+  description:
+    'Intensive one-to-one behaviour training near Hastings using the TAR method (Train, Adjust, Repeat), with full day school included and your dog home every night.',
+  serviceType: 'Dog behaviour training',
+  offerings: plans,
+  areaServed: AREA_LOCAL,
+});
 ---
 
 <Base
@@ -132,6 +147,7 @@ const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
   description="One-to-one behaviour training (TAR method) near Hastings — five days a week, full day school included, your dog home every night. £2,000 for two months."
   path="/intensive-dog-training"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="intensive">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>

@@ -9,6 +9,7 @@ import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
+import { ORG_ID, absUrl } from '../data/schema';
 import pricing from '../data/pricing.json';
 
 // Media (reused site assets — owner may swap on review; no new binaries)
@@ -309,12 +310,29 @@ const headStart = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
+  '@id': `${absUrl('/puppycourse')}#course`,
   name: 'The Fairy Tails DIY Puppy Course',
+  url: absUrl('/puppycourse'),
   description:
     'A free, four-week, force-free puppy training course you can follow at home: socialisation, toilet training, life skills, enrichment and husbandry — written by the trainers at The Fairy Tails K9 Centre.',
-  provider: { '@type': 'Organization', name: business.name, url: business.domain },
+  // Reference the ONE business entity rather than restating it (see data/schema.ts).
+  provider: { '@id': ORG_ID },
   isAccessibleForFree: true,
-  hasCourseInstance: { '@type': 'CourseInstance', courseMode: 'Online', courseWorkload: 'P4W' },
+  // Google's Course guidelines want an explicit free Offer — "isAccessibleForFree"
+  // alone leaves the price unstated.
+  offers: {
+    '@type': 'Offer',
+    price: 0,
+    priceCurrency: 'GBP',
+    category: 'Free',
+    availability: 'https://schema.org/InStock',
+    url: absUrl('/puppycourse'),
+  },
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'Online',
+    courseWorkload: 'P4W',
+  },
 };
 ---
 

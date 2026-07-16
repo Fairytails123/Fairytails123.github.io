@@ -151,36 +151,11 @@ const clubLife = [
   },
 ];
 
-// JSON-LD — the site's primary structured data lives on the homepage
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'LocalBusiness',
-  name: business.name,
-  url: business.domain,
-  telephone: business.phones.main.tel.replace('tel:', ''),
-  email: business.emails.info,
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: `${business.address.line1}, ${business.address.line2}`,
-    addressLocality: business.address.town,
-    postalCode: business.address.postcode,
-    addressCountry: business.address.countryCode,
-  },
-  geo: { '@type': 'GeoCoordinates', latitude: business.geo.lat, longitude: business.geo.lng },
-  openingHoursSpecification: [
-    {
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: business.hours.jsonLd.days,
-      opens: business.hours.jsonLd.opens,
-      closes: business.hours.jsonLd.closes,
-    },
-  ],
-  sameAs: [business.socials.facebook, business.socials.instagram],
-  // Board & Train serves the whole South of England (London-led) via the £2/mile
-  // door-to-door collection service; day-to-day services remain Hastings-local.
-  areaServed: ['Hastings & 1066 Country, East Sussex', 'London', 'South East England'],
-  priceRange: '££',
-};
+// NOTE: the LocalBusiness JSON-LD that used to live here moved into the
+// site-wide @graph (src/data/schema.ts, emitted by Base.astro) on 2026-07-16.
+// It is now ONE @id-anchored entity on every page instead of a homepage copy
+// competing with a second, subtly different copy on /contact. Do not re-add a
+// LocalBusiness node here — reference ORG_ID instead.
 ---
 
 <Base
@@ -877,8 +852,6 @@ const jsonLd = {
       </div>
     </section>
   </div>
-
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 </Base>
 
 <script>

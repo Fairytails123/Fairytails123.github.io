@@ -5,6 +5,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, buildFaqSchema, AREA_LOCAL } from '../data/schema';
 
 import classNightHall from '../assets/pages/puppy-training-classes/class-night-hall.jpg';
 import kamAndPup from '../assets/pages/puppy-training-classes/kam-and-pup.webp';
@@ -131,6 +132,26 @@ const faqs = [
     a: 'We’d love the whole household on board — that’s how the training sticks. Bring a partner or older children if you like, with one main handler per pup on the night. Just let us know who’s coming when you book.',
   },
 ];
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/puppy-training-classes',
+  name: 'Puppy Training Classes',
+  description:
+    'Small-group puppy training evening classes in Hastings and St Leonards, with three day-school introductory sessions included.',
+  serviceType: 'Puppy training',
+  // `plan` is a .find() so TS widens it to Offering|undefined; the page already
+  // dereferences it throughout, so assert it as membership-plans.astro does.
+  offerings: [plan!],
+  areaServed: AREA_LOCAL,
+});
+
+// FAQPage from the REAL rendered Q&A above — never from the kit-list or
+// entry-criteria <details> blocks, which are labels rather than questions.
+const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
 ---
 
 <Base
@@ -138,6 +159,8 @@ const faqs = [
   description="Small group puppy training evening classes based in Hastings for your pup and you! The experienced trainers will help you give your puppy the best start."
   path="/puppy-training-classes"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
   <div data-page="puppy-classes">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>

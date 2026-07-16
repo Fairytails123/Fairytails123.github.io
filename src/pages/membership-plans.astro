@@ -14,6 +14,7 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
+import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
 
 // Real photos only (owner rule) — verified in-repo shots from The Barn pool.
 // Hero = the two-dog countryside walk, rehomed here 2026-07-11 when master image 8
@@ -138,13 +139,28 @@ const perkRows = [
     body: 'Muddy season happens. Half Days dogs get a hot towel wash before home time.',
   },
 ];
+
+// Service + Offer structured data, sourced from pricing.json. `provider` is a
+// reference to the ONE business entity (see data/schema.ts) — never a restated
+// organisation. areaServed follows the two-track model: Board & Train travels,
+// day-to-day services are Hastings-local.
+const serviceLd = buildServiceSchema({
+  path: '/membership-plans',
+  name: 'Day School Membership',
+  description:
+    'Monthly day-school membership for registered school dogs in Hastings: bookings invoiced for you, free pick-ups and drop-offs, grooming perks and priority boarding space.',
+  serviceType: 'Dog day care membership',
+  offerings: [planHalf, planT1, planT2],
+  areaServed: AREA_LOCAL,
+});
 ---
 
 <Base
-  title="Membership Plans — Day School Membership | The Fairy Tails K9 Centre"
+  title="Day School Membership in Hastings | The Fairy Tails"
   description={`Day-school membership for registered school dogs in Hastings — from ${gbp(planHalf.price)} a month, with free pick-ups & drop-offs, grooming perks and priority boarding.`}
   path="/membership-plans"
 >
+  <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
   <div data-page="membership-plans">
     <!-- ============ HERO ============ -->
     <!-- ═══ HERO ANIMATION SLOT: owner design handoff pending (2026-07-11) ═══

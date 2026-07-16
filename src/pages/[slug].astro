@@ -6,6 +6,7 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
+import { ORG_ID, WEBSITE_ID } from '../data/schema';
 
 export async function getStaticPaths() {
   // Build-time collision guard (WEBSITE-PLAN.md): a post slug must never
@@ -94,7 +95,10 @@ const jsonLd = {
   ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
   image: `${business.domain}${heroOg.src}`,
   author: { '@type': 'Person', name: 'Kamal Singh' },
-  publisher: { '@type': 'Organization', name: business.name, url: business.domain },
+  // Reference the ONE business entity rather than restating it as a bare
+  // Organization — that stub used to read as a separate org (see data/schema.ts).
+  publisher: { '@id': ORG_ID },
+  isPartOf: { '@id': WEBSITE_ID },
   mainEntityOfPage: `${business.domain}/${post.id}`,
 };
 ---
@@ -104,6 +108,7 @@ const jsonLd = {
   description={description}
   path={`/${post.id}`}
   ogImage={`${business.domain}${heroOg.src}`}
+  ogType="article"
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 

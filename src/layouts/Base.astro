@@ -4,6 +4,7 @@ import '@fontsource-variable/karla';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { business } from '../data/business';
+import { buildSiteGraph } from '../data/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
@@ -14,11 +15,16 @@ interface Props {
   /** Path beginning with /, e.g. /dog-boarding-school */
   path: string;
   ogImage?: string | undefined;
+  /** og:type for this template. 'article' for blog posts; 'website' otherwise. */
+  ogType?: string | undefined;
 }
 
-const { title, description, path, ogImage } = Astro.props;
+const { title, description, path, ogImage, ogType = 'website' } = Astro.props;
 const canonical = `${business.domain}${path === '/' ? '' : path}`;
 const gtmId = business.tracking.gtm;
+// The ONE business entity, emitted once per page. Every other JSON-LD node on
+// the site references it by @id rather than restating it — see data/schema.ts.
+const siteGraph = buildSiteGraph();
 ---
 
 <!doctype html>
@@ -29,7 +35,8 @@ const gtmId = business.tracking.gtm;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
+    <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} is:inline />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
