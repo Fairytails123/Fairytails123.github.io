@@ -2,7 +2,14 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
-## ⏸️ PAUSE POINT 2026-07-16 (evening) — 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-07-17 — 🔴 START HERE NEXT SESSION
+
+> ### ▶ PICK UP HERE — FIRST POST-STAGE SEO WORKOVER RAN (data + owner-packs only; ZERO site changes, tree clean)
+> **All four numbered SEO stages are complete, so the programme is now in its standing weekly loop — this session ran it** (detail lives ONLY in `SEO.md`: refreshed banner + newest §6 ledger entry). Headlines: **the pillar's drop-recovery first read is EARLY-POSITIVE** (latest GSC day = best since late June — but one day, so the do-not-touch freeze on `/dog-boarding-school` HOLDS) · **the blog title-length fix is confirmed at zero** on a clean Ahrefs crawl · **competitor link-mining proved the #1 for our primary term is NOT link-powered** (it wins on relevance — great news for the gated pillar-deepening plan, and it right-sizes the backlink job) · our citation coverage is nearly empty (**2 of 18** checked sites; **the old Yell listing died Oct 2025**).
+> **📦 TWO NEW OWNER-LANE PACKS in `SEO.md`:** **§9c Citations/NAP** (verbatim NAP block + ordered worklist — **do the Yell re-claim first**, ~15–20 min per site) and **§9d Outreach starter** (press angles incl. the London-dogs-to-a-Sussex-barn story, vet/groomer resource-link ask, templates; `/puppycourse` + the 5★ licence are the hooks). **Pick one §9d press angle and the release gets drafted next session.**
+> **⏳ Unchanged waits:** the 3-page indexation experiment (re-inspect in GSC ~23–30 Jul — a real fork: if still uncrawled, backlinks/outreach become the priority, and §9d is ready for that) · pillar on-page frozen until recovery reads clean over several consecutive days · the owner queue from 07-16 below (homepage mobile-65 decisions: bigger hero photo + film-fade gating · real-phone feel check · cream-nav glance · GA4 key-events star if not yet done).
+
+## ⏸️ PAUSE POINT 2026-07-16 (evening) — earlier
 
 > ### ▶ PICK UP HERE — THE og:image + HERO-LCP IMAGE BATCH IS LIVE (the last Stage-3 item)
 > **SEO status + next actions live ONLY in `SEO.md`** (banner + newest §6 ledger). Shipped `385bb6c` (Hostinger run 29506973537):
