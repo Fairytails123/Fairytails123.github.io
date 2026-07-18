@@ -2,9 +2,12 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
-## ⏸️ PAUSE POINT 2026-07-18 — 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-07-18 (SESSION CLOSED — tree clean, everything deployed) — 🔴 START HERE NEXT SESSION
 
-> ### ▶ PICK UP HERE — ALT-TEXT BATCH LIVE (Ahrefs missing-alt closed 6/7; pillar's 3 HELD) · CITATIONS DAY 2 (headless) · PRESS RELEASE DRAFTED
+> ### ▶ NEXT SESSION STARTS WITH
+> **(1) The `claude-seo` plugin's `/seo…` skills will now appear in the skill list — the toolbox rule (user CLAUDE.md + CODING carrier) applies to all SEO work from here on.** (2) Read SEO.md banner + newest §6 entry as always. (3) The dated queue: **indexation-experiment read ~07-23→30 · Yell moderation re-check ~07-24 · pillar recovery watch daily** (several clean days ⇒ ungate deepening + apply the §7 held alt texts). (4) Top ungated build item: **GEO batch #1 (P 5.4, SEO.md §7/§11 — non-frozen pages only)**. (5) Owner-lane queue below unchanged.
+>
+> ### ▶ WHAT THIS SESSION DID — ALT-TEXT BATCH LIVE (Ahrefs missing-alt closed 6/7; pillar's 3 HELD) · CITATIONS DAY 2 (headless) · PRESS RELEASE DRAFTED · claude-seo PLUGIN INSTALLED + FIRST GEO RUN
 > **⚠️ A session died un-closed on 17 Jul ~22:14** — it left 8 drafted alt texts uncommitted in the tree (no ledger, no commit). This session **verified every text against the actual image (2 were wrong and corrected — one said "walking to heel" for a dog visibly out front on a loose lead), found it had missed `/training-plans` (Ahrefs' 7th flagged URL), and SHIPPED the lot: `f1d3fa6` + `a8c0442`, both deploys green first try, all 6 alts live-verified on www.** The **pillar `/dog-boarding-school`'s 3 alts were deliberately HELD** — alt text is new indexable content and the page is frozen for the drop-recovery signal; the verbatim strings sit in SEO.md §7 (P 4.0) to apply the moment the freeze lifts. Tree is clean again.
 > **📈 Recovery read #2:** newest GSC day (07-14) = pos 14.9 / 222 impr — second consecutive day above the trough but not pre-drop shape, and the reveal fix only deployed ON 07-14. **Pillar freeze HOLDS.**
 > **🦴 Citations day 2 (headless, ≥2-floor exceeded — detail in SEO.md §9c):** MisterWhat verified = fossil · **Yelp turns out to EXIST as a "Claimed" grooming-era fossil** (worklist had it absent) → **owner fix via biz.yelp.com** · Scoot fossil still shows the old Parker Road address · +2 new fossil surfaces found · 4 directories absence-confirmed (create-tier). **The dead mobile 07842 116216 is on ≥6 surfaces — the worst NAP poison.**
