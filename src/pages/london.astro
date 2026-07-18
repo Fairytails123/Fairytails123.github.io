@@ -34,6 +34,11 @@ const boardTrain = pricing.offerings
 
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
 
+// The two plans named in the quick-answer block, looked up by id so that copy
+// can never drift from pricing.json (house rule: money lives in data).
+const btAdult = boardTrain.find((o) => o.id === 'board-train-adult')!;
+const btPuppy = boardTrain.find((o) => o.id === 'board-train-puppy')!;
+
 // Long-distance pick-up & drop-off (London & the South of England) — the rate and the
 // illustrative London mileage live in pricing.json; never hard-code them in copy.
 // Charged per journey on the ONE-WAY distance from our postcode (owner, 2026-07-12).
@@ -147,6 +152,7 @@ const faqLd = buildFaqSchema('/london', faqs);
   title="Residential Dog Training for London Dogs | The Fairy Tails"
   description={`Residential dog training for London dogs — we collect at ${gbp(perMile)} a mile, train in real streets, cafés and traffic, and bring back a dog who handles the city.`}
   path="/london"
+  updated="2026-07-18"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -230,6 +236,36 @@ const faqLd = buildFaqSchema('/london', faqs);
         <li class="paw-bullet flex items-center text-moss-700">Daily reports + body-cam video</li>
       </ul>
     </div>
+
+    <!-- ============ QUICK ANSWER ============
+         A deliberate 134-167 word, self-contained answer to the definition-shaped
+         question a London owner actually asks. Sits high on the page because AI
+         assistants take ~44% of their citations from the first 30% of a page, and
+         it must stay quotable WHOLE — do not split it or make a sentence depend on
+         surrounding copy. Every figure interpolates from pricing.json.
+         NB deliberately NOT added to `faqs`: that array is the rendered accordion
+         AND the FAQPage schema, and this is prose, not an FAQ entry. -->
+    <section class="mx-auto max-w-6xl px-4 pt-20 sm:pt-28" data-section="quick-answer">
+      <div class="max-w-3xl">
+        <p class="eyebrow text-honey-700" data-reveal>In short</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How does residential dog training work for a
+          <em class="squiggle not-italic whitespace-nowrap">London dog</em>?
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+          Residential dog training means your dog lives and trains with us full-time at our
+          countryside base near Hastings, while you stay in London. Our own team collects from your
+          door — not a courier — and brings your dog home at the end of the course. Travel is charged
+          at {gbp(perMile)} a mile, counted one way per journey, so central London is about {londonMiles}
+          miles: roughly {gbp(londonJourney)} each way, on top of the course price. {btAdult.name} is
+          {gbp(btAdult.price)} {btAdult.unit}; {btPuppy.name} is {gbp(btPuppy.price)} {btPuppy.unit}. Your
+          dog settles at the barn first, then trains out in the real world — Hastings town centre, the
+          seafront promenade, cafés and traffic — from week 5. Parent training starts in week 4, by
+          video for London families. You get daily reports and body-cam video, and you can visit
+          whenever you like.
+        </p>
+      </div>
+    </section>
 
     <!-- ============ THE CITY DOG ============ -->
     <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="city-dog">

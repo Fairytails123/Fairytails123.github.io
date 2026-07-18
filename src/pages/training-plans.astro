@@ -78,10 +78,13 @@ const meta: Record<string, PlanMeta> = {
     imgAlt: 'A dog focused on its handler amid the distractions of a town centre',
   },
   'puppy-intensive': {
-    bestFor: 'Local pups up to 18 weeks — trainer-led, we do the day-in, day-out heavy lifting for you.',
+    bestFor: 'Pups up to 18 weeks — they board with us and our trainers do the day-in, day-out heavy lifting.',
     age: ['puppy'],
     goal: ['socialisation', 'obedience'],
-    format: ['day-based'],
+    // Boards for the month (owner, 2026-07-18), so it must appear under the
+    // Residential filter — a family filtering for residential training was
+    // previously never shown it.
+    format: ['residential'],
     budget: ['programme'],
     cta: { label: 'Explore Puppy School', href: '/comprehensive-puppy-training' },
     img: imgCompPuppy,
@@ -212,6 +215,7 @@ const serviceLd = buildServiceSchema({
   title="Dog Training in Hastings — Plans & Prices | The Fairy Tails"
   description={`Compare every way to train in Hastings & St Leonards — from ${socialWalkPrice} social walks to live-in Board & Train. Filter by age, goal, format and budget.`}
   path="/training-plans"
+  updated="2026-07-18"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />

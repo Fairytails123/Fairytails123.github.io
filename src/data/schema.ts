@@ -21,6 +21,7 @@ import { business } from './business';
 /** The one canonical business entity. Reference this; never restate it. */
 export const ORG_ID = `${business.domain}/#organization`;
 export const WEBSITE_ID = `${business.domain}/#website`;
+export const AUTHOR_ID = `${business.domain}/#author`;
 const LOGO_ID = `${business.domain}/#logo`;
 
 /** Absolute URL for a site path, matching Base.astro's canonical rule exactly
@@ -140,6 +141,26 @@ export function buildSiteGraph() {
         inLanguage: 'en-GB',
       },
     ],
+  };
+}
+
+/**
+ * The site's one author identity, for a BlogPosting's `author`.
+ *
+ * Every post shares one @id, so the posts accumulate to a single person rather
+ * than reading as a different anonymous author each time — the same "one entity,
+ * referenced by @id" rule the business itself follows. `worksFor` ties that
+ * person to the business entity, which is the whole authority signal here.
+ * The name lives in business.ts; there is deliberately no `url` (no author page
+ * exists — the optional author.url warning in Google's Rich Results Test is
+ * expected and is NOT fixed by inventing a link).
+ */
+export function buildAuthorNode() {
+  return {
+    '@type': 'Person',
+    '@id': AUTHOR_ID,
+    name: business.author.name,
+    worksFor: { '@id': ORG_ID },
   };
 }
 

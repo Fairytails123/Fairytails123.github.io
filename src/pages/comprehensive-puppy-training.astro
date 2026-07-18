@@ -84,7 +84,7 @@ const rhythm = [
   { on: true, phase: 'Time on', title: 'The right introductions', body: 'Structured play with carefully chosen friends — different breeds, sizes and temperaments, always supervised.' },
   { on: false, phase: 'Time off', title: 'Rest & reset', body: 'Down-time in their own space. This is where confidence actually sets in — short bursts, then proper recovery.' },
   { on: true, phase: 'Time on', title: 'A taste of the world', body: 'A little training and a new experience woven in — a new surface, a new sound, a new face.' },
-  { on: false, phase: 'Time off', title: 'Wind down for home', body: 'Brains full, tails wagging. They go home tired in the best way, ready to do it all again tomorrow.' },
+  { on: false, phase: 'Time off', title: 'Wind down', body: 'Brains full, tails wagging. They settle for the evening tired in the best way, ready to do it all again tomorrow.' },
 ];
 
 // What your puppy learns out in the real world.
@@ -98,8 +98,8 @@ const worldSkills = [
 
 // The shape of the month. DRAFT — owner to supply the real week-by-week on the preview.
 const monthPlan = [
-  { week: 'Week 1', title: 'Settle & assess', body: 'Your puppy moves into the rhythm of full-day school. We get to know them and they get to know us — routine and trust come first.' },
-  { week: 'Week 2', title: 'Socialise & explore', body: 'Structured introductions ramp up, first outings into the quieter corners of the real world, and overnight stays begin — gently.' },
+  { week: 'Week 1', title: 'Settle & assess', body: 'Your puppy moves in and finds the rhythm of the day. We get to know them and they get to know us — routine and trust come first.' },
+  { week: 'Week 2', title: 'Socialise & explore', body: 'Structured introductions ramp up, and the first outings into the quieter corners of the real world begin — gently.' },
   { week: 'Week 3', title: 'Out into the world', body: 'Busier places — a café, a short bus ride, a livelier park — with loose-lead walking and recall growing stronger every day.' },
   { week: 'Week 4', title: 'Consolidate & hand over', body: 'Everything comes together, and we coach you: the cues, the timing and the habits that keep it all going once your puppy is home for good.' },
 ];
@@ -109,7 +109,7 @@ const includes = [
   'Full days of trainer-led training and socialisation',
   'Structured introductions to all breeds, shapes and sizes',
   'Real-world outings — towns, cafés, transport and busy parks',
-  'Overnight stays to head off separation anxiety',
+  'Boarding with us, which heads off separation anxiety',
   'An end-of-month handover so the training sticks at home',
 ];
 
@@ -123,7 +123,7 @@ const benefits = [
 
 // Eligibility for a mid-vaccination puppy (differs from the classes' "under 6 months").
 const entryRules = [
-  'Best for local puppies from their second set of vaccinations, up to around 18 weeks old.',
+  'Best for puppies from their second set of vaccinations, up to around 18 weeks old. Your puppy boards with us for the month; families near Hastings can choose to have them home in the evenings.',
   'Vaccinations in progress or up to date — DHP, Leptospirosis and Kennel Cough (the same set our day school asks for). If your pup is mid-course, get in touch and we’ll plan the right start date.',
   'A short chat or free consult first, so we can build the month around your puppy — and be honest if a different route would suit them better.',
 ];
@@ -141,11 +141,11 @@ const faqs = [
   },
   {
     q: 'How is it different from Board & Train?',
-    a: 'Board & Train is residential — your dog lives with us — and is often the right call for older dogs or serious behavioural issues. This is full-day puppy school with overnight stays woven in for the separation-anxiety work, so your pup is home with you most nights.',
+    a: 'Both are month-long programmes where your puppy boards with us. Board & Train is the route we take for older dogs and for serious behavioural work; puppy school is built around structured socialisation, real-world outings and the habits that are easiest to lay down while your puppy is still young. If you are not sure which suits yours, have a chat with us — we would rather point you at the right one than sell you this one.',
   },
   {
-    q: 'Will the overnight stays upset my puppy?',
-    a: 'No — that’s rather the point. Stays are gentle, gradual and in good company, and they teach your puppy that being apart from you is nothing to fear. Preventing separation anxiety now is far kinder than trying to fix it later.',
+    q: 'Will boarding upset my puppy?',
+    a: 'No — that’s rather the point. Nights with us are gentle, gradual and in good company, and they teach your puppy that being apart from you is nothing to fear. Preventing separation anxiety now is far kinder than trying to fix it later. Families near Hastings who would rather ease into it can have their puppy home in the evenings.',
   },
   {
     q: 'Is my puppy too young, or too nervous?',
@@ -165,7 +165,7 @@ const serviceLd = buildServiceSchema({
   path: '/comprehensive-puppy-training',
   name: 'Puppy School',
   description:
-    'A full-day, trainer-led puppy school month in Hastings and St Leonards: structured socialisation, real-world confidence and separation-anxiety prevention, with your puppy home with you.',
+    'A month of trainer-led puppy school near Hastings: your puppy boards with us, with structured socialisation, real-world outings and separation-anxiety prevention built into every day.',
   serviceType: 'Puppy training',
   // `plan` is a .find() so TS widens it to Offering|undefined; the page already
   // dereferences it throughout, so assert it as membership-plans.astro does.
@@ -182,6 +182,7 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
   title="Puppy School in Hastings & St Leonards | The Fairy Tails"
   description="Puppy school in Hastings & St Leonards: full-day, trainer-led puppy training and structured socialisation that builds real-world confidence, day by day."
   path="/comprehensive-puppy-training"
+  updated="2026-07-18"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -232,9 +233,9 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
           <span class="hero-line block">the <em class="squiggle not-italic">rest of their life</em></span>
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
-          One month of full-day, trainer-led training and structured socialisation — we introduce your
-          puppy to the world so they grow up confident, settled and easy to live with. For local pups
-          from their second vaccinations, up to 18 weeks.
+          One month of trainer-led training and structured socialisation, boarding with us — we
+          introduce your puppy to the world so they grow up confident, settled and easy to live with.
+          For pups from their second vaccinations, up to 18 weeks.
         </p>
         <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
           <a href="#enquire" class="btn btn-honey">
@@ -257,7 +258,7 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
       <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
         <li class="paw-bullet flex items-center text-moss-700">Full days with our trainers — we do the hard work</li>
         <li class="paw-bullet flex items-center text-moss-700">Socialised with all breeds, shapes and sizes</li>
-        <li class="paw-bullet flex items-center text-moss-700">Overnight stays that head off separation anxiety</li>
+        <li class="paw-bullet flex items-center text-moss-700">Boards with us — settling without you, learned early</li>
       </ul>
     </div>
 
@@ -293,6 +294,38 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
             A blank canvas — let’s make it count
           </figcaption>
         </figure>
+      </div>
+    </section>
+
+    <!-- ============ QUICK ANSWER ============
+         A deliberate 134-167 word, self-contained answer to the definition-shaped
+         question an owner actually asks ("what is puppy school?"). Sits high on the
+         page because AI assistants take ~44% of their citations from the first 30%
+         of a page, and it must stay quotable WHOLE.
+         ⚠️ FACTS (owner, 2026-07-18): the puppy BOARDS with us for the month, and the
+         month is open to local AND non-local puppies — this supersedes the 2026-06-30
+         record that had it day-only and local-only. Do not reintroduce "home with you
+         most nights". Sits on cream-50 with no HillDivider so the band chain below
+         (cream-50 -> cream-100) stays valid. NOT added to `faqs`: that array is the
+         rendered accordion AND the FAQPage schema. -->
+    <section class="mx-auto max-w-6xl px-4 py-20 sm:py-28" data-section="quick-answer">
+      <div class="max-w-3xl">
+        <p class="eyebrow text-honey-700" data-reveal>In short</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          What is <em class="squiggle not-italic">puppy school</em>?
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+          Puppy school is a one-month programme for puppies up to 18 weeks old, at our licensed
+          countryside base near Hastings ({business.licence.authority} licence {business.licence.number}).
+          Your puppy boards with us for the month and spends their days with our trainers — families
+          near Hastings can choose to have them home in the evenings. It costs {gbp(plan!.price)} for the
+          month. Each day alternates time on and time off: a calm arrival, settling before anything else,
+          structured play with carefully chosen dogs of different breeds and sizes, proper rest, then
+          something new woven in — a new surface, a new sound, a new face. Real-world outings are part of
+          the lesson: towns, cafés, transport and busy parks. Boarding is deliberate too — a puppy who
+          learns early to settle without you is a puppy who does not develop separation anxiety later. The
+          month ends with a handover, so the training holds once your puppy is home.
+        </p>
       </div>
     </section>
 
@@ -438,8 +471,8 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
             </h2>
             <p class="mt-5 leading-relaxed text-cream-100" data-reveal>
               One of the kindest things you can teach a young puppy is that being apart from you is nothing
-              to fear. Overnight stays with us, woven into the month, teach your puppy to settle without
-              you — calmly, in good company.
+              to fear. Boarding with us for the month teaches your puppy to settle without you — calmly,
+              in good company, and long before it can turn into a problem.
             </p>
             <p class="mt-4 leading-relaxed text-cream-100" data-reveal>
               It matters more than most people realise. Separation anxiety is one of the hardest
@@ -451,8 +484,8 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
             <div class="mt-7 rounded-2xl bg-moss-900/60 p-6" data-reveal>
               <CouncilRating licence={true} size="md" />
               <p class="mt-4 leading-relaxed text-cream-100">
-                Our overnight stays are on fully licensed premises. For dogs who already struggle with
-                separation, our residential
+                Your puppy boards on fully licensed premises. For dogs who already struggle with
+                separation, our
                 <a href="/dog-boarding-school" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Board &amp; Train</a>
                 tackles it head-on — <a href="/archiestory" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Archie’s story</a>
                 is a good example.

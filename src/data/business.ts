@@ -43,6 +43,16 @@ export const business = {
     instagram: 'https://www.instagram.com/fairytails_dogschool/',
   },
 
+  // The site's byline identity. Every blog post is written under this name, so
+  // it belongs in the data layer rather than hard-coded in the post template —
+  // and it is emitted with a stable @id (see data/schema.ts) so the posts
+  // resolve to ONE person rather than one anonymous Person node per post.
+  // No `url` yet: there is no author page to point at, and Google's Rich
+  // Results Test treats author.url as optional. Don't invent one.
+  author: {
+    name: 'Kamal Singh',
+  },
+
   // Council licensing under the Animal Welfare (Licensing of Activities
   // Involving Animals) (England) Regulations 2018. Displaying the licence
   // number is a legal requirement for a licensed premises — it lives in the

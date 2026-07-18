@@ -4,7 +4,7 @@ import '@fontsource-variable/karla';
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { business } from '../data/business';
-import { buildSiteGraph } from '../data/schema';
+import { buildSiteGraph, ORG_ID, WEBSITE_ID } from '../data/schema';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ConsentBanner from '../components/ConsentBanner.astro';
@@ -17,10 +17,44 @@ interface Props {
   ogImage?: string | undefined;
   /** og:type for this template. 'article' for blog posts; 'website' otherwise. */
   ogType?: string | undefined;
+  /**
+   * ISO date (YYYY-MM-DD) of the last GENUINE content review of this page.
+   *
+   * Renders a visible "last reviewed and updated <Month Year>" line and emits a
+   * WebPage node carrying dateModified. Freshness is a real ranking and
+   * AI-citation signal (the <3-months cohort is cited ~3x more often), but the
+   * date is only worth having if it is TRUE: bump it when the page's content
+   * genuinely changes, never on a routine rebuild, and never automatically from
+   * the build clock — a date that drifts ahead of the content is a lie we would
+   * be telling on every page at once.
+   */
+  updated?: string | undefined;
 }
 
-const { title, description, path, ogImage, ogType = 'website' } = Astro.props;
+const { title, description, path, ogImage, ogType = 'website', updated } = Astro.props;
 const canonical = `${business.domain}${path === '/' ? '' : path}`;
+const updatedDisplay = updated
+  ? new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
+      new Date(`${updated}T00:00:00Z`)
+    )
+  : null;
+// A WebPage node ONLY when the page states a real review date — it exists to
+// carry dateModified. It references the one business entity and the one
+// WebSite by @id rather than restating either (see data/schema.ts).
+const webPageLd = updated
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: title,
+      description,
+      dateModified: updated,
+      isPartOf: { '@id': WEBSITE_ID },
+      about: { '@id': ORG_ID },
+      inLanguage: 'en-GB',
+    }
+  : null;
 const gtmId = business.tracking.gtm;
 // The ONE business entity, emitted once per page. Every other JSON-LD node on
 // the site references it by @id rather than restating it — see data/schema.ts.
@@ -36,6 +70,7 @@ const siteGraph = buildSiteGraph();
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <script type="application/ld+json" set:html={JSON.stringify(siteGraph)} is:inline />
+    {webPageLd && <script type="application/ld+json" set:html={JSON.stringify(webPageLd)} is:inline />}
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -97,6 +132,13 @@ const siteGraph = buildSiteGraph();
     <Header />
     <main>
       <slot />
+      {
+        updatedDisplay && (
+          <p class="mx-auto max-w-6xl px-4 pt-12 text-center text-sm text-bark-500">
+            This page was last reviewed and updated <time datetime={updated}>{updatedDisplay}</time>.
+          </p>
+        )
+      }
     </main>
     <Footer />
     <ConsentBanner />

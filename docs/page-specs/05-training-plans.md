@@ -20,7 +20,7 @@
 | 10 | **Primary page CTA** | **Book the FREE phone consult** (Acuity `56694430`) — the low-friction "not sure which plan?" action, repeated in hero + empty state + closing band. EnquiryForm is secondary. |
 | 11 | **Hero media** | **Video loop hero** (lazy `data-hero-video` pattern) cut from the March reserve clips via the FFmpeg tonemap pipeline. **Owner picks the clip** — Claude extracts candidate stills from the reserves and presents them at the hero/animation pass (needs frame extraction, so deferred out of the interview). Prefer a clip that reads as "a range of training." |
 | 12 | **Copy** | **Claude drafts, owner corrects on preview** — headline, intro, and each card's one-line "best for", written from the existing site voice + pricing data; flagged as drafts. |
-| 13 | **Puppy-product positioning** (owner, 2026-07-06) | **Comprehensive Puppy Training** = *trainer-led, labour-intensive* (our trainers do the heavy lifting; puppy is with us full-day). **Puppy Training Classes** = *instructional, parent-led* (we teach you; you put in the work at home). Use this to write the two puppy cards' "best for" lines and keep them clearly distinct. |
+| 13 | **Puppy-product positioning** (owner, 2026-07-06) | **Comprehensive Puppy Training** = *trainer-led, labour-intensive* (our trainers do the heavy lifting; ~~puppy is with us full-day~~ **corrected 2026-07-18 (owner): the puppy BOARDS with us for the month** — "boards with us full stop"; open to local **and** non-local, with local families able to *opt* for more evenings at home). **Puppy Training Classes** = *instructional, parent-led* (we teach you; you put in the work at home). Use this to write the two puppy cards' "best for" lines and keep them clearly distinct. ⚠️ **This contrast (vs Classes) is unaffected — but the contrast vs `board-train-puppy` is now an OPEN QUESTION awaiting the owner (both board); don't write a card line that invents one.** |
 | 14 | **Comprehensive Puppy = its own page** (owner, 2026-07-06) | Comprehensive Puppy Training gets a **dedicated page** at `/comprehensive-puppy-training`, **in the main nav as "Puppy School"** (owner update — the primary puppy offer). So its grid-card CTA → the new page, NOT the free consult and NOT `/intensive-dog-training`. |
 | 15 | **Budget bands = TWO only** (owner, 2026-07-06) | `pay-as-you-go` (£0–£175) / `programme` (£1,200+). Natural price gap; no middle band. |
 
@@ -48,11 +48,13 @@
 | Boarding School for Dogs | adult | behaviour, obedience | residential | programme |
 | Holiday Board & Train | any | obedience, socialisation | residential | programme |
 | Intensive Dog Training | adult | behaviour | day-based | programme |
-| Comprehensive Puppy Training | puppy | socialisation, obedience | day-based | programme |
+| Comprehensive Puppy Training | puppy | socialisation, obedience | ~~day-based~~ **residential** ¹ | programme |
 | Puppy Training Classes | puppy | obedience, socialisation | group-class | pay-as-you-go |
 | One to One Dog Training | any | behaviour, obedience | one-to-one | pay-as-you-go |
 | Dog Social Walks | any | socialisation, enrichment | walk | pay-as-you-go |
 | Free Phone Consultation | any | (always shown) | — | pay-as-you-go |
+
+¹ **Corrected 2026-07-18 (owner fact correction).** Comprehensive Puppy Training's Format was recorded as `day-based` on the 2026-06-30 understanding that the puppy went home each evening. The owner has confirmed **the puppy boards with us for the month** (local **and** non-local; local families may merely *opt* for more evenings at home), so its Format chip is **`residential`**. **The live page has already been changed to match (2026-07-18) — do not revert it to `day-based`.**
 
 *Free Consult is never filtered out (it's the universal fallback). Budget = TWO bands only (owner 2026-07-06): `pay-as-you-go` (£0–£175) and `programme` (£1,200+). The Comprehensive Puppy card links to its own new dedicated page (decision #14), not the free consult.*
 

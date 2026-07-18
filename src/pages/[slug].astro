@@ -6,7 +6,7 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import HillDivider from '../components/HillDivider.astro';
 import { business } from '../data/business';
-import { ORG_ID, WEBSITE_ID } from '../data/schema';
+import { ORG_ID, WEBSITE_ID, buildAuthorNode } from '../data/schema';
 
 export async function getStaticPaths() {
   // Build-time collision guard (WEBSITE-PLAN.md): a post slug must never
@@ -94,7 +94,9 @@ const jsonLd = {
   datePublished: pubDate.toISOString(),
   ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
   image: `${business.domain}${heroOg.src}`,
-  author: { '@type': 'Person', name: 'Kamal Singh' },
+  // One @id-anchored person across every post (data/schema.ts) — a bare
+  // Person node per post read as a different author each time.
+  author: buildAuthorNode(),
   // Reference the ONE business entity rather than restating it as a bare
   // Organization — that stub used to read as a separate org (see data/schema.ts).
   publisher: { '@id': ORG_ID },
@@ -126,7 +128,7 @@ const jsonLd = {
           {title}
         </h1>
         <p class="mt-5 text-sm font-bold text-cream-200/90" data-post-byline>
-          Kamal Singh
+          {business.author.name}
           <span class="mx-2 text-honey-400" aria-hidden="true">•</span>
           <time datetime={pubDate.toISOString()}>{dateFmt.format(pubDate)}</time>
         </p>
