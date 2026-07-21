@@ -157,7 +157,7 @@ const tracks = [
 // Entry criteria that are TRUE FOR BOTH TRACKS. Anything that differs by track
 // belongs in `tracks` above, never here.
 const entryRules = [
-  `Best for puppies aged 12–16 weeks, from their second set of vaccinations. ${plan!.eligibility} is the window this course is built around.`,
+  `${plan!.eligibility}, from their second set of vaccinations — that is the window this course is built around.`,
   'Vaccinations in progress or up to date — DHP, Leptospirosis and Kennel Cough (the same set our day school asks for). If your pup is mid-course, get in touch and we’ll plan the right start date.',
   'A short chat or free consult first, so we can build the four weeks around your puppy — and be honest if a different route would suit them better.',
 ];
@@ -354,8 +354,18 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           What is <em class="squiggle not-italic">puppy school</em>?
         </h2>
+        {/* 🔴 THE ONE SANCTIONED EXCEPTION TO "NEVER RESTATE THE BOARDING RULE IN PROSE"
+            (CLAUDE.md / SEO.md locked #13). This passage must stay a self-contained,
+            134–167-word answer that an AI assistant can quote WHOLE, so it cannot be
+            assembled from `arrangements.options` without wrecking its readability and
+            word count. The age window IS interpolated below so it can never drift; the
+            boarding sentence is hand-written and is therefore a SECOND copy of a fact
+            that has already flipped four times.
+            ⚠️ RULE: any edit to `pricing.json` `board-train-puppy.arrangements` REQUIRES
+            re-reading this paragraph in the same commit, and re-counting it into the
+            134–167 band from the BUILT html. This is in the §4 change gate. */}
         <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
-          Puppy school is a four-week programme for puppies aged 12–16 weeks, at our licensed
+          Puppy school is a four-week programme for {plan!.eligibility.toLowerCase()}, at our licensed
           countryside base near Hastings ({business.licence.authority} licence {business.licence.number}).
           Your puppy boards with us and spends their days with our trainers. Puppies travelling to us
           from London and beyond board for the whole four weeks; families local to Hastings can keep

@@ -131,6 +131,11 @@ const meta: Record<string, PlanMeta> = {
   },
 };
 
+// ⚠️ THE PROSE COUNT IS HAND-WRITTEN AND MUST MATCH `order.length`.
+// It appears THREE times: the hero line, the trust strip and the intro
+// paragraph. It said "Nine" for a day after the 2026-07-21 SKU merge took
+// this list from 9 to 8 — counting the rendered cards is NOT the same as
+// reading the copy around them. Change all three whenever this array changes.
 const order = [
   'board-train-puppy',
   'board-train-adult',
@@ -258,7 +263,7 @@ const serviceLd = buildServiceSchema({
           <span class="hero-line block">to train in Hastings</span>
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
-          Nine honest ways to train with us — from a {socialWalkPrice} social walk to a live-in Board &amp; Train.
+          Eight honest ways to train with us — from a {socialWalkPrice} social walk to a live-in Board &amp; Train.
           Filter to your dog, or let a free phone call point you to the best fit.
         </p>
         <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
@@ -282,7 +287,7 @@ const serviceLd = buildServiceSchema({
       <ul
         class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4"
       >
-        <li class="paw-bullet flex items-center text-moss-700">Nine ways to train — honestly</li>
+        <li class="paw-bullet flex items-center text-moss-700">Eight ways to train — honestly</li>
         <li class="paw-bullet flex items-center text-moss-700">From {socialWalkPrice} to live-in residential</li>
         <li class="paw-bullet flex items-center text-moss-700">A free call to point you right</li>
         <li class="paw-bullet flex items-center text-moss-700">5-star council-licensed premises</li>
@@ -297,7 +302,7 @@ const serviceLd = buildServiceSchema({
       </h2>
       <p class="mt-6 text-lg leading-relaxed text-bark-700" data-reveal>
         The right plan depends on your dog's age, what you're trying to fix, how hands-on you want to
-        be, and your budget. Below are the nine ways we can help. Use the filters to narrow them down —
+        be, and your budget. Below are the eight ways we can help. Use the filters to narrow them down —
         or skip all that and book a free phone call. We'll point you to the honest best fit, even if
         it's the cheapest option on the page.
       </p>
