@@ -35,11 +35,13 @@ A location page ships ONLY if ≥3 sections could **not** be find-replaced to an
 
 | Programme (`id`) | Price | Unit | Large-dog | Eligibility |
 |---|---|---|---|---|
-| `board-train-puppy` | £1,200 | for 4 weeks | — | Puppies 12–16 weeks |
+| `board-train-puppy` ¹ | £1,200 | for 4 weeks | — | Puppies 12–16 weeks |
 | `board-train-adult` **(flagship, honey ring)** | £2,500 | for 8–10 weeks | +£300 | Adult dogs 16 wks+; rescues case-by-case |
 | `board-train-holiday` | £1,500 | for 4 weeks | +£300 | Dogs boarding while you're away |
 
 **Travel is charged separately and never bundled into a programme price** — `transport.longDistancePerMile` (£2) × one-way miles, per journey.
+
+¹ **2026-07-21 — `board-train-puppy` is now THE single residential puppy course.** The owner confirmed the two £1,200 puppy programmes were one product (*"they're one product"*), so `puppy-intensive` ("Comprehensive Puppy Training") was **deleted** and absorbed into this SKU, which gained `publicName` **"Puppy School"** and an **`arrangements`** block. **This matters for London specifically:** `arrangements.nonLocal` is the rule for families travelling to us — **boarding is MANDATORY for the four-week course** (home at weekends optional, or stay right through), versus local Hastings families for whom boarding is optional and flexible. **Never mix the two groups' requirements in one passage** (SEO.md locked #13) — render from the data, don't paraphrase. Its dedicated page is `/comprehensive-puppy-training`.
 
 ## Derived-figure formula (decision #4 — derive at build, from data only)
 
