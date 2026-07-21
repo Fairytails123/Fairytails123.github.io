@@ -13,12 +13,20 @@ interface Props {
 
 const { service = '', page } = Astro.props;
 
+// ⚠️ THESE STRINGS ARE A DATA CONTRACT, not just labels. Each is posted to n8n as the
+// `service` field AND pushed to GA4 as the `service` param on `enquiry_submitted`, so
+// renaming one splits historic reporting on that value. Change deliberately, and note
+// the date here so the split is explainable.
+// 2026-07-21 (owner-approved): 'Comprehensive Puppy Training' -> 'Puppy School'. The
+// former named a SKU that no longer exists (merged into `board-train-puppy`), so every
+// puppy enquiry was being attributed to a deleted product. "Puppy School" is the
+// product's public name across the nav, the page title and the page itself.
 const services = [
   'Board & Train',
   'Intensive Dog Training',
   'Dog Day School',
   'Puppy Training Classes',
-  'Comprehensive Puppy Training',
+  'Puppy School',
   'Membership Plans',
   'Dog Grooming',
   'General enquiry',

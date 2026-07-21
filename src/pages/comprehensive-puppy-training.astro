@@ -930,7 +930,9 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
           </p>
         </div>
         <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
-          <EnquiryForm service="Comprehensive Puppy Training" page="/comprehensive-puppy-training" />
+          {/* Must match a string in EnquiryForm's `services` array exactly, or the
+              dropdown silently preselects nothing. Renamed with it on 2026-07-21. */}
+          <EnquiryForm service="Puppy School" page="/comprehensive-puppy-training" />
         </div>
         <p class="mt-8 text-center leading-relaxed text-cream-200">
           Prefer to talk first? Call us on

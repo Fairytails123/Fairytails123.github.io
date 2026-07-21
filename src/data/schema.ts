@@ -194,6 +194,15 @@ export function buildServiceSchema(opts: {
       name: opts.name,
       itemListElement: opts.offerings.map((o) => ({
         '@type': 'Offer',
+        // Stable, page-independent @id — the same house rule as ORG_ID/WEBSITE_ID: one
+        // entity, referenced by @id, never restated. Without it, an offering sold from
+        // two pages emitted two Offer nodes identical except for the self-referencing
+        // `url`, which reads as two commercial claims for one product. Added 2026-07-21
+        // when the merged `board-train-puppy` ended up on both /dog-boarding-school
+        // (as one tier of the range) and /comprehensive-puppy-training (its dedicated
+        // page). Schema-only, so it is permitted under the pillar's recovery freeze —
+        // same class as the 2026-07-16 Service+Offer addition.
+        '@id': `${business.domain}/#offer-${o.id}`,
         name: o.name,
         description: offerDescription(o),
         price: o.price,
