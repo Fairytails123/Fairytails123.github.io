@@ -25,7 +25,8 @@ import terrierGrass from '../assets/pages/puppy-training-classes/puppy-terrier-g
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
 
 const puppyClasses = pricing.offerings.find((o) => o.id === 'puppy-classes')!;
-const puppyIntensive = pricing.offerings.find((o) => o.id === 'puppy-intensive')!;
+// Merged 2026-07-21: `puppy-intensive` absorbed into `board-train-puppy` (one product).
+const puppyIntensive = pricing.offerings.find((o) => o.id === 'board-train-puppy')!;
 const dayFull = pricing.offerings.find((o) => o.id === 'day-full')!;
 
 // --- Aims (verbatim-tidied) ---

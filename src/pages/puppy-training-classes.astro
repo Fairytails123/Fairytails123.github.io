@@ -41,7 +41,7 @@ const realWorld = [
 
 const plan = pricing.offerings.find((o) => o.id === 'puppy-classes');
 const puppyBoard = pricing.offerings.find((o) => o.id === 'board-train-puppy');
-const puppyIntensive = pricing.offerings.find((o) => o.id === 'puppy-intensive');
+// (`puppyIntensive` removed 2026-07-21 — that SKU merged into `board-train-puppy`.)
 
 const gbp = (n) => `£${Number.isInteger(n) ? n.toLocaleString('en-GB') : n.toFixed(2)}`;
 
@@ -728,7 +728,9 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
           Not quite the right fit? <em class="squiggle not-italic">There’s a route for every pup</em>
         </h2>
 
-        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
+        {/* 2 cards since the 2026-07-21 SKU merge (was 3 — two of them were the same
+            product). Grid dropped 3 -> 2 cols so there is no empty column. */}
+        <div class="mt-12 grid gap-6 md:grid-cols-2" data-stagger>
           <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
             <h3 class="font-display text-xl font-bold text-moss-800">Do-it-yourself puppy course</h3>
             <p class="mt-1 text-sm font-bold text-bark-500">Free · at your own pace</p>
@@ -739,8 +741,14 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
             <a href="/puppycourse" class="btn btn-moss mt-6 w-full">Start the free course</a>
           </article>
 
+          {/* ⚠️ 2026-07-21: these were TWO cards — `board-train-puppy` and `puppy-intensive` —
+              shown side by side as if they were different products. The owner confirmed they are
+              ONE (the SKUs merged; see pricing.json `board-train-puppy._mergeNote`), so they are
+              now one card. The old second card also carried a FALSE claim, "home every evening,
+              trained all day", which the 2026-07-18 boarding correction had missed because it
+              named no dates. Do not re-split this card, and never reinstate that line. */}
           <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
-            <h3 class="font-display text-xl font-bold text-moss-800">{puppyBoard.name}</h3>
+            <h3 class="font-display text-xl font-bold text-moss-800">{puppyBoard.publicName}</h3>
             <p class="mt-1 text-sm font-bold text-bark-500">{puppyBoard.eligibility}</p>
             <p class="mt-4">
               <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyBoard.price)}</span>
@@ -748,23 +756,10 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
             </p>
             <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
               The full residential start: toilet training, obedience foundations and structured
-              socialisation, with daily reports home.
+              socialisation, with daily reports home. Puppies travelling to us board for the whole
+              four weeks; local families can keep the boarding flexible.
             </p>
-            <a href="/dog-boarding-school" class="btn btn-moss mt-6 w-full">Boarding School for Puppies</a>
-          </article>
-
-          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
-            <h3 class="font-display text-xl font-bold text-moss-800">{puppyIntensive.name}</h3>
-            <p class="mt-1 text-sm font-bold text-bark-500">{puppyIntensive.eligibility}</p>
-            <p class="mt-4">
-              <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyIntensive.price)}</span>
-              <span class="font-bold text-bark-500"> {puppyIntensive.unit}</span>
-            </p>
-            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
-              Day-school days with dedicated training woven through — home every evening, trained
-              all day.
-            </p>
-            <a href="/comprehensive-puppy-training" class="btn btn-moss mt-6 w-full">Comprehensive puppy training</a>
+            <a href="/comprehensive-puppy-training" class="btn btn-moss mt-6 w-full">Puppy School</a>
           </article>
         </div>
       </div>

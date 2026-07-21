@@ -20,7 +20,6 @@ import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
 import imgBoardPuppy from '../assets/pages/training-real-world/rw-park-frankie-278656.webp';
 import imgBoardAdult from '../assets/pages/training-real-world/rw-town-river-247356.webp';
 import imgIntensive from '../assets/pages/training-real-world/rw-town-rocco-736596.webp';
-import imgCompPuppy from '../assets/pages/training-real-world/rw-cafe-ruby-495919.webp';
 import imgHoliday from '../assets/pages/training-real-world/rw-sea-tilly-990468.webp';
 import imgClasses from '../assets/pages/training-real-world/rw-cafe-henry-301777.webp';
 import imgOneToOne from '../assets/pages/training-real-world/rw-park-henry-555952.webp';
@@ -47,13 +46,17 @@ type PlanMeta = {
 };
 
 const meta: Record<string, PlanMeta> = {
+  // The single residential puppy course (the former `puppy-intensive` merged into this
+  // one on 2026-07-21 — owner: "they're one product"). Its dedicated page is
+  // /comprehensive-puppy-training under the public name "Puppy School", so the CTA now
+  // routes there rather than to the pillar, which presents it as one tier of the range.
   'board-train-puppy': {
-    bestFor: 'Puppies 12–16 weeks who can live in with us and get the deepest possible start.',
+    bestFor: 'Puppies 12–16 weeks who board with us and get the deepest possible start.',
     age: ['puppy'],
     goal: ['obedience', 'socialisation'],
     format: ['residential'],
     budget: ['programme'],
-    cta: { label: 'Explore Board & Train', href: '/dog-boarding-school' },
+    cta: { label: 'Explore Puppy School', href: '/comprehensive-puppy-training' },
     img: imgBoardPuppy,
     imgAlt: 'A young dog learning to settle calmly on a walk during training',
   },
@@ -76,21 +79,6 @@ const meta: Record<string, PlanMeta> = {
     cta: { label: 'Explore Intensive', href: '/intensive-dog-training' },
     img: imgIntensive,
     imgAlt: 'A dog focused on its handler amid the distractions of a town centre',
-  },
-  'puppy-intensive': {
-    bestFor: 'Pups 12–16 weeks — they board with us and our trainers do the day-in, day-out heavy lifting.',
-    age: ['puppy'],
-    goal: ['socialisation', 'obedience'],
-    // Boards for the four weeks (owner, 2026-07-18 + 2026-07-21), so it must
-    // appear under the Residential filter — a family filtering for residential
-    // training was previously never shown it. Local families may keep boarding
-    // flexible, but the product is residential by default: see the boarding
-    // rule in pricing.json `puppy-intensive.arrangements` (SEO.md locked #13).
-    format: ['residential'],
-    budget: ['programme'],
-    cta: { label: 'Explore Puppy School', href: '/comprehensive-puppy-training' },
-    img: imgCompPuppy,
-    imgAlt: 'A puppy settled calmly beside a café table during socialisation training',
   },
   'board-train-holiday': {
     bestFor: "Dogs boarding while you're away — a holiday that comes home better trained.",
@@ -147,7 +135,6 @@ const order = [
   'board-train-puppy',
   'board-train-adult',
   'intensive-dog-training',
-  'puppy-intensive',
   'board-train-holiday',
   'puppy-classes',
   'one-to-one',
@@ -418,7 +405,11 @@ const serviceLd = buildServiceSchema({
                 )}
                 <div class="flex flex-1 flex-col p-6">
                   {plan.elevated && <p class="eyebrow text-honey-700">Start here</p>}
-                  <h3 class="font-display text-xl font-bold text-moss-800">{plan.name}</h3>
+                  {/* `publicName` where a plan has one (only the merged residential puppy
+                      course does, "Puppy School"), so the card title, its CTA and the page it
+                      lands on all say the same thing. The formal `name` stays on the pillar,
+                      which presents it as one tier of the Board & Train range. */}
+                  <h3 class="font-display text-xl font-bold text-moss-800">{plan.publicName ?? plan.name}</h3>
                   <p class="mt-2">
                     <span class="font-display text-3xl font-bold text-moss-700">
                       {plan.price === 0 ? 'Free' : gbp(plan.price)}

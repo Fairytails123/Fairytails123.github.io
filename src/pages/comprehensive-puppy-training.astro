@@ -48,9 +48,16 @@ const compReal = [
   { img: cwTillySea, name: 'Tilly', caption: 'Settling by the seafront' },
 ];
 
-const plan = pricing.offerings.find((o) => o.id === 'puppy-intensive');
+// ⚠️ MERGED 2026-07-21 (owner: "they're one product"). This page used to render a
+// separate `puppy-intensive` SKU. It was byte-identical to `board-train-puppy` on
+// price, unit and eligibility once the owner corrected them, so the two were merged
+// into `board-train-puppy` — the single residential puppy course. This page remains
+// its dedicated page under the public name "Puppy School" (`publicName` in the data);
+// /dog-boarding-school presents the same course as part of the Board & Train range.
+const plan = pricing.offerings.find((o) => o.id === 'board-train-puppy');
 const puppyClasses = pricing.offerings.find((o) => o.id === 'puppy-classes');
-const puppyBoard = pricing.offerings.find((o) => o.id === 'board-train-puppy');
+// (`puppyBoard` removed 2026-07-21 — it was `board-train-puppy`, which IS this page's
+// product since the merge. `plan` above is the single source now.)
 
 const gbp = (n) => `£${Number.isInteger(n) ? n.toLocaleString('en-GB') : n.toFixed(2)}`;
 
@@ -122,7 +129,7 @@ const benefits = [
 ];
 
 // ⚠️ THE BOARDING RULE IS DATA, NOT COPY (owner, 2026-07-21 — SEO.md locked #13).
-// It lives in pricing.json `puppy-intensive.arrangements` because every previous
+// It lives in pricing.json `board-train-puppy.arrangements` because every previous
 // version lived only in page prose, and each session that re-derived it from copy
 // got it wrong — the fact flipped FOUR times between 2026-06-30 and 2026-07-21.
 // Render from `tracks` below. NEVER restate the rule in prose, and NEVER let one
@@ -368,7 +375,7 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
          strategy for these two groups clearly separated so that the requirements for
          local and non-local puppies are not mixed together." This section is that
          separation. EVERY word of the boarding rule renders from
-         pricing.json `puppy-intensive.arrangements` via `tracks` — do NOT hard-code
+         pricing.json `board-train-puppy.arrangements` via `tracks` — do NOT hard-code
          it here, and do NOT write a sentence that mixes the two groups.
          Stays on cream-50 so the band chain (cream-50 -> cream-100 below) is intact. -->
     <section class="mx-auto max-w-6xl px-4 pb-20 sm:pb-28" data-section="tracks">
@@ -754,7 +761,11 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
           <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 text-bark-700 shadow-[var(--shadow-polaroid)]" data-reveal>
             <div class="flex items-start justify-between gap-4">
               <div>
-                <h3 class="font-display text-2xl font-bold text-moss-800">{plan.name}</h3>
+                {/* `publicName` ("Puppy School"), not `name` ("Boarding School for Puppies"):
+                    since the 2026-07-21 SKU merge this page renders `board-train-puppy`, and
+                    the pillar keeps the formal range name. This page is the product's dedicated
+                    page under its public name — the duality is deliberate (SEO.md #9). */}
+                <h3 class="font-display text-2xl font-bold text-moss-800">{plan.publicName}</h3>
                 <p class="mt-1 text-sm font-bold text-bark-500">{plan.eligibility}</p>
               </div>
               <Image
@@ -872,7 +883,11 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
           Not quite the right fit? <em class="squiggle not-italic">There’s a route for every pup</em>
         </h2>
 
-        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
+        {/* ⚠️ 2026-07-21: the "Boarding School for Puppies" card was REMOVED from this row.
+            It is the SAME product as this page (the SKUs merged — see the frontmatter note),
+            so it was offering the reader this course as an alternative to itself. Two cards
+            now: the lighter parent-led route, and the free DIY course. Do not re-add it. */}
+        <div class="mt-12 grid gap-6 md:grid-cols-2" data-stagger>
           <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
             <h3 class="font-display text-xl font-bold text-moss-800">{puppyClasses.name}</h3>
             <p class="mt-1 text-sm font-bold text-bark-500">{puppyClasses.eligibility}</p>
@@ -885,20 +900,6 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
               work at home. Includes three day-school intro sessions.
             </p>
             <a href="/puppy-training-classes" class="btn btn-moss mt-6 w-full">Puppy Training Classes</a>
-          </article>
-
-          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
-            <h3 class="font-display text-xl font-bold text-moss-800">{puppyBoard.name}</h3>
-            <p class="mt-1 text-sm font-bold text-bark-500">{puppyBoard.eligibility}</p>
-            <p class="mt-4">
-              <span class="font-display text-3xl font-bold text-moss-700">{gbp(puppyBoard.price)}</span>
-              <span class="font-bold text-bark-500"> {puppyBoard.unit}</span>
-            </p>
-            <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">
-              The residential version: your puppy <strong class="text-moss-800">lives with us</strong> for
-              the full four weeks — the deepest immersion, with daily reports home.
-            </p>
-            <a href="/dog-boarding-school" class="btn btn-moss mt-6 w-full">Boarding School for Puppies</a>
           </article>
 
           <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">

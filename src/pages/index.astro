@@ -66,9 +66,12 @@ const socialWalks = pricing.offerings.find((o) => o.id === 'social-walks')!;
 
 // Where each supporting service card links (built pages, or enquiry-first where the page isn't live yet)
 const detailHref: Record<string, string> = {
+  // The residential puppy course keeps pointing at the pillar here (it is presented as
+  // part of the Board & Train range on the homepage). Its dedicated page, under the
+  // public name "Puppy School", is /comprehensive-puppy-training. The former
+  // `puppy-intensive` key was dropped 2026-07-21 when the two SKUs merged.
   'board-train-puppy': '/dog-boarding-school',
   'board-train-holiday': '/dog-boarding-school',
-  'puppy-intensive': '/comprehensive-puppy-training',
   'puppy-classes': '/puppy-training-classes',
   'one-to-one': '#enquire',
   'social-walks': '#enquire',

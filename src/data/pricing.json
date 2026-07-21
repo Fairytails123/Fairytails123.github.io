@@ -23,6 +23,8 @@
       "id": "board-train-puppy",
       "category": "board-train",
       "name": "Boarding School for Puppies",
+      "_mergeNote": "SINGLE SOURCE FOR THE RESIDENTIAL PUPPY COURSE (owner, 2026-07-21). This absorbed the former `puppy-intensive` (\"Comprehensive Puppy Training\", public name \"Puppy School\") — the two were byte-identical on price, unit and eligibility once the owner corrected them, and he confirmed they are ONE product. Board & Train is the residential RANGE (older dogs and puppies, varying lengths and entry criteria); this is its puppy course. It is rendered on BOTH /dog-boarding-school (as part of the range) and /comprehensive-puppy-training (the dedicated page, public name \"Puppy School\"). ⚠️ /dog-boarding-school is under a drop-recovery freeze — name/price/unit/eligibility/features render there, so DO NOT change those fields until the freeze lifts. Adding non-rendered keys (like the two below) is safe. See SEO.md locked #11/#12/#13.",
+      "publicName": "Puppy School",
       "price": 1200,
       "unit": "for 4 weeks",
       "largeDogSurcharge": null,
@@ -34,6 +36,28 @@
         "Structured socialisation",
         "Daily reports + body-cam session videos"
       ],
+      "_arrangementsNote": "THE PUPPY BOARDING RULE — owner's own words, 2026-07-21 (SEO.md locked decision #13). This fact has been owner-confirmed in FOUR shapes (2026-06-30 day-only+local-only · 2026-07-18 both-board reversal · 2026-07-21 local/non-local rule · 2026-07-21 eligibility+unit). It lives HERE, in data, because every previous version lived only in page prose and each session re-derived it and got it wrong. RENDER FROM THIS BLOCK — never restate the rule in copy, and never mix the two groups' requirements in one passage. NOT rendered on the frozen /dog-boarding-school (that page reads name/price/unit/eligibility/features only), so adding it is freeze-safe.",
+      "arrangements": {
+        "local": {
+          "label": "Local to Hastings",
+          "boarding": "optional",
+          "summary": "Boarding is available but optional — the arrangement stays flexible.",
+          "options": [
+            "Home with you each evening",
+            "With us during the week, home at weekends",
+            "Boarding with us for the full four weeks"
+          ]
+        },
+        "nonLocal": {
+          "label": "Travelling to us from London and beyond",
+          "boarding": "required",
+          "summary": "Puppies travelling to us board with us for the four-week course.",
+          "options": [
+            "Home at weekends, if you would prefer that",
+            "With us right through until the course ends"
+          ]
+        }
+      },
       "acuityUrl": null,
       "order": 1
     },
@@ -86,40 +110,6 @@
       ],
       "acuityUrl": null,
       "order": 4
-    },
-    {
-      "id": "puppy-intensive",
-      "category": "training",
-      "name": "Comprehensive Puppy Training",
-      "price": 1200,
-      "unit": "for 4 weeks",
-      "largeDogSurcharge": null,
-      "eligibility": "Puppies 12–16 weeks old",
-      "features": ["Boards with us for the course", "Full days with our trainers", "Structured socialisation"],
-      "_arrangementsNote": "THE PUPPY BOARDING RULE — owner's own words, 2026-07-21 (SEO.md locked decision #13). This fact has been owner-confirmed in FOUR shapes now (2026-06-30 day-only+local-only · 2026-07-18 both-board reversal · 2026-07-21 local/non-local rule · 2026-07-21 eligibility+unit corrected to match board-train-puppy). It lives HERE, in data, because every previous version lived only in page prose and each session re-derived it and got it wrong. RENDER FROM THIS BLOCK — never restate the rule in copy, and never mix the two groups' requirements in one passage.",
-      "arrangements": {
-        "local": {
-          "label": "Local to Hastings",
-          "boarding": "optional",
-          "summary": "Boarding is available but optional — the arrangement stays flexible.",
-          "options": [
-            "Home with you each evening",
-            "With us during the week, home at weekends",
-            "Boarding with us for the full four weeks"
-          ]
-        },
-        "nonLocal": {
-          "label": "Travelling to us from London and beyond",
-          "boarding": "required",
-          "summary": "Puppies travelling to us board with us for the four-week course.",
-          "options": [
-            "Home at weekends, if you would prefer that",
-            "With us right through until the course ends"
-          ]
-        }
-      },
-      "acuityUrl": null,
-      "order": 5
     },
     {
       "id": "puppy-classes",
