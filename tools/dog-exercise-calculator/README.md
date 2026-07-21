@@ -1,15 +1,15 @@
-# tools/dog-walking-calculator — dev kit
+# tools/dog-exercise-calculator — dev kit
 
-The Dog Walking Calculator is a **no-build** web tool: native ES modules, no bundler, no
-dependencies. This folder is its isolation/dev kit and **does not ship**. The tool itself ships from
-`public/`.
+> ⚠️ **INTEGRATED AS AN ASTRO PAGE 2026-07-21 — the paths below are the OLD standalone-bundle layout and are superseded.** The tool ships as **`/dog-exercise-calculator`** (`src/pages/dog-exercise-calculator.astro`), NOT from `public/`. **Edit the engine at `src/scripts/dog-exercise-calculator/{data,engine,copy,ui}.js`** (there is no `public/` copy). Tests: **`npm run test:dog-exercise-calculator`**. Read this folder's `CLAUDE.md` (its top note) for the full picture; §0's sourcing discipline and the engine contract still apply verbatim.
 
-## Where the tool lives
+The dog exercise calculator is a pure-ESM tool (no bundler, no dependencies). This folder is its
+isolation/dev kit and **does not ship**.
 
-**`public/dog-walking-calculator/`** (repo root) → `../../public/dog-walking-calculator/` from here.
+## Where the tool lives (superseded — see the note above)
 
-Astro copies `public/` verbatim into `dist/`, so it is served at **`/dog-walking-calculator/`** with
-zero build wiring. There is only one copy — edit those files directly.
+The engine now lives at **`src/scripts/dog-exercise-calculator/`** (imported by the Astro page).
+The historical standalone layout described below was `public/dog-walking-calculator/` served at
+`/dog-walking-calculator/`; it no longer exists in this repo.
 
 ```
 index.html    markup + module boot
