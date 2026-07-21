@@ -116,7 +116,13 @@ export function buildSiteGraph() {
             closes: business.hours.jsonLd.closes,
           },
         ],
-        sameAs: [business.socials.facebook, business.socials.instagram],
+        // Socials + any NAP-VERIFIED directory profile (see the guard comment on
+        // `business.directoryProfiles` — never add an unverified listing here).
+        sameAs: [
+          business.socials.facebook,
+          business.socials.instagram,
+          ...Object.values(business.directoryProfiles),
+        ],
         areaServed: [...AREA_LOCAL, ...AREA_DESTINATION],
         priceRange: '££',
         // The Hastings Borough Council animal-activity licence — a real,

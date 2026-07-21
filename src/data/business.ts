@@ -43,6 +43,27 @@ export const business = {
     instagram: 'https://www.instagram.com/fairytails_dogschool/',
   },
 
+  // Directory profiles emitted as schema.org `sameAs` — they tell Google "these
+  // listings are the same business as this website", which strengthens the entity.
+  //
+  // ⚠️ ONLY ADD A LISTING HERE ONCE ITS NAP HAS BEEN READ AND VERIFIED CORRECT.
+  // `sameAs` is an endorsement: publishing a listing that still carries the dead
+  // grooming-era mobile (07842 116216) or a Grooming primary category would tell
+  // Google our own NAP is inconsistent — worse than not linking it at all. This
+  // is why the field sat empty and gated from 2026-07-18 (SEO.md §7 P 2.4).
+  //
+  // cylex — VERIFIED 2026-07-21 against business.ts, field by field: name ✓,
+  // full address + TN35 5DT ✓, phone 01424 300668 ✓ (the dead mobile is GONE),
+  // website ✓, hours Mon–Fri 08:00–17:30 + Sat/Sun closed ✓, primary category
+  // Pets & Animals → Pet Services → Dog Training ✓. Page reads "Verified Listing,
+  // updated 17/07/2026". NOTE the PUBLIC profile lives on the TOWN SUBDOMAIN
+  // (hastings.cylex-uk.co.uk) — www.cylex-uk.co.uk 403s/404s, which is what
+  // blocked this for days. Residual (owner, ~1 min, does NOT block sameAs): three
+  // grooming keyword chips still sit in its secondary keyword list.
+  directoryProfiles: {
+    cylex: 'https://hastings.cylex-uk.co.uk/company/the-fairy-tails-k9-centre-27356248.html',
+  },
+
   // The site's byline identity. Every blog post is written under this name, so
   // it belongs in the data layer rather than hard-coded in the post template —
   // and it is emitted with a stable @id (see data/schema.ts) so the posts
