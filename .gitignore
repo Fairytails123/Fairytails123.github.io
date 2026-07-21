@@ -13,6 +13,10 @@ fairytails-image-archive/
 tools/breed-matcher/backups/*
 !tools/breed-matcher/backups/.gitkeep
 
+# dog-exercise-calculator tool — timestamped backups (see tools/dog-exercise-calculator/CLAUDE.md §1)
+tools/dog-exercise-calculator/backups/*
+!tools/dog-exercise-calculator/backups/.gitkeep
+
 # misc
 *.log
 .DS_Store

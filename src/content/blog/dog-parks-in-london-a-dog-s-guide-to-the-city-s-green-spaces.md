@@ -18,6 +18,8 @@ heroAlt: "View across Greenwich Park towards the Old Royal Naval College and the
 
 Hey, dog lovers! Amidst London's bustling areas lies a world of joy for our furry friends. This guide dives into the best 10 dog parks in the city, each a haven of lush greenery and jolly freedom. Perfect for locals and visitors, these parks offer unforgettable adventures for all dog breeds. So, grab your leash and let's uncover London's dog-friendly gems!
 
+Before you set off, it helps to know *how much* walking your dog actually needs — it varies a lot by breed and age. Our free [dog exercise calculator](/dog-exercise-calculator) works out a sensible daily target in seconds.
+
 ## LONDON'S TOP DOG PARKS
 
 ### 1. HAMPSTEAD HEATH DOG PARK

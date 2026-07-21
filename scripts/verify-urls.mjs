@@ -65,8 +65,9 @@ const MANIFEST = [
   { path: '/puppy-week-3', type: 'stub', status: 'built' },
   { path: '/puppy-week-4', type: 'stub', status: 'built' },
   { path: '/puppy-toilet-schdule', type: 'stub', status: 'built' }, // typo slug is verbatim-correct
-  // ---- value-added tools (standalone, self-contained, served verbatim from public/) ----
-  { path: '/breed-matcher/', type: 'page', status: 'built' }, // tools/breed-matcher -> public/breed-matcher/index.html
+  // ---- value-added tools ----
+  { path: '/breed-matcher/', type: 'page', status: 'built' }, // standalone: tools/breed-matcher -> public/breed-matcher/index.html
+  { path: '/dog-exercise-calculator', type: 'page', status: 'built' }, // Astro page (built 2026-07-21): src/pages/dog-exercise-calculator.astro; engine in src/scripts/, dev kit in tools/dog-exercise-calculator
   // ---- intentional 404s ----
   { path: '/staff-resources', type: 'gone', status: 'built' },
   { path: '/internal-management-resources', type: 'gone', status: 'built' },

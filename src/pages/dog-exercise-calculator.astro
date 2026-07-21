@@ -1,0 +1,824 @@
+---
+import { getImage, Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import HillDivider from '../components/HillDivider.astro';
+import { business } from '../data/business';
+import { buildFaqSchema, buildAuthorNode, ORG_ID, absUrl } from '../data/schema';
+
+// The calculator's data + copy — the SAME modules the interactive tool runs on
+// (src/scripts/dog-exercise-calculator). Importing them here lets us server-render
+// the by-breed table, the puppy chart and the sourcing from a single source of
+// truth, so the citable content exists at t=0 with no JavaScript. (This is the
+// deliberate opposite of the bare /breed-matcher pattern, which ships thin.)
+import { BREEDS, BANDS, BAND_ORDER, RULES } from '../scripts/dog-exercise-calculator/data.js';
+import { COPY, formatRange } from '../scripts/dog-exercise-calculator/copy.js';
+
+// Reused harvest photos (Astro dedupes cross-folder imports by hash).
+import heroImg from '../assets/pages/dog-boarding-school/Dog-walk-with-Kam-2880w.webp';
+import puppyRecall from '../assets/pages/puppy-training-classes/puppy-recall.webp';
+import countryPark from '../assets/pages/intensive-dog-training/Intensive-Training-in-the-Country-Park-2880w.webp';
+
+const path = '/dog-exercise-calculator';
+const ogHero = await getImage({ src: heroImg, width: 1200, format: 'jpeg' });
+
+// ---- Server-rendered content, built from the calculator's own dataset ----
+
+// The by-breed reference, grouped by energy band (all 97 breeds). Each breed
+// links back into the calculator prefilled via its ?breed= deep link — the
+// integration the tool we modelled on never wired up.
+const bandDots = { low: 1, moderate: 2, high: 3, working: 4 };
+const bandGroups = BAND_ORDER.map((id) => {
+  const band = BANDS[id];
+  const breeds = BREEDS.filter((b) => b.band === id).sort((a, b) =>
+    a.name.localeCompare(b.name, 'en-GB')
+  );
+  return { id, ...band, breeds, range: formatRange(band.minMinutes, band.maxMinutes), dots: bandDots[id] };
+});
+const totalBreeds = BREEDS.length;
+
+// The puppy "five-minute rule" chart (formal-exercise budget by age), computed
+// from RULES so it can never drift from the engine. 5 min per month of age,
+// twice a day — shown to twelve months.
+const pr = RULES.puppy;
+const puppyChart = [];
+for (let m = pr.minMonths; m <= 12; m += 1) {
+  const perSession = pr.minutesPerMonthOfAge * m;
+  puppyChart.push({ months: m, perSession, perDay: perSession * pr.sessionsPerDay });
+}
+const puppyMax = Math.max(...puppyChart.map((r) => r.perDay));
+
+// ---- FAQ (real rendered Q&A → FAQPage schema). Deliberately NOT the two GEO
+// "quick answer" blocks below, which stay quotable-whole and out of this array. ----
+const faqs = [
+  {
+    q: 'How long should I walk my dog each day?',
+    a: 'For most healthy adult dogs, somewhere between 30 minutes and two hours, split across two or more walks. The right figure depends far more on breed and energy level than on size: a Pug and a Border Collie are worlds apart. Enter your dog above for a personalised guide, and let them sniff and explore rather than route-marching — a slow, nose-led walk does more good than a brisk lap.',
+  },
+  {
+    q: 'Can you over-exercise a dog?',
+    a: 'Yes. Growing puppies are the biggest risk — too much hard, repetitive exercise while the joints are developing can do lasting harm, which is why a puppy’s budget is worked out from their age. Flat-faced breeds overheat and struggle to breathe if pushed, and older dogs tire sooner. Exercise is also the most common cause of heatstroke in dogs: the Royal Kennel Club reports around three-quarters of cases follow over-exercising or a hot day, so in warm weather walk early or late and cut the distance.',
+  },
+  {
+    q: 'How much exercise does a senior dog need?',
+    a: 'A little less than they needed as a healthy adult, and spread across more, shorter walks — “little and often”. No UK authority publishes an exact reduction, so the figure the calculator shows for a senior is our own interpretation of that qualitative advice, not a sourced number. Keeping the routine going matters more than the total, because joints stiffen when they are not used. If an older dog tires quickly, moves awkwardly or seems stiff, see your vet rather than pushing on.',
+  },
+  {
+    q: 'Does mental stimulation count as exercise?',
+    a: 'It genuinely tires a dog out, and it matters most on days when walks are shorter — but it is an addition to walking time, not a substitute for it. PDSA and the Royal Kennel Club are both explicit that a garden or a puzzle feeder does not replace getting out. Good options: sniffing on walks, scatter feeding and snuffle mats, a few minutes of reward-based training, varying the route, and chews or licking, which are calming rather than just occupying.',
+  },
+  {
+    q: 'Is a walk enough for a high-energy or working breed?',
+    a: 'Often not on its own. Working and herding breeds — Collies, Malinois, Spaniels from working lines, and the like — need something to think about as well as distance to cover. Without a job they tend to invent one, and it is rarely one you would have chosen. Scent work, training, and structured play alongside the walking settle them in a way that raw mileage does not.',
+  },
+  {
+    q: 'Where do these figures come from — are they reliable?',
+    a: 'Breed levels are based on the Royal Kennel Club’s per-breed exercise tiers and PDSA’s minimum-exercise figures, cross-checked breed by breed. Three things are our own editorial judgement, and the page says so plainly: the four minute-ranges, the puppy cap at the adult figure, and the senior reduction. The puppy five-minute rule is the Royal Kennel Club’s, and we note that PDSA disagrees with it. It is a well-researched starting point, not veterinary advice — every dog is an individual, and your vet’s guidance always comes first.',
+  },
+];
+const faqLd = buildFaqSchema(path, faqs);
+
+// WebApplication schema for the tool itself — publisher + author reference the
+// ONE business entity / author by @id (data/schema.ts). Deliberately NO Service
+// or Offer node: this is an informational tool, not a commercial claim, so it
+// passes the URL-lifecycle schema-duplication test and cannot cannibalise a
+// money page (SEO.md locked #12).
+const appLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  '@id': `${absUrl(path)}#app`,
+  name: 'Dog Exercise Calculator',
+  url: absUrl(path),
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'Any (web browser)',
+  browserRequirements: 'Requires JavaScript',
+  inLanguage: 'en-GB',
+  isAccessibleForFree: true,
+  description:
+    'A free calculator that estimates how much daily walking and exercise a dog needs, by breed, energy level and life stage (puppy, adult or senior), based on Royal Kennel Club and PDSA guidance.',
+  publisher: { '@id': ORG_ID },
+  author: buildAuthorNode(),
+  offers: { '@type': 'Offer', price: 0, priceCurrency: 'GBP' },
+  isPartOf: { '@id': `${business.domain}/#website` },
+};
+
+// Funnels OUT — segmented so a visitor meets one clear next step, never a wall
+// of links (SEO.md: the tool feeds the money pages, it does not compete with them).
+const helpCards = [
+  {
+    title: 'Not enough hours in the day?',
+    body: 'If your dog needs more than home life can give — the high-energy and working breeds especially — structured days at our Dog Day School burn body and brain, so they come home settled.',
+    href: '/dog-day-school',
+    label: 'Dog Day School',
+  },
+  {
+    title: 'A clever dog that needs a job',
+    body: 'When walks alone will never be enough, our residential Board & Train builds the focus and off-switch that turn a busy dog into an easy one to live with.',
+    href: '/dog-boarding-school',
+    label: 'Board & Train',
+  },
+  {
+    title: 'Getting a puppy started right',
+    body: 'Early exercise, socialisation and habits set the whole course. Our Puppy School does the heavy lifting for you — or start our free week-by-week course today.',
+    href: '/comprehensive-puppy-training',
+    label: 'Puppy School',
+  },
+];
+---
+
+<Base
+  title="How Much Exercise Does My Dog Need? | Dog Exercise Calculator"
+  description="Free dog exercise calculator: work out how much daily walking your dog needs by breed and age — for puppies, adults and seniors — using Royal Kennel Club and PDSA guidance."
+  path={path}
+  updated="2026-07-21"
+  ogImage={`${business.domain}${ogHero.src}`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(appLd)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
+
+  <div data-page="dog-exercise-calculator">
+    <!-- ============ HERO ============ -->
+    <section class="relative isolate flex min-h-[74svh] items-end overflow-hidden bg-pine-950" data-hero>
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <Image
+          src={heroImg}
+          alt="A Fairy Tails trainer walking a dog on a loose lead through the countryside"
+          class="h-full w-full object-cover"
+          widths={[828, 1280, 1600, 1920]}
+          sizes="(max-width: 767px) 314px, 100vw"
+          formats={['avif', 'webp']}
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+          data-hero-media
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-pine-950/95 via-pine-950/55 to-pine-950/30"></div>
+      </div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-20 pt-36 sm:pb-24">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>Free tool · Dog exercise calculator</p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.5rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">How much exercise does</span>
+          <span class="hero-line block">my dog <em class="squiggle not-italic">really need</em>?</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Enter your dog’s breed and age for a personalised daily walking guide — for puppies, adults
+          and seniors. Built on Royal Kennel Club and PDSA guidance, with the honest bits marked out.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#calculator" class="btn btn-honey">
+            Use the calculator <span class="btn-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a href="/breed-matcher/" class="btn btn-ghost-light">Try the breed matcher</a>
+        </div>
+      </div>
+
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/70" data-hero-cue aria-hidden="true">
+        <svg width="22" height="30" viewBox="0 0 22 30" fill="none" class="animate-bounce">
+          <rect x="1" y="1" width="20" height="28" rx="10" stroke="currentColor" stroke-width="2"></rect>
+          <circle cx="11" cy="10" r="3" fill="currentColor"></circle>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
+        <li class="paw-bullet flex items-center text-moss-700">{totalBreeds} breeds, by name or energy level</li>
+        <li class="paw-bullet flex items-center text-moss-700">Adjusts for puppies, adults &amp; seniors</li>
+        <li class="paw-bullet flex items-center text-moss-700">Sourced from the RKC &amp; PDSA</li>
+      </ul>
+    </div>
+
+    <!-- ============ THE CALCULATOR ============ -->
+    <section class="mx-auto max-w-4xl scroll-mt-24 px-4 pb-16 pt-16 sm:pt-20" id="calculator" data-section="calculator">
+      <div class="mx-auto mb-8 max-w-2xl text-center">
+        <p class="eyebrow text-honey-700" data-reveal>Your dog’s daily guide</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Work out their <em class="squiggle not-italic">walking time</em>
+        </h2>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          Pick a breed — nicknames work — or choose the energy level that fits, tell us their life
+          stage, and we’ll show a sensible daily target with the cautions that matter for that dog.
+        </p>
+      </div>
+
+      <div class="dec-calc grain rounded-3xl bg-cream-50 p-5 shadow-[var(--shadow-polaroid)] sm:p-8" data-reveal>
+        <div id="dwc-root" class="dwc">
+          <form class="dwc__form" id="dwc-form" novalidate>
+            <!-- Step 1: mode -->
+            <section class="dwc__step" aria-labelledby="dwc-mode-label">
+              <h3 class="dwc__step-title" id="dwc-mode-label"><span class="dwc__step-num">1</span> How would you like to choose?</h3>
+              <div class="dwc__tabs" role="radiogroup" aria-labelledby="dwc-mode-label" data-dwc="mode-group">
+                <button type="button" class="dwc__tab" role="radio" aria-checked="true" data-dwc="mode" data-value="breed" id="dwc-mode-breed">Search by breed</button>
+                <button type="button" class="dwc__tab" role="radio" aria-checked="false" data-dwc="mode" data-value="energy" id="dwc-mode-energy">Choose by energy level</button>
+              </div>
+            </section>
+
+            <!-- Step 2a: breed search -->
+            <section class="dwc__step" data-dwc="panel-breed" aria-labelledby="dwc-breed-label">
+              <h3 class="dwc__step-title" id="dwc-breed-label"><span class="dwc__step-num">2</span> Which breed?</h3>
+              <div class="dwc__chosen" data-dwc="breed-chosen" hidden>
+                <p class="dwc__chosen-text">
+                  <span class="dwc__chosen-label">Chosen breed:</span>
+                  <strong data-dwc="breed-chosen-name"></strong>
+                  <span class="dwc__chosen-band" data-dwc="breed-chosen-band"></span>
+                </p>
+                <button type="button" class="dwc__link-button" data-dwc="breed-change">Change breed</button>
+              </div>
+              <div class="dwc__combobox" data-dwc="breed-search-wrap">
+                <label class="dwc__label" for="dwc-breed-input">Start typing a breed name</label>
+                <input class="dwc__input" id="dwc-breed-input" data-dwc="breed-input" type="text" role="combobox"
+                  autocomplete="off" autocapitalize="off" spellcheck="false" aria-expanded="false"
+                  aria-controls="dwc-breed-listbox" aria-autocomplete="list" aria-describedby="dwc-breed-hint dwc-breed-note"
+                  placeholder="e.g. Labrador, staffy, sausage dog" />
+                <p class="dwc__hint" id="dwc-breed-hint">Nicknames work too. Use the up and down arrow keys to move through the suggestions.</p>
+                <ul class="dwc__listbox" id="dwc-breed-listbox" data-dwc="breed-listbox" role="listbox" aria-label="Breed suggestions" hidden></ul>
+                <p class="dwc__search-note" id="dwc-breed-note" data-dwc="search-note" hidden></p>
+                <p class="dwc__nomatch" data-dwc="breed-nomatch" hidden></p>
+              </div>
+              <p class="dwc__error" data-dwc="error-breed" role="alert" hidden></p>
+            </section>
+
+            <!-- Step 2b: energy level (cards injected from data.js) -->
+            <section class="dwc__step" data-dwc="panel-energy" aria-labelledby="dwc-energy-label" hidden>
+              <h3 class="dwc__step-title" id="dwc-energy-label"><span class="dwc__step-num">2</span> Which best describes your dog?</h3>
+              <div class="dwc__cards" role="radiogroup" aria-labelledby="dwc-energy-label" data-dwc="band-group"></div>
+              <p class="dwc__error" data-dwc="error-band" role="alert" hidden></p>
+            </section>
+
+            <!-- Step 3: life stage -->
+            <section class="dwc__step" aria-labelledby="dwc-stage-label">
+              <h3 class="dwc__step-title" id="dwc-stage-label"><span class="dwc__step-num">3</span> Life stage</h3>
+              <div class="dwc__tabs" role="radiogroup" aria-labelledby="dwc-stage-label" data-dwc="stage-group">
+                <button type="button" class="dwc__tab" role="radio" aria-checked="false" data-dwc="stage" data-value="puppy">Puppy</button>
+                <button type="button" class="dwc__tab" role="radio" aria-checked="true" data-dwc="stage" data-value="adult">Adult</button>
+                <button type="button" class="dwc__tab" role="radio" aria-checked="false" data-dwc="stage" data-value="senior">Senior</button>
+              </div>
+              <p class="dwc__stage-note" data-dwc="stage-note"></p>
+              <div class="dwc__field" data-dwc="puppy-months-wrap" hidden>
+                <label class="dwc__label" for="dwc-puppy-months">How old is your puppy, in months?</label>
+                <input class="dwc__input dwc__input--number" id="dwc-puppy-months" data-dwc="puppy-months" type="number" inputmode="numeric" step="1" aria-describedby="dwc-puppy-hint" />
+                <p class="dwc__hint" id="dwc-puppy-hint" data-dwc="puppy-hint"></p>
+                <p class="dwc__error" data-dwc="error-puppyMonths" role="alert" hidden></p>
+              </div>
+            </section>
+
+            <div class="dwc__actions">
+              <button type="submit" class="dwc__submit" data-dwc="submit">Show exercise plan</button>
+            </div>
+          </form>
+
+          <section class="dwc__result-region" id="dwc-result" data-dwc="result" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></section>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ QUICK ANSWER (GEO block #1) ============
+         A self-contained, ~150-word answer to the head question, placed high and
+         kept quotable WHOLE for AI-Overview citation. NOT added to `faqs`. -->
+    <section class="mx-auto max-w-6xl px-4 pb-16" data-section="quick-answer">
+      <div class="max-w-3xl">
+        <p class="eyebrow text-honey-700" data-reveal>In short</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How much exercise does <em class="squiggle not-italic">my dog need</em>?
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+          Most healthy adult dogs need between 30 minutes and two hours of walking a day, and the right
+          amount depends mainly on breed and energy level rather than size. As a rough guide, low-energy
+          companion breeds are happy with around 30 to 45 minutes; steady, everyday dogs with 45 to 75
+          minutes; high-drive breeds with 75 minutes to two hours; and working or herding breeds with
+          two hours or more, plus a job to do. Puppies and senior dogs need less, worked out
+          differently. Split the total across two or more walks, and let your dog sniff and explore
+          rather than route-marching — mental exercise tires a dog as much as distance does, but never
+          replaces getting out. These are general-guidance figures drawn from Royal Kennel Club exercise
+          tiers and PDSA minimums; a dog that is unwell, overweight or recovering should follow its
+          vet’s advice first.
+        </p>
+      </div>
+
+      <!-- Band reference — the four energy levels, server-rendered and citable -->
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
+        {
+          bandGroups.map((band) => (
+            <div class="grain flex flex-col rounded-2xl bg-cream-100 p-6 shadow-[var(--shadow-lift)]">
+              <div class="flex items-center gap-1" aria-hidden="true">
+                {[1, 2, 3, 4].map((n) => (
+                  <span class:list={['dec-bar', n <= band.dots ? 'dec-bar--on' : '']} />
+                ))}
+              </div>
+              <h3 class="mt-3 font-display text-xl font-bold text-moss-800">{band.label}</h3>
+              <p class="mt-1 font-display text-2xl font-bold text-honey-600">{band.range}<span class="text-base font-bold text-bark-500"> a day</span></p>
+              <p class="mt-2 text-sm leading-relaxed text-bark-700">{band.summary}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ============ BY-BREED TABLE (all 97) ============ -->
+    <section class="bg-cream-100" data-section="by-breed">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <p class="eyebrow text-honey-700" data-reveal>Every breed, sorted</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Dog exercise needs <em class="squiggle not-italic">by breed</em>
+        </h2>
+        <p class="mt-4 max-w-2xl leading-relaxed text-bark-700" data-reveal>
+          All {totalBreeds} breeds in the calculator, grouped by how much they typically need. Tap any
+          breed to open it in the calculator, then set the life stage for puppies and seniors.
+        </p>
+
+        <div class="mt-10 space-y-8">
+          {
+            bandGroups.map((band) => (
+              <div class="grain rounded-2xl bg-cream-50 p-6 shadow-[var(--shadow-lift)] sm:p-8" data-reveal>
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-cream-200 pb-4">
+                  <h3 class="font-display text-2xl font-bold text-moss-800">
+                    {band.label} energy
+                  </h3>
+                  <p class="font-display text-xl font-bold text-honey-600">{band.range} <span class="text-sm font-bold text-bark-500">a day (adult)</span></p>
+                </div>
+                <ul class="mt-5 flex flex-wrap gap-2.5">
+                  {band.breeds.map((b) => (
+                    <li>
+                      <a
+                        href={`/dog-exercise-calculator?breed=${b.slug}#calculator`}
+                        class="dec-chip"
+                      >
+                        {b.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+        <p class="mt-6 max-w-2xl text-sm leading-relaxed text-bark-500" data-reveal>
+          Bands are placed on the published landmarks (30, 60 and 120 minutes). A handful of breeds are
+          deliberately banded down where a flat face or a giant frame makes the published figure unsafe
+          as a target — the calculator explains which, and why, when you pick one.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ PUPPIES (GEO block #2 + the 5-minute-rule chart) ============ -->
+    <section class="relative overflow-hidden bg-pine-950 text-cream-100" data-section="puppy">
+      <HillDivider class="relative z-10 bg-cream-100 text-pine-950" flip />
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-0 h-2/3" aria-hidden="true" style="background: radial-gradient(60% 50% at 80% 0%, rgba(236,194,124,0.14), transparent 70%);"></div>
+
+      <div class="relative z-10 mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="grid items-start gap-12 lg:grid-cols-[1fr_0.9fr]">
+          <div>
+            <p class="eyebrow text-honey-400" data-reveal>The five-minute rule</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+              How much exercise does <em class="squiggle not-italic">a puppy need</em>?
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-cream-100" data-reveal>
+              A common rule of thumb is five minutes of formal exercise per month of age, up to twice a
+              day — so about 15 minutes twice daily for a three-month-old, and 30 minutes twice daily by
+              six months. It is a starting point, not a target: it covers lead walks and structured
+              exercise only, because too much impact while the joints are still growing can do lasting
+              harm. Free play and pottering at their own pace are separate, and puppies are good at
+              stopping when they have had enough. Large and giant breeds grow for longer, so their
+              careful period lasts well past a year. It is worth knowing that PDSA disagrees with the
+              five-minute rule, calling it unsupported by evidence and not right for every puppy — so
+              follow your puppy rather than the number, and ask your vet if you are unsure.
+            </p>
+          </div>
+
+          <!-- Chart: formal exercise by age, from RULES -->
+          <figure class="grain rounded-2xl bg-pine-900 p-6 shadow-[var(--shadow-lift)] sm:p-7" data-reveal>
+            <figcaption class="font-display text-lg font-bold text-cream-50">Formal exercise a day, by age</figcaption>
+            <p class="mt-1 text-sm text-cream-300">The five-minute rule, twice daily</p>
+            <ul class="mt-5 space-y-2.5">
+              {
+                puppyChart.map((r) => (
+                  <li class="grid grid-cols-[3.5rem_1fr_3.5rem] items-center gap-3 text-sm">
+                    <span class="font-bold text-cream-200">{r.months} mo</span>
+                    <span class="dec-track" aria-hidden="true">
+                      <span class="dec-fill" style={`width:${Math.round((r.perDay / puppyMax) * 100)}%`} />
+                    </span>
+                    <span class="text-right font-bold text-honey-300">{r.perDay}m</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="mt-4 text-xs leading-relaxed text-cream-300">
+              The calculator caps this at the adult figure for the breed — a small breed reaches its
+              adult amount well before it stops growing. That cap is our own safety logic, not a
+              published rule.
+            </p>
+          </figure>
+        </div>
+
+        <!-- Puppy funnel -->
+        <div class="mt-12 grid items-center gap-6 rounded-2xl bg-moss-800 p-6 shadow-[var(--shadow-lift)] sm:grid-cols-[1fr_auto] sm:p-8" data-reveal>
+          <div>
+            <h3 class="font-display text-2xl font-bold text-cream-50">Getting the early weeks right</h3>
+            <p class="mt-2 max-w-2xl leading-relaxed text-cream-100">
+              Exercise is only one piece — socialisation, confidence and habits all set now, in a window
+              that doesn’t come back. Our <a href="/comprehensive-puppy-training" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Puppy School</a>
+              does the work for you full-time, our <a href="/puppy-training-classes" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">puppy classes</a>
+              coach you weekly, and our <a href="/puppycourse" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">free week-by-week course</a>
+              is there whenever you want it.
+            </p>
+          </div>
+          <figure class="mx-auto w-40 shrink-0 overflow-hidden rounded-xl sm:w-44">
+            <Image src={puppyRecall} alt="A puppy running back to its handler on a recall" class="aspect-square w-full object-cover" widths={[176, 352]} sizes="11rem" />
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SENIORS & OVER-EXERCISING ============ -->
+    <section data-section="care">
+      <HillDivider class="bg-pine-950 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="grid gap-8 lg:grid-cols-2">
+          <article class="grain rounded-2xl bg-cream-100 p-8 shadow-[var(--shadow-lift)]" data-reveal>
+            <h2 class="font-display text-2xl font-bold text-moss-800">Older dogs: little and often</h2>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              A senior dog usually wants a little less than they did in their prime, spread across more,
+              shorter walks. Keeping the routine going matters more than the total — joints stiffen when
+              they aren’t used, and swimming is gentle on sore ones. No UK authority publishes an exact
+              reduction, so the senior figure in the calculator is our own reading of the “a little
+              less” advice, offered as a starting point. New stiffness or tiring quickly is a vet matter,
+              not just old age.
+            </p>
+          </article>
+          <article class="grain rounded-2xl bg-cream-100 p-8 shadow-[var(--shadow-lift)]" data-reveal>
+            <h2 class="font-display text-2xl font-bold text-moss-800">Can you do too much?</h2>
+            <p class="mt-4 leading-relaxed text-bark-700">
+              Yes — and it’s easy to miss. Over-exercising a growing puppy can quietly damage developing
+              joints; flat-faced breeds overheat and struggle to breathe if pushed; and heat is the big
+              one — most canine heatstroke follows over-exercising or a hot day. In warm weather, walk in
+              the cool of the morning or evening and cut the distance. When in doubt, watch the dog in
+              front of you rather than the number.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SOURCING & DISCLAIMER (E-E-A-T) ============ -->
+    <section class="bg-cream-100" data-section="sourcing">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-24">
+        <p class="eyebrow text-honey-700" data-reveal>Honest about the numbers</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>{COPY.sourcing.title}</h2>
+        <div class="dec-prose mt-6 space-y-4 leading-relaxed text-bark-700" data-reveal>
+          {COPY.sourcing.paragraphs.map((p) => <p set:html={p} />)}
+        </div>
+        <p class="mt-6 rounded-2xl border-l-4 border-honey-500 bg-cream-50 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
+          <strong class="text-moss-800">{COPY.disclaimer.title}</strong> {COPY.disclaimer.body}
+        </p>
+        <p class="mt-6 text-sm text-bark-500" data-reveal>
+          Compiled and reviewed by {business.author.name} and the training team at
+          <a href="/certified-dog-trainer" class="font-bold text-moss-700 underline decoration-honey-500 underline-offset-2">The Fairy Tails K9 Centre</a>,
+          a {business.licence.rating}-star {business.licence.authority}–licensed centre
+          (licence {business.licence.number}).
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section class="bg-cream-50" data-section="faq">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-24">
+        <p class="eyebrow text-honey-700" data-reveal>Good to know</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Dog exercise <em class="squiggle not-italic">questions</em>
+        </h2>
+        <div class="mt-10 space-y-4" data-stagger>
+          {
+            faqs.map((f) => (
+              <details class="group rounded-2xl bg-cream-100 shadow-[var(--shadow-lift)]">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-6 font-display text-lg font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </summary>
+                <div class="accordion-body">
+                  <div class="overflow-hidden">
+                    <p class="px-6 pb-6 leading-relaxed text-bark-700">{f.a}</p>
+                  </div>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW WE CAN HELP (funnels) ============ -->
+    <section class="bg-cream-100" data-section="help">
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="grid items-end gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <p class="eyebrow text-honey-700" data-reveal>When the walk isn’t the whole answer</p>
+            <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+              A tired dog is a <em class="squiggle not-italic">happy dog</em> — we can help
+            </h2>
+            <p class="mt-4 max-w-xl leading-relaxed text-bark-700" data-reveal>
+              Sometimes the honest answer is “more than one person can fit into a day”. We’re a
+              5-star licensed dog-training centre near Hastings, and we work with families across the
+              South of England and London.
+            </p>
+          </div>
+          <figure class="overflow-hidden rounded-2xl shadow-[var(--shadow-lift)]" data-reveal>
+            <Image src={countryPark} alt="A dog being trained and exercised in a busy country park" class="aspect-[4/3] w-full object-cover" widths={[480, 960]} sizes="(min-width: 1024px) 26rem, 90vw" />
+          </figure>
+        </div>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
+          {
+            helpCards.map((c) => (
+              <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-xl font-bold text-moss-800">{c.title}</h3>
+                <p class="mt-3 flex-1 text-sm leading-relaxed text-bark-700">{c.body}</p>
+                <a href={c.href} class="btn btn-moss mt-6 w-full">{c.label}</a>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 rounded-2xl bg-cream-50 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
+          <strong class="text-moss-800">Live in London or a flat?</strong> A city dog’s exercise looks
+          different — busier streets, less green space, more to get used to. See how we help
+          <a href="/london" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">London dogs settle and train</a>,
+          or find the right dog for your life with our
+          <a href="/breed-matcher/" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">breed matcher</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ ENQUIRY ============ -->
+    <section id="enquire" class="bg-pine-900" data-section="enquire">
+      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="eyebrow text-honey-400" data-reveal>Talk to a trainer</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
+            Not sure what your dog <em class="squiggle not-italic">needs</em>?
+          </h2>
+          <p class="mt-4 text-lg leading-relaxed text-cream-200" data-reveal>
+            Tell us about your dog and what’s going on, and we’ll point you to the right kind of help —
+            no hard sell.
+          </p>
+        </div>
+        <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
+          <EnquiryForm service="General enquiry" page="/dog-exercise-calculator" />
+        </div>
+        <p class="mt-8 text-center leading-relaxed text-cream-200">
+          Prefer to talk first? Call us on
+          <a href={business.phones.main.tel} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">{business.phones.main.display}</a>
+          or WhatsApp us
+          <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">on the same number</a>.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<!-- ===========================================================================
+     Calculator theme — the countryside-editorial skin for the tool's dwc__ classes.
+     Uses the design-system tokens (global @theme custom properties) so it stays in
+     lock-step with the rest of the site. is:global because the result card, energy
+     cards and suggestions are injected by ui.js (Astro's scoped hashes never reach
+     JS-created nodes); the selectors are all .dwc__* / #dwc-root, and this CSS only
+     ships with this page's bundle, so there is no site-wide leak.
+     =========================================================================== -->
+<style is:global>
+  #dwc-root { color: var(--color-bark-700); }
+  #dwc-root .dwc__form { display: grid; gap: 1.75rem; }
+  #dwc-root .dwc__step { display: block; }
+  #dwc-root .dwc__step-title {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+    color: var(--color-moss-800); display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.9rem;
+  }
+  #dwc-root .dwc__step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 1.7rem; height: 1.7rem; border-radius: 999px; flex-shrink: 0;
+    background: var(--color-moss-700); color: var(--color-cream-50);
+    font-size: 0.9rem; font-weight: 700;
+  }
+
+  /* Toggle groups (mode + life stage) */
+  #dwc-root .dwc__tabs {
+    display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.35rem;
+    background: var(--color-cream-100); border-radius: 999px; width: fit-content; max-width: 100%;
+  }
+  #dwc-root .dwc__tab {
+    appearance: none; border: 0; cursor: pointer;
+    padding: 0.6rem 1.15rem; border-radius: 999px; font-weight: 700; font-size: 0.95rem;
+    color: var(--color-bark-700); background: transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  }
+  #dwc-root .dwc__tab:hover { color: var(--color-moss-800); }
+  #dwc-root .dwc__tab.is-active,
+  #dwc-root .dwc__tab[aria-checked='true'] {
+    background: var(--color-moss-700); color: var(--color-cream-50);
+    box-shadow: var(--shadow-lift);
+  }
+  #dwc-root .dwc__tab:focus-visible { outline: 3px solid var(--color-honey-400); outline-offset: 2px; }
+
+  /* Inputs */
+  #dwc-root .dwc__label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 700; color: var(--color-bark-700); }
+  #dwc-root .dwc__input {
+    width: 100%; border: 2px solid var(--color-cream-200); background: #fff;
+    border-radius: 0.9rem; padding: 0.8rem 1rem; color: var(--color-bark-900); font: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  #dwc-root .dwc__input:focus { outline: none; border-color: var(--color-moss-500); box-shadow: 0 0 0 4px rgb(112 135 87 / 0.15); }
+  #dwc-root .dwc__input--number { max-width: 12rem; }
+  #dwc-root .dwc__hint { margin-top: 0.5rem; font-size: 0.82rem; color: var(--color-bark-500); }
+
+  /* Combobox suggestions */
+  #dwc-root .dwc__combobox { position: relative; }
+  #dwc-root .dwc__listbox {
+    list-style: none; margin: 0.5rem 0 0; padding: 0.35rem; max-height: 20rem; overflow-y: auto;
+    background: var(--color-cream-50); border: 2px solid var(--color-cream-200); border-radius: 1rem;
+    box-shadow: var(--shadow-polaroid);
+  }
+  #dwc-root .dwc__option {
+    display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 0.6rem 0.8rem; border-radius: 0.7rem; cursor: pointer;
+  }
+  #dwc-root .dwc__option:hover { background: var(--color-cream-100); }
+  #dwc-root .dwc__option.is-active,
+  #dwc-root .dwc__option[aria-selected='true'] { background: var(--color-honey-200); }
+  #dwc-root .dwc__option-name { font-weight: 700; color: var(--color-moss-800); }
+  #dwc-root .dwc__option-band { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-bark-500); }
+  #dwc-root .dwc__search-note,
+  #dwc-root .dwc__nomatch { margin-top: 0.6rem; font-size: 0.85rem; color: var(--color-bark-500); }
+
+  /* Chosen-breed pill */
+  #dwc-root .dwc__chosen {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem;
+    padding: 0.9rem 1.1rem; border-radius: 1rem; background: var(--color-moss-100);
+    border: 2px solid var(--color-moss-200);
+  }
+  #dwc-root .dwc__chosen-label { color: var(--color-bark-500); font-weight: 700; }
+  #dwc-root .dwc__chosen-text strong { color: var(--color-moss-800); }
+  #dwc-root .dwc__chosen-band { color: var(--color-bark-500); font-size: 0.9rem; }
+  #dwc-root .dwc__link-button {
+    appearance: none; border: 0; background: transparent; cursor: pointer;
+    font-weight: 700; color: var(--color-moss-700); text-decoration: underline;
+    text-decoration-color: var(--color-honey-400); text-underline-offset: 3px; text-decoration-thickness: 2px;
+  }
+
+  /* Energy cards */
+  #dwc-root .dwc__cards { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { #dwc-root .dwc__cards { grid-template-columns: 1fr 1fr; } }
+  #dwc-root .dwc__card {
+    display: flex; flex-direction: column; gap: 0.35rem; text-align: left; cursor: pointer;
+    padding: 1.1rem 1.2rem; border-radius: 1.1rem; background: var(--color-cream-50);
+    border: 2px solid var(--color-cream-200); transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+  }
+  #dwc-root .dwc__card:hover { transform: translateY(-2px); border-color: var(--color-moss-300); }
+  #dwc-root .dwc__card.is-active,
+  #dwc-root .dwc__card[aria-checked='true'] { border-color: var(--color-moss-600); background: var(--color-honey-200); }
+  #dwc-root .dwc__card:focus-visible { outline: 3px solid var(--color-honey-400); outline-offset: 2px; }
+  #dwc-root .dwc__card-label { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--color-moss-800); }
+  #dwc-root .dwc__card-summary { font-size: 0.86rem; line-height: 1.45; color: var(--color-bark-700); }
+  #dwc-root .dwc__card-range { font-weight: 700; color: var(--color-honey-700); }
+
+  /* Errors */
+  #dwc-root .dwc__error { margin-top: 0.6rem; font-size: 0.9rem; font-weight: 700; color: #a4331e; }
+
+  /* Submit */
+  #dwc-root .dwc__actions { margin-top: 0.25rem; }
+  #dwc-root .dwc__submit {
+    appearance: none; border: 0; cursor: pointer; width: 100%;
+    padding: 1rem 1.5rem; border-radius: 999px; font-weight: 700; font-size: 1.05rem;
+    background: var(--color-honey-400); color: var(--color-bark-900);
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  #dwc-root .dwc__submit:hover { background: var(--color-honey-300); transform: translateY(-2px); box-shadow: var(--shadow-lift); }
+  #dwc-root .dwc__submit:active { transform: translateY(0) scale(0.99); }
+  #dwc-root .dwc__submit:focus-visible { outline: 3px solid var(--color-moss-500); outline-offset: 3px; }
+  @media (min-width: 640px) { #dwc-root .dwc__submit { width: auto; min-width: 16rem; } }
+
+  /* Result */
+  #dwc-root .dwc__result-region { margin-top: 2rem; }
+  #dwc-root .dwc__result-region:focus-visible { outline: 3px solid var(--color-honey-400); outline-offset: 4px; border-radius: 1.25rem; }
+  #dwc-root .dwc__result-card {
+    background: linear-gradient(160deg, var(--color-moss-800), var(--color-pine-900));
+    color: var(--color-cream-100); border-radius: 1.5rem; padding: 1.75rem;
+    box-shadow: var(--shadow-polaroid);
+  }
+  @media (min-width: 640px) { #dwc-root .dwc__result-card { padding: 2.25rem; } }
+  #dwc-root .dwc__result-eyebrow { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-honey-300); }
+  #dwc-root .dwc__result-title { font-family: var(--font-display); font-weight: 700; font-size: 1.9rem; line-height: 1.1; color: var(--color-cream-50); margin-top: 0.35rem; }
+  #dwc-root .dwc__result-band { margin-top: 0.2rem; font-weight: 700; color: var(--color-honey-200); }
+  #dwc-root .dwc__result-figure { margin-top: 1.1rem; display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; }
+  #dwc-root .dwc__result-minutes { font-family: var(--font-display); font-weight: 700; font-size: 2.75rem; line-height: 1; color: var(--color-honey-300); }
+  #dwc-root .dwc__result-unit { font-weight: 700; color: var(--color-cream-200); }
+  #dwc-root .dwc__result-breakdown { margin-top: 1rem; line-height: 1.6; color: var(--color-cream-100); }
+  #dwc-root .dwc__result-note,
+  #dwc-root .dwc__result-baseline { margin-top: 0.75rem; font-size: 0.9rem; line-height: 1.55; color: var(--color-cream-200); }
+
+  /* Cautions */
+  #dwc-root .dwc__cautions { margin-top: 1.25rem; background: var(--color-cream-50); border-radius: 1.25rem; padding: 1.4rem 1.5rem; box-shadow: var(--shadow-lift); }
+  #dwc-root .dwc__cautions-title { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--color-moss-800); }
+  #dwc-root .dwc__cautions-list { list-style: none; margin: 0.85rem 0 0; padding: 0; display: grid; gap: 0.7rem; }
+  #dwc-root .dwc__caution { border-left: 4px solid var(--color-moss-400); padding: 0.35rem 0 0.35rem 0.9rem; line-height: 1.55; color: var(--color-bark-700); }
+  #dwc-root .dwc__caution strong { color: var(--color-moss-800); }
+  #dwc-root .dwc__caution--important { border-left-color: var(--color-clay-500); }
+
+  /* Enrichment */
+  #dwc-root .dwc__enrichment { margin-top: 1.25rem; background: var(--color-cream-100); border-radius: 1.25rem; padding: 1.4rem 1.5rem; }
+  #dwc-root .dwc__enrichment-title { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--color-moss-800); }
+  #dwc-root .dwc__enrichment-intro { margin-top: 0.5rem; line-height: 1.6; color: var(--color-bark-700); }
+  #dwc-root .dwc__enrichment-list { margin: 0.85rem 0 0; padding-left: 1.2rem; display: grid; gap: 0.5rem; line-height: 1.55; color: var(--color-bark-700); }
+  #dwc-root .dwc__enrichment-list li::marker { color: var(--color-honey-600); }
+
+  /* Cross-link */
+  #dwc-root .dwc__crosslink { margin-top: 1.25rem; text-align: center; }
+  #dwc-root .dwc__crosslink a { font-weight: 700; color: var(--color-moss-700); text-decoration: underline; text-decoration-color: var(--color-honey-400); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  #dwc-root .dwc__crosslink a:hover { color: var(--color-moss-800); }
+
+  /* Small shared bits used in the server-rendered content */
+  .dec-chip {
+    display: inline-block; padding: 0.4rem 0.85rem; border-radius: 999px;
+    background: var(--color-cream-100); border: 1.5px solid var(--color-cream-200);
+    font-size: 0.88rem; font-weight: 700; color: var(--color-moss-800); text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  }
+  .dec-chip:hover { background: var(--color-honey-200); border-color: var(--color-honey-400); transform: translateY(-1px); }
+  .dec-bar { width: 0.55rem; height: 1.1rem; border-radius: 2px; background: var(--color-cream-300); }
+  .dec-bar--on { background: var(--color-honey-500); }
+  .dec-track { display: block; height: 0.7rem; border-radius: 999px; background: var(--color-pine-800); overflow: hidden; }
+  .dec-fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(to right, var(--color-honey-400), var(--color-honey-300)); }
+  .dec-prose a { font-weight: 700; color: var(--color-moss-700); text-decoration: underline; text-decoration-color: var(--color-honey-500); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .dec-prose a:hover { color: var(--color-moss-800); }
+
+  @media (prefers-reduced-motion: reduce) {
+    #dwc-root .dwc__tab, #dwc-root .dwc__card, #dwc-root .dwc__submit, .dec-chip { transition: none; }
+  }
+</style>
+
+<!-- The calculator itself: its engine/data/copy are untouched; ui.js was adapted
+     only for ClientRouter-safety and to fire the site's tool_engagement event. -->
+<script>
+  import '../scripts/dog-exercise-calculator/ui.js';
+</script>
+
+<!-- Page motion: standard y-only reveals + hero entrance (never hides content —
+     verify-reveals gate). Mirrors the site's animation contract. -->
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+  let mm = null;
+
+  function initExerciseCalcMotion() {
+    const root = document.querySelector('[data-page="dog-exercise-calculator"]');
+    if (!root || root.dataset.gsapInit) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 24, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, duration: 0.7 }, 0.85)
+        .from('[data-hero-cue]', { autoAlpha: 0, duration: 0.6 }, 1.1);
+
+      gsap.to('[data-hero-media]', {
+        scale: 1.09,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: 'top top', end: 'bottom top', scrub: true },
+      });
+      gsap.to('[data-hero-cue]', {
+        autoAlpha: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: '[data-hero]', start: '5% top', end: '20% top', scrub: true },
+      });
+
+      gsap.utils.toArray('[data-reveal]').forEach((el) => {
+        gsap.from(el, { y: 36, duration: 0.85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+      });
+      gsap.utils.toArray('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, { y: 28, duration: 0.7, ease: 'power3.out', stagger: 0.07, scrollTrigger: { trigger: group, start: 'top 88%', once: true } });
+      });
+    });
+  }
+
+  initExerciseCalcMotion();
+  document.addEventListener('astro:page-load', initExerciseCalcMotion);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) { mm.revert(); mm = null; }
+  });
+</script>
