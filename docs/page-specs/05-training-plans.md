@@ -34,7 +34,7 @@
 | Boarding School for Dogs (`board-train-adult`) | £2,500 / 8–10wk (+£300 large) | `/dog-boarding-school` |
 | Holiday Board & Train (`board-train-holiday`) | £1,500 / 4wk (+£300 large) | `/dog-boarding-school` |
 | Intensive Dog Training (`intensive-dog-training`) | £2,000 / 2mo (+£300 large) | `/intensive-dog-training` |
-| ~~Comprehensive Puppy Training (`puppy-intensive`) | £1,200 / 1mo | New dedicated page (owner 2026-07-06)…~~ | **🔴 ROW DELETED 2026-07-21** | **This SKU no longer exists** — merged into the `board-train-puppy` row above (owner: *"they're one product"*). Its dedicated page survives as that course's page. |
+| ~~Comprehensive Puppy Training (`puppy-intensive`)~~ **🔴 ROW DELETED 2026-07-21** | ~~£1,200 / 1mo~~ | **This SKU no longer exists** — merged into the `board-train-puppy` row above (owner: *"they're one product"*). Its dedicated page survives as that course's page. |
 | Puppy Training Classes (`puppy-classes`) | £175 / course | `/puppy-training-classes` |
 | One to One Dog Training (`one-to-one`) | £49.99 / session | Acuity `appointmentType=51989230` (byte-for-byte) |
 | Dog Social Walks (`social-walks`) | £20 / walk | **Free consult** (existing-clients-only; no Acuity) |
@@ -50,7 +50,7 @@
 | Boarding School for Dogs | adult | behaviour, obedience | residential | programme |
 | Holiday Board & Train | any | obedience, socialisation | residential | programme |
 | Intensive Dog Training | adult | behaviour | day-based | programme |
-| ~~Comprehensive Puppy Training | puppy | socialisation, obedience | ~~day-based~~ **residential** ¹ | programme~~ **ROW GONE 2026-07-21 — merged into the Puppy School row above** |
+| ~~Comprehensive Puppy Training~~ **ROW GONE 2026-07-21 ¹** | ~~puppy~~ | ~~socialisation, obedience~~ | ~~day-based → residential~~ | ~~programme~~ |
 | Puppy Training Classes | puppy | obedience, socialisation | group-class | pay-as-you-go |
 | One to One Dog Training | any | behaviour, obedience | one-to-one | pay-as-you-go |
 | Dog Social Walks | any | socialisation, enrichment | walk | pay-as-you-go |
