@@ -92,10 +92,32 @@
       "category": "training",
       "name": "Comprehensive Puppy Training",
       "price": 1200,
-      "unit": "for 1 month",
+      "unit": "for 4 weeks",
       "largeDogSurcharge": null,
-      "eligibility": "Puppies up to 18 weeks",
-      "features": ["Boards with us for the month", "Full days with our trainers", "Structured socialisation"],
+      "eligibility": "Puppies 12–16 weeks old",
+      "features": ["Boards with us for the course", "Full days with our trainers", "Structured socialisation"],
+      "_arrangementsNote": "THE PUPPY BOARDING RULE — owner's own words, 2026-07-21 (SEO.md locked decision #13). This fact has been owner-confirmed in FOUR shapes now (2026-06-30 day-only+local-only · 2026-07-18 both-board reversal · 2026-07-21 local/non-local rule · 2026-07-21 eligibility+unit corrected to match board-train-puppy). It lives HERE, in data, because every previous version lived only in page prose and each session re-derived it and got it wrong. RENDER FROM THIS BLOCK — never restate the rule in copy, and never mix the two groups' requirements in one passage.",
+      "arrangements": {
+        "local": {
+          "label": "Local to Hastings",
+          "boarding": "optional",
+          "summary": "Boarding is available but optional — the arrangement stays flexible.",
+          "options": [
+            "Home with you each evening",
+            "With us during the week, home at weekends",
+            "Boarding with us for the full four weeks"
+          ]
+        },
+        "nonLocal": {
+          "label": "Travelling to us from London and beyond",
+          "boarding": "required",
+          "summary": "Puppies travelling to us board with us for the four-week course.",
+          "options": [
+            "Home at weekends, if you would prefer that",
+            "With us right through until the course ends"
+          ]
+        }
+      },
       "acuityUrl": null,
       "order": 5
     },
