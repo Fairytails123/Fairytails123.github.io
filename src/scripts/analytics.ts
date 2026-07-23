@@ -79,7 +79,13 @@ export function initAnalytics() {
           : href.startsWith('mailto:')
             ? 'email'
             : '';
-      if (method) push({ event: 'contact_click', method });
+      // `location` separates the site-wide header/footer contacts from an in-body CTA, which
+      // is the difference between "the page persuaded them" and "they used the furniture".
+      // No PII: these are the business's own published numbers/addresses.
+      if (method) {
+        const where = link.closest('header') ? 'header' : link.closest('footer') ? 'footer' : 'body';
+        push({ event: 'contact_click', method, location: where });
+      }
     },
     { capture: true },
   );
@@ -91,7 +97,10 @@ export function initAnalytics() {
     for (const [selector, tool] of TOOLS) {
       if (target.closest(selector) && !state.toolsSeen.has(tool)) {
         state.toolsSeen.add(tool);
-        push({ event: 'tool_engagement', tool });
+        // `stage` distinguishes "picked the tool up" from "got an answer out of it"
+        // (the dog-exercise calculator pushes stage:'result' / 'deeplink_result').
+        // Without it the two are one undifferentiated key event.
+        push({ event: 'tool_engagement', tool, stage: 'start' });
       }
     }
   };
@@ -113,9 +122,23 @@ export function initAnalytics() {
 export function toAreaDistrict(raw: string): string {
   const value = (raw || '').trim();
   if (!value) return '';
-  const outward = value
-    .toUpperCase()
-    .replace(/\s+/g, ' ')
-    .match(/^([A-Z]{1,2}\d{1,2}[A-Z]?)(?:\s?\d[A-Z]{2})?$/);
-  return outward ? outward[1] : value.slice(0, 32);
+  const upper = value.toUpperCase().replace(/\s+/g, ' ');
+
+  // 1. A FULL postcode anywhere in the string reduces to its outward code.
+  //    This is the case the old anchored regex missed: it only matched when the
+  //    WHOLE field was a postcode, so "London SW1A 1AA" and "TN35 5DT, Hastings"
+  //    fell through to the free-text branch and shipped the full postcode to GA4.
+  const full = upper.match(/\b([A-Z]{1,2}\d{1,2}[A-Z]?) ?\d[A-Z]{2}\b/);
+  if (full) return full[1];
+
+  // 2. A bare outward code (anywhere) is already district-level — keep it.
+  const outward = upper.match(/\b([A-Z]{1,2}\d{1,2}[A-Z]?)\b/);
+  if (outward) return outward[1];
+
+  // 3. Free text with no digits is a place name ("London", "Hastings") — not
+  //    identifying, so it passes through as typed. Anything else still carrying
+  //    digits is dropped rather than guessed at: an empty district is a gap in a
+  //    report, a leaked postcode is a household.
+  if (/\d/.test(value)) return '';
+  return value.slice(0, 32);
 }

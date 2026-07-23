@@ -41,8 +41,12 @@ const ANALYTICS = { tool: 'dog-exercise-calculator' };
 
 /**
  * @param {object} result
+ * @param {'result'|'deeplink_result'} stage How the answer was reached. A `?breed=`
+ *   deep link from the 97-breed table auto-computes without a button press — that is
+ *   the page's PRIMARY SEO mechanic, so it must count as engagement, but it is tagged
+ *   separately so it can always be told apart from a hand-driven calculation.
  */
-function logUsage(result) {
+function logUsage(result, stage) {
   try {
     // Pressing the button twice on the same dog is one engagement, not two.
     const key = JSON.stringify({
@@ -55,7 +59,7 @@ function logUsage(result) {
     state.lastLoggedKey = key;
 
     window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ event: 'tool_engagement', tool: ANALYTICS.tool });
+    window.dataLayer.push({ event: 'tool_engagement', tool: ANALYTICS.tool, stage: stage || 'result' });
   } catch {
     /* analytics must never surface an error to the user */
   }
@@ -479,7 +483,7 @@ function computeAndRender(opts = {}) {
   }
 
   if (opts.focusResult) nodes.result.focus();
-  if (opts.log) logUsage(result);
+  if (opts.log) logUsage(result, opts.logStage);
   return true;
 }
 
@@ -739,7 +743,12 @@ function init() {
   renderBreedChoice();
 
   if (shouldAutoCompute) {
-    const rendered = computeAndRender({ focusResult: false, log: false });
+    // A `?breed=` arrival IS the answer being delivered — the 97-breed table's deep links
+    // are how this page is meant to earn search traffic. Logging it stops that traffic
+    // reporting as total disengagement (and stops it suppressing the tool's key-event rate
+    // against the estimator and toilet-schedule tools). `lastLoggedKey` still de-dupes the
+    // follow-up "Calculate" press on the same dog.
+    const rendered = computeAndRender({ focusResult: false, log: true, logStage: 'deeplink_result' });
     if (rendered) state.hasSubmitted = true;
   }
 }
