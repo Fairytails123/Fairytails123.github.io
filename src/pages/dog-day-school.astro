@@ -10,6 +10,7 @@ const ogHero = await getImage({ src: heroPoster, width: 1200, format: 'jpeg' });
 import DaySchoolRain from '../components/DaySchoolRain.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
@@ -163,7 +164,7 @@ const serviceLd = buildServiceSchema({
   title="Doggy Day Care & Dog Day School, Hastings | The Fairy Tails"
   description="Enrichment-led doggy day care near Hastings Country Park — structured play, socialisation and daily reports. Full & half days, local pick-up & drop-off."
   path="/dog-day-school"
-  updated="2026-07-18"
+  updated="2026-07-24"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -275,9 +276,11 @@ const serviceLd = buildServiceSchema({
       </div>
     </section>
 
+    <PainFreePromise tone="pine" dividerFrom="bg-cream-50" flip />
+
     <!-- ============ WHY DAY SCHOOL — ENRICHMENT ============ -->
     <section class="bg-cream-100" data-section="enrichment">
-      <HillDivider class="bg-cream-50 text-cream-100" />
+      <HillDivider class="bg-pine-950 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <div class="grid items-center gap-12 lg:grid-cols-2">
           <div>

@@ -1,5 +1,7 @@
 # Page 13 — London — FINAL SPEC (pre-build interview 2026-07-14)
 
+> **🔒 ADDED 2026-07-24 — the site-wide PAIN-FREE POSITIONING band.** This page now renders `<PainFreePromise tone="sand" dividerFrom="bg-cream-100" />` between two of its top-level sections, and **the section immediately below it had its own `<HillDivider>` `bg-*` half repointed** to the band's colour — if you move or remove the band you must repoint that divider back, or the colour chain breaks silently. Owner directive (locked decision #14, `SEO.md` §1): **we are pain-free dog trainers, never "force-free"**, and every page names the three tools we never use — choke chains, prong collars, electric e-collars. **No page-specific facts may be added to that shared component** — it renders on nine pages, and a kit-list claim written from one page was false on four of them.
+
 **Slug:** `/london` (**NEW page — no old-site equivalent, no preserved anchors**). Not part of the original URL manifest: it is the first **D-track catchment page**, created by the SEO programme (SEO.md §1 locked decision #3, owner-signed 2026-07-13). Supersedes nothing — it is additive.
 **Source data:** `src/data/pricing.json` (`transport`, `category: "board-train"`), `src/data/business.ts` — the single source of truth. Never hard-code money — render from data with `gbp()`.
 **Reference implementation:** `src/pages/dog-boarding-school.astro` conventions throughout (hero skeleton, GSAP contract, HillDivider rhythm, data-driven pricing cards, drag-track rail).

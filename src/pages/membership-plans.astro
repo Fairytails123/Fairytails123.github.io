@@ -14,6 +14,7 @@ const ogHero = await getImage({ src: heroFriends, width: 1200, format: 'jpeg' })
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
@@ -161,7 +162,7 @@ const serviceLd = buildServiceSchema({
   title="Day School Membership in Hastings | The Fairy Tails"
   description={`Day-school membership for registered school dogs in Hastings — from ${gbp(planHalf.price)} a month, with free pick-ups & drop-offs, grooming perks and priority boarding.`}
   path="/membership-plans"
-  updated="2026-07-16"
+  updated="2026-07-24"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -249,9 +250,11 @@ const serviceLd = buildServiceSchema({
       </p>
     </section>
 
+    <PainFreePromise tone="pine" dividerFrom="bg-cream-50" flip />
+
     <!-- ============ SIGNATURE: THE THREE PLANS + SAVINGS COUNTERS ============ -->
     <section class="bg-cream-100" data-section="plans">
-      <HillDivider class="bg-cream-50 text-cream-100" />
+      <HillDivider class="bg-pine-950 text-cream-100" />
       <div id="plans" class="mx-auto max-w-6xl scroll-mt-24 px-4 pb-24 pt-12">
         <div class="max-w-2xl">
           <p class="eyebrow text-honey-700" data-reveal>The plans</p>

@@ -11,6 +11,7 @@ const settleLoopPosterOpt = await getImage({ src: settleLoopPoster, width: 560, 
 const ogHero = await getImage({ src: heroPoster, width: 1200, format: 'jpeg' });
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 import { buildServiceSchema, buildFaqSchema, AREA_LOCAL } from '../data/schema';
@@ -166,7 +167,7 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
   title="Puppy Classes in Hastings & St Leonards | The Fairy Tails"
   description="Small group puppy training evening classes based in Hastings for your pup and you! The experienced trainers will help you give your puppy the best start."
   path="/puppy-training-classes"
-  updated="2026-07-18"
+  updated="2026-07-24"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -279,9 +280,11 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
       </div>
     </section>
 
+    <PainFreePromise tone="pine" dividerFrom="bg-cream-50" flip />
+
     <!-- ============ WHY GROUP CLASSES ============ -->
     <section class="bg-cream-100" data-section="why">
-      <HillDivider class="bg-cream-50 text-cream-100" />
+      <HillDivider class="bg-pine-950 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <p class="eyebrow text-honey-700" data-reveal>Why choose group classes</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>

@@ -12,6 +12,7 @@ import heroPoster from '../assets/pages/training-plans/training-plans-poster.jpg
 const ogHero = await getImage({ src: heroPoster, width: 1200, format: 'jpeg' });
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
@@ -209,7 +210,7 @@ const serviceLd = buildServiceSchema({
   title="Dog Training in Hastings — Plans & Prices | The Fairy Tails"
   description={`Compare every way to train in Hastings & St Leonards — from ${socialWalkPrice} social walks to live-in Board & Train. Filter by age, goal, format and budget.`}
   path="/training-plans"
-  updated="2026-07-18"
+  updated="2026-07-24"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -447,8 +448,14 @@ const serviceLd = buildServiceSchema({
     </section>
 
     <!-- ============ CLOSING + ENQUIRY ============ -->
+    <!-- The promise band sits AFTER the plans grid on this page, not before it (owner, 2026-07-24).
+         This page's whole job is the comparison grid, and it is the site's thinnest money page —
+         460 shared words ahead of the grid pushed the reason-for-the-page down and took the shared
+         share to 38.8%. Every other page keeps the band higher. -->
+    <PainFreePromise tone="sand" dividerFrom="bg-cream-100" />
+
     <section id="enquire" class="bg-pine-950" data-section="enquire">
-      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <HillDivider class="bg-cream-50 text-pine-950" flip />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
         <div class="mx-auto max-w-2xl text-center">
           <p class="eyebrow text-honey-400" data-reveal>Still not sure?</p>

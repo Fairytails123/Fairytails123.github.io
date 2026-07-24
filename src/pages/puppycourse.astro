@@ -13,6 +13,7 @@ const ogHero = await getImage({ src: heroPup, width: 1200, format: 'jpeg' });
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import { ORG_ID, absUrl } from '../data/schema';
 import pricing from '../data/pricing.json';
@@ -320,7 +321,7 @@ const jsonLd = {
   name: 'The Fairy Tails DIY Puppy Course',
   url: absUrl('/puppycourse'),
   description:
-    'A free, four-week, force-free puppy training course you can follow at home: socialisation, toilet training, life skills, enrichment and husbandry — written by the trainers at The Fairy Tails K9 Centre.',
+    'A free, four-week, pain-free puppy training course you can follow at home, built on positive reinforcement: socialisation, toilet training, life skills, enrichment and husbandry — written by the trainers at The Fairy Tails K9 Centre.',
   // Reference the ONE business entity rather than restating it (see data/schema.ts).
   provider: { '@id': ORG_ID },
   isAccessibleForFree: true,
@@ -346,7 +347,7 @@ const jsonLd = {
   title="Free DIY Puppy Training Course | The Fairy Tails K9 Centre"
   description="Our free DIY puppy course: four structured weeks of socialisation, life skills and husbandry, a daily schedule and a toilet-training guide from our trainers."
   path="/puppycourse"
-  updated="2026-07-16"
+  updated="2026-07-24"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
@@ -400,7 +401,7 @@ const jsonLd = {
     <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
       <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
         <li class="paw-bullet flex items-center text-moss-700">100% free — no sign-up, no catch</li>
-        <li class="paw-bullet flex items-center text-moss-700">Force-free &amp; science-backed</li>
+        <li class="paw-bullet flex items-center text-moss-700">Pain-free &amp; science-backed</li>
         <li class="paw-bullet flex items-center text-moss-700">Four structured weeks</li>
         <li class="paw-bullet flex items-center text-moss-700">Written by our qualified trainers</li>
       </ul>
@@ -448,9 +449,11 @@ const jsonLd = {
       </div>
     </section>
 
+    <PainFreePromise tone="pine" dividerFrom="bg-cream-50" flip />
+
     <!-- ============ METHODS ============ -->
     <section class="bg-cream-100" data-section="methods">
-      <HillDivider class="bg-cream-50 text-cream-100" />
+      <HillDivider class="bg-pine-950 text-cream-100" />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <p class="eyebrow text-honey-700" data-reveal>Our methods</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>

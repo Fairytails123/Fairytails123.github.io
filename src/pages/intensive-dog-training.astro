@@ -9,6 +9,7 @@ const loopPosterOpt = await getImage({ src: loopPoster, width: 560, format: 'web
 const ogHero = await getImage({ src: heroPoster, width: 1200, format: 'jpeg' });
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
 import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
@@ -152,7 +153,7 @@ const serviceLd = buildServiceSchema({
   title="Intensive Dog Training in Hastings | The Fairy Tails"
   description="One-to-one behaviour training (TAR method) near Hastings — five days a week, full day school included, your dog home every night. £2,000 for two months."
   path="/intensive-dog-training"
-  updated="2026-07-18"
+  updated="2026-07-24"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -327,9 +328,11 @@ const serviceLd = buildServiceSchema({
       </div>
     </section>
 
+    <PainFreePromise tone="cream" dividerFrom="bg-cream-50" />
+
     <!-- ============ WEEK-BY-WEEK REGIME — signature scroll story ============ -->
     <section class="bg-pine-950 text-cream-100" data-section="regime">
-      <HillDivider class="bg-cream-50 text-pine-950" flip />
+      <HillDivider class="bg-cream-100 text-pine-950" flip />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <p class="eyebrow text-honey-400" data-reveal>The journey</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
@@ -589,7 +592,8 @@ const serviceLd = buildServiceSchema({
             <h3 class="font-display text-xl font-bold text-moss-700">Adult dogs</h3>
             <p class="mt-3 leading-relaxed text-bark-700">
               A two-month course of structured, five-days-a-week training for one or two priority
-              issues. We only use positive methods and never use aversive tools.
+              issues. We train on positive reinforcement and never use aversive tools — no choke
+              chain, no prong collar, no e-collar.
             </p>
           </article>
           <article class="rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-moss-300">

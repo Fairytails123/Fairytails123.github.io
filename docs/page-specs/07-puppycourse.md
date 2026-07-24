@@ -1,5 +1,7 @@
 # Page 7 — `/puppycourse` — FINAL spec (pre-build interview 2026-07-12)
 
+> **🔴 SUPERSEDING CORRECTION 2026-07-24 — "FORCE-FREE" IS BANNED SITE-WIDE. The two mentions below (lines ~20 trust strip, ~32 meta) are HISTORY, not instructions.** Owner directive: we are **pain-free dog trainers**, never "force-free", because a lead, a legally required muzzle or a nail trim all involve a degree of *force*, while none of them involve *pain*. Both strings were changed on the live page on 2026-07-24 (trust strip → *"Pain-free & science-backed"*; the Course JSON-LD description now reads *pain-free … built on positive reinforcement*), and the page gained a `<PainFreePromise />` band naming the three tools we never use.
+
 The immersive **free DIY Puppy Course hub**, absorbing the old site's `/puppycourse` page,
 its 5 hidden popup subpages (`/puppy-week-1`, `/week-2-puppy`, `/puppy-week-3`,
 `/puppy-week-4`, `/puppy-toilet-schdule`) and the non-duplicate copy from

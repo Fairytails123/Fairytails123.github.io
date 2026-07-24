@@ -7,6 +7,7 @@ const reassuranceLoopPosterOpt = await getImage({ src: reassuranceLoopPoster, wi
 import Base from '../layouts/Base.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import WholeDogFunnel from '../components/WholeDogFunnel.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
@@ -92,7 +93,7 @@ const pains = [
 
 // The whole-dog club — one place for a dog's whole life
 const journey = [
-  { title: 'Train', body: 'Kind, force-free training that actually changes behaviour.' },
+  { title: 'Train', body: 'Kind, pain-free training on positive reinforcement that actually changes behaviour.' },
   { title: 'Day school', body: 'Enrichment-led days of play, friends and structure.' },
   { title: 'Board', body: 'A home-from-home in the countryside when you’re away.' },
   { title: 'Groom', body: 'Looking as good as they feel, at our sister salon.' },
@@ -167,7 +168,7 @@ const clubLife = [
 
 <Base
   title="The Fairy Tails K9 Centre — Dog Training in Hastings"
-  description="Kind, force-free dog training, day school and board & train near Hastings — turning anxious, reactive dogs into calmer, happier companions. Book a free consult."
+  description="Pain-free dog training near Hastings on positive reinforcement — day school, board & train and help for anxious, reactive dogs. Book a free consult."
   path="/"
 >
   <div data-page="home">
@@ -237,7 +238,7 @@ const clubLife = [
     <div class="relative z-10 mx-auto -mt-12 max-w-5xl px-4" data-hero-trust>
       <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-2 sm:gap-2 lg:grid-cols-4">
         <li class="paw-bullet flex items-center text-moss-700">5-star council-rated premises</li>
-        <li class="paw-bullet flex items-center text-moss-700">Force-free &amp; qualified</li>
+        <li class="paw-bullet flex items-center text-moss-700">Pain-free &amp; qualified</li>
         <li class="paw-bullet flex items-center text-moss-700">Countryside base, real-world training</li>
         <li class="paw-bullet flex items-center text-moss-700">Daily reports home</li>
       </ul>
@@ -348,9 +349,11 @@ const clubLife = [
       </div>
     </section>
 
+    <PainFreePromise tone="sand" dividerFrom="bg-cream-100" />
+
     <!-- ============ TRACK 1 — Training that transforms ============ -->
     <section id="Trainingplans" class="bg-pine-950 text-cream-100 scroll-mt-24" data-section="track-training">
-      <HillDivider class="bg-cream-100 text-pine-950" flip />
+      <HillDivider class="bg-cream-50 text-pine-950" flip />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
         <p class="eyebrow text-honey-400" data-reveal>Track 1 · for dogs who are struggling</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-cream-50 sm:text-4xl" data-reveal>
@@ -670,8 +673,17 @@ const clubLife = [
             <p class="mt-1.5 text-sm text-bark-700">Recognised trainer &amp; behaviourist qualifications.</p>
           </div>
           <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
-            <p class="font-display text-xl font-bold text-moss-800">Force-free</p>
-            <p class="mt-1.5 text-sm text-bark-700">Accredited, pain-free methods — no choke chain, no shock collar, no prong collar.</p>
+            {/* "Accredited" and "Qualified team" are OWNER-CONFIRMED and deliberately kept
+                (owner, 2026-07-24: "keep accredited and qualified trainers as it is important
+                trust factor"). A 2026-07-24 review flagged them as unevidenced IN THIS REPO —
+                that is a documentation gap, not a false claim; the owner holds the facts.
+                🔶 Still worth capturing: the awarding body's name, so it can go into the
+                LocalBusiness `hasCredential` alongside the council licence. */}
+            <p class="font-display text-xl font-bold text-moss-800">Pain-free</p>
+            {/* NOT "positive reinforcement only" — an exclusivity claim is the same unkeepable
+                purity promise "force-free" was, and a lead/muzzle/nail trim disproves it. State the
+                mechanism, not a purity label. */}
+            <p class="mt-1.5 text-sm text-bark-700">Accredited, pain-free methods built on positive reinforcement — no choke chain, no prong collar, no e-collar.</p>
           </div>
           <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
             <p class="font-display text-xl font-bold text-moss-800">Years of happy dogs</p>

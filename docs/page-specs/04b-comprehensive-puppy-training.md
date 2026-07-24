@@ -1,5 +1,7 @@
 # Page 4b — `/comprehensive-puppy-training` — "Puppy School" — FINAL SPEC (pre-build interview 2026-07-06)
 
+> **🔒 ADDED 2026-07-24 — the site-wide PAIN-FREE POSITIONING band.** This page now renders `<PainFreePromise tone="pine" dividerFrom="bg-cream-50" />` between two of its top-level sections, and **the section immediately below it had its own `<HillDivider>` `bg-*` half repointed** to the band's colour — if you move or remove the band you must repoint that divider back, or the colour chain breaks silently. Owner directive (locked decision #14, `SEO.md` §1): **we are pain-free dog trainers, never "force-free"**, and every page names the three tools we never use — choke chains, prong collars, electric e-collars. **No page-specific facts may be added to that shared component** — it renders on nine pages, and a kit-list claim written from one page was false on four of them.
+
 > *(Title was "Puppy School (Comprehensive Puppy Training)" until 2026-07-21. **"Comprehensive Puppy Training" is now a RETIRED product name** — its SKU `puppy-intensive` was deleted when the owner confirmed it and `board-train-puppy` are one product. The **slug is unchanged** and never will be renamed. This page's product is `pricing.json` **`board-train-puppy`**, formal name "Boarding School for Puppies", `publicName` **"Puppy School"**.)*
 
 > **🎯 SEO TARGETING LOCKED 2026-07-16 (owner + data) — read before touching this page's copy.**

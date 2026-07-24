@@ -1,5 +1,7 @@
 # Page 5 — Training Plans — FINAL SPEC (pre-build interview 2026-07-06)
 
+> **🔒 ADDED 2026-07-24 — the site-wide PAIN-FREE POSITIONING band.** This page now renders `<PainFreePromise tone="pine" dividerFrom="bg-cream-50" />` between two of its top-level sections, and **the section immediately below it had its own `<HillDivider>` `bg-*` half repointed** to the band's colour — if you move or remove the band you must repoint that divider back, or the colour chain breaks silently. Owner directive (locked decision #14, `SEO.md` §1): **we are pain-free dog trainers, never "force-free"**, and every page names the three tools we never use — choke chains, prong collars, electric e-collars. **No page-specific facts may be added to that shared component** — it renders on nine pages, and a kit-list claim written from one page was false on four of them.
+
 **Slug:** `/training-plans` (NEW page — no old-site equivalent; anchor `#Trainingplans` kept on the homepage so legacy links still land). Supersedes the WEBSITE-PLAN baseline for this page.
 **Source data:** `src/data/pricing.json` (prices/facts = truth; never hard-code money). No harvest copy — all prose is Claude-drafted, owner corrects on preview.
 **Reference implementation:** `src/pages/dog-boarding-school.astro` conventions; filter/grid interaction is a new mechanic for the site.

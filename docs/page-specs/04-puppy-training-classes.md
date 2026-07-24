@@ -1,5 +1,7 @@
 # Page 4 — Puppy Training Classes — FINAL SPEC (pre-build interview 2026-07-05)
 
+> **🔒 ADDED 2026-07-24 — the site-wide PAIN-FREE POSITIONING band.** This page now renders `<PainFreePromise tone="pine" dividerFrom="bg-cream-50" />` between two of its top-level sections, and **the section immediately below it had its own `<HillDivider>` `bg-*` half repointed** to the band's colour — if you move or remove the band you must repoint that divider back, or the colour chain breaks silently. Owner directive (locked decision #14, `SEO.md` §1): **we are pain-free dog trainers, never "force-free"**, and every page names the three tools we never use — choke chains, prong collars, electric e-collars. **No page-specific facts may be added to that shared component** — it renders on nine pages, and a kit-list claim written from one page was false on four of them.
+
 > **📸 Update 2026-07-07 (LIVE):** a new "Out in the real world" `data-stagger` photo grid (6 real town/café/seafront/park shots) was added at the end of the benefits section. Also, **5 stock/AI filler images shared by both puppy pages were replaced with real photos** — on this page: `puppy-socialisation`, `classes-lead-walk` (aspect 16/9→square), `puppy-lab-sit`, `puppy-head-tilt` (all now real, alt text updated). Source + method: `docs/training-photo-pipeline.md`; head-collar/muzzle screened. See HANDOVER 2026-07-07.
 
 **Slug:** `/puppy-training-classes` (preserved). Supersedes the WEBSITE-PLAN baseline for this page.

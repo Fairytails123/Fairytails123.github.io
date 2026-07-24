@@ -1,0 +1,235 @@
+---
+// PAIN-FREE PROMISE — the site-wide training-methods commitment band.
+//
+// Owner directive, 2026-07-24: position us as PAIN-FREE dog trainers, never as
+// "force-free". His reasoning is the same argument he makes himself in
+// /force-free-trainers-v-balanced-dog-trainers: a lead, a legally required
+// muzzle and a nail trim all involve a degree of FORCE, so "force-free" is a
+// promise no honest trainer can keep — but none of them involve PAIN, and that
+// is a promise we can keep and be held to.
+//
+// ⚠️ THE LEAD'S WORDING IS LOAD-BEARING — DO NOT "TIGHTEN" IT.
+// It says nothing we use is "designed to work by hurting them". It deliberately
+// does NOT say "nothing we do will ever hurt your dog": that absolute is
+// falsified by our own published writing (a nail clipper can nick a quick) and
+// by the muzzle/lead exceptions above. The distinction is invisible to a reader
+// and is the entire reason this band is defensible. Every review pass so far has
+// tried to flatten it. Don't.
+//
+// Facts sourced from our own published article /archiestory (what each tool
+// does and the injuries it can cause) and from /intensive-dog-training (the TAR
+// method and the walking kit list). Deliberately claims NO accreditation or
+// certification — whether the business holds a methods accreditation is still an
+// open owner question in docs/page-specs/12-homepage.md.
+//
+// Usage: <PainFreePromise tone="pine" dividerFrom="bg-cream-50" /> — `dividerFrom`
+// is the bg-* class of the section IMMEDIATELY ABOVE. Omit it to render no
+// divider. Remember the section BELOW then has this band above it, so its own
+// HillDivider's bg-* half must be repointed to this band's colour.
+import HillDivider from './HillDivider.astro';
+
+interface Props {
+  /** Band colour. Pick whichever does not collide with the sections either side. */
+  tone?: 'pine' | 'cream' | 'sand';
+  /** bg-* class of the section directly above, e.g. "bg-cream-50". Omit for no divider. */
+  dividerFrom?: string;
+  /** Mirror the hill, so consecutive dividers alternate. */
+  flip?: boolean;
+}
+
+const { tone = 'pine', dividerFrom, flip = false } = Astro.props;
+
+// Static class strings only — Tailwind v4 scans source text, so a computed
+// class name like `text-${x}` would never be generated.
+const TONES = {
+  pine: {
+    section: 'bg-pine-950 text-cream-100',
+    divider: 'text-pine-950',
+    eyebrow: 'text-honey-400',
+    h2: 'text-cream-50',
+    lead: 'text-cream-200',
+    card: 'bg-pine-900',
+    cardTitle: 'text-cream-50',
+    body: 'text-cream-200',
+    strong: 'text-honey-300',
+    mark: 'text-honey-400',
+    note: 'bg-pine-900 text-cream-100',
+    link: 'text-honey-300 decoration-honey-400',
+  },
+  cream: {
+    section: 'bg-cream-100',
+    divider: 'text-cream-100',
+    eyebrow: 'text-honey-700',
+    h2: 'text-moss-800',
+    lead: 'text-bark-700',
+    card: 'border-2 border-cream-200 bg-cream-50',
+    cardTitle: 'text-moss-800',
+    body: 'text-bark-700',
+    strong: 'text-moss-800',
+    mark: 'text-moss-600',
+    note: 'bg-cream-50 text-bark-700',
+    link: 'text-moss-700 decoration-honey-400',
+  },
+  sand: {
+    section: 'bg-cream-50',
+    divider: 'text-cream-50',
+    eyebrow: 'text-honey-700',
+    h2: 'text-moss-800',
+    lead: 'text-bark-700',
+    card: 'border-2 border-cream-200 bg-cream-100',
+    cardTitle: 'text-moss-800',
+    body: 'text-bark-700',
+    strong: 'text-moss-800',
+    mark: 'text-moss-600',
+    note: 'bg-cream-100 text-bark-700',
+    link: 'text-moss-700 decoration-honey-400',
+  },
+} as const;
+
+const t = TONES[tone];
+
+// The three tools, and what each one actually does. Mechanism first — an owner
+// who has been told an e-collar is "only a tingle" needs the object made
+// picturable before the consequence lands. Consequences stay modal-hedged
+// ("can bruise"), exactly as /archiestory hedges them.
+const never = [
+  {
+    name: 'Choke chains',
+    why: 'A sliding metal loop that tightens around your dog’s neck whenever the lead goes tight, and only loosens when the pressure comes off. Repeated use can damage the windpipe, and a sudden jerk can strain the neck or spine.',
+  },
+  {
+    name: 'Prong collars',
+    why: 'Metal links with inward-facing points that press into the skin around your dog’s neck every time the lead tightens. Repeated use can bruise, break the skin and damage the nerves underneath.',
+  },
+  {
+    name: 'Electric collars (e-collars, shock collars)',
+    why: 'Contact points on your dog’s neck that deliver an electric shock by remote control. Even on “low”, it works by being unpleasant enough to stop the dog — who may link that to whatever they were looking at, often the other dog.',
+  },
+];
+
+// What we do instead. Four mechanisms, not four values: an owner who has been
+// sold an e-collar as "the only thing that works" reads "kind" as "ineffective"
+// unless shown an alternative that plausibly works.
+const instead = [
+  {
+    title: 'Positive reinforcement',
+    body: 'We pay for the behaviour we want with food your dog will actually work for, plus toys and play — so they learn what to do, not only what to avoid.',
+  },
+  {
+    title: 'Work kept below your dog’s threshold',
+    // TAR is deliberately NOT named here. It is a feature of the Intensive
+    // programme only (pricing.json), and this band renders on nine pages —
+    // branding it site-wide would sell a day-school or membership buyer a
+    // method their product does not include.
+    body: 'We set the distance and duration your dog can cope with, then close the gap as they steady, rather than correcting them for not coping.',
+  },
+  {
+    title: 'Counter-conditioning',
+    body: 'We change how your dog feels about the thing they react to, rather than suppressing the reaction and leaving the feeling underneath. On our training programmes that work happens where the problem does: the high street, cafés, traffic, the seafront.',
+  },
+  {
+    title: 'Ordinary, well-fitted kit',
+    // ⚠️ NEVER re-add a "that is the whole kit list" claim here. Each page owns
+    // its own kitList array and they genuinely differ (day school asks for 11
+    // items incl. two collars; puppy classes accepts a flat collar OR a
+    // harness; Board & Train adds a 20 ft line and a carabiner pack). A
+    // totalising claim in this shared component is false on most of them.
+    body: 'A well-fitted harness, a non-retractable lead, a collar with an ID tag — ordinary kit, nothing corrective. Your programme’s own kit list is the one to pack from.',
+  },
+];
+---
+
+<section class:list={[t.section]} data-section="pain-free">
+  {dividerFrom && <HillDivider class={`${dividerFrom} ${t.divider}`} flip={flip} />}
+
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:py-28">
+    <p class:list={['eyebrow', t.eyebrow]} data-reveal>The line we won’t cross</p>
+
+    <h2
+      class:list={['mt-3 max-w-3xl font-display text-3xl font-bold sm:text-4xl', t.h2]}
+      data-reveal
+    >
+      <em class="squiggle not-italic">Pain-free</em> dog training — and exactly what that rules out
+    </h2>
+
+    <p class:list={['mt-5 max-w-3xl text-lg leading-relaxed', t.lead]} data-reveal>
+      We are pain-free dog trainers. Nothing we put on your dog, and nothing we do with your dog,
+      is designed to work by hurting them — no choke chain, no prong collar, no electric collar,
+      not on the toughest case, not on the worst day.
+    </p>
+
+    <!-- The three tools we never use -->
+    <ul class="mt-12 grid gap-5 md:grid-cols-3" data-stagger>
+      {
+        never.map((tool) => (
+          <li class:list={['grain rounded-2xl p-7', t.card]}>
+            <span
+              class:list={['flex h-9 w-9 items-center justify-center rounded-full', t.mark]}
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M5.6 5.6 18.4 18.4" />
+              </svg>
+            </span>
+            <p class:list={['mt-4 font-display text-xl font-bold', t.cardTitle]}>
+              <span class="sr-only">We never use: </span>{tool.name}
+            </p>
+            <p class:list={['mt-2.5 text-sm leading-relaxed', t.body]}>{tool.why}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- What we use instead -->
+    <div class="mt-16 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+      <div>
+        <h3 class:list={['font-display text-2xl font-bold sm:text-3xl', t.h2]} data-reveal>
+          What we use instead
+        </h3>
+        <p class:list={['mt-4 leading-relaxed', t.lead]} data-reveal>
+          Positive reinforcement dog training, applied properly — and it works on the hard cases
+          too, not only the easy ones.
+        </p>
+        <p class="mt-6" data-reveal>
+          <a
+            href="/archiestory"
+            class:list={['text-sm font-bold underline decoration-2 underline-offset-4', t.link]}
+          >
+            Read what choke chains, prong collars and e-collars actually do to a dog →
+          </a>
+        </p>
+      </div>
+
+      <!--
+        The paw ::before is in-flow, so `flex items-start` gives a proper hanging indent
+        ONLY when the <li> has exactly two children. The title and body must therefore
+        share one <span>: split them into siblings and flex lays the bold lead-in out as
+        its own narrow, badly-wrapping column.
+      -->
+      <ul class="space-y-6" data-stagger>
+        {
+          instead.map((item) => (
+            <li class:list={['paw-bullet flex items-start leading-relaxed', t.body]}>
+              <span>
+                <strong class:list={['font-display text-lg font-bold', t.strong]}>
+                  {item.title}.
+                </strong>{' '}
+                {item.body}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- The closing contrast. Owner-written list, 2026-07-24. -->
+    <p class:list={['mt-14 max-w-3xl rounded-2xl p-6 leading-relaxed', t.note]} data-reveal>
+      <strong class:list={[t.strong]}>Why we say pain-free, not force-free:</strong> a lead, a
+      collar, a harness, a muzzle where safety requires one, a nail trim, grooming restraints, a
+      bathing noose, holding a dog steady in a busy street — every one of those applies a degree of
+      force, and not one of them is there to cause pain. Force-free isn’t a promise any trainer can
+      honestly keep. Pain-free is.
+    </p>
+  </div>
+</section>
