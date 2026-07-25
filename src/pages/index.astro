@@ -844,27 +844,12 @@ const clubLife = [
         <div class="grain mt-10 rounded-3xl bg-cream-50 p-6 shadow-[var(--shadow-polaroid)] sm:p-12" data-reveal>
           <EnquiryForm service="General enquiry" page="/" />
         </div>
-
-        <div class="mx-auto mt-10 grid max-w-4xl gap-6 text-cream-200 sm:grid-cols-3" data-stagger>
-          <div>
-            <p class="eyebrow text-honey-400">Find us</p>
-            <p class="mt-2 leading-relaxed">
-              {business.address.line1}, {business.address.line2}, {business.address.town} {business.address.postcode}
-            </p>
-            <a href={business.mapsUrl} target="_blank" rel="noopener" class="mt-1 inline-block font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">
-              Open in Google Maps ↗
-            </a>
-          </div>
-          <div>
-            <p class="eyebrow text-honey-400">Opening hours</p>
-            <p class="mt-2 leading-relaxed">{business.hours.display}</p>
-          </div>
-          <div>
-            <p class="eyebrow text-honey-400">Talk to us</p>
-            <a href={business.phones.main.tel} class="mt-2 block font-bold text-honey-300">{business.phones.main.display}</a>
-            <a href={business.phones.main.whatsapp} class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4">WhatsApp us</a>
-          </div>
-        </div>
+        {/* The "Find us / Opening hours / Talk to us" grid that used to sit here was
+            REMOVED 2026-07-25 (owner): the site-wide <Footer/> renders immediately below
+            this section and carries the same address, maps link, hours, phone and
+            WhatsApp — the two blocks read as an obvious duplication, one above the
+            other. The footer is the owner-locked legal NAP display; don't re-add a
+            second copy here. */}
       </div>
     </section>
   </div>
