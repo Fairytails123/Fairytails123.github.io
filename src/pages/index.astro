@@ -669,16 +669,13 @@ const clubLife = [
         <!-- TODO(owner): drop in real accreditation logos + exact figures (years / dogs trained / review rating). -->
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" data-stagger>
           <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
+            {/* The three bodies are DATA (business.accreditations, owner-supplied 2026-07-25 —
+                this closed the 2026-07-24 "unevidenced in the repo" review flag). They also
+                render as hasCredential entries in the site-wide @graph (data/schema.ts). */}
             <p class="font-display text-xl font-bold text-moss-800">Qualified team</p>
-            <p class="mt-1.5 text-sm text-bark-700">Recognised trainer &amp; behaviourist qualifications.</p>
+            <p class="mt-1.5 text-sm text-bark-700">Trainer &amp; behaviourist qualifications — {business.accreditations.map((a) => a.name.replace(/^The /, '')).join(' · ')}.</p>
           </div>
           <div class="rounded-2xl border-2 border-cream-200 bg-cream-100 p-6 text-center">
-            {/* "Accredited" and "Qualified team" are OWNER-CONFIRMED and deliberately kept
-                (owner, 2026-07-24: "keep accredited and qualified trainers as it is important
-                trust factor"). A 2026-07-24 review flagged them as unevidenced IN THIS REPO —
-                that is a documentation gap, not a false claim; the owner holds the facts.
-                🔶 Still worth capturing: the awarding body's name, so it can go into the
-                LocalBusiness `hasCredential` alongside the council licence. */}
             <p class="font-display text-xl font-bold text-moss-800">Pain-free</p>
             {/* NOT "positive reinforcement only" — an exclusivity claim is the same unkeepable
                 purity promise "force-free" was, and a lead/muzzle/nail trim disproves it. State the

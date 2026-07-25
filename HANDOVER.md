@@ -2,7 +2,22 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
-## ⏸️ PAUSE POINT 2026-07-24 — "FORCE-FREE" → "PAIN-FREE" REPOSITIONING SHIPPED TO 9 PAGES · 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-07-25 — SEPARATION-ANXIETY HONESTY FIX (locked #15) + ACCREDITING BODIES INTO SCHEMA · 🔴 START HERE NEXT SESSION
+
+> **SEO detail lives ONLY in `SEO.md`** (banner + new locked **#15** + newest §6 entry). This block is the engineering record.
+>
+> ### ▶ WHAT THIS SESSION DID
+> **🔴 (1) An owner-caught live falsehood, corrected site-wide.** `/comprehensive-puppy-training` claimed our Board & Train *"tackles [separation anxiety] head-on — Archie's story is a good example."* Owner's correction, now **locked #15** (SEO.md §1): SA is **environment-specific** — the trigger context is the dog's own home and their own family — so **no residential programme can treat it**, and once it sets in it is **never 100% treated, only a rehab process**. The cited Archie's story is our own published account of exactly how hard that road is — the sentence's own evidence argued against it. **Six passages corrected on two pages**, each with a guard comment: comp-puppy's licence box (the falsehood — now an honest no-cure/no-guarantees line) · independence paragraph ("a cure later" → "no cure, only management and slow rehab") · the boarding FAQ (schema syncs by construction) · the includes list ("helps head off") · the GEO quick-answer ("does not develop" → "rarely develops"; **re-measured 158w, inside the 134–167 band**) · day-school's "Time apart" card ("ease separation anxiety" → independence-building + fewer hours home alone).
+> **🟢 (2) The correction ADDED the owner's strongest prevention fact:** puppies can join **straight from the breeder, as soon as their second vaccinations are done**, and go home already settled about time apart — "the longer it's left, the bigger the risk." New copy in the independence section; consistent with the page's existing second-vaccination entry facts.
+> **✅ (3) The accreditation open question is CLOSED — the owner named the three bodies:** British College of Canine Studies · The International School for Canine Psychology and Behaviour (ISCP) · The Institute of Modern Dog Trainers (IMDT). Now **data** (`business.accreditations`) → **three `hasCredential` entries in the site-wide `@graph`** beside the council licence (schema.ts `hasCredential` became an array) + named in full on the homepage PROOF card (all four credibility cards still equal height, verified). **No URLs invented** — same rule as `author.url`.
+> **Gates:** build 36 · verify-urls 50/0/0 · verify-reveals ✓ · colour-chain 9/9 · GEO band 158/134–167 · desktop-1440 + true-390 clean · seo-content plugin check on the changed passages: PASS. Citations floor met (scoot verified · **thegooddogguide first-ever read — dead mobile CONFIRMED** · ratingsplus connection-refused, logged).
+>
+> ### ▶ NEXT SESSION STARTS WITH
+> **(1)** Everything in the 2026-07-24 pause point below still stands — the pillar freeze above all. **At unfreeze, note the pillar's Archie card is CLEAN on #15** (it promises no quick fix and claims no SA cure — verified this session), so the unfreeze batch is unchanged.
+> **(2)** The **SA problem page** (§7 problem-page cluster) now has its honest angle written down in #15's annotation: "why residential can't fix separation anxiety — and what actually helps" may beat competitors' fix-promises on trust. Long-tail, ungated, whenever a content slot opens.
+> **(3)** GA4 audiences (07-23 item) still owed — not retroactive.
+
+## ⏸️ PAUSE POINT 2026-07-24 — "FORCE-FREE" → "PAIN-FREE" REPOSITIONING SHIPPED TO 9 PAGES · earlier
 
 > **SEO detail lives ONLY in `SEO.md`** (banner + new locked **#14** + newest §6 entry + **§7a-ii**). This block is the engineering record.
 >

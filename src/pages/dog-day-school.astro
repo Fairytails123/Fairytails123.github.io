@@ -76,8 +76,12 @@ const pillars = [
     body: 'Our team keeps a calm, positive atmosphere; quieter dogs build confidence and resilience in a safe, controlled environment.',
   },
   {
+    // Deliberately a PREVENTION + fewer-hours-alone claim, never a treatment one:
+    // separation anxiety is environment-specific (the trigger is the dog's own
+    // home and family), so day school cannot "ease" or treat it (owner
+    // correction 2026-07-25, SEO.md locked #15).
     title: 'Time apart, made easy',
-    body: 'Happy hours away from you, in good company, ease separation anxiety and teach your dog to be content on their own.',
+    body: 'Happy hours away from you, in good company, build the independence that helps prevent separation problems — and mean far fewer hours home alone.',
   },
 ];
 
@@ -164,7 +168,7 @@ const serviceLd = buildServiceSchema({
   title="Doggy Day Care & Dog Day School, Hastings | The Fairy Tails"
   description="Enrichment-led doggy day care near Hastings Country Park — structured play, socialisation and daily reports. Full & half days, local pick-up & drop-off."
   path="/dog-day-school"
-  updated="2026-07-24"
+  updated="2026-07-25"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />

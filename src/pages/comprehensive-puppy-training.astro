@@ -117,7 +117,7 @@ const includes = [
   'Full days of trainer-led training and socialisation',
   'Structured introductions to all breeds, shapes and sizes',
   'Real-world outings — towns, cafés, transport and busy parks',
-  'Boarding with us, which heads off separation anxiety',
+  'Boarding with us, which helps head off separation anxiety',
   'An end-of-month handover so the training sticks at home',
 ];
 
@@ -187,7 +187,7 @@ const faqs = [
   },
   {
     q: 'Will boarding upset my puppy?',
-    a: 'No — that’s rather the point. Nights with us are gentle, gradual and in good company, and they teach your puppy that being apart from you is nothing to fear. Preventing separation anxiety now is far kinder than trying to fix it later. If you are local to Hastings and would rather ease into it, you can keep the nights flexible — see “Local to Hastings” above.',
+    a: 'No — that’s rather the point. Nights with us are gentle, gradual and in good company, and they teach your puppy that being apart from you is nothing to fear. Preventing separation anxiety now is far kinder than attempting a fix later — once it takes hold there is no complete cure, only slow rehab. If you are local to Hastings and would rather ease into it, you can keep the nights flexible — see “Local to Hastings” above.',
   },
   {
     q: 'Is my puppy too young, or too nervous?',
@@ -224,7 +224,7 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
   title="Puppy School in Hastings & St Leonards | The Fairy Tails"
   description="Puppy school in Hastings & St Leonards: full-day, trainer-led puppy training and structured socialisation that builds real-world confidence, day by day."
   path="/comprehensive-puppy-training"
-  updated="2026-07-24"
+  updated="2026-07-25"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -375,7 +375,7 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
           settling before anything else, structured play with carefully chosen dogs of all sizes, proper
           rest, then something new — a surface, a sound, a face. Real-world outings are part of the
           lesson: towns, cafés, transport and busy parks. Boarding is deliberate too: a puppy who learns
-          early to settle without you does not develop separation anxiety later. The four weeks end with
+          early to settle without you rarely develops separation anxiety later. The four weeks end with
           a handover, so the training holds once your puppy is home.
         </p>
       </div>
@@ -588,23 +588,33 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
             <p class="mt-5 leading-relaxed text-cream-100" data-reveal>
               One of the kindest things you can teach a young puppy is that being apart from you is nothing
               to fear. Boarding with us teaches your puppy to settle without you — calmly,
-              in good company, and long before it can turn into a problem.
+              in good company, and long before it can turn into a problem. The earlier that lesson
+              starts, the better it takes: some puppies join us straight from the breeder, as soon as
+              their second vaccinations are done, and go home already knowing that time apart is safe.
+              The longer it’s left, the bigger the risk.
             </p>
             <p class="mt-4 leading-relaxed text-cream-100" data-reveal>
               It matters more than most people realise. Separation anxiety is one of the hardest
-              behaviours to fix once it takes hold, and one of the biggest reasons puppies are given up.
+              things in all of dog training, and one of the biggest reasons puppies are given up.
               Left unchecked, it can leave owners feeling like prisoners of their own dog — unable to leave
               the house without a scene — and it’s rarely fair on the neighbours either. Prevention now is
-              far kinder, and far easier, than a cure later.
+              far kinder — because later there is no cure, only management and slow rehab.
             </p>
+            {/* 🔒 OWNER CORRECTION 2026-07-25 (SEO.md locked #15): this box used to say our
+                Board & Train "tackles separation anxiety head-on". FALSE — separation anxiety
+                is environment-specific (the trigger context is the dog's own home and their
+                own family), so it CANNOT be trained out at our premises, and once it sets in
+                it is never 100% treated — only a rehab process. Never reintroduce a
+                treats/fixes/tackles-SA claim for ANY service. Prevention (early boarding) is
+                the only strong claim we can honestly make, and it is this page's whole point. */}
             <div class="mt-7 rounded-2xl bg-moss-900/60 p-6" data-reveal>
               <CouncilRating licence={true} size="md" />
               <p class="mt-4 leading-relaxed text-cream-100">
-                Your puppy boards on fully licensed premises. For dogs who already struggle with
-                separation, our
-                <a href="/dog-boarding-school" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Board &amp; Train</a>
-                tackles it head-on — <a href="/archiestory" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Archie’s story</a>
-                is a good example.
+                Your puppy boards on fully licensed premises. And we’ll be straight with you:
+                once separation anxiety takes hold there is no complete cure — only long, patient
+                rehab, with no guarantees. That is exactly why we board puppies early, while
+                prevention still works. <a href="/archiestory" class="font-bold text-honey-300 underline decoration-honey-500 underline-offset-2">Archie’s story</a>
+                shows how hard that road can get.
               </p>
             </div>
           </div>

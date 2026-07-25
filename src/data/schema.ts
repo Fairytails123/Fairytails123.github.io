@@ -126,17 +126,30 @@ export function buildSiteGraph() {
         areaServed: [...AREA_LOCAL, ...AREA_DESTINATION],
         priceRange: '££',
         // The Hastings Borough Council animal-activity licence — a real,
-        // publicly verifiable credential, and the strongest trust signal we own.
-        hasCredential: {
-          '@type': 'EducationalOccupationalCredential',
-          credentialCategory: 'license',
-          identifier: business.licence.number,
-          name: `Animal activity licence ${business.licence.number} — ${business.licence.rating}-star rating`,
-          recognizedBy: {
-            '@type': 'GovernmentOrganization',
-            name: business.licence.authority,
+        // publicly verifiable credential, and the strongest trust signal we own —
+        // plus the trainer accreditation bodies (owner-supplied 2026-07-25),
+        // which turn the homepage's "Accredited" claim from asserted to named.
+        hasCredential: [
+          {
+            '@type': 'EducationalOccupationalCredential',
+            credentialCategory: 'license',
+            identifier: business.licence.number,
+            name: `Animal activity licence ${business.licence.number} — ${business.licence.rating}-star rating`,
+            recognizedBy: {
+              '@type': 'GovernmentOrganization',
+              name: business.licence.authority,
+            },
           },
-        },
+          ...business.accreditations.map((a) => ({
+            '@type': 'EducationalOccupationalCredential',
+            credentialCategory: 'certification',
+            name: `Dog trainer qualification — ${a.name}`,
+            recognizedBy: {
+              '@type': 'Organization',
+              name: a.name,
+            },
+          })),
+        ],
       },
       {
         '@type': 'WebSite',

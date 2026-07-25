@@ -84,6 +84,18 @@ export const business = {
     rating: 5,
   },
 
+  // The trainer accreditation bodies behind the site's "Accredited" /
+  // "qualified team" claims — owner-supplied 2026-07-25, closing the open
+  // question that had left those claims unevidenced in the repo. Rendered as
+  // hasCredential entries in the site-wide @graph (data/schema.ts) and named
+  // on the homepage PROOF card. Deliberately no URLs: never invent a link
+  // (same house rule as author.url).
+  accreditations: [
+    { name: 'British College of Canine Studies' },
+    { name: 'The International School for Canine Psychology and Behaviour (ISCP)' },
+    { name: 'The Institute of Modern Dog Trainers (IMDT)' },
+  ],
+
   acuity: {
     main: 'https://app.acuityscheduling.com/schedule.php?owner=13914499',
     // Header "Book Appointment" — the old site's prominent CTA for returning regulars
