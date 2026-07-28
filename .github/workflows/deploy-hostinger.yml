@@ -37,6 +37,11 @@ jobs:
       - name: Verify built URLs
         run: node scripts/verify-urls.mjs --dist
 
+      # A malformed .htaccess takes the WHOLE site down (redirect loop), so it gates the
+      # deploy rather than being checked after the fact.
+      - name: Verify .htaccess redirect rules
+        run: node scripts/test-htaccess.mjs
+
       - name: Deploy dist/ to Hostinger via FTPS
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:

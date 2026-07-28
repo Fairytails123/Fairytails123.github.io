@@ -8,7 +8,32 @@ RewriteCond %{HTTPS} !=on [OR]
 RewriteCond %{HTTP_HOST} !^www\.thefairytails\.co\.uk$ [NC]
 RewriteRule ^(.*)$ https://www.thefairytails.co.uk/$1 [R=301,L]
 
-# 2) Legacy URL preservation: serve extensionless URLs from the built .html files
+# 2) ONE URL PER PAGE (added 2026-07-28) — 301 every duplicate spelling onto the URL
+#    that is in the sitemap and in the page's own <link rel="canonical">.
+#    WHY: Astro build.format:'file' writes "<slug>.html"; rule (3) below serves that
+#    file extensionless, but the raw "<slug>.html" stayed directly fetchable and so did
+#    "/index" — so EVERY page had a 200-serving twin and the HOMEPAGE had THREE live
+#    URLs ("/", "/index", "/index.html"), all byte-identical. Google files the twins as
+#    "Alternate page with proper canonical tag" in the Not-indexed report and spends
+#    crawl budget re-fetching them, on a site that has already had pages sit in
+#    "Discovered - currently not indexed" for 10 days.
+#
+#    ⚠️ These match %{THE_REQUEST} — the ORIGINAL client request line — NOT
+#    %{REQUEST_URI}. That is load-bearing: rule (3) rewrites internally to "<slug>.html",
+#    so a REQUEST_URI-based rule would match its own rewrite and loop forever.
+#    Keep 2a before 2b (so /index.html reaches / in ONE hop) and both before rule (3).
+#    Logic is covered by scripts/test-htaccess.mjs — run `npm run test:htaccess` after
+#    any edit here.
+
+# 2a) /index, /index.html and /<dir>/index.html -> the directory root
+RewriteCond %{THE_REQUEST} \s/+(([^\s?]*/)?)index(\.html)?[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2b) /<path>.html -> /<path>
+RewriteCond %{THE_REQUEST} \s/+([^\s?]+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 3) Legacy URL preservation: serve extensionless URLs from the built .html files
 #    (Astro build.format:'file' — /gallery must serve gallery.html with a direct 200)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f

@@ -13,6 +13,7 @@
     "verify-urls": "node scripts/verify-urls.mjs",
     "verify-reveals": "node scripts/verify-reveals.mjs",
     "test:area-district": "node scripts/test-area-district.mjs",
+    "test:htaccess": "node scripts/test-htaccess.mjs",
     "test:breed-matcher": "node tools/breed-matcher/test/engine.test.mjs",
     "test:dog-exercise-calculator": "node tools/dog-exercise-calculator/test/engine.test.mjs"
   },
