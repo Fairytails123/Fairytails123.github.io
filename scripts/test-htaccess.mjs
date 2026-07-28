@@ -47,6 +47,17 @@ for (const l of lines) {
   }
 }
 
+// The trailing-slash normaliser must exist and must be guarded on !-d, or every page's
+// "slug/" spelling 500s (rule 3 rewrites it to "slug/.html" and loops). It must also sit
+// before rule 3. Guarding on !-d is what keeps the real directories (/breed-matcher/,
+// /media/, /_astro/) serving 200 instead of being redirected into nothing.
+const slashRuleIdx = lines.findIndex((l) => /^RewriteRule\s+\^\(\.\+\)\/\$/i.test(l));
+if (slashRuleIdx === -1) {
+  fail('the trailing-slash normaliser (RewriteRule ^(.+)/$) is missing — every /slug/ will 500');
+} else if (!/^RewriteCond\s+%\{REQUEST_FILENAME\}\s+!-d/i.test(lines[slashRuleIdx - 1] || '')) {
+  fail('the trailing-slash rule is not guarded by "RewriteCond %{REQUEST_FILENAME} !-d" — real directories would break');
+}
+
 // The extensionless rewrite must still be present, and must come AFTER the redirects.
 const extensionlessIdx = lines.findIndex((l) => /^RewriteRule\s+\^\(\.\*\)\$\s+\$1\.html/i.test(l));
 if (extensionlessIdx === -1) {
@@ -58,6 +69,9 @@ const lastRedirectIdx = lines.reduce(
 );
 if (extensionlessIdx !== -1 && lastRedirectIdx > extensionlessIdx) {
   fail('the canonical-URL redirects must come BEFORE the extensionless rewrite');
+}
+if (slashRuleIdx !== -1 && extensionlessIdx !== -1 && slashRuleIdx > extensionlessIdx) {
+  fail('the trailing-slash normaliser must come BEFORE the extensionless rewrite, or /slug/ still 500s');
 }
 
 /* ── Replay the real patterns against a request corpus ─────────────────────── */

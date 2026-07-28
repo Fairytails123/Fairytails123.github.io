@@ -322,10 +322,12 @@ const GROUPS = [
     flex-direction: column;
     align-items: center;
     text-align: center;
-    /* The block is faded in with opacity (not visibility) so screen readers still reach it.
-       That leaves an invisible-but-clickable CTA, so mouse input is blocked until the
-       timeline sets pointer-events:auto at the reveal. Keyboard focus is unaffected. */
-    pointer-events: none;
+    /* No pointer-events gate here. It used to block mouse input because the block was
+       faded to opacity:0 and an invisible CTA is still clickable. The block no longer
+       fades (it must stay visible for Googlebot — see the timeline), so blocking clicks
+       would now leave a CTA that is plainly on screen and silently does nothing until the
+       user has scrubbed 65% through the section. Do not reinstate it without restoring
+       a fade, and do not restore the fade. */
   }
   .fnl__eyebrow {
     font-size: 0.6875rem;
@@ -803,31 +805,42 @@ const GROUPS = [
         });
         tl.eventCallback('onUpdate', render);
 
-        tl.from(headEls, { y: 26, autoAlpha: 0, duration: 0.6, stagger: 0.12 }, 0)
-          .from(groupEls, { y: 14, autoAlpha: 0, duration: 0.5, stagger: 0.08 }, 0.45)
+        // 🔴 MOVEMENT ONLY — NEVER autoAlpha/opacity on anything carrying text.
+        // These five tweens used to carry `autoAlpha: 0` / `opacity: 0`. `from()`
+        // immediate-renders its from-state, so at scroll 0 the whole section was hidden:
+        // measured live in real Chrome, 32 of 32 [data-fnl-*] nodes computed as hidden —
+        // one H2, four H3s, the caption, the payoff line and 20 service phrases that appear
+        // NOWHERE else in the homepage HTML. Googlebot does not scroll, so it indexed none
+        // of it. Identical bug class to the one that cost /dog-boarding-school 71% of its
+        // clicks in July. See the animation contract in CLAUDE.md; `npm run verify-reveals`
+        // now scans components and will fail the build if a hidden from-state comes back.
+        tl.from(headEls, { y: 26, duration: 0.6, stagger: 0.12 }, 0)
+          .from(groupEls, { y: 14, duration: 0.5, stagger: 0.08 }, 0.45)
           .from(
             chipEls,
-            { y: -14, autoAlpha: 0, scale: 0.96, transformOrigin: 'left center', duration: 0.5, stagger: 0.06 },
+            // y:14, NOT y:-14 — the non-crossing rule. With the fade gone, chips starting
+            // ABOVE their final spot while their group heading starts BELOW its own would
+            // converge by 28px and visibly slide through the H3. Matching the group's
+            // offset makes the heading and its chips travel as one block.
+            { y: 14, scale: 0.96, transformOrigin: 'left center', duration: 0.5, stagger: 0.06 },
             0.55
           )
           .to(growT, { s: 1, duration: 3.2, ease: 'sine.inOut' }, 0.6)
           .to(wireT, { p: 1, duration: 2.6, ease: 'none' }, 0.75)
           .to(coreT, { p: 1, duration: 2.4, ease: 'power2.out' }, 1.1)
-          .from(capEl, { y: 10, autoAlpha: 0, duration: 0.5 }, 3.4)
+          .from(capEl, { y: 10, duration: 0.5 }, 3.4)
           .to(dimT, { p: 1, duration: 0.9, ease: 'sine.inOut' }, 3.7)
           // 0.6, not 0.4: the chips REST here, and at 0.4 their text fell to 3.16:1 and the
           // group headings to 2.80:1 against pine-950. 0.6 keeps 5.38:1 / 4.70:1 and still
           // reads as clearly receded.
           .to([...chipEls, ...groupEls], { opacity: 0.6, duration: 0.9, ease: 'sine.inOut' }, 3.7)
-          // `opacity`, NOT `autoAlpha`: autoAlpha adds visibility:hidden, which strips the
-          // payoff line and the primary CTA from the accessibility tree and the tab order for
-          // the whole first 65% of a two-viewport scrub. A screen reader driving a virtual
-          // cursor never scrolls, so it would never see them at all. Left in the tree, they
-          // are announced; `pointer-events` stops a mouse hitting the invisible link, and the
-          // focusin handler below reveals everything the instant a keyboard reaches it.
-          .from(outEls, { y: 20, opacity: 0, duration: 0.6, stagger: 0.18 }, 3.9)
+          // The old `opacity: 0` here was chosen over autoAlpha to keep the payoff line and
+          // the CTA in the accessibility tree. That was the right instinct aimed at the wrong
+          // target: a screen reader could still reach them, but Googlebot — which renders,
+          // does not scroll, and snapshots at progress 0 — saw opacity:0 and indexed nothing.
+          // Movement-only fixes both at once, so the a11y workaround is no longer needed.
+          .from(outEls, { y: 20, duration: 0.6, stagger: 0.18 }, 3.9)
           .from(ruleEl, { scaleX: 0, transformOrigin: 'center', duration: 0.6 }, 4.2)
-          .set(outcomeEl, { pointerEvents: 'auto' }, 4.4)
           .to({}, { duration: 0.8 }, 5.2); // a beat to rest on the outcome
 
         currentTl = tl;

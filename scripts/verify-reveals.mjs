@@ -24,13 +24,28 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const DIR = 'src/pages';
+// ⚠️ SCAN EVERY .astro FILE UNDER src/, NOT JUST src/pages (widened 2026-07-28).
+// The original gate did a FLAT readdir of src/pages only, so it never once looked at
+// src/components — and WholeDogFunnel.astro, the homepage's pinned funnel, was shipping
+// five hidden from-states the whole time. Measured live at scroll 0 in real Chrome:
+// 32 of 32 [data-fnl-*] nodes hidden (one H2, four H3s, 20 service phrases), while the
+// 61 [data-reveal] nodes on the same page were correctly visible — i.e. the gate reported
+// green for two weeks while the rule was being broken on the site's biggest earning page.
+// A gate that only inspects part of the tree is worse than no gate: it manufactures
+// confidence. Keep this recursive.
+const ROOT = 'src';
 const HIDE = /(autoAlpha|opacity)\s*:\s*0\s*[,}]/;
+
+const astroFiles = (dir) =>
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) return astroFiles(p);
+    return e.isFile() && p.endsWith('.astro') ? [p] : [];
+  });
 
 const offences = [];
 
-for (const file of readdirSync(DIR).filter((f) => f.endsWith('.astro'))) {
-  const path = join(DIR, file);
+for (const path of astroFiles(ROOT)) {
   const lines = readFileSync(path, 'utf8').split(/\r?\n/);
 
   for (let i = 0; i < lines.length; i++) {
@@ -42,7 +57,10 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.astro'))) {
     let owner = null;
     for (let k = i; k >= Math.max(0, i - 4); k--) {
       if (/\.(to|fromTo|set)\(/.test(lines[k])) { owner = 'to'; break; }
-      if (/\.from\(/.test(lines[k])) { owner = 'from'; break; }
+      // `(?<!\bArray)` — `Array.from({length: n}, …)` is not a GSAP tween. Without this the
+      // gate flags decorative SVG particles built inside an Array.from callback (they set
+      // opacity:0 and carry no text), which would train people to ignore a real failure.
+      if (/(?<!\bArray)\.from\(/.test(lines[k])) { owner = 'from'; break; }
     }
     if (owner !== 'from') continue;                 // .to()/.set() may fade — no text
     if (lines[i].includes('[data-hero-cue]')) continue; // aria-hidden scroll arrow

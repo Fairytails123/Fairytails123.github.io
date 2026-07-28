@@ -33,6 +33,20 @@ RewriteRule ^ /%1 [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+([^\s?]+)\.html[\s?] [NC]
 RewriteRule ^ /%1 [R=301,L]
 
+# 2c) Trailing slash on a page URL -> the canonical no-slash form (added 2026-07-28).
+#     WITHOUT THIS, EVERY PAGE'S TRAILING-SLASH SPELLING RETURNS HTTP 500, not a 404:
+#     the server normalises "slug/" so rule 3's `-f` test passes, rule 3 rewrites it to
+#     "slug/.html" which does not exist, and it re-enters until LiteSpeed's internal
+#     redirect limit trips. Verified live on 45/45 paths before the fix.
+#     `!-d` protects the only real directories (/breed-matcher/, /media/, /_astro/), and
+#     `^(.+)/$` cannot match the empty per-directory string, so "/" is untouched.
+#     Must sit AFTER 2a/2b and BEFORE rule 3.
+#     NB this one tests %{REQUEST_FILENAME}, not %{THE_REQUEST} — it is a filesystem
+#     question, not a request-spelling one, and rule 3 never produces a trailing slash,
+#     so there is no loop risk.
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
 # 3) Legacy URL preservation: serve extensionless URLs from the built .html files
 #    (Astro build.format:'file' — /gallery must serve gallery.html with a direct 200)
 RewriteCond %{REQUEST_FILENAME} !-d
