@@ -2,6 +2,28 @@
 
 **SEO (standing, 2026-07-12):** all SEO status + next actions live in **`SEO.md`** (repo root, gitignored — STATUS banner + §6 ledger) — HANDOVER no longer tracks SEO tasks; the 2026-07-12 block's item (1) below is **superseded by SEO.md Stage 1** (absorbed verbatim).
 
+---
+
+## ✅ CURRENT STATE — what is true RIGHT NOW (refresh at every session close; last: 2026-08-03)
+
+> **Read this before any dated ⏸️ block below.** Every block under it is a *historical record of
+> that session* and is deliberately never rewritten — so an old block saying "the freeze holds" or
+> "the Breed Matcher is a `public/` file" was true **then** and is not a statement about today.
+> This section is the only place that describes the present. **If you find a dated block
+> contradicting this list, this list wins.**
+
+| Fact | State as of 2026-08-03 |
+|---|---|
+| **Pillar drop-recovery freeze** | 🔓 **LIFTED** (owner decision). Any "blocked by the freeze" note anywhere is stale. |
+| **The pillar's unfreeze batch + day-school & puppy blocks** | ✅ Built, gate-green, desktop+mobile verified — **on branch `held/owner-copy-review-2026-08-03` (`369e929`), NOT in the working tree and NOT deployed.** Held only for owner copy review. `git checkout` it; do **not** rebuild from the SEO.md drafts — two of them are wrong (see §7a/§7a-ii banners). |
+| **`verify-reveals` + `verify-nap`** | ✅ Both are `prebuild` **and** explicit CI steps. `npm run build` cannot succeed without them. Never demote to manual. |
+| **Breed Matcher** | ✅ A full `<Base>` Astro page at `src/pages/breed-matcher/index/index.astro` (the double nesting is load-bearing). **No longer a `public/` file.** Its PECR exposure is closed. |
+| **"Secure field hire"** | 🔒 **WE DO NOT OFFER IT** (owner, 2026-08-03). The `field:` service key is deleted and must never return. Generic "hire a field" advice and the visitor's own answer option are fine — see CLAUDE.md. |
+| **Holiday Board & Train section** | Owner approved writing it; **copy drafted in `SEO.md` §7a-iii**, not yet in a page. |
+| **Last deployed commit** | `43a8940` — deploy green, `verify-urls --live` 50/50. Working tree clean, `main` in sync with origin. |
+| **Second brain** | **`LEARNING-CURVE.md`** (gitignored, OneDrive-synced) — read §1 + skim §2/§3 at every SEO session start; append at close. |
+| **Predictions due** | **~2026-08-11 → 08-18** (homepage funnel copy) and **early Oct** (3 pages). Tracked in `LEARNING-CURVE.md` §6. |
+
 ## ⏸️ PAUSE POINT 2026-08-03 — THE AHREFS AUDIT EXECUTED: the reveal gate never actually ran · a live PECR exposure · the PILLAR FREEZE LIFTED (copy held) · 🔴 START HERE NEXT SESSION
 
 > **Tree state at close: ONE commit DEPLOYED + LIVE-VERIFIED (`5c352f6`, run 30845639374, green first try, FTPS no retry). THREE PAGES ARE DELIBERATELY UNCOMMITTED IN THE WORKING TREE, awaiting owner copy review** — `src/pages/dog-boarding-school.astro`, `src/pages/dog-day-school.astro`, `src/pages/comprehensive-puppy-training.astro`. They are built, gate-green and visually verified; they are NOT a work-in-progress. **SEO detail lives ONLY in `SEO.md`** (banner + new **§12** + newest §6 entry + §9c rows). This block is the engineering record.

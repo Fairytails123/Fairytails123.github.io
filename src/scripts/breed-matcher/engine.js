@@ -72,10 +72,12 @@ export function scoreBreed(breed, a) {
       const g = breed.spaceNeed - space;
       const pen = g * 9;
       // access (not home size) is the solvable part
-      // ⚠️ Hiring a secure field is GENERIC advice here — deliberately unlinked and
-      // never called "ours". We have no field-hire offering in pricing.json; it was
-      // presented as a Fairy Tails service until 2026-08-03. See the owner-owed note
-      // at the top of services.js before wiring it back up.
+      // 🔒 Hiring a secure field is GENERIC advice here — deliberately unlinked and
+      // never called "ours". ✅ OWNER CONFIRMED 2026-08-03: "we don't have secure
+      // field service — we don't offer that." It had been presented as a Fairy Tails
+      // service in this tool since ~June 2026. **Never re-link it, and never re-add a
+      // `field:` key to services.js** — the moment it carries svc() it becomes a
+      // product claim for a product that does not exist. Advice = fine; "our" = not.
       if (a.access === "parksOnly" && breed.size < 5) {
         gap(pen, 0.7, "Needs more space than parks alone provide",
           `Regular open space sorts this — hiring a secure field, or making the most of nearby beaches and countryside, plus our ${svc("walking", "dog walking")}.`);

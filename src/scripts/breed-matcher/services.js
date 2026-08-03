@@ -27,15 +27,21 @@
    copy. Do not add a key for something we might do, or that a page merely
    mentions; add it after it exists in pricing.json.
 
-   ❓ OWNER-OWED — SECURE FIELD HIRE. There used to be a `field:` key here
-   ("secure field hire", pointed at /contact as an ask-us link), and the two space
-   bridges in engine.js offered it as ours. There is no field-hire offering in
-   pricing.json, so on 2026-08-03 the key was removed and those bridges now
-   suggest hiring a field as GENERIC advice, unlinked and unclaimed — true either
-   way, since plenty of people do hire one. **Question for Kam: do we actually
-   offer secure field hire?** If yes, it belongs in pricing.json with its own
-   entry (name, price, unit, eligibility) first — then re-add the key here and
-   re-link the bridges. Never the other way round.
+   ✅ SECURE FIELD HIRE — ANSWERED BY THE OWNER 2026-08-03: **WE DO NOT OFFER IT.**
+   "We don't have secure field service — we don't offer that." So the `field:` key
+   that used to sit here ("secure field hire", linked to /contact as an ask-us) was
+   a product claim for a product that does not exist, and it had been live in this
+   tool since ~June 2026. It is GONE and **must never be re-added.**
+
+   🔒 What is still allowed, and why: the two space bridges in engine.js suggest
+   hiring a field as GENERIC advice — unlinked, unclaimed, not attributed to us.
+   That is honest (plenty of owners do hire one) and useful to a reader whose dog
+   needs more space than their garden gives. `data.js` also keeps "I'd happily
+   travel or hire a secure field" as an ANSWER OPTION — that is the visitor
+   describing their own access, not us offering anything, and it feeds
+   effectiveSpace(). Neither is a claim. **The line is: describing a thing the
+   owner might do = fine; presenting it as "our <thing>" with a link = a product
+   claim, and it needs a pricing.json entry first.**
    =========================================================================== */
 
 export const FT = {
