@@ -112,6 +112,37 @@ const monthPlan = [
   { week: 'Week 4', title: 'Consolidate & hand over', body: 'Everything comes together, and we coach you: the cues, the timing and the habits that keep it all going once your puppy is home for good.' },
 ];
 
+// TOILET TRAINING — the routine, rendered inside the "shape of the month" section
+// (add-only, 2026-08-03). Substance is warranted by the course's own data: pricing.json
+// `board-train-puppy.features` opens with "Toilet training". These lines are the
+// ROUTINE — marketing copy in the same class as `worldSkills` / `includes`, carrying
+// no price, no eligibility and no boarding fact.
+// ⚠️ IT IS NOT THE ONLY TOILET-TRAINING CONTENT ON THE SITE, and must never claim to be:
+// /puppycourse has its own `#toilet-training` section, H2 and interactive age tool, and
+// astro.config.mjs 301s the legacy /puppy-toilet-schdule there. That page owns the DIY
+// intent — how often, how long they can hold it, do it yourself. This block owns the
+// done-for-you angle: we run the routine for you, all day, and hand it over. The prose
+// links to /puppycourse#toilet-training so the two read as a pair, not as rivals.
+// 🔴 NOT A BOARDING PASSAGE. The boarding rule is DATA (pricing.json
+// `board-train-puppy.arrangements`, locked #13) rendered by data-section="tracks", and
+// the quick-answer block is its ONE sanctioned prose exception. Nothing here — or in
+// the block that renders it — may say who boards, for how long, or where a puppy
+// sleeps at night. A second prose copy of that rule is exactly how it flipped four
+// times before it was moved into data.
+// Looked up BY PREDICATE, not by index: `features[0]` would silently render the wrong
+// sentence the day someone reorders the list in pricing.json, and it falls back to a
+// REAL entry of the same array — never to a hard-coded string.
+const toiletFeature = plan!.features.find((f) => /toilet/i.test(f)) ?? plan!.features[0];
+
+const toiletRoutine = [
+  'A trip outside after every nap, every meal and every burst of play',
+  'The same spot and the same quiet cue word, every single time',
+  'Praise the second they get it right, so the right choice becomes the obvious one',
+  'Trainers reading the early signs all day, so far fewer accidents happen at all',
+  'Accidents cleaned up and nothing more — a telling-off after the event teaches a puppy nothing',
+  'The whole routine handed over to you, so it carries straight on at home',
+];
+
 // What the month includes — marketing copy (NOT price facts, which live in pricing.json).
 const includes = [
   'Full days of trainer-led training and socialisation',
@@ -221,10 +252,26 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
 ---
 
 <Base
-  title="Puppy School in Hastings & St Leonards | The Fairy Tails"
-  description="Puppy school in Hastings & St Leonards: full-day, trainer-led puppy training and structured socialisation that builds real-world confidence, day by day."
+  {/*
+    ⚠️ TITLE WIDENED 2026-08-03 — the old tag was geo-CAPPED, not false.
+    It read "Puppy School in Hastings & St Leonards" + "full-day, trainer-led", written
+    under the pre-2026-07-18 premise that this was a LOCAL DAY month. Hastings itself is
+    TRUE and stays: `business.town` is Hastings and the quick answer below places the
+    base near Hastings. What was wrong was the CAP — naming two neighbouring towns and
+    nothing else reads as a local-only service, while this page's own data sells a course
+    puppies travel for: `arrangements.nonLocal.label` is "Travelling to us from London and
+    beyond", and boarding is mandatory for those puppies (locked #13). A page can BE in
+    Hastings and ALSO take travelling puppies — the tag now says both, with one geo token,
+    the four-week shape, and the brand suffix, at 60 characters.
+    🔒 Do NOT put "residential puppy training" here (locked to /dog-boarding-school, owner
+    Q2 2026-07-21) or "puppy boarding and training" (the pillar holds it). "Puppy School"
+    stays the primary term per locked #9.
+    Price and the age band interpolate from pricing.json — never hard-code them again.
+  */}
+  title="Puppy School — Our 4-Week Course, Hastings | The Fairy Tails"
+  description={`Four-week Puppy School near Hastings, ${gbp(plan!.price)}, for ${plan!.eligibility.toLowerCase()}: toilet training, obedience and socialisation. Puppies travel to us from London.`}
   path="/comprehensive-puppy-training"
-  updated="2026-07-25"
+  updated="2026-08-03"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -341,9 +388,10 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
 
     <!-- ============ QUICK ANSWER ============
          A deliberate 134-167 word, self-contained answer to the definition-shaped
-         question an owner actually asks ("what is puppy school?"). Sits high on the
-         page because AI assistants take ~44% of their citations from the first 30%
-         of a page, and it must stay quotable WHOLE.
+         question an owner actually asks. Sits high on the page because AI assistants
+         take ~44% of their citations from the first 30% of a page, and it must stay
+         quotable WHOLE. (H2 retitle rationale + the word recount live in the JS-style
+         comment inside the section below, which does not ship in the HTML.)
          ⚠️ Boarding facts: see the `arrangements` note in the frontmatter (SEO.md #13).
          This block states BOTH tracks without mixing them, because it must stay quotable
          whole. Sits on cream-50 with no HillDivider so the band chain below
@@ -353,7 +401,7 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
       <div class="max-w-3xl">
         <p class="eyebrow text-honey-700" data-reveal>In short</p>
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
-          What is <em class="squiggle not-italic">puppy school</em>?
+          What is <em class="squiggle not-italic">Puppy School</em>, and what happens in the four-week course?
         </h2>
         {/* 🔴 THE ONE SANCTIONED EXCEPTION TO "NEVER RESTATE THE BOARDING RULE IN PROSE"
             (CLAUDE.md / SEO.md locked #13). This passage must stay a self-contained,
@@ -364,9 +412,24 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
             that has already flipped four times.
             ⚠️ RULE: any edit to `pricing.json` `board-train-puppy.arrangements` REQUIRES
             re-reading this paragraph in the same commit, and re-counting it into the
-            134–167 band from the BUILT html. This is in the §4 change gate. */}
+            134–167 band from the BUILT html. This is in the §4 change gate.
+
+            ⚠️ H2 RETITLED 2026-08-03 + RE-COUNTED IN THE SAME CHANGE (the rule above).
+            It read "What is puppy school?" — our own product name asked back at a reader
+            who has never heard it, and nobody searches their way to a name they don't
+            know. It now names the thing as well ("the four-week course") in ONE question
+            the paragraph genuinely answers end to end: what it is, then what happens.
+            Keep it a single question — an earlier draft welded a label and a question
+            together with an em dash and read as two headings. The answer's first sentence
+            deliberately repeats the question's terms ("Puppy School is our four-week
+            puppy training course…"), which is what makes the passage quotable alone.
+            🔒 "residential puppy training" stays locked to /dog-boarding-school (owner Q2,
+            2026-07-21) and "puppy boarding and training" stays with the pillar — neither
+            may appear here. Boarding facts in the passage are UNCHANGED by that edit.
+            WORD COUNT re-done on the final wording: 158 words (160 tokens counting the
+            two standalone em dashes) — inside the 134–167 band. */}
         <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
-          Puppy school is a four-week programme for {plan!.eligibility.toLowerCase()}, at our licensed
+          Puppy School is our four-week puppy training course for {plan!.eligibility.toLowerCase()}, at our licensed
           countryside base near Hastings ({business.licence.authority} licence {business.licence.number}).
           Your puppy boards with us and spends their days with our trainers. Puppies travelling to us
           from London and beyond board for the whole four weeks; families local to Hastings can keep
@@ -705,6 +768,68 @@ const faqLd = buildFaqSchema('/comprehensive-puppy-training', faqs);
             ))
           }
         </ol>
+
+        {/* ---- TOILET TRAINING (add-only, 2026-08-03) ----
+            Sits INSIDE the existing "shape of the month" section on purpose: a new
+            section element would have forced the FOLLOWING section's HillDivider bg-*
+            half to be repointed, and that chain breaks silently when it is missed.
+            Adding inside touches no divider at all — cream-50 -> cream-100 -> cream-50
+            is exactly as it was.
+            Warranted by the course's own data: `board-train-puppy.features` opens with
+            "Toilet training".
+            ⚠️ It does NOT own the sub-intent alone. /puppycourse#toilet-training already
+            owns the DIY side — how often, how long a puppy can hold it, the age tool and
+            the schedule table — and the legacy /puppy-toilet-schdule 301s there. THIS
+            block is the done-for-you side: we run the routine all day and hand it over.
+            The third paragraph links across, so keep that link if you edit the copy.
+            🔴 TOILET TRAINING ONLY. No boarding-arrangement prose may enter this block —
+            the rule is DATA (pricing.json `arrangements`, locked #13) rendered by
+            data-section="tracks", and the quick-answer block above is its ONE sanctioned
+            prose exception. Never add a sentence here about nights, weekends, or who
+            boards; a second prose copy is how that fact flipped four times.
+            ⚠️ Honesty (locked #8): this promises a ROUTINE and a handover, never a
+            finished toilet-trained puppy in four weeks, and it says out loud that it only
+            holds if the routine carries on at home. Keep that caveat.
+            NOT added to `faqs` — that array is the rendered accordion AND the FAQPage
+            schema. */}
+        <div class="mt-16 grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            {/* Eyebrow interpolates the feature itself, so the heading can never drift
+                from what the course actually includes. */}
+            <p class="eyebrow text-honey-700" data-reveal>{toiletFeature}</p>
+            <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+              How do you <em class="squiggle not-italic">toilet train a puppy</em> in four weeks?
+            </h2>
+            <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+              It is the thing most new owners ask about first. Puppies don’t learn it from being told
+              off — they learn it from a routine so predictable that going outside becomes the obvious
+              thing to do. What makes it hard at home is rarely knowledge; it’s consistency, around
+              work, the school run and everything else a day throws at you.
+            </p>
+            <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+              So we run one. A trainer is with your puppy right through the day, which means the right
+              moments get praised as they happen and the early signs get read before the puddle.
+              {plan!.eligibility} are still building bladder control, so we work with their body clock
+              rather than against it — and you’re never left guessing how it’s going, because daily
+              reports and body-cam videos of their sessions come with the course.
+            </p>
+            <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+              Then we hand it over. Toilet training only holds if the same routine carries on at home,
+              so before the four weeks are out we walk you through the timings, the cue word and the
+              signs to watch for — and we’ll tell you honestly where your puppy has got to, rather
+              than pretend every puppy is finished on the same day. Prefer to run it yourself? The
+              hour-by-hour schedule, and how long a puppy can realistically hold it at each age, is
+              set out in our <a href="/puppycourse#toilet-training" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">free DIY puppy course</a>.
+            </p>
+          </div>
+
+          <div class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] sm:p-8" data-reveal>
+            <h3 class="font-display text-xl font-bold text-moss-800">The routine, every day</h3>
+            <ul class="mt-5 space-y-2.5" data-stagger>
+              {toiletRoutine.map((r) => <li class="paw-bullet flex items-start leading-relaxed text-bark-700">{r}</li>)}
+            </ul>
+          </div>
+        </div>
       </div>
     </section>
 
