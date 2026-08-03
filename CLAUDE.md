@@ -50,10 +50,11 @@ Rebuild of **www.thefairytails.co.uk** (Fairy Tails K9 Centre, a dog-training bu
 
 1. **`HANDOVER.md`** — session status + ordered next actions.
 2. **`SEO.md`** (repo root, **GITIGNORED** — OneDrive-synced, never committed: public repo) — the SEO operating system: strategy, scored backlog, session ledger. Read its STATUS banner + newest §6 ledger entry at session start, right after HANDOVER.md.
-3. **`WEBSITE-PLAN.md`** — the master plan: locked interview decisions, page map with build-order/status tracker, per-page baseline specs, architecture, URL manifest, stage gates, risks. It is the *baseline*; each page's pre-build interview is the *final word*.
-4. **`docs/page-specs/*.md`** — per-page FINAL specs produced by each pre-build interview (supersede the baseline for that page).
-5. **`docs/site-audit/*.json`** — raw per-page audit of all ~39 live URLs (copy, links, images, defects, SEO baseline) that the plan was built from.
-6. **`..\fairytails-image-archive\`** (outside the repo) — Stage 0 harvest: per-page verbatim `copy.md`, `links.json`, raw `page.html`, and every live-site image full-res. **This is the content source for every page build** — the audit JSONs are summaries; the harvest is verbatim.
+3. **`LEARNING-CURVE.md`** (repo root, **GITIGNORED** — OneDrive-synced, never committed: public repo) — **the second brain for SEO** (owner, 2026-08-03). Not a defect log: *"in SEO there are no bugs, just good practices, bad practices and learned lessons."* It holds **§1 THE LAWS**, a **§2 DO** list of proven practice, a **§3 DON'T** list of proven harm, the case files behind them, and a **§6 prediction scoreboard** that keeps us calibrated. **Read §1 in full and skim the §2/§3 headings at the start of every SEO session**, and check §6 for anything due. **Append to it whenever a practice is proven, disproven, or a prediction resolves** — that is how the programme compounds instead of re-learning. ⚠️ Precedence: `SEO.md` §1 locked decisions always win; this file is craft, not policy. But where it conflicts with a *plugin or tool* recommendation, **this file wins — it is evidenced**.
+4. **`WEBSITE-PLAN.md`** — the master plan: locked interview decisions, page map with build-order/status tracker, per-page baseline specs, architecture, URL manifest, stage gates, risks. It is the *baseline*; each page's pre-build interview is the *final word*.
+5. **`docs/page-specs/*.md`** — per-page FINAL specs produced by each pre-build interview (supersede the baseline for that page).
+6. **`docs/site-audit/*.json`** — raw per-page audit of all ~39 live URLs (copy, links, images, defects, SEO baseline) that the plan was built from.
+7. **`..\fairytails-image-archive\`** (outside the repo) — Stage 0 harvest: per-page verbatim `copy.md`, `links.json`, raw `page.html`, and every live-site image full-res. **This is the content source for every page build** — the audit JSONs are summaries; the harvest is verbatim.
 
 This folder is used from more than one Windows machine via OneDrive. Claude's per-machine memory does **not** travel with it — durable project knowledge belongs in these repo files, not in session memory.
 
@@ -61,7 +62,8 @@ This folder is used from more than one Windows machine via OneDrive. Claude's pe
 
 SEO is part of EVERY main-website task from now on, not a separate project.
 
-- **Session start:** after HANDOVER.md, read `SEO.md` (STATUS banner + newest §6 ledger entry). If the banner's last-workover date is >7 days old and this is a website session, offer the SEO workover first.
+- **Session start:** after HANDOVER.md, read `SEO.md` (STATUS banner + newest §6 ledger entry), **then `LEARNING-CURVE.md` — §1 THE LAWS in full, skim the §2 DO / §3 DON'T headings, and check §6 for a prediction that is due.** If the banner's last-workover date is >7 days old and this is a website session, offer the SEO workover first.
+- **Session close:** as well as the `SEO.md` §6 ledger entry, **append to `LEARNING-CURVE.md` anything the session proved, disproved, or predicted** — a practice that worked, a practice that harmed, a belief that turned out false, a tool behaving unlike its docs, or a prediction resolving. If the session proved nothing new, say so and move on; an empty append is better than an invented lesson. **A prediction made without a due date in §6 is not a prediction.**
 - **Every website change** must pass the SEO gate (`SEO.md` §4, ~2 min) — run it at the same moment as the mandatory desktop+mobile visual test, before commit.
 - **Session close** (any session that touched the site): append a §6 ledger entry — even two lines ("Gate: n/a — nothing SEO-relevant") — and refresh the banner.
 - SEO status/next-actions live ONLY in `SEO.md`. HANDOVER may say "see SEO.md", never restate them.
