@@ -4,9 +4,10 @@ import Base from '../layouts/Base.astro';
 import CouncilRating from '../components/CouncilRating.astro';
 import EnquiryForm from '../components/EnquiryForm.astro';
 import HillDivider from '../components/HillDivider.astro';
+import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
-import { buildServiceSchema, AREA_DESTINATION } from '../data/schema';
+import { buildServiceSchema, buildFaqSchema, AREA_DESTINATION } from '../data/schema';
 
 // Video posters live in src/assets so astro:assets can optimise them — the hero
 // underlay <Picture> is this page's LCP element (see the 2026-07-16 image batch).
@@ -142,6 +143,57 @@ const clientCards = [
 
 const gbp = (n: number) => `£${n.toLocaleString('en-GB')}`;
 
+// ── THE PUPPY TIER ────────────────────────────────────────────────────────────
+// Board & Train is the residential RANGE — older dogs AND puppies, at different
+// lengths and entry criteria (owner, 2026-07-21). `board-train-puppy` is its puppy
+// course and the ONLY residential puppy course we sell: rendered here as a tier of
+// the range under its formal name, and on /comprehensive-puppy-training as its
+// dedicated page under the public name "Puppy School". Never invent a distinction
+// between the two — there is none in the data (locked #11).
+//
+// 🔒 LOCKED #13 — THE BOARDING RULE IS DATA, NOT PROSE. It lives in pricing.json
+// `board-train-puppy.arrangements` because every earlier version lived only in page
+// copy, and each session that re-derived it from copy got it wrong: the fact flipped
+// FOUR times between 2026-06-30 and 2026-07-21. Render the two groups from
+// `puppyTracks` below, each in its OWN card — never restate the rule in prose, and
+// never let one passage carry both groups' requirements.
+type PuppyArrangement = {
+  label: string;
+  boarding: string;
+  summary: string;
+  options: string[];
+};
+const btPuppy = boardTrain.find((o) => o.id === 'board-train-puppy')! as unknown as {
+  name: string;
+  price: number;
+  unit: string;
+  eligibility: string;
+  features: string[];
+  arrangements: { local: PuppyArrangement; nonLocal: PuppyArrangement };
+};
+const puppyTracks: PuppyArrangement[] = [btPuppy.arrangements.local, btPuppy.arrangements.nonLocal];
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+// ⚠️ THIS PAGE HAD NO `faqs` ARRAY BEFORE TODAY, and no FAQPage node. The array is
+// created here as the single source for BOTH the rendered accordion in the puppy-tier
+// band and the FAQPage schema — the same construction /london,
+// /puppy-training-classes and /comprehensive-puppy-training use, so the two can never
+// drift apart. Only ever put a REAL, RENDERED question in it: the kit-list <details>
+// below is a label, not a question, and harvesting it would breach Google's guidelines.
+//
+// 🔒 The answer says NOTHING about boarding, deliberately, and it must stay that way.
+// Locked #13 forbids one passage carrying both groups' requirements — and asserting the
+// non-local requirement alone ("your puppy boards with us") is simply FALSE for local
+// families, whose boarding is optional. It cannot signpost the cards either: a FAQPage
+// answer gets lifted into a search result or an AI answer with no page around it, so
+// "set out below" points at nothing. The answer therefore answers only what was asked.
+const faqs = [
+  {
+    q: 'Do you take puppies, or only older dogs?',
+    a: `We take both. Board & Train is our residential range: it runs from puppies through to adult dogs, at different lengths and with different entry criteria. ${btPuppy.name} is the puppy course — ${gbp(btPuppy.price)} ${btPuppy.unit}, for ${btPuppy.eligibility.toLowerCase()}. Our trainers do the day-in, day-out work at the age when good habits are easiest to lay down, and you get daily reports and body-cam video of every session.`,
+  },
+];
+
 // Long-distance pick-up & drop-off (London & the South of England) — the rate and the
 // illustrative London mileage live in pricing.json; never hard-code them in copy.
 // Charged per journey on the ONE-WAY distance from our postcode (owner, 2026-07-12).
@@ -162,15 +214,29 @@ const serviceLd = buildServiceSchema({
   offerings: boardTrain,
   areaServed: AREA_DESTINATION,
 });
+
+// FAQPage from the REAL rendered Q&A above (the puppy-tier band's accordion) — never
+// from the kit-list <details>, which is a label rather than a question.
+const faqLd = buildFaqSchema('/dog-boarding-school', faqs);
 ---
 
 <Base
   title="Residential Dog Training — Board & Train | The Fairy Tails"
   description="Residential dog training (board & train) in the Sussex countryside, with door-to-door collection from London. We do the hard work — you enjoy the results."
   path="/dog-boarding-school"
+  {/*
+    First `updated` date this page has ever carried. It was excluded from the
+    2026-07-18 GEO batch because the drop-recovery freeze was on and a visible date
+    plus a new WebPage node is new indexable content. The owner lifted that freeze
+    today and the page genuinely changes today (puppy-tier band, pain-free band, the
+    positive-training rewrite), so the date is TRUE. Bump it only when the content
+    genuinely changes again — never on a rebuild, never from the build clock.
+  */}
+  updated="2026-08-03"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
   <div data-page="board-train">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
@@ -375,9 +441,144 @@ const serviceLd = buildServiceSchema({
       </div>
     </section>
 
-    <!-- ============ PROOF ============ -->
-    <section class="overflow-hidden py-20 sm:py-28" data-section="proof">
-      <div class="mx-auto max-w-6xl px-4">
+    <!-- ============ THE PUPPY TIER ============
+         Sits immediately after the programme section's puppy line ("we train pups from
+         as young as twelve weeks"), which until now was the whole of this page's puppy
+         content: no name, no price, no age band, nothing for a puppy-boarding searcher
+         to land on.
+
+         NO HillDivider here: the programme section above is the same bg-cream-100 field,
+         and a hill between two identical colours draws nothing. That also keeps the
+         PainFreePromise call below honest — the section directly above IT is still
+         bg-cream-100, which is what its `dividerFrom` names. With no colour and no shape
+         to mark the join, whitespace is the only cue left, so the wrapper carries the
+         house `pt-12` like every other section on this page — don't drop it.
+
+         🔒 Every figure interpolates from pricing.json, and the boarding rule is
+         RENDERED from `arrangements` in two separate cards (locked #13). Never restate
+         it in prose here, and never write a sentence that carries both groups. -->
+    <section class="bg-cream-100" data-section="puppy-tier">
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-700" data-reveal>The puppy tier</p>
+        <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Puppy boarding and training — <em class="squiggle not-italic">{btPuppy.eligibility.toLowerCase()}</em>
+        </h2>
+        {/* The age band is already in the H2 above — repeating `eligibility` here read
+            like a mail-merge. The second clause carries the page's other entry
+            condition instead (the programme section's vaccination line, above).
+            ⚠️ And no boarding claim in this paragraph: it sits above BOTH cards, so any
+            sentence that says where a puppy sleeps is either half the rule or both
+            groups at once (locked #13). The cards say it; this doesn't. */}
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Our residential range takes puppies as well as adult dogs. {btPuppy.name} is the puppy
+          course: {gbp(btPuppy.price)} {btPuppy.unit}, and puppies need their second set of
+          vaccinations before they can join. Your puppy spends their days with our trainers, at
+          the age when the habits you want are easiest to lay down and there is least to un-teach
+          later.
+        </p>
+        <ul class="mt-7 grid max-w-3xl gap-2.5 sm:grid-cols-2" data-stagger>
+          {btPuppy.features.map((f) => <li class="paw-bullet flex items-start text-bark-700">{f}</li>)}
+        </ul>
+
+        <h3 class="mt-14 max-w-2xl font-display text-2xl font-bold text-moss-800" data-reveal>
+          Where your puppy sleeps depends on <em class="squiggle not-italic">where you are</em>
+        </h3>
+        <div class="mt-7 grid gap-6 lg:grid-cols-2" data-stagger>
+          {
+            puppyTracks.map((track) => (
+              <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]">
+                <p
+                  class:list={[
+                    'inline-flex w-fit items-center rounded-full px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider',
+                    track.boarding === 'required'
+                      ? 'bg-honey-200 text-bark-800'
+                      : 'bg-moss-200 text-moss-800',
+                  ]}
+                >
+                  {track.boarding === 'required' ? 'Boarding included' : 'Boarding optional'}
+                </p>
+                <h4 class="mt-4 font-display text-xl font-bold text-moss-800">{track.label}</h4>
+                <p class="mt-3 font-bold leading-relaxed text-moss-700">{track.summary}</p>
+                <ul class="mt-4 space-y-2.5">
+                  {track.options.map((option) => (
+                    <li class="paw-bullet flex items-start leading-relaxed text-bark-700">{option}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+        <p class="mt-7 max-w-3xl leading-relaxed text-bark-700" data-reveal>
+          Travelling to us? Puppies use exactly the same
+          <a
+            href="#london-pickup"
+            class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-4"
+          >
+            door-to-door pick-up and drop-off
+          </a>
+          as our adult programmes.
+        </p>
+
+        <div class="mt-10 max-w-3xl space-y-4" data-stagger>
+          {
+            faqs.map((faq) => (
+              <details class="group rounded-2xl bg-cream-50 shadow-[var(--shadow-lift)]">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-7 font-display text-xl font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+                  {faq.q}
+                  <svg
+                    class="accordion-chevron h-5 w-5 shrink-0 text-honey-600"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M4 7l6 6 6-6"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </summary>
+                <div class="accordion-body">
+                  <div class="overflow-hidden">
+                    <div class="px-7 pb-7">
+                      <p class="leading-relaxed text-bark-700">{faq.a}</p>
+                    </div>
+                  </div>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+
+        <a href="/comprehensive-puppy-training" class="btn btn-moss mt-8 w-fit" data-reveal>
+          See the full Puppy School programme <span class="btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    {/*
+      PAIN-FREE PROMISE — parked since 2026-07-24 (SEO.md §7a-ii) because this page was
+      the drop-recovery signal and a whole new band is materially new indexable content.
+      Freeze lifted, so it ships. tone="pine" collides with neither neighbour, and
+      `dividerFrom` is the bg-* of the section directly above — the puppy-tier band,
+      which is bg-cream-100. ⚠️ The section BELOW is now preceded by pine-950, so the
+      PROOF section carries a divider it never had (see the note there).
+    */}
+    <PainFreePromise tone="pine" dividerFrom="bg-cream-100" flip />
+
+    <!-- ============ PROOF ============
+         ⚠️ COLOUR CHAIN, repaired 2026-08-03. This section used to butt straight onto
+         the cream-100 programme band with no divider at all — a near-invisible edge
+         between two creams. The pain-free band above it is pine-950, so a hard edge is
+         no longer an option: it gets the standard dark→light hill (non-flip, matching
+         this page's other dark→light joins, and alternating with the flipped hill on
+         the band above). Section padding moved to pb-* so the hill sits flush at the
+         top; the pt-12 now lives on the content wrapper, as everywhere else. -->
+    <section class="overflow-hidden pb-20 sm:pb-28" data-section="proof">
+      <HillDivider class="bg-pine-950 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pt-12">
         <p class="eyebrow text-honey-700" data-reveal>Proof, not promises</p>
         <h2 class="mt-3 max-w-2xl font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           We'll never sell you a <em class="squiggle not-italic">guaranteed fix</em>
@@ -786,8 +987,9 @@ const serviceLd = buildServiceSchema({
             <h4 class="font-display text-xl font-bold text-moss-700">Adult dogs</h4>
             <p class="mt-3 leading-relaxed text-bark-700">
               Dogs older than sixteen weeks must do the full eight-week course, with one week's
-              break. We can't train in less than eight weeks due to latent inhibition. We only use
-              positive training and never use aversive tools.
+              break. We can't train in less than eight weeks due to latent inhibition. We train on
+              positive reinforcement and never use aversive tools — no choke chain, no prong
+              collar, no e-collar.
             </p>
           </article>
           <article class="rounded-2xl border-2 border-cream-200 p-7 transition-colors duration-300 hover:border-moss-300">

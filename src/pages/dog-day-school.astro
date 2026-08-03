@@ -13,7 +13,7 @@ import HillDivider from '../components/HillDivider.astro';
 import PainFreePromise from '../components/PainFreePromise.astro';
 import { business } from '../data/business';
 import pricing from '../data/pricing.json';
-import { buildServiceSchema, AREA_LOCAL } from '../data/schema';
+import { buildServiceSchema, buildFaqSchema, AREA_LOCAL } from '../data/schema';
 
 import doggyFriends from '../assets/pages/dog-day-school/doggy-friends-2880w.webp';
 // Owner's master pool image 4 (2026-07-11): a birthday party in the playroom — the
@@ -45,6 +45,16 @@ const halfPlan = pricing.offerings.find((o) => o.id === 'day-half-am');
 const addOns = pricing.addOns;
 const flexi = pricing.flexiPass;
 const taster = pricing.offerings.find((o) => o.id === 'day-taster');
+// pricing.json carries the taster COUNT as prose, not a number — the SKU's own
+// eligibility line reads "Three required before joining" and its features read
+// "1 hour, then 2 hours, then 3 hours". So the page keeps exactly ONE copy of that
+// count here, as both the numeral (for arithmetic) and the word (for prose), and
+// everything below reads it from here rather than retyping "three".
+// ⚠️ There is NO separate assessment SKU in pricing.json: the assessment IS these
+//    sessions. Never write copy that charges for an assessment "plus" tasters — that
+//    invents a fourth appointment and a price the data does not have.
+const tasterSessions = { count: 3, word: 'three' };
+const tasterTotal = taster.price * tasterSessions.count;
 const cbs = pricing.offerings.find((o) => o.id === 'cbs');
 // Membership counterparts for the estimator's "membership would be cheaper" nudge
 // (owner, 2026-07-11): full days compare against Tier 1, half days against Half Days.
@@ -87,7 +97,10 @@ const pillars = [
 
 const daySchedule = [
   { time: '7:45 – 9:30am', title: 'Pick-up round & arrivals', body: 'Our school buses head out on their rounds and the first happy paws hit the playground.' },
-  { time: '8:00 – 10:00am', title: 'Parent drop-offs', body: 'We open at 8:00am — drop your dog off any time up to 10:00am.' },
+  // `key` is a stable machine handle, NOT copy — the FAQ below looks this row up by it
+  // so the visible title stays free to be reworded. Renaming or removing the key breaks
+  // the build LOUDLY, which is the point: a silent fallback would let the FAQ drift.
+  { key: 'drop-offs', time: '8:00 – 10:00am', title: 'Parent drop-offs', body: 'We open at 8:00am — drop your dog off any time up to 10:00am.' },
   { time: '9:30 – 10:30am', title: 'Welcome & settling in', body: 'Cuddles and calm to settle everyone in, plus health, poop and bag checks so the day starts right.' },
   { time: '10:30am – 12:00pm', title: 'Walking & enrichment', body: 'Out for walks, then into the enrichment activities that keep clever dogs happy and pleasantly tired.' },
   { time: '11:00am – 12:30pm', title: 'Lunch & feeding', body: 'A calm, supervised lunch — every dog fed their own meal, exactly as you’ve asked us to.' },
@@ -97,6 +110,14 @@ const daySchedule = [
   { time: 'By 4:30pm', title: 'Home runs complete', body: 'All the school-bus return journeys are wrapped up by half past four.' },
   { time: 'Until 5:30pm', title: 'Parent pick-ups', body: 'We stay open until 5:30pm for collections — then we do it all again tomorrow!' },
 ];
+
+// The morning drop-off window, read back OUT of daySchedule rather than retyped, so
+// the FAQ answer below can never drift from the timetable it is describing. Same
+// "one copy of a fact" discipline the pricing figures follow. Matched on the row's
+// `key`, never on its editable title — and deliberately with NO optional chaining or
+// fallback: if the row ever goes, the build must fail rather than quietly print
+// nothing where a time should be.
+const dropOffWindow = daySchedule.find((s) => s.key === 'drop-offs').time;
 
 const whyUs = [
   { icon: iconBuddies, title: 'Regular buddies', body: 'Your dog socialises with its regular friends, engaging in planned activities for the day.' },
@@ -118,13 +139,13 @@ const railCards = [
 
 const joinSteps = [
   { title: 'Send an enquiry', body: 'Tell us about your dog and what you’re after. We’ll be in touch to arrange your first visit.' },
-  { title: 'Assessment & tasters', body: `An introductory assessment plus three taster sessions — 1 hour, then 2, then 3 — at ${gbp(taster.price)} each, so we can be sure day school suits your dog.` },
+  { title: 'Assessment & tasters', body: `Your dog’s introductory assessment is ${tasterSessions.word} taster sessions — 1 hour, then 2, then 3 — at ${gbp(taster.price)} each, so we can be sure day school suits your dog.` },
   { title: 'Welcome to the school', body: 'Once your dog is accepted, you’re all set — and ready to start booking days.' },
   { title: 'Book your days', body: 'Book full or half days to suit your week, or save with a regular weekly booking or membership.' },
 ];
 
 const criteria = [
-  'Every new dog has an introductory assessment plus at least three taster sessions, so we know day school is the right fit.',
+  `Every new dog’s introductory assessment is at least ${tasterSessions.word} taster sessions, so we know day school is the right fit.`,
   'Vaccinations up to date — DHP, Leptospirosis and Kennel Cough.',
   'Intact male dogs over six months old can’t join (unless they’re on one of our training programmes).',
   'Females in season can’t attend while they’re in season.',
@@ -149,6 +170,57 @@ const kitList = [
   'Registration form, signed and submitted before the first full day',
 ];
 
+// The questions day-care families actually ask on the phone. This array is BOTH the
+// rendered accordion in the FAQ section AND the FAQPage schema, so only genuine
+// questions may live here.
+// ⚠️ NEVER harvest the `criteria` or `kitList` <details> blocks into it — they are
+//    labels, not questions, and a FAQPage built from them breaches Google's guidelines.
+// ⚠️ Every figure interpolates from pricing.json / business.ts. Nothing here may be
+//    typed by hand, so an answer can never quietly contradict the plan cards below.
+// ⚠️ An answer EARNS its place by carrying something the rest of the page doesn't.
+//    A "do I have to come the same days every week?" answer was cut on 2026-08-03
+//    because the quick answer, the plan-card badges and the estimator's Flexi Pass
+//    panel already said all three of its facts — a fourth copy is not an FAQ.
+const faqs = [
+  {
+    q: 'What does a day at day school actually involve?',
+    a: `A settled arrival with health, poop and bag checks first, then walks and timetabled enrichment, a calm supervised lunch where every dog is fed their own meal exactly as you’ve asked us to, a proper rest period, and an afternoon of play with a little obedience practice woven through it. Every dog goes home with a daily report. A full day runs ${fullPlan.eligibility}; a half day is ${halfPlan.eligibility.toLowerCase()}.`,
+  },
+  {
+    // ⚠️ TWO different clock formats meet here — the timetable's "8:00 – 10:00am" and
+    // business.ts's canonical "8.00 am – 5.30 pm". business.ts is the source of truth
+    // and must NOT be reformatted to match, so the answer keeps them apart instead:
+    // the drop-off window belongs to one sentence, the full opening hours stand alone
+    // as a labelled line at the end. Don't run the two back together.
+    q: 'When can I drop my dog off, and what are your hours?',
+    a: `Morning drop-offs run ${dropOffWindow}, and we can’t take any dog in before we open; collections are welcome any time up to closing. Full opening hours: ${business.hours.display}.`,
+  },
+  {
+    // ⚠️ THIS IS THE LOCAL SCHOOL BUS — pricing.json `addOns`, charged per journey.
+    // It is NOT the long-distance collection service in `transport` (£2 a mile, one
+    // way, for families travelling to Board & Train from London and beyond). They are
+    // different services and the copy must keep them apart — never merge or cross-quote.
+    // ⚠️ Pick-up and drop-off are SEPARATE keys in addOns. They happen to cost the same
+    // today; quoting one figure for both would go silently wrong the day they don't.
+    q: 'Do you collect and drop off at home?',
+    a: `Yes. Our school buses run a local round each morning and a return run each afternoon — ${gbp(addOns.pickUpPerJourney)} for the morning pick-up and ${gbp(addOns.dropOffPerJourney)} for the afternoon drop-off. Your times depend on where you live, and we set them when your dog joins. Both are included free on every membership plan.`,
+  },
+  {
+    // The framing here MUST match the joining section further down the page: the
+    // assessment IS the taster sessions, it is not a separate charge on top of them.
+    // The joining TOTAL is stated in exactly two places by design — the quick-answer
+    // cost block and here, the two spots a reader asking "what will this cost me?"
+    // actually lands — and both read `tasterTotal`, so they can't drift apart. What is
+    // only here: the per-session debrief and the fact that we will turn a dog away.
+    q: 'How does my dog join, and what does the assessment cost?',
+    a: `Your dog’s assessment is ${tasterSessions.word} introductory taster sessions at ${gbp(taster.price)} each — ${gbp(tasterTotal)} for the ${tasterSessions.word}. They build up gently, one hour then two then three, with a staff debrief after each one so you hear honestly how your dog got on. It works both ways: if day school isn’t right for your dog yet, we’ll tell you so rather than take the booking.`,
+  },
+  {
+    q: 'My dog is nervous around other dogs — is day school right for them?',
+    a: `Often yes, and sometimes not yet. The day is structured and supervised, so quieter dogs build confidence in a controlled group — and Confidence Building Sessions, ${gbp(cbs.price)} ${cbs.unit}, recorded with the video link sent to you, are there for dogs who need a bit more help. We can’t take dogs with risky behaviour issues, but they’re very welcome to start with training and join us later. The taster sessions exist so that nobody has to guess.`,
+  },
+];
+
 // Service + Offer structured data, sourced from pricing.json. `provider` is a
 // reference to the ONE business entity (see data/schema.ts) — never a restated
 // organisation. areaServed follows the two-track model: Board & Train travels,
@@ -162,16 +234,24 @@ const serviceLd = buildServiceSchema({
   offerings: dayPlans,
   areaServed: AREA_LOCAL,
 });
+
+// FAQPage from the REAL rendered Q&A above — never from the admission-criteria or
+// kit-list <details> blocks, which are labels rather than questions.
+const faqLd = buildFaqSchema('/dog-day-school', faqs);
 ---
 
 <Base
   title="Doggy Day Care & Dog Day School, Hastings | The Fairy Tails"
   description="Enrichment-led doggy day care near Hastings Country Park — structured play, socialisation and daily reports. Full & half days, local pick-up & drop-off."
   path="/dog-day-school"
-  updated="2026-07-25"
+  {/* Bumped 2026-08-03: the quick-answer cost block, the FAQ section and the exercise-
+      calculator / plans cross-links were all added that day. This date is a claim about
+      the CONTENT, not the build — only move it when the copy genuinely changes. */}
+  updated="2026-08-03"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} is:inline />
   <div data-page="day-school">
     <!-- ============ HERO ============ -->
     <section class="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-pine-950" data-hero>
@@ -280,6 +360,49 @@ const serviceLd = buildServiceSchema({
       </div>
     </section>
 
+    <!-- ============ QUICK ANSWER ============
+         A deliberate 134–167-word, self-contained answer to the question a day-care
+         family actually types: what it costs. It sits this high because AI assistants
+         take ~44% of their citations from the first 30% of a page, and it must stay
+         quotable WHOLE — no sentence may lean on the copy around it, and nothing may be
+         split out of it. Measured at 164 words (2026-08-03); re-count from the BUILT
+         html after any edit.
+         ⚠️ EVERY figure interpolates from pricing.json (the day-school offerings plus
+         the top-level flexiPass and addOns), so this block can never drift from the
+         plan cards and estimator further down the page.
+         ⚠️ The extras sentence names EVERY optional extra the page sells — school bus
+         (pick-up and drop-off priced from their own separate keys), Sniffari and CBS.
+         It says "you can also add", not "the extras are", so it invites rather than
+         claims completeness; if a new add-on ever lands in pricing.json, add it here
+         too and re-count.
+         Sits on cream-50 with NO HillDivider, so the band chain below (cream-50 -> the
+         pine PainFreePromise) stays valid. Deliberately NOT in `faqs`: that array is
+         the rendered accordion AND the FAQPage schema. -->
+    <section class="mx-auto max-w-6xl px-4 pb-20 sm:pb-28" data-section="quick-answer">
+      <div class="max-w-3xl">
+        <p class="eyebrow text-honey-700" data-reveal>In short</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          How much does <em class="squiggle not-italic">doggy day care</em> near Hastings cost?
+        </h2>
+        <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+          Day school at The Fairy Tails, near Hastings, is charged by the day, so you only pay for
+          the days your dog comes. A full day is {gbp(fullPlan.price)} ({fullPlan.eligibility}) and a
+          half day, {halfPlan.eligibility.toLowerCase()}, is {gbp(halfPlan.price)}. Book the same days
+          every week and a full day drops to {gbp(fullPlan.weeklyDiscountPrice)}, a half day to
+          {gbp(halfPlan.weeklyDiscountPrice)}. Large dogs are +{gbp(fullPlan.largeDogSurcharge)} on a
+          full day and +{gbp(halfPlan.largeDogSurcharge)} on a half day. If your week changes shape,
+          the {flexi.name} is {gbp(flexi.price)} for {flexi.days} full days — {gbp(flexi.price / flexi.days)}
+          a day — used any time within {flexi.validityDays} days. Joining starts with an introductory
+          assessment made up of {tasterSessions.word} taster sessions at {gbp(taster.price)} each,
+          {gbp(tasterTotal)} in all. The planned activities, socialisation and daily obedience practice
+          are all in the day rate. You can also add the local school bus,
+          {gbp(addOns.pickUpPerJourney)} for a morning pick-up and {gbp(addOns.dropOffPerJourney)} for
+          an afternoon drop-off, a Sniffari walk at {gbp(addOns.sniffariPerDay)} a day, or a Confidence
+          Building Session at {gbp(cbs.price)} {cbs.unit}.
+        </p>
+      </div>
+    </section>
+
     <PainFreePromise tone="pine" dividerFrom="bg-cream-50" flip />
 
     <!-- ============ WHY DAY SCHOOL — ENRICHMENT ============ -->
@@ -300,7 +423,11 @@ const serviceLd = buildServiceSchema({
             <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
               Years of domestication made dogs wonderful company, but they still need enrichment in
               their lives. That’s where we come in — a day full of the movement, stimulation and
-              friendship they’re wired for.
+              friendship they’re wired for. Not sure how much your own dog needs? Our
+              <a href="/dog-exercise-calculator" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">
+                dog exercise calculator
+              </a>
+              works it out from their breed and age.
             </p>
           </div>
           <!-- overlapping photo cluster -->
@@ -555,6 +682,18 @@ const serviceLd = buildServiceSchema({
         <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
           Plans to suit <em class="squiggle not-italic">your week</em>
         </h2>
+        <p class="mt-5 max-w-3xl text-lg leading-relaxed text-bark-700" data-reveal>
+          Book full or half days as and when you need them. And if you’re weighing day school up
+          against everything else we do, our
+          <a href="/training-plans" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">
+            training plans
+          </a>
+          and
+          <a href="/membership-plans" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">
+            membership plans
+          </a>
+          lay out every route and what each one costs.
+        </p>
 
         <div class="mt-12 grid items-start gap-6 sm:grid-cols-2" data-stagger>
           {
@@ -764,9 +903,9 @@ const serviceLd = buildServiceSchema({
         </ol>
 
         <p class="mt-8 rounded-2xl bg-cream-50 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
-          <strong class="text-moss-800">The assessment</strong> is made up of three introductory
+          <strong class="text-moss-800">The assessment</strong> is made up of {tasterSessions.word} introductory
           taster sessions at <strong class="text-moss-800">{gbp(taster.price)} each</strong>. After the
-          three sessions, any further half or full days are charged at the standard rate. Please only
+          {tasterSessions.word} sessions, any further half or full days are charged at the standard rate. Please only
           book once your dog has been accepted into the school.
         </p>
 
@@ -825,9 +964,45 @@ const serviceLd = buildServiceSchema({
       </div>
     </section>
 
+    <!-- ============ FAQ ============
+         Real questions, rendered here AND emitted as the FAQPage schema — `faqs` in the
+         frontmatter is the single source for both, so the two can never disagree.
+         ⚠️ COLOUR CHAIN: this cream-50 band was inserted between the cream-100 joining
+         section and the pine-900 enquiry section, so the enquiry section's HillDivider
+         was repointed bg-cream-100 -> bg-cream-50 in the same edit. -->
+    <section class="bg-cream-50" data-section="faq">
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-4xl px-4 pb-20 pt-12 sm:pb-28">
+        <p class="eyebrow text-honey-700" data-reveal>Good to know</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Day-school <em class="squiggle not-italic">questions</em>
+        </h2>
+
+        <div class="mt-10 space-y-4" data-stagger>
+          {
+            faqs.map((f) => (
+              <details class="group rounded-2xl bg-cream-100 shadow-[var(--shadow-lift)]">
+                <summary class="flex cursor-pointer list-none items-center justify-between gap-4 p-6 font-display text-lg font-bold text-moss-800 [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <svg class="accordion-chevron h-5 w-5 shrink-0 text-honey-600" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <path d="M4 7l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </summary>
+                <div class="accordion-body">
+                  <div class="overflow-hidden">
+                    <p class="px-6 pb-6 leading-relaxed text-bark-700">{f.a}</p>
+                  </div>
+                </div>
+              </details>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
     <!-- ============ ENQUIRY FORM ============ -->
     <section id="enquire" class="bg-pine-900" data-section="enquire">
-      <HillDivider class="bg-cream-100 text-pine-900" flip />
+      <HillDivider class="bg-cream-50 text-pine-900" flip />
       <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
         <div class="mx-auto max-w-2xl text-center">
           <p class="eyebrow text-honey-400" data-reveal>Let’s talk</p>
