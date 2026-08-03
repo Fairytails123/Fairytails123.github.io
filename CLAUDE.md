@@ -32,7 +32,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Rebuild of **www.thefairytails.co.uk** (Fairy Tails K9 Centre, a dog-training business) — replacing a rented Duda-builder site with an owner-controlled static **Astro 6** site. **Production host since 2026-07-04 = Hostinger** (push to `main` → GitHub Actions → FTPS deploy → LIVE at www.thefairytails.co.uk; GitHub Pages is a manual-only preview). Premium GSAP animation and one Three.js homepage showpiece.
 
-**Current state (2026-07-12): EVERY page in the URL manifest is BUILT and LIVE on production** (started 2026-06-12, built inside-out; the last page, `/puppycourse`, shipped 2026-07-12, and the site-wide polish pass cleared the logged a11y/GSAP debts the same day). The phase now is **owner reviews + per-page sign-offs, logged follow-ups (mobile hero-LCP perf, the y-only-reveals a11y decision) and the Ahrefs SEO workover** (subscription bought; London-first targeting for Board & Train). **Check `HANDOVER.md` first in every session for the exact pick-up point and next actions** — it is the single source of truth for status, updated when a session ends; do not trust any hard-coded state here.
+**Current state: EVERY page in the URL manifest is BUILT and LIVE on production** (started 2026-06-12, built inside-out; the last page, `/puppycourse`, shipped 2026-07-12). **The build queue has been empty since 2026-07-12 — the programme is now SEO + honesty + measurement, not page-building.** As of 2026-08-03 the drop-recovery freeze on `/dog-boarding-school` is **LIFTED**, the two build gates (`verify-reveals`, `verify-nap`) run on every build **and** in CI, and the phase is owner copy reviews on live pages, the Ahrefs backlog, and the citation programme.
+
+🔴 **DO NOT TRUST ANY HARD-CODED STATE IN THIS FILE.** For what is true *right now*, read **`HANDOVER.md`'s `✅ CURRENT STATE` table at the top** — it is the only place that describes the present, it is refreshed at every session close, and **it wins over any dated block or any line in here that contradicts it.** Then the newest `⏸️ PAUSE POINT`, then `SEO.md`, then `LEARNING-CURVE.md` §1.
 
 ## Commands
 
