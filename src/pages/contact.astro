@@ -29,7 +29,7 @@ const councilRegister = 'https://www.hastings.gov.uk/licensing/animal/register/'
 
 <Base
   title="Contact The Fairy Tails K9 Centre"
-  description="Get in touch with The Fairy Tails K9 Centre in Hastings — call 01424 300668, send an enquiry, or visit the barn on Barley Lane. Open Mon–Fri, 8am–5.30pm."
+  description={`Get in touch with The Fairy Tails K9 Centre in Hastings — call ${business.phones.main.display}, send an enquiry, or visit the barn on Barley Lane. Open Mon–Fri, 8am–5.30pm.`}
   path="/contact"
 >
   <div data-page="contact">
@@ -42,7 +42,12 @@ const councilRegister = 'https://www.hastings.gov.uk/licensing/animal/register/'
         </h1>
         <p class="mt-5 max-w-xl text-lg leading-relaxed text-cream-200/90" data-hero-sub>
           Please don’t hesitate to contact us if you require any further information or wish to
-          book a visit.
+          book a visit. If it’s a place at our
+          <a
+            href="/dog-day-school"
+            class="font-bold text-honey-300 underline decoration-honey-600 underline-offset-4"
+            >dog day school</a
+          > you’re after, have a read of how a day there runs first.
         </p>
       </div>
     </header>
@@ -164,6 +169,9 @@ const councilRegister = 'https://www.hastings.gov.uk/licensing/animal/register/'
           <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
             Tell us about <em class="squiggle not-italic">your dog</em>
           </h2>
+          {/* No links in this paragraph, deliberately: it is the last thing a visitor reads
+              before the form, and the form is this page's whole job. Onward links belong in
+              the intro at the top of the page. */}
           <p class="mt-4 text-lg leading-relaxed text-bark-700" data-reveal>
             Whatever you need — training, day school, boarding or just some honest advice — send it
             over and we’ll reply within 24–48 hours.

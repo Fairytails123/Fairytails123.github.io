@@ -103,6 +103,12 @@ const cases = [
   ['GET /dog-boarding-school.html?utm_source=x HTTP/1.1', '301', '/dog-boarding-school'],
   ['GET /breed-matcher/ HTTP/1.1', 'serve', null],
   ['GET /breed-matcher/index.html HTTP/1.1', '301', '/breed-matcher/'],
+  // The EXTENSIONLESS twin. Added 2026-08-03 when /breed-matcher/ became a real Astro page at
+  // src/pages/breed-matcher/index/index.astro — the double nesting is what preserves the
+  // trailing slash under build.format:'file', but it also means "index" is now a real path
+  // segment. Rule 2a's `index(\.html)?` already folds it; this case asserts that, so the port
+  // cannot silently reintroduce the duplicate-twin defect fixed on 2026-07-28.
+  ['GET /breed-matcher/index HTTP/1.1', '301', '/breed-matcher/'],
   ['GET /comprehensive-puppy-training HTTP/1.1', 'serve', null],
   ['GET /dog-exercise-calculator HTTP/1.1', 'serve', null],
   ['GET /puppy-classes HTTP/1.1', 'serve', null],

@@ -1,9 +1,9 @@
 ---
 title: "Why Dog Training Guarantees Can Be a Red Flag – The Truth About Quick Fixes and Archie’s Story"
-seoTitle: "Why Dog Training Guarantees Are a Red Flag"
-description: "Learn why guarantees in dog training are unrealistic and risky. The injuries they can cause, and why positive reinforcement is the safest, most humane approach."
+seoTitle: "Choke, Prong & Shock Collars: The Injuries They Cause"
+description: "How choke chains, prong collars and shock collars work, the injuries they cause, and why lasting change is built on positive reinforcement, not a guarantee."
 pubDate: 2025-08-10T12:11:21
-updatedDate: 2025-08-10T12:17:19
+updatedDate: 2026-08-03
 category: Training Methods
 heroImage: ../../assets/blog/archiestory/whatsapp-2025-08-07.jpeg
 heroAlt: "Say no to cruel dog collars illustration — three dogs straining against a choke chain, prong collar and electric collar"
@@ -118,11 +118,11 @@ Psychological impact:
 - It can cause fear-based reactivity if the dog associates the pain with specific triggers (like other dogs, cyclists, or strangers).
 - Often increases aggression in already frustrated or defensive dogs.
 
-### 3. Electric Collars (E-Collars)
+### 3. Electric Collars (E-Collars, or Shock Collars)
 
 How they work:
 
-- E-collars deliver an electric pulse via contact points on the dog’s neck.
+- E-collars — commonly sold as shock collars, and sometimes as “remote trainers” — deliver an electric pulse via contact points on the dog’s neck.
 - The handler uses a remote control to deliver a shock when the dog performs an undesired behaviour.
 - The intensity can range from a mild tingle to a strong, painful jolt — but even “low-level” shocks can be aversive, especially for sensitive dogs.
 

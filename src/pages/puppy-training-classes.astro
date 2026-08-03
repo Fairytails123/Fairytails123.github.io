@@ -165,9 +165,19 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
 
 <Base
   title="Puppy Classes in Hastings & St Leonards | The Fairy Tails"
-  description="Small group puppy training evening classes based in Hastings for your pup and you! The experienced trainers will help you give your puppy the best start."
+  {/*
+    Description rewritten 2026-08-03. The previous text was verbatim legacy Duda copy
+    ("…for your pup and you!") carrying no price, no format and no proof. This page ranks
+    around the foot of page one, which is exactly where snippet quality still has leverage,
+    so the concrete facts earn their space. (Metrics in SEO.md — locked #7 keeps GSC data
+    out of this public repo.)
+    Title is deliberately unchanged: the geo IS honest here (Concordia Hall, St Leonards)
+    and this page is Track-L local by design, unlike /comprehensive-puppy-training.
+    All figures from pricing.json `puppy-classes` — never hard-code them.
+  */}
+  description={`Small-group puppy classes in St Leonards — ${gbp(plan.price)} ${plan.unit} for ${plan.eligibility.toLowerCase()}: four Thursday-evening sessions plus three day-school intro sessions.`}
   path="/puppy-training-classes"
-  updated="2026-07-24"
+  updated="2026-08-03"
   ogImage={`${business.domain}${ogHero.src}`}
 >
   <script type="application/ld+json" set:html={JSON.stringify(serviceLd)} is:inline />
@@ -731,9 +741,12 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
           Not quite the right fit? <em class="squiggle not-italic">There’s a route for every pup</em>
         </h2>
 
-        {/* 2 cards since the 2026-07-21 SKU merge (was 3 — two of them were the same
-            product). Grid dropped 3 -> 2 cols so there is no empty column. */}
-        <div class="mt-12 grid gap-6 md:grid-cols-2" data-stagger>
+        {/* ⚠️ Only TWO of these cards are products. The 2026-07-21 SKU merge took this
+            grid from 3 product cards to 2 (two of them were the same product) and the
+            columns dropped 3 -> 2 to match; the third card restored here on 2026-08-03 is
+            the free exercise calculator, a tool — NOT a re-split of the puppy course.
+            If the product cards ever change again, count them before touching the columns. */}
+        <div class="mt-12 grid gap-6 md:grid-cols-3" data-stagger>
           <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
             <h3 class="font-display text-xl font-bold text-moss-800">Do-it-yourself puppy course</h3>
             <p class="mt-1 text-sm font-bold text-bark-500">Free · at your own pace</p>
@@ -763,6 +776,17 @@ const faqLd = buildFaqSchema('/puppy-training-classes', faqs);
               four weeks; local families can keep the boarding flexible.
             </p>
             <a href="/comprehensive-puppy-training" class="btn btn-moss mt-6 w-full">Puppy School</a>
+          </article>
+
+          <article class="grain flex flex-col rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+            <h3 class="font-display text-xl font-bold text-moss-800">How much walking does your pup need?</h3>
+            <p class="mt-1 text-sm font-bold text-bark-500">Free tool · no booking</p>
+            <p class="mt-4 flex-1 text-sm leading-relaxed text-bark-700">
+              Puppies need far less formal walking than most people expect — too much impact on
+              growing joints can do lasting harm. Our dog exercise calculator works out a daily
+              figure from your pup’s breed and age, and explains the five-minute rule behind it.
+            </p>
+            <a href="/dog-exercise-calculator" class="btn btn-moss mt-6 w-full">Try the exercise calculator</a>
           </article>
         </div>
       </div>

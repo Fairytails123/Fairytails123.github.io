@@ -66,6 +66,17 @@ const siteGraph = buildSiteGraph();
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- FRAMED RENDER. The homepage embeds one of our own pages (/breed-matcher/)
+         in an iframe. Since that page became a full <Base> page it would otherwise
+         render a SECOND header, footer and consent banner inside an ~800px box.
+         Mark the framed case on <html> before anything paints, so the CSS below can
+         drop the chrome the parent page is already showing. Cross-origin framing
+         cannot read window.top's properties, but comparing the references never
+         throws, so no try/catch is needed. A crawler is never framed — this can
+         hide nothing from a crawl. -->
+    <script is:inline>
+      if (window.self !== window.top) document.documentElement.classList.add('is-framed');
+    </script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -109,17 +120,44 @@ const siteGraph = buildSiteGraph();
       } catch (e) {}
     </script>
     <script is:inline define:vars={{ gtmId }}>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l != 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', gtmId);
+      // 🔴 NEVER LOAD GTM IN A FRAME. A framed copy of one of OUR OWN pages firing
+      // its own page_view is always wrong: the homepage embeds /breed-matcher/, so
+      // without this guard every visitor who merely SCROLLED to that section would
+      // boot a second GTM container and register a page_view for a page they never
+      // navigated to — inflating sessions and page_view on a property that was only
+      // rebuilt on 2026-07-23. The parent page is already measured; the frame must
+      // stay silent. Nothing else changes: no page except a framed one is affected,
+      // and Googlebot renders pages top-level, never framed.
+      if (window.self === window.top) {
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l != 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      }
     </script>
+
+    <!-- The framed state, set by the inline script at the top of <head>. The parent
+         page already shows the header, footer and consent banner, and a page can mark
+         its own marketing furniture with data-frame-hide so only the embedded thing
+         itself shows. Global because it targets the site shell from the layout. -->
+    <style is:global>
+      html.is-framed #site-header,
+      html.is-framed body > footer,
+      html.is-framed #ft-consent-banner,
+      html.is-framed [data-updated-line],
+      html.is-framed [data-frame-hide] {
+        display: none !important;
+      }
+      html.is-framed body {
+        background: transparent;
+      }
+    </style>
   </head>
   <body>
     <noscript>
@@ -134,7 +172,7 @@ const siteGraph = buildSiteGraph();
       <slot />
       {
         updatedDisplay && (
-          <p class="mx-auto max-w-6xl px-4 pt-12 text-center text-sm text-bark-500">
+          <p class="mx-auto max-w-6xl px-4 pt-12 text-center text-sm text-bark-500" data-updated-line>
             This page was last reviewed and updated <time datetime={updated}>{updatedDisplay}</time>.
           </p>
         )
@@ -147,8 +185,10 @@ const siteGraph = buildSiteGraph();
       // GA4 measurement. Reports what GTM cannot see by itself — above all the page_view
       // for Astro view transitions, which a stock GA4 install silently misses.
       // Read the header comment in src/scripts/analytics.ts before touching this.
+      // Not started in a frame, for the same reason GTM is not loaded in one (see the
+      // <head> comment): a framed copy of our own page must never report itself.
       import { initAnalytics } from '../scripts/analytics';
-      initAnalytics();
+      if (window.self === window.top) initAnalytics();
     </script>
   </body>
 </html>

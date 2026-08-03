@@ -77,6 +77,6 @@ Daycare is more than a place for play; it's a breeding ground for long-lasting f
 
 Choosing to introduce your puppy to daycare is a transformative decision, one that significantly influences their overall development. At Fairy Tails Dog Daycare in Hastings, we are committed to shaping young canines into sociable, adaptable, and confident adult dogs. The benefits of our daycare extend far beyond mere convenience; they lay the cornerstone for a happy, well-adjusted life for your furry family member.
 
-To explore how your puppy can thrive with our specialised daycare services, visit us at [www.thefairytails.co.uk](/). For a more personal touch, feel free to call us at 01424 300668. Together, we can embark on this enriching journey, fostering a bright, joyful, and healthy future for your beloved puppy. Let's nurture their potential and watch them flourish in the loving environment of Fairy Tails Daycare.
+To explore how your puppy can thrive with our specialised daycare services, see our [dog day school in Hastings](/dog-day-school). For a more personal touch, feel free to call us at 01424 300668. Together, we can embark on this enriching journey, fostering a bright, joyful, and healthy future for your beloved puppy. Let's nurture their potential and watch them flourish in the loving environment of Fairy Tails Daycare.
 
 ![Dogs playing together in the courtyard at Fairy Tails](../../assets/blog/puppy-daycare-benefits-shaping-happy-confident-canines/4.jpg)

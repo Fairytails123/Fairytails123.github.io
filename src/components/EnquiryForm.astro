@@ -62,6 +62,15 @@ const labelClass = 'field-label';
   class="mx-auto max-w-2xl space-y-5"
   data-webhook={business.enquiryWebhook}
   data-page={page}
+  {/* The client script's success/failure messages quote the phone number. Sourcing it
+      here (rather than typing it into the script) keeps rule #7 — facts come from
+      business.ts — enforceable across the module boundary: an inline <script> cannot
+      import frontmatter, so without this the number could only be hard-coded, and a
+      number change would leave the enquiry form telling customers a dead line. That is
+      exactly the failure that put the dead grooming-era mobile on six directory
+      listings — see SEO.md §9c. (Deliberately not repeating that number here: it is
+      what `npm run verify-nap` exists to keep out of the source.) */}
+  data-phone={business.phones.main.display}
   novalidate
 >
   <div class="grid gap-5 sm:grid-cols-2">
@@ -175,6 +184,8 @@ const labelClass = 'field-label';
     const startedAt = Date.now();
     const status = document.getElementById('ef-status')!;
     const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    // Rendered from business.ts via data-phone — never retype the number here.
+    const phone = form.dataset.phone ?? '';
 
     const showSuccess = () => {
       form.querySelectorAll('input, select, textarea, button').forEach((el) => {
@@ -182,7 +193,7 @@ const labelClass = 'field-label';
       });
       status.className = 'text-sm font-medium text-moss-700';
       status.textContent =
-        "Thank you — we've got your enquiry and we'll be in touch soon. If it's urgent, call or WhatsApp us on 01424 300668.";
+        `Thank you — we've got your enquiry and we'll be in touch soon. If it's urgent, call or WhatsApp us on ${phone}.`;
     };
 
     form.addEventListener('submit', async (e) => {
@@ -245,7 +256,7 @@ const labelClass = 'field-label';
         button.innerHTML = buttonHtml;
         status.className = 'text-sm font-medium text-red-700';
         status.textContent =
-          "Sorry — that didn't send. Please try again, or call/WhatsApp us on 01424 300668.";
+          `Sorry — that didn't send. Please try again, or call/WhatsApp us on ${phone}.`;
       }
     });
   }

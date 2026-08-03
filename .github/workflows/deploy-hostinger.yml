@@ -31,6 +31,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Hiding body copy from Googlebot has cost this site more than every other defect
+      # combined (71% of the pillar's clicks, July 2026; the homepage's whole-dog section
+      # for three weeks). `npm run build` now runs this as `prebuild` too — it is repeated
+      # here as its own named step so a failure is legible in the CI log instead of
+      # surfacing as a mystery build error.
+      - name: Verify scroll reveals hide nothing from Googlebot
+        run: node scripts/verify-reveals.mjs
+
+      # A phone number typed into copy goes stale silently. That is how the dead
+      # grooming-era mobile ended up on six directory listings; the site must not
+      # become the seventh.
+      - name: Verify NAP facts come from business.ts
+        run: node scripts/verify-nap.mjs
+
       - name: Build with Astro
         run: npm run build
 

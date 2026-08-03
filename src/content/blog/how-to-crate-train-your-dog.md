@@ -2,7 +2,7 @@
 title: "How to crate train your dog"
 description: "Crate training your dog may take some time and effort but can be useful in various situations, giving your dog a safe place of its own."
 pubDate: 2022-04-11T11:48:15
-updatedDate: 2023-07-20T11:52:24
+updatedDate: 2026-08-03
 category: Puppies
 heroImage: ../../assets/blog/how-to-crate-train-your-dog/crate-training.jpg
 heroAlt: "A yellow Labrador lying calmly in an open wire crate"
@@ -56,7 +56,7 @@ Put your dog in the crate using your regular command and a treat. Initially, it 
 
 ### Too much time in the crate
 
-A crate isn't a magical solution. If not used correctly, a dog can feel trapped and frustrated. For example, if your dog is crated all day while you're at work and then crated all night again, he's spending too much time in too small a space. Other arrangements should be made to accommodate his physical and emotional needs. Also, remember that puppies under six months of age shouldn't stay in a crate for more than three or four hours at a time unless night time sleeping. They can't control their bladders and bowels for longer periods.
+A crate isn't a magical solution. If not used correctly, a dog can feel trapped and frustrated. For example, if your dog is crated all day while you're at work and then crated all night again, he's spending too much time in too small a space. Other arrangements should be made to accommodate his physical and emotional needs. Also, remember that puppies under six months of age shouldn't stay in a crate for more than three or four hours at a time unless night time sleeping. They can't control their bladders and bowels for longer periods. If you're not sure how much daily walking he should be getting outside the crate, our free [dog exercise calculator](/dog-exercise-calculator) gives you a guide figure from his breed and age.
 
 ### Whining
 
@@ -66,6 +66,6 @@ If the whining continues after you've ignored him for several minutes, use the p
 
 ### Separation anxiety
 
-Attempting to use the crate to remedy separation anxiety won't solve the problem. A crate may prevent your dog from being destructive, but he may injure himself in an attempt to escape from the crate. Separation anxiety problems can only be resolved with counter-conditioning and desensitisation procedures. You may want to consult a professional dog trainer for help.
+Attempting to use the crate to remedy separation anxiety won't solve the problem. A crate may prevent your dog from being destructive, but he may injure himself in an attempt to escape from the crate. Separation anxiety is worked on through counter-conditioning and desensitisation — a slow rehabilitation process rather than a fix, and one that is far easier to prevent than to undo. You may want to consult a professional dog trainer for help.
 
 ![A white French Bulldog puppy resting on a soft bed inside a wire crate](../../assets/blog/how-to-crate-train-your-dog/crate-training-2.webp)

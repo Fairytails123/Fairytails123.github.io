@@ -676,6 +676,9 @@ const photoCount = photos.length;
           ease: 'power2.inOut',
           scale: true,
           absolute: true,
+          // verify-reveals-ignore — this runs only from a filter-chip CLICK handler, never on
+          // load and never from a ScrollTrigger, so no server-rendered content is hidden at
+          // t=0. Tiles a crawler sees are already in the DOM, visible, before any chip is tapped.
           onEnter: (els) =>
             gsap.fromTo(els, { opacity: 0, scale: 0.82 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }),
           onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.82, duration: 0.3, ease: 'power2.in' }),

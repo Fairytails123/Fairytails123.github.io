@@ -8,10 +8,13 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "//prebuild": "verify-reveals GATES THE BUILD (2026-08-03). It protects against the bug that cost /dog-boarding-school 71% of its clicks in July 2026 and hid the homepage's whole-dog section for three weeks — and until today it ran ONLY when a human remembered to type it: no prebuild here, and no step in deploy-hostinger.yml. Never demote it back to a manual script.",
+    "prebuild": "node scripts/verify-reveals.mjs && node scripts/verify-nap.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "verify-urls": "node scripts/verify-urls.mjs",
     "verify-reveals": "node scripts/verify-reveals.mjs",
+    "verify-nap": "node scripts/verify-nap.mjs",
     "test:area-district": "node scripts/test-area-district.mjs",
     "test:htaccess": "node scripts/test-htaccess.mjs",
     "test:breed-matcher": "node tools/breed-matcher/test/engine.test.mjs",

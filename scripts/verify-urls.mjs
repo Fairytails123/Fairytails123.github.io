@@ -66,7 +66,16 @@ const MANIFEST = [
   { path: '/puppy-week-4', type: 'stub', status: 'built' },
   { path: '/puppy-toilet-schdule', type: 'stub', status: 'built' }, // typo slug is verbatim-correct
   // ---- value-added tools ----
-  { path: '/breed-matcher/', type: 'page', status: 'built' }, // standalone: tools/breed-matcher -> public/breed-matcher/index.html
+  // 🔴 THIS ENTRY IS THE GUARD ON A DELIBERATELY ODD SOURCE PATH — read before "fixing" either.
+  // Astro page (ported 2026-08-03): src/pages/breed-matcher/index/index.astro; engine in
+  // src/scripts/breed-matcher/, dev kit in tools/breed-matcher. There is NO public/ copy any
+  // more (the old public/breed-matcher/index.html is deleted — recreating one would be served
+  // verbatim and silently shadow the page). The nested path is not a typo: build.format:'file'
+  // strips a trailing `index` segment, so breed-matcher.astro AND breed-matcher/index.astro
+  // would BOTH emit dist/breed-matcher.html and destroy the directory. Only the nested form
+  // emits dist/breed-matcher/index.html, which the trailing slash below resolves to — so if
+  // anyone tidies the page up a level, this line fails the build. Fix the path, not this.
+  { path: '/breed-matcher/', type: 'page', status: 'built' },
   { path: '/dog-exercise-calculator', type: 'page', status: 'built' }, // Astro page (built 2026-07-21): src/pages/dog-exercise-calculator.astro; engine in src/scripts/, dev kit in tools/dog-exercise-calculator
   // ---- intentional 404s ----
   { path: '/staff-resources', type: 'gone', status: 'built' },

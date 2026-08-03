@@ -1,7 +1,18 @@
 # Breed Matcher — Build Plan & Handover Brief
 
+> ⚠️ **INTEGRATED AS AN ASTRO PAGE, 2026-08-03.** Everything below this banner was written for the retired **standalone single-file** tool. **Wherever a path, a hosting claim or a build claim below disagrees with this banner, the banner wins** — that applies to the whole document, not to any one numbered section, so do not read an unmarked line further down as current just because it carries no warning. (The sections most obviously rewritten by the port are the REPO LAYOUT block, §1, §2, §3, §5 and §13; the stalest lines in those have been corrected in place.) The tool ships as **`/breed-matcher/`**, a full `<Base>` Astro page, **NOT** a bare `public/` file. **`public/breed-matcher/index.html` is DELETED** — do not recreate it; a copy there would be served verbatim by Astro and would silently win over the page.
+>
+> - **Page:** `src/pages/breed-matcher/index/index.astro`. 🔴 **That path is not a typo — read the header comment in the file before moving it.** `build.format:'file'` emits `<route pathname>.html`, and Astro strips a trailing `index` segment, so BOTH `breed-matcher.astro` AND `breed-matcher/index.astro` would emit `dist/breed-matcher.html` and destroy the trailing-slash URL. Only this path emits `dist/breed-matcher/index.html`, which is what has been live since June 2026. `scripts/verify-urls.mjs` fails the build if it moves.
+> - **Engine (single source):** `src/scripts/breed-matcher/{data,engine,services,ui}.js`. `data.js` + `engine.js` are the dataset and the scoring, lifted **verbatim** — the port changed no scores. `services.js` holds the service links; `ui.js` is the rendering layer, adapted only for ClientRouter-safety, namespaced handlers (`window.ftBM`), the site's `tool_engagement` event, and section-local scrolling.
+> - **⚠️ Those four modules must stay PLAIN JS with no `src/data/*.ts` imports** — the node regression harness loads them directly and cannot read TypeScript. That is why the grooming sister-site URL is handed in from the page (`data-grooming-url` on `#bm-root`) rather than imported.
+> - **Styling:** the `.astro` page's `<style is:global>` carries the tool's own palette and rules, every selector scoped to `#bm-root`. The **Google Fonts `<link>` is gone** — Fraunces/Inter became the site's self-hosted `var(--font-display)`/`var(--font-body)`. That third-party request, on a page that had no consent banner at all, was a live UK PECR exposure and is the reason this port happened. **Never reintroduce a third-party font link.**
+> - **Framing:** the homepage embeds this page in an iframe. `Base.astro` marks a framed render with `html.is-framed`, hides the header/footer/consent banner, and — critically — **does not load GTM in a frame**, so scrolling past the homepage section can no longer fire a phantom `page_view`. Sections tagged `data-frame-hide` drop out too, leaving just the tool.
+> - **Tests:** `npm run test:breed-matcher` (unchanged assertions, now importing the modules). Then `npm run build && npm run verify-urls`.
+>
+> **Everything else below — §0's three sacred rules, the scoring spec in §6, the dataset schema in §7, the tips design in §8 and the regression checklist in §13 — still applies verbatim.** Back up before edits, into `backups/` (gitignored).
+
 **Project:** Breed-matching tool for The Fairy Tails K9 Centre (Hastings)
-**Status:** v1 complete and tested. This document is the brief for continuing it in Claude Code.
+**Status:** v1 complete and tested; integrated as the Astro page `/breed-matcher/` on 2026-08-03.
 
 ---
 
@@ -10,28 +21,26 @@
 This tool was **integrated into the Fairy Tails main website repo on 2026-06-20**. It is kept in
 **its own folder so it can be worked on in isolation** while still shipping with the site build.
 
-- **The live tool file (single source of truth):**
-  `public/breed-matcher/index.html` (relative to the repo root, i.e. `../../public/breed-matcher/index.html` from here).
-  It is a **standalone, self-contained, no-build file** — open it directly in a browser to work on it.
-- **Why `public/`:** Astro copies everything in `public/` **verbatim** into `dist/` at build time, so the
-  tool ships automatically at the URL **`/breed-matcher/`** with **no build step, no bundler, no Astro
-  processing** — exactly as the "no build step" rule below requires. There is **only one copy** of the
-  tool (no mirror to drift).
+- **The live tool (single source of truth), since 2026-08-03:** the Astro page
+  `src/pages/breed-matcher/index/index.astro` plus the four modules in `src/scripts/breed-matcher/`.
+  ~~`public/breed-matcher/index.html`~~ is **deleted** — see the banner above.
+- **Why an Astro page, not `public/`:** a bare `public/` file is copied verbatim into `dist/`, which is
+  how the tool shipped originally — but it also meant no `<Base>`, so no consent banner, no self-hosted
+  fonts, no schema and no analytics on a page that was pulling a third-party font CDN. Being a real page
+  fixes all of that. There is still **only one copy** of the tool (no mirror to drift).
 - **This dev kit (`tools/breed-matcher/`, NOT served):**
   - `CLAUDE.md` — this brief (auto-loads as context when working in this folder).
   - `README.md` — quick orientation + the dev/test/backup loop.
   - `test/engine.test.mjs` — the node regression harness (§13). Run: `npm run test:breed-matcher`.
   - `backups/` — put timestamped backups here (gitignored; see §1).
-- **Editing rule:** edit `public/breed-matcher/index.html` directly. **Back it up into
-  `tools/breed-matcher/backups/` first** (see §1). Do **not** create a second copy of the tool anywhere
-  — one source of truth only.
-- **It is NOT yet on the homepage.** The site is built inside-out and the homepage is built **last**; the
-  homepage integration (feature/link/embed the matcher) is recorded in the site plan (`WEBSITE-PLAN.md`)
-  and `HANDOVER.md` to be done during the homepage build. For now the tool is reachable standalone at
-  `/breed-matcher/` on the preview.
-- **Service URLs (§5)** currently point at the **old live domain** (`https://thefairytails.co.uk/...`),
-  which still resolves. When those service pages exist on the new site, repoint `FT = {…}` to the new
-  paths. This is a known follow-up (see §5 / Phase 4).
+- **Editing rule:** edit the module that owns the thing you are changing (the table in `README.md`
+  maps them). **Back it up into `tools/breed-matcher/backups/` first** (see §1). Do **not** create a
+  second copy of the tool anywhere — one source of truth only.
+- **It IS on the homepage.** The homepage's `data-section="breed-matcher"` band iframes
+  `/breed-matcher/`, with a direct link as the fallback. Check layout changes framed and unframed.
+- **Service URLs (§5)** are now our own site-relative slugs, held in `src/scripts/breed-matcher/services.js`
+  — no domain literal, so nothing to go stale. The one external link, the grooming sister site, is handed
+  in from `business.ts`. §5's placeholder table below is history, not the current config.
 
 > Everything below is the original brief, kept as the authoritative spec.
 
@@ -61,30 +70,44 @@ If you're tempted to simplify the engine, simplify *anything except* these three
 - **British English** everywhere — UI copy, comments, everything. (colour, organise, behaviour, neighbour…)
 - **Additive-only edits** where possible. Don't rip out working sections to "tidy".
 - **Take a timestamped backup before any edit.** From the repo root:
-  `cp public/breed-matcher/index.html tools/breed-matcher/backups/index.backup-2026-06-20-1430.html`
+  `cp src/scripts/breed-matcher/engine.js tools/breed-matcher/backups/engine.backup-2026-08-03-1430.js`
   (or PowerShell `Copy-Item`). Backups live in `tools/breed-matcher/backups/` (gitignored), so any single
-  change can be reverted instantly.
-- **Hosting is GitHub Pages only**, under the `fairytails123` account, via the main website's Astro build
-  (the file ships verbatim from `public/`). Do **not** introduce Netlify, Vercel, or any extra build/deploy
-  tooling for this tool.
-- **No build step. No framework. No bundler.** Vanilla JS, HTML, CSS in one file. It must run by opening the file.
+  change can be reverted instantly. The last standalone build is kept there as
+  `index.backup-2026-08-03-astro-port.html`.
+- **Hosting is the main website's own pipeline** — production is **Hostinger** since 2026-07-04 (push to
+  `main` → GitHub Actions → FTPS deploy). The tool ships as part of `npm run build`. Do **not** introduce
+  Netlify, Vercel, or any extra build/deploy tooling for this tool.
+- **No framework. Plain JS only.** Vanilla ES modules, no React/Vue, no bundler config of its own — Astro
+  bundles `ui.js` and its imports like any other page script. ⚠️ `data.js` / `engine.js` / `services.js` /
+  `ui.js` must stay **plain `.js` with no `src/data/*.ts` imports**: the node regression harness loads them
+  directly and cannot read TypeScript.
 - **Mobile-first.** Design and test at ~380px width first.
-- **No external runtime dependencies** except the Google Fonts stylesheet. Everything else is self-contained.
+- **No third-party runtime dependencies at all.** 🔒 In particular the fonts are the **site's self-hosted
+  Fraunces/Karla** (`var(--font-display)` / `var(--font-body)`, shipped by `Base.astro` via `@fontsource`).
+  **NEVER add a third-party font `<link>`** — the standalone tool pulled Fraunces and Inter from Google's
+  font CDN, firing a request carrying the visitor's IP before any consent could be given, on a page with no
+  consent banner. That was a live UK PECR exposure and it is the reason this port happened. A grep of the
+  built HTML for that CDN's hostname must return nothing.
 
 ### Rules that do NOT apply here (noted to avoid confusion)
 - The **Telegram mobile URL / no-percent-encoding rule** applies only to URLs sent through a Telegram bot. This tool uses plain website `<a href>` links with no query parameters — standard encoding is fine. Don't apply the `+`-for-spaces rule here.
-- The **no-localStorage rule** comes from the Claude artifact sandbox. On GitHub Pages, `localStorage`/`sessionStorage` work normally — so if you want to add "save my result" or "resume", you may. (v1 deliberately keeps all state in memory; see §12.)
+- The **no-localStorage rule** comes from the Claude artifact sandbox. On a real host, `localStorage`/`sessionStorage` work normally — so if you want to add "save my result" or "resume", you may. (v1 deliberately keeps all state in memory; see §12. ⚠️ If you do add storage, the page's "Your answers stay in your browser" line still holds, but check it before shipping.)
 - The read-only master Google Sheet is irrelevant to this tool — it doesn't touch any sheet.
 
 ---
 
-## 2. File map (`public/breed-matcher/index.html`)
+## 2. File map
 
-Everything lives in one file. Inside the single `<script>`:
+> ⚠️ **Everything used to live in one file; it does not any more.** The blocks below are all still
+> there, but split across `src/scripts/breed-matcher/`: `FT`/`svc()` → **`services.js`**; `B()`/`BREEDS[]`
+> and `QUESTIONS[]` → **`data.js`**; `effectiveSpace()`/`scoreBreed()`/`whyLine()`/`buildTips()` →
+> **`engine.js`**; `state` and every `render*`/`animateBars()` → **`ui.js`**. The CSS moved to the
+> `<style is:global>` block in `src/pages/breed-matcher/index/index.astro`, in the same order, every
+> selector scoped to `#bm-root`. `README.md` has the "what am I changing → which file" table.
 
 | Block | What it is | Edit frequency |
 |---|---|---|
-| `SITE` + `FT = {…}` | Fairy Tails service links (placeholder URLs **to confirm**) | High — confirm URLs |
+| `FT = {…}` | Fairy Tails service links. 🔒 A key here is a **product claim** — it must exist in `pricing.json` | Rare — and never additively without checking |
 | `svc()` | Helper that renders a service link | Rare |
 | `B()` + `BREEDS[]` | The breed dataset (see §7). `B()` is a positional helper | High — extend to 150+ |
 | `QUESTIONS[]` | The quiz, one object per question (see §9) | Medium |
@@ -96,17 +119,19 @@ Everything lives in one file. Inside the single `<script>`:
 | `renderIntro / renderBreedSelect / renderQuestion / renderResults / heroCardHtml / altHtml` | Rendering | Medium |
 | `animateBars()` | Drives the signature before→after bar | Low |
 
-CSS is all in the `<head>` `<style>`, organised top-to-bottom: tokens → base → buttons → intro → progress → question → results/bridge → tips → alternatives → reduced-motion.
+CSS is organised top-to-bottom: tokens → base → buttons → intro → progress → question → results/bridge → tips → alternatives → reduced-motion.
 
 ---
 
 ## 3. Tech stack & hosting
 
-- Vanilla JS (ES2015+), HTML5, CSS3. No transpile.
-- Fonts: **Fraunces** (display) + **Inter** (body) via Google Fonts `<link>`. System-font fallbacks are in the stack if the CDN is blocked.
-- Deploy: the file lives at `public/breed-matcher/index.html`; the main website's GitHub Actions build
-  (`npm run build` / `withastro/action`) copies `public/` into `dist/` and publishes to Pages. No actions
-  specific to this tool, no build for it. Served at `/breed-matcher/`.
+- Vanilla JS (ES modules, ES2015+), HTML5, CSS3. No transpile, no framework.
+- Fonts: the **site's self-hosted** Fraunces (display) + Karla (body), via `var(--font-display)` /
+  `var(--font-body)`, with system-font fallbacks still in the stack. 🔒 **No Google Fonts `<link>`, and
+  never any other third-party font request** — see §1 for why (UK PECR).
+- Deploy: the page and its modules build with the site (`npm run build`) and go out through the main
+  website's GitHub Actions → **FTPS → Hostinger** pipeline (production since 2026-07-04; GitHub Pages is
+  a manual-only preview). No actions specific to this tool. Served at `/breed-matcher/`.
 
 ---
 
@@ -143,8 +168,16 @@ CSS is all in the `<head>` `<style>`, organised top-to-bottom: tokens → base �
 
 ## 5. Service config (confirm these)
 
-In `FT = {…}` at the top of the script. Current placeholders point at the **old live domain** (which
-still resolves); repoint to the new-site paths once those pages exist:
+> ⚠️ **The live config is `src/scripts/breed-matcher/services.js`, and the table below is the ORIGINAL
+> placeholder set — history, not current state.** Read the file. Two things changed materially: the URLs
+> are now our own site-relative slugs (`/dog-day-school`, `/puppy-training-classes`,
+> `/intensive-dog-training`, `/dog-boarding-school`, `/contact`), and **`field` was DELETED on
+> 2026-08-03** — we have no field-hire offering in `pricing.json`, so the tool no longer presents one as
+> ours. 🔒 **A key in `FT` is a product claim.** Adding one for something we do not sell breaches the
+> honesty gate; it must exist in `pricing.json` first. The owner-owed question about field hire is
+> recorded at the top of `services.js`.
+
+The original placeholder set, which pointed at the **old live domain**:
 
 | Key | Used for | Placeholder URL |
 |---|---|---|
@@ -153,11 +186,12 @@ still resolves); repoint to the new-site paths once those pages exist:
 | `intensive` | drive / challenging-breed / strong-steer | `/training` |
 | `grooming` | coat-upkeep bridge + the handling tip | `/grooming` |
 | `walking` | exercise/space top-up | `/dog-walking` |
-| `field` | space/access bridge — points to **contact** so it works whether or not field hire is a service | `/contact` |
+| ~~`field`~~ | ~~space/access bridge~~ — **DELETED 2026-08-03**: not a service we sell. The space bridges now suggest hiring a field as generic advice, unlinked | ~~`/contact`~~ |
 | `boarding` | (available, not yet wired into a bridge) | `/boarding` |
 | `chat` | "thinking of getting a dog" soft CTA | `/contact` |
 
-**Action:** replace with the real page URLs. If field hire becomes a named service, give it its own URL.
+**Done:** the real page URLs are wired. **Still open:** if field hire turns out to be a real service, it
+needs a `pricing.json` entry first, then a `field` key and its bridges back.
 
 ---
 
@@ -368,17 +402,19 @@ Kam's stated direction: "add more value and quizzes and areas." Candidates:
 
 ## 13. Testing
 
-There's no framework (by rule). The engine is validated with a small **node harness** that loads the
-file with the DOM stubbed. It is committed at **`tools/breed-matcher/test/engine.test.mjs`** and runs via
-**`npm run test:breed-matcher`** (or `node tools/breed-matcher/test/engine.test.mjs`). It reads the live
-tool at `public/breed-matcher/index.html`.
+There's no framework (by rule). The engine is validated with a small **node harness**, committed at
+**`tools/breed-matcher/test/engine.test.mjs`** and run via **`npm run test:breed-matcher`** (or
+`node tools/breed-matcher/test/engine.test.mjs`).
 
-How it works (and the gotchas it handles):
-- Extract the inline script with **`lastIndexOf('<script>')`** — a naive `split('<script>')[1]` can grab the
-  wrong chunk if a CSS comment ever contains the literal word `<script>`.
-- Strip the boot call `renderIntro();` so nothing renders under the stub.
-- `(0, eval)(...)` the script **plus appended assertions in the same string** — `eval`'d `const`s don't leak
-  out, so assertions must live inside the evaluated string to share scope with `BREEDS`/`scoreBreed`.
+Since the 2026-08-03 port it simply **imports the real modules** —
+`src/scripts/breed-matcher/data.js` and `engine.js` — and asserts against them. The assertions are
+unchanged from the standalone era, which is the proof that the port moved the engine without retuning it.
+
+⚠️ **That import is why those modules must stay plain JS with no `src/data/*.ts` imports.** Add a
+TypeScript import to any of them and this harness stops running — i.e. the scoring engine silently stops
+being covered. (The old machinery — read the HTML, find the inline script with `lastIndexOf('<script>')`,
+strip the `renderIntro();` boot call, `(0, eval)` it with the assertions appended so they shared scope with
+the eval'd `const`s — existed only because the tool was one file. It is gone; don't reinstate it.)
 
 **Regression checklist** (the §6.6 cases must keep their shape): giant→hard-no with no lift; the dramatic Collie bridge (14→75); Rottweiler+toddler steer flag; allergy hard-no only on non-low-allergen coats; supported never exceeds 92; hard-no `supported === base`. (Mid-range exact numbers like the 73→89 case depend on the *full* answer set, so the harness asserts those as invariants/ranges rather than exact points.)
 
@@ -388,8 +424,9 @@ Plus a manual pass on a real phone at ~380px: auto-advance feels right, Back wor
 
 ## 14. Suggested next Claude Code session
 
-1. Back up first: `cp public/breed-matcher/index.html tools/breed-matcher/backups/index.backup-<date>.html`.
-2. Confirm the real service URLs in `FT = {…}`.
+1. Back up first: `cp src/scripts/breed-matcher/data.js tools/breed-matcher/backups/data.backup-<date>.js`.
+2. ~~Confirm the real service URLs in `FT = {…}`.~~ Done — see §5. What is still open there is the
+   **field-hire question for Kam** (`services.js`, top).
 3. Add the Phase-1 breeds in batches by group; re-run `npm run test:breed-matcher` after each batch to confirm nothing regressed and rankings still look sane.
 4. Sit with Kam for 20 minutes on the `kids` / `guard` / `aloneTol` / `novice` values for breeds he knows best.
 5. Only then move to Phase 2 (visuals).

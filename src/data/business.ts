@@ -60,8 +60,21 @@ export const business = {
   // (hastings.cylex-uk.co.uk) — www.cylex-uk.co.uk 403s/404s, which is what
   // blocked this for days. Residual (owner, ~1 min, does NOT block sameAs): three
   // grooming keyword chips still sit in its secondary keyword list.
+  // thegooddogguide — VERIFIED 2026-08-03. This is the TRAINERS listing (45272), created
+  // 2026-07-28 and since APPROVED. Read from the live public page: name "The Fairy Tails
+  // K9 Centre" ✓, full canonical address + TN35 5DT ✓, category "Dog Trainer" ✓ (the
+  // grooming-era listing 30416 is a SEPARATE record on this directory — it files one
+  // listing per category — and is deliberately NOT published here).
+  // ⚠️ HONEST LIMIT OF THIS VERIFICATION: the directory hides the last six digits behind a
+  // click-to-reveal, so only the prefix "01424…" was actually read. That is enough to
+  // exclude the risk this gate exists for — the dead grooming-era mobile 07842 116216
+  // appears ZERO times on the page, and 01424 300668 is the only 01424 number the business
+  // has. It is NOT a full read. Owner residual (~1 min): open the listing, click "Show"
+  // and confirm the full number. Do not describe this as fully verified until that happens.
   directoryProfiles: {
     cylex: 'https://hastings.cylex-uk.co.uk/company/the-fairy-tails-k9-centre-27356248.html',
+    thegooddogguide:
+      'https://www.thegooddogguide.com/east-sussex/hastings/dog-trainers-canine-behaviorists/the-fairy-tails-k9-centre/45272',
   },
 
   // The site's byline identity. Every blog post is written under this name, so

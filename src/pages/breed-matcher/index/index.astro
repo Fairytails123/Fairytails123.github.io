@@ -1,0 +1,606 @@
+---
+/* =============================================================================
+   /breed-matcher/ — the Breed Matcher, as a full <Base> Astro page.
+   =============================================================================
+
+   🔴 READ THIS BEFORE MOVING OR RENAMING THIS FILE — LOCKED RULE #1 DEPENDS ON IT.
+
+   The live URL is `/breed-matcher/` WITH a trailing slash: a REAL DIRECTORY
+   (`dist/breed-matcher/index.html`), which Apache serves with a 200 and whose
+   no-slash spelling mod_dir 301s onto. That has been the canonical URL since the
+   tool shipped in June 2026, it is what the sitemap and every internal link
+   carry, and it must not change.
+
+   `astro.config.mjs` sets `build.format: 'file'`, under which Astro writes
+   `<route pathname>.html`. That means BOTH of the obvious filenames are wrong:
+
+     src/pages/breed-matcher.astro        -> route /breed-matcher -> dist/breed-matcher.html
+     src/pages/breed-matcher/index.astro  -> route /breed-matcher -> dist/breed-matcher.html   ← same!
+
+   Astro strips a trailing `index` segment when it builds the route (see
+   node_modules/astro/dist/core/routing/parse-route.js), so a nested index.astro
+   is NOT the directory-output form under 'file' — that is what `build.format:
+   'preserve'` does, and this project is on 'file'. Either of those two filenames
+   would delete the directory, and .htaccess rule 2c would then 301
+   `/breed-matcher/` -> `/breed-matcher`: the canonical URL inverted.
+
+   THIS path is what produces the directory. The route pathname is
+   `/breed-matcher/index`, so getOutFolder()/getOutFile() write
+   `dist/breed-matcher/` + `index.html` — exactly the file that is live today.
+   `.htaccess` rule 2a already 301s the `/breed-matcher/index` spelling onto
+   `/breed-matcher/`, so the route path is never a public URL, and the sitemap
+   maps it back (see the serialize() note in astro.config.mjs).
+
+   GUARD: scripts/verify-urls.mjs carries `{ path: '/breed-matcher/' }`, which
+   resolves to dist/breed-matcher/index.html. If anyone "tidies" this file up a
+   level, that gate fails the build. Do not silence it — fix the path.
+
+   NOTE FOR LOCAL WORK: `npm run dev` serves this at `/breed-matcher/index`
+   (trailingSlash:'never' means the dev server does not answer `/breed-matcher/`).
+   Production is served from the built directory, so the live URL is unaffected.
+   ============================================================================= */
+import Base from '../../../layouts/Base.astro';
+import HillDivider from '../../../components/HillDivider.astro';
+import { business } from '../../../data/business';
+import { buildAuthorNode, ORG_ID, WEBSITE_ID, absUrl } from '../../../data/schema';
+import { BREEDS } from '../../../scripts/breed-matcher/data.js';
+
+// The canonical URL keeps its trailing slash — byte-identical to the <link
+// rel="canonical"> the standalone tool carried, so nothing moves for Google.
+const path = '/breed-matcher/';
+const totalBreeds = BREEDS.length;
+
+/* -----------------------------------------------------------------------------
+   Schema: WebApplication + our one Author, and NOTHING ELSE.
+   Deliberately no Service and no Offer node. This is an informational tool, not
+   a commercial claim: an Offer here would put a second, competing description of
+   our services into the graph and let a free quiz cannibalise a money page
+   (SEO.md locked #12). publisher/author reference the ONE business entity and
+   the ONE author by @id — never restate either (src/data/schema.ts).
+   ----------------------------------------------------------------------------- */
+const appLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  '@id': `${absUrl(path)}#app`,
+  name: 'Dog Breed Matcher',
+  url: absUrl(path),
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'Any (web browser)',
+  browserRequirements: 'Requires JavaScript',
+  inLanguage: 'en-GB',
+  isAccessibleForFree: true,
+  description:
+    `A free breed-matching quiz that scores how well a chosen dog breed fits a household's home, space, hours, experience and grooming appetite, across ${totalBreeds} breeds — and shows honestly which gaps professional support can and cannot close.`,
+  publisher: { '@id': ORG_ID },
+  author: buildAuthorNode(),
+  isPartOf: { '@id': WEBSITE_ID },
+};
+
+// Where the tool sends people next. Three routes out, one clear step each —
+// the same discipline as /dog-exercise-calculator: the tool feeds the money
+// pages, it never competes with them.
+// `also` is a second, softer route out of the card — a free resource beside the
+// paid one. It is a separate anchor rather than markup inside `body` on purpose:
+// `body` is interpolated as text ({c.body}), so an <a> written in there would be
+// escaped and render as visible tag soup. Add links here, never in the string.
+const helpCards: {
+  title: string;
+  body: string;
+  href: string;
+  label: string;
+  also?: { href: string; text: string };
+}[] = [
+  {
+    title: 'Getting a puppy this year?',
+    body: 'The first weeks decide most of it. Our Puppy School does the socialising, handling and habits for you full-time.',
+    href: '/comprehensive-puppy-training',
+    label: 'Puppy School',
+    also: { href: '/puppycourse', text: 'Or work through our free week-by-week puppy course at home' },
+  },
+  {
+    title: 'A breed that needs more than you can give?',
+    body: 'Days at our Dog Day School cover the hours you are out, and burn body and brain, so a high-drive dog comes home settled rather than wound up.',
+    href: '/dog-day-school',
+    label: 'Dog Day School',
+  },
+  {
+    title: 'A lot of dog for a first-timer?',
+    body: 'Our residential Board & Train builds the focus and the off-switch that turn a demanding breed into an easy one to live with.',
+    href: '/dog-boarding-school',
+    label: 'Board & Train',
+  },
+];
+---
+
+<Base
+  title="Dog Breed Matcher | Which Dog Breed Is Right For Me?"
+  description="A free, honest breed-matching quiz. Keep the breed you love centre stage, see how it really fits your home, hours and space — and how to close the gaps."
+  path={path}
+  updated="2026-08-03"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(appLd)} is:inline />
+
+  <div data-page="breed-matcher">
+    <!-- ============ HERO ============ -->
+    <section
+      class="relative isolate flex min-h-[52svh] items-end overflow-hidden bg-pine-950"
+      data-hero
+      data-frame-hide
+    >
+      <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true"
+        style="background: radial-gradient(70% 60% at 20% 0%, rgba(63,107,87,0.35), transparent 70%), radial-gradient(60% 50% at 90% 20%, rgba(236,194,124,0.16), transparent 70%);"></div>
+
+      <div class="mx-auto w-full max-w-6xl px-4 pb-16 pt-36 sm:pb-20">
+        <p class="eyebrow text-honey-300" data-hero-eyebrow>Free tool · Breed matcher</p>
+        <h1 class="mt-4 max-w-3xl font-display text-[2.5rem] font-bold leading-[1.05] text-cream-50 sm:text-6xl" data-hero-title>
+          <span class="hero-line block">Which dog breed</span>
+          <span class="hero-line block">is <em class="squiggle not-italic">right for me</em>?</span>
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg leading-relaxed text-cream-100/90" data-hero-sub>
+          Most breed quizzes exist to tell you that you have chosen wrong. This one keeps the breed
+          you have set your heart on centre stage, scores how it really fits your home, your hours
+          and the space you can get to — and then says plainly which of those gaps we can close for
+          you, and which nobody can.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-4" data-hero-cta>
+          <a href="#matcher" class="btn btn-honey">
+            Start the matcher <span class="btn-arrow" aria-hidden="true">↓</span>
+          </a>
+          <a href="/dog-exercise-calculator" class="btn btn-ghost-light">Try the exercise calculator</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust strip — overlaps the hero -->
+    <div class="relative z-10 mx-auto -mt-10 max-w-5xl px-4" data-hero-trust data-frame-hide>
+      <ul class="grain grid gap-4 rounded-2xl bg-cream-50 px-7 py-6 text-sm font-bold text-bark-700 shadow-[var(--shadow-polaroid)] sm:grid-cols-3 sm:gap-2">
+        <li class="paw-bullet flex items-center text-moss-700">{totalBreeds} breeds, purebreds and crosses</li>
+        <li class="paw-bullet flex items-center text-moss-700">Takes about a minute</li>
+        <!-- ⚠️ PRECISION MATTERS HERE. This said "Nothing saved, nothing shared" —
+             written when the tool was a standalone file with no analytics at all.
+             ui.js now pushes `tool_engagement` {tool, stage} on start and result, so
+             "nothing shared" is no longer strictly true. What IS true, and is the
+             thing a visitor is actually asking about, is that their answers never
+             leave the browser: nothing is stored, and no answer is ever sent
+             anywhere. Do not widen this back into an absolute. -->
+        <li class="paw-bullet flex items-center text-moss-700">Your answers stay in your browser</li>
+      </ul>
+    </div>
+
+    <!-- ============ THE MATCHER ============ -->
+    <!-- id="matcher" is the hero CTA's target (href="#matcher") — keep them in
+         step. scroll-mt-24 (6rem) clears the fixed 76px header so the heading
+         is not left underneath it, matching #bm-root below. -->
+    <section id="matcher" class="mx-auto max-w-4xl scroll-mt-24 px-4 pb-16 pt-14 sm:pt-16" data-section="matcher">
+      <div class="mx-auto mb-8 max-w-2xl text-center" data-frame-hide>
+        <p class="eyebrow text-honey-700" data-reveal>Ten questions</p>
+        <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+          Find your <em class="squiggle not-italic">honest match</em>
+        </h2>
+        <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+          Pick the breed you have in mind — or skip and let us match you from scratch — then answer
+          ten quick questions about your home, your week and who lives with you.
+        </p>
+      </div>
+
+      <div class="grain rounded-3xl bg-cream-50 p-4 shadow-[var(--shadow-polaroid)] sm:p-8" data-reveal data-frame-flat>
+        <!-- #bm-root is the themed wrapper the tool's CSS is scoped to; #bm-app is
+             the screen it renders into. data-grooming-url hands the sister-site URL
+             down from business.ts so services.js never hard-codes it. -->
+        <div id="bm-root" class="scroll-mt-24" data-grooming-url={business.groomingSite}>
+          <div class="wrap">
+            <div id="bm-app" aria-live="polite"></div>
+            <noscript>
+              <div class="bm-noscript">
+                <p><strong>The matcher needs JavaScript to run.</strong> It scores {totalBreeds}
+                breeds against your answers in the browser — your answers are never sent anywhere and
+                never saved, which is also why there is no version of it that works without scripts.</p>
+                <p>If you would rather just ask a person: we are a licensed dog-training centre near
+                Hastings and we talk people through this decision every week. Tell us the breed you
+                are considering and what your week actually looks like, and we will give you a
+                straight answer — including when the answer is “not that one”.</p>
+                <p>
+                  <a href="/contact">Talk to us about the breed you are considering</a> ·
+                  <a href="/comprehensive-puppy-training">Puppy School</a> ·
+                  <a href="/dog-day-school">Dog Day School</a> ·
+                  <a href="/dog-boarding-school">Board &amp; Train</a>
+                </p>
+              </div>
+            </noscript>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHAT IT DOES, AND WHAT IT WON'T DO ============ -->
+    <section class="bg-cream-100" data-section="how" data-frame-hide>
+      <HillDivider class="bg-cream-50 text-cream-100" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-honey-700" data-reveal>How it works</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            An honest score, then <em class="squiggle not-italic">the bridge</em>
+          </h2>
+          <!-- ⚠️ Every service named in this paragraph must be one we actually sell
+               (pricing.json). It listed "a secure field standing in for the garden you
+               do not have" until 2026-08-03 — we have no field-hire offering, and this
+               is server-rendered, crawler-visible prose, so it read as a real product.
+               Beach and woodland days are day-school reality (see /dog-day-school). -->
+          <p class="mt-5 text-lg leading-relaxed text-bark-700" data-reveal>
+            You get two numbers. The first is how the breed fits your life exactly as it is today.
+            The second is where that lands once the right support is doing its share — daycare
+            covering the hours you are out, beach and woodland days standing in for the garden you
+            do not have, a groomer taking on a coat you did not sign up for. The second number only
+            ever moves on gaps a service genuinely closes.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-3" data-stagger>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]">
+            <h3 class="font-display text-xl font-bold text-moss-800">Your breed stays the hero</h3>
+            <p class="mt-3 text-sm leading-relaxed text-bark-700">
+              We do not swap your breed out for a “safer” one. The dog you have fallen for stays at
+              the top of the results, with alternatives underneath if you want them.
+            </p>
+          </article>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]">
+            <h3 class="font-display text-xl font-bold text-moss-800">Some gaps we will not pretend about</h3>
+            <p class="mt-3 text-sm leading-relaxed text-bark-700">
+              A giant breed in a flat, or a heavy-shedding coat in a home with a real allergy, gets
+              no lift at all — because no service or training changes it. The score simply stays
+              where it is and says so.
+            </p>
+          </article>
+          <article class="grain rounded-2xl bg-cream-50 p-7 shadow-[var(--shadow-lift)]">
+            <h3 class="font-display text-xl font-bold text-moss-800">A guide, not a verdict</h3>
+            <p class="mt-3 text-sm leading-relaxed text-bark-700">
+              Breed traits are generalisations, and where you get your dog and how you start it
+              matter more than the breed does. Treat the number as a conversation-opener.
+            </p>
+          </article>
+        </div>
+
+        <p class="mt-8 rounded-2xl border-l-4 border-honey-500 bg-cream-50 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
+          <strong class="text-moss-800">The thread running through all of it:</strong> the right
+          start prevents the problems people pay to fix later. Early handling, early socialising and
+          calm time alone from day one are worth more than the breed decision itself — which is why
+          the results end with those, whichever dog you choose.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ WHERE WE COME IN ============ -->
+    <section class="bg-cream-50" data-section="help" data-frame-hide>
+      <HillDivider class="bg-cream-100 text-cream-50" />
+      <div class="mx-auto max-w-6xl px-4 pb-20 pt-12 sm:pb-24">
+        <div class="max-w-3xl">
+          <p class="eyebrow text-honey-700" data-reveal>If the gaps are real</p>
+          <h2 class="mt-3 font-display text-3xl font-bold text-moss-800 sm:text-4xl" data-reveal>
+            The support that <em class="squiggle not-italic">closes them</em>
+          </h2>
+          <p class="mt-4 leading-relaxed text-bark-700" data-reveal>
+            We are a {business.licence.rating}-star {business.licence.authority}–licensed dog
+            centre near Hastings, working with families across the South of England and London.
+          </p>
+        </div>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-3" data-stagger>
+          {
+            helpCards.map((c) => (
+              <article class="grain flex flex-col rounded-2xl bg-cream-100 p-7 shadow-[var(--shadow-lift)] transition-transform duration-300 hover:-translate-y-1.5">
+                <h3 class="font-display text-xl font-bold text-moss-800">{c.title}</h3>
+                <div class="mt-3 flex-1">
+                  <p class="text-sm leading-relaxed text-bark-700">{c.body}</p>
+                  {c.also && (
+                    <p class="mt-3 text-sm leading-relaxed text-bark-700">
+                      <a
+                        href={c.also.href}
+                        class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2"
+                      >
+                        {c.also.text}
+                      </a>
+                    </p>
+                  )}
+                </div>
+                <a href={c.href} class="btn btn-moss mt-6 w-full">{c.label}</a>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="mt-8 rounded-2xl bg-cream-100 p-6 leading-relaxed text-bark-700 shadow-[var(--shadow-lift)]" data-reveal>
+          <strong class="text-moss-800">Still weighing two breeds up?</strong> Talk it through with
+          us before you commit — call
+          <a href={business.phones.main.tel} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">{business.phones.main.display}</a>,
+          <a href={business.phones.main.whatsapp} class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">WhatsApp the same number</a>,
+          or <a href="/contact" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">send us a note</a>.
+          You can also work out
+          <a href="/dog-exercise-calculator" class="font-bold text-moss-700 underline decoration-honey-400 decoration-2 underline-offset-2">how much exercise a breed really needs</a>
+          before you decide.
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<!-- =============================================================================
+     The tool's own stylesheet — its "considered countryside premium" palette, kept
+     as its own self-contained system (dev-kit brief §4: the site theme and the
+     tool's are compatible cousins; do not unify them without a deliberate pass).
+
+     THREE scoping changes were made when it moved out of a standalone document,
+     and no restyling beyond them:
+       • Every selector is prefixed with #bm-root, and the :root tokens now live on
+         #bm-root, so nothing here can touch the rest of the site. The old `body`
+         and `body::before` rules became #bm-root rules; the page-chrome rules
+         (.topbar/.brandmark/.brandtext) are gone — the site Header does that now.
+       • The reduced-motion block was `*{animation:none!important}` — a GLOBAL
+         override that would have reached the header, footer and every page
+         animation. It is scoped to #bm-root *.
+       • FONTS ARE THE SITE'S SELF-HOSTED ONES. The standalone file pulled Fraunces
+         and Inter from Google's font CDN — a third-party request (with the visitor's
+         IP) firing before any consent could be given, on a page that had no consent
+         banner at all. That was the live UK PECR exposure this port exists to close.
+         'Fraunces' -> var(--font-display) and 'Inter' -> var(--font-body) (Karla),
+         both already self-hosted by Base via @fontsource. NEVER reintroduce a
+         third-party font <link> here — and note that a grep of the built HTML for
+         that CDN's hostname should return nothing at all.
+
+     is:global because the whole tool UI is injected by ui.js and Astro's scoped
+     style hashes never reach JS-created nodes. This CSS ships only with this
+     page's bundle.
+     ============================================================================= -->
+<style is:global>
+  #bm-root {
+    --ink:#17241F;
+    --forest:#1E4A3A;
+    --forest-deep:#123127;
+    --moss:#3E6B57;
+    --sage:#8AA899;
+    --paper:#F6F2E9;
+    --card:#FCFAF4;
+    --sand:#ECE4D5;
+    --line:#DBD2C1;
+    --gold:#C2853A;
+    --gold-soft:#E8CB94;
+    --clay:#A94C34;
+    --clay-soft:#EBD3CB;
+    --clay-tint:#FBF1ED;
+    --good:#3E7D5A;
+    --demand:#C2853A;
+    --mute:#5B6A62;
+    --shadow:0 1px 2px rgba(18,49,39,.04),0 8px 24px rgba(18,49,39,.06);
+    --radius:18px;
+
+    font-family:var(--font-body),system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    color:var(--ink);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  #bm-root *{box-sizing:border-box;}
+  #bm-root .wrap{max-width:560px;margin:0 auto;padding:0 4px 8px;}
+
+  /* ---------- generic ---------- */
+  #bm-root h2,#bm-root h3{font-family:var(--font-display),Georgia,serif;font-weight:600;line-height:1.12;letter-spacing:-.01em;color:var(--forest-deep);}
+  #bm-root .eyebrow{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);margin-bottom:14px;}
+  #bm-root .muted{color:var(--mute);}
+  #bm-root .fade{animation:bm-fade .45s ease both;}
+  @keyframes bm-fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  /* ---------- buttons ---------- */
+  #bm-root .btn{
+    appearance:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;
+    font-size:16px;border-radius:999px;padding:15px 26px;transition:transform .12s ease,background .2s ease,box-shadow .2s ease;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;text-transform:none;letter-spacing:normal;
+  }
+  #bm-root .btn-primary{background:var(--forest);color:#fff;box-shadow:var(--shadow);}
+  #bm-root .btn-primary:hover{background:var(--forest-deep);transform:translateY(-1px);}
+  #bm-root .btn-primary:active{transform:translateY(0);}
+  #bm-root .btn-ghost{appearance:none;border:none;cursor:pointer;font-family:inherit;background:transparent;color:var(--moss);padding:12px 16px;font-weight:600;font-size:15px;}
+  #bm-root .btn-ghost:hover{color:var(--forest-deep);}
+  #bm-root .btn-block{width:100%;}
+  #bm-root .btn:focus-visible,#bm-root a:focus-visible,#bm-root .opt:focus-visible,#bm-root .btn-ghost:focus-visible,#bm-root .alt:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+  /* ---------- intro ---------- */
+  #bm-root .hero{padding:6px 0 8px;}
+  #bm-root .hero h2{font-size:clamp(30px,7.5vw,40px);margin:6px 0 0;}
+  #bm-root .hero h2 em{font-style:italic;color:var(--gold);}
+  #bm-root .hero-lead{font-size:17px;color:var(--mute);margin:18px 0 26px;max-width:42ch;}
+  #bm-root .spine{
+    border-left:3px solid var(--gold);padding:4px 0 4px 16px;margin:26px 0 30px;
+    font-family:var(--font-display),Georgia,serif;font-style:italic;font-size:18px;color:var(--forest-deep);line-height:1.32;
+  }
+  #bm-root .hero-points{list-style:none;margin:0 0 30px;padding:0;display:grid;gap:14px;}
+  #bm-root .hero-points li{display:flex;gap:12px;font-size:15px;color:var(--ink);align-items:flex-start;}
+  #bm-root .hero-points .tick{flex:0 0 auto;width:22px;height:22px;border-radius:7px;background:var(--sand);color:var(--moss);display:grid;place-items:center;font-size:13px;margin-top:1px;}
+  #bm-root .hero-points .tick svg{width:13px;height:13px;}
+
+  /* ---------- progress ---------- */
+  #bm-root .progress{display:flex;align-items:center;gap:12px;padding:8px 0 22px;}
+  #bm-root .progress-track{flex:1;height:6px;background:var(--sand);border-radius:99px;overflow:hidden;}
+  #bm-root .progress-fill{height:100%;background:var(--moss);border-radius:99px;width:0;transition:width .4s cubic-bezier(.2,.7,.2,1);}
+  #bm-root .progress-label{font-size:12px;font-weight:600;color:var(--mute);letter-spacing:.04em;white-space:nowrap;}
+
+  /* ---------- question card ---------- */
+  #bm-root .q-head{margin:6px 0 4px;}
+  #bm-root .q-head h2{font-size:clamp(24px,6.5vw,30px);}
+  #bm-root .q-help{font-size:14px;color:var(--mute);margin:10px 0 22px;}
+  #bm-root .opts{display:grid;gap:11px;margin-bottom:8px;}
+  #bm-root .opt{
+    appearance:none;text-align:left;cursor:pointer;font-family:inherit;font-size:16px;font-weight:500;color:var(--ink);
+    background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:17px 18px;width:100%;
+    display:flex;align-items:center;gap:14px;transition:border-color .16s ease,background .16s ease,transform .1s ease;
+  }
+  #bm-root .opt:hover{border-color:var(--sage);background:#fff;}
+  #bm-root .opt:active{transform:scale(.99);}
+  #bm-root .opt .box{flex:0 0 auto;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;transition:all .16s ease;}
+  #bm-root .opt.sel{border-color:var(--forest);background:#fff;box-shadow:0 0 0 1px var(--forest);}
+  #bm-root .opt.sel .box{background:var(--forest);border-color:var(--forest);color:#fff;}
+  #bm-root .opt .box svg{width:13px;height:13px;opacity:0;transition:opacity .14s;}
+  #bm-root .opt.sel .box svg{opacity:1;}
+  #bm-root .multi-actions{margin-top:18px;}
+
+  /* breed search */
+  #bm-root .search-wrap{position:relative;margin:4px 0 6px;}
+  #bm-root .search-input{
+    width:100%;font-family:inherit;font-size:16px;padding:16px;border:1.5px solid var(--line);
+    border-radius:14px;background:var(--card);color:var(--ink);
+  }
+  #bm-root .search-input:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 1px var(--forest);}
+  #bm-root .search-list{margin-top:8px;display:grid;gap:7px;max-height:46vh;overflow:auto;}
+  #bm-root .search-list .opt{padding:13px 16px;font-size:15px;}
+  #bm-root .breed-grp{font-size:11px;color:var(--mute);letter-spacing:.06em;text-transform:uppercase;margin-left:auto;font-weight:600;}
+
+  /* ---------- results ---------- */
+  #bm-root .result-top{padding:14px 0 4px;}
+  #bm-root .result-top .eyebrow{margin-bottom:8px;}
+  #bm-root .hero-card{
+    background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+    padding:22px 20px;box-shadow:var(--shadow);margin-bottom:18px;
+  }
+  #bm-root .hero-card .breed-name{font-size:clamp(26px,7vw,34px);margin:0;}
+  #bm-root .hero-card .breed-meta{font-size:13px;color:var(--mute);margin-top:5px;letter-spacing:.02em;}
+
+  /* the signature bridge */
+  #bm-root .bridge{margin:22px 0 6px;}
+  #bm-root .bridge-nums{display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-bottom:12px;}
+  #bm-root .bridge-num{display:flex;flex-direction:column;}
+  #bm-root .bridge-num .lab{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:2px;}
+  #bm-root .bridge-num .val{font-family:var(--font-display),Georgia,serif;font-weight:600;font-size:40px;line-height:1;color:var(--forest-deep);}
+  #bm-root .bridge-num.after .val{color:var(--gold);}
+  #bm-root .bridge-num.after{text-align:right;align-items:flex-end;}
+  #bm-root .bridge-arrow{font-size:20px;color:var(--sage);padding-bottom:6px;}
+  #bm-root .bar{position:relative;height:16px;background:var(--sand);border-radius:99px;overflow:hidden;}
+  #bm-root .bar .base{position:absolute;left:0;top:0;height:100%;width:0;border-radius:99px;background:var(--moss);transition:width .8s cubic-bezier(.2,.7,.2,1);}
+  #bm-root .bar .lift{position:absolute;top:0;height:100%;width:0;border-radius:99px;
+    background:repeating-linear-gradient(45deg,var(--gold) 0 8px,var(--gold-soft) 8px 16px);
+    transition:width .7s cubic-bezier(.2,.7,.2,1) .55s;opacity:.95;}
+  #bm-root .band{display:inline-flex;align-items:center;gap:7px;margin-top:14px;font-size:13px;font-weight:600;padding:6px 13px;border-radius:99px;}
+  #bm-root .band .dot{width:8px;height:8px;border-radius:99px;}
+  #bm-root .band.great{background:rgba(62,125,90,.12);color:var(--good);} #bm-root .band.great .dot{background:var(--good);}
+  #bm-root .band.support{background:rgba(62,107,87,.12);color:var(--moss);} #bm-root .band.support .dot{background:var(--moss);}
+  #bm-root .band.demand{background:rgba(194,133,58,.14);color:#9a6722;} #bm-root .band.demand .dot{background:var(--demand);}
+  #bm-root .band.honest{background:var(--clay-tint);color:var(--clay);} #bm-root .band.honest .dot{background:var(--clay);}
+
+  #bm-root .why{font-size:15.5px;color:var(--ink);margin:18px 0 2px;line-height:1.45;}
+
+  /* gaps & bridges */
+  #bm-root .section-lab{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);margin:24px 0 12px;}
+  #bm-root .bridge-list{display:grid;gap:10px;}
+  #bm-root .bridge-item{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;}
+  #bm-root .bridge-item .bi-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  #bm-root .bridge-item .gap{font-weight:600;font-size:15px;color:var(--ink);}
+  #bm-root .bridge-item .lift-tag{font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap;}
+  #bm-root .bridge-item .fix{font-size:14px;color:var(--mute);margin-top:5px;line-height:1.45;}
+  #bm-root .bridge-item a{color:var(--forest);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--gold-soft);}
+  #bm-root .bridge-item a:hover{border-bottom-color:var(--gold);}
+
+  /* honest / hard-no note */
+  #bm-root .honest-note,#bm-root .steer-note{border-radius:13px;padding:15px 16px;margin-top:6px;font-size:14.5px;line-height:1.5;}
+  #bm-root .honest-note{background:var(--clay-tint);border:1px solid var(--clay-soft);color:#7c3a27;}
+  #bm-root .honest-note strong{color:var(--clay);}
+  #bm-root .steer-note{background:var(--clay-tint);border:1px solid var(--clay-soft);color:#7c3a27;}
+  #bm-root .steer-note a{color:var(--clay);font-weight:700;}
+  #bm-root .steer-note .st-head{display:flex;align-items:center;gap:8px;font-family:var(--font-display),Georgia,serif;font-weight:600;font-size:16px;color:var(--clay);margin-bottom:6px;}
+
+  /* tips */
+  #bm-root .tips{display:grid;gap:11px;}
+  #bm-root .tip{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px 16px;}
+  #bm-root .tip .t-head{font-weight:600;font-size:15px;color:var(--forest-deep);margin-bottom:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  #bm-root .tip .t-body{font-size:14px;color:var(--mute);line-height:1.5;}
+  #bm-root .tip .t-body a{color:var(--forest);font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--gold-soft);}
+  #bm-root .tip.flag{background:var(--clay-tint);border-color:var(--clay-soft);}
+  #bm-root .tip.flag .t-head{color:var(--clay);}
+  #bm-root .tip.flag .t-body{color:#7c3a27;}
+  #bm-root .tip .pill{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:var(--clay);color:#fff;}
+  #bm-root .tip.first-tip .t-head{color:var(--gold);}
+  #bm-root .tip-key{font-size:14px;color:var(--mute);margin:2px 0 14px;}
+
+  /* alternatives */
+  #bm-root .alts{display:grid;gap:10px;}
+  #bm-root .alt{
+    appearance:none;font-family:inherit;text-align:left;width:100%;
+    background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px 16px;
+    display:flex;align-items:center;gap:14px;cursor:pointer;transition:border-color .15s,transform .1s;
+  }
+  #bm-root .alt:hover{border-color:var(--sage);}
+  #bm-root .alt:active{transform:scale(.995);}
+  #bm-root .alt .a-score{font-family:var(--font-display),Georgia,serif;font-weight:600;font-size:24px;color:var(--moss);flex:0 0 auto;width:46px;}
+  #bm-root .alt .a-mid{flex:1;min-width:0;display:block;}
+  #bm-root .alt .a-name{font-weight:600;font-size:15.5px;color:var(--ink);display:block;}
+  #bm-root .alt .a-line{font-size:13px;color:var(--mute);margin-top:2px;display:block;}
+  #bm-root .alt .a-go{color:var(--sage);font-size:18px;}
+
+  #bm-root .disclaimer{font-size:12.5px;color:var(--mute);text-align:center;margin:30px 0 8px;line-height:1.5;padding:0 8px;}
+  #bm-root .disclaimer a{color:var(--forest);font-weight:600;}
+  #bm-root .footer-spine{font-family:var(--font-display),Georgia,serif;font-style:italic;color:var(--forest);text-align:center;font-size:15px;margin:26px 0 6px;}
+  #bm-root .restart{display:flex;justify-content:center;margin-top:18px;}
+
+  /* no-JS fallback (server-rendered, so it is what a scriptless visitor gets) */
+  #bm-root .bm-noscript{display:grid;gap:14px;font-size:15px;line-height:1.55;color:var(--ink);padding:8px 0 4px;}
+  #bm-root .bm-noscript a{color:var(--forest);font-weight:600;text-decoration:underline;text-decoration-color:var(--gold-soft);text-decoration-thickness:2px;text-underline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    #bm-root *{animation:none!important;transition:none!important;}
+  }
+
+  /* Framed on the homepage: Base has already hidden the site chrome and every
+     [data-frame-hide] section, so all that is left is the tool. Drop this page's
+     own card and its section padding too — the homepage section already provides
+     a card around the iframe, and doubling them reads as a box in a box. */
+  html.is-framed [data-frame-flat]{background:transparent;box-shadow:none;padding:0;}
+  html.is-framed [data-section="matcher"]{padding-top:.5rem;padding-bottom:.5rem;}
+</style>
+
+<!-- The tool itself. Engine, data, service links and UI all live in
+     src/scripts/breed-matcher/ — the SINGLE source; there is no public/ copy. -->
+<script>
+  import '../../../scripts/breed-matcher/ui.js';
+</script>
+
+<!-- Page motion: standard y-only reveals + hero entrance. Never hides content
+     (verify-reveals gate). Skipped entirely when framed — every animated section
+     is display:none inside the homepage iframe, and driving ScrollTriggers on
+     hidden elements only burns frames. -->
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+  let mm = null;
+
+  function initBreedMatcherMotion() {
+    if (window.self !== window.top) return; // framed: the animated sections are hidden
+    const root = document.querySelector('[data-page="breed-matcher"]');
+    if (!root || root.dataset.gsapInit) return;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) return; // static page — everything already visible
+    root.dataset.gsapInit = '1';
+
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('[data-hero-eyebrow]', { y: 24, duration: 0.6 }, 0.1)
+        .from('[data-hero-title] .hero-line', { y: 24, duration: 0.9, stagger: 0.14 }, 0.2)
+        .from('[data-hero-sub]', { y: 24, duration: 0.7 }, 0.55)
+        .from('[data-hero-cta] > *', { y: 18, duration: 0.55, stagger: 0.1 }, 0.72)
+        .from('[data-hero-trust]', { y: 36, duration: 0.7 }, 0.85);
+
+      gsap.utils.toArray('[data-reveal]').forEach((el) => {
+        gsap.from(el, { y: 36, duration: 0.85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+      });
+      gsap.utils.toArray('[data-stagger]').forEach((group) => {
+        gsap.from(group.children, { y: 28, duration: 0.7, ease: 'power3.out', stagger: 0.07, scrollTrigger: { trigger: group, start: 'top 88%', once: true } });
+      });
+    });
+  }
+
+  initBreedMatcherMotion();
+  document.addEventListener('astro:page-load', initBreedMatcherMotion);
+  document.addEventListener('astro:before-swap', () => {
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+    if (mm) { mm.revert(); mm = null; }
+  });
+</script>
