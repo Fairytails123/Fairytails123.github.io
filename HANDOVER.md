@@ -24,7 +24,31 @@
 | **Second brain** | **`LEARNING-CURVE.md`** (gitignored, OneDrive-synced) — read §1 + skim §2/§3 at every SEO session start; append at close. |
 | **Predictions due** | **~2026-08-11 → 08-18** (homepage funnel copy) and **early Oct** (3 pages). Tracked in `LEARNING-CURVE.md` §6. |
 
-## ⏸️ PAUSE POINT 2026-08-03 — THE AHREFS AUDIT EXECUTED: the reveal gate never actually ran · a live PECR exposure · the PILLAR FREEZE LIFTED (copy held) · 🔴 START HERE NEXT SESSION
+## ⏸️ PAUSE POINT 2026-08-04 — NEXT-ACTIONS RE-DERIVATION: a measurement instrument found unsound · one blog retarget shipped · the status line fixed · 🔴 START HERE NEXT SESSION
+
+> **Tree state at close: EVERYTHING COMMITTED, PUSHED AND LIVE.** One commit `dd2f1fc`, working tree clean, `main` in sync, **deploy run 30914930540 green FIRST TRY** (no FTPS retry needed — the 08-03 red run is superseded exactly as that block predicted), `verify-urls --live` 50/50.
+> **SEO detail lives ONLY in `SEO.md`** (banner + newest §6 + the new §7a-iv + §12 rows + §9c rows + the appended §2 pull log) and the craft lessons in **`LEARNING-CURVE.md`** (§2 ×2, §3 ×2, §6 corrected). This block is the engineering record.
+>
+> ### ▶ WHAT SHIPPED (one file)
+> `src/content/blog/frustration-in-dogs-dog-training.md` gained a `seoTitle` override: **"Barrier Frustration in Dogs: Barking, Lunging and What Helps"** (60 chars). The page's own top query is `barrier frustration`, a phrase in neither its title nor its slug, while the 1,903-word body has carried a dedicated section on it since 2022. **Frontmatter only — live-verified that `<title>` and `og:title` changed while the visible H1 and the `BlogPosting` headline are byte-identical.** No visual test: a `<title>` renders nothing on the page.
+> **Gates:** build 37 · verify-reveals ✓ · verify-nap ✓ · verify-urls 50/0/0 (dist AND `--live`) · test:htaccess 25/25.
+>
+> ### ▶ 🔴 THE FINDING THAT MATTERS IS A BROKEN MEASUREMENT, NOT A CONTENT OPPORTUNITY
+> **`gsc-keywords`' `top_url` is a function of the REQUEST, not of the row.** Two calls, identical window, identical `impressions ≥ 5` floor, differing **only** in the keyword substring → **different `top_url` on 5 of 7 shared rows** with byte-identical clicks/impressions/position/`urls_count`. Reproduces exactly on a verbatim re-run, so it is **deterministic per request — which is worse than random, because it survives being checked twice the same way.** It had already contaminated `SEO.md` §7a's recorded success test and §12 rejected-fix #11. Both corrected; law banked in `LEARNING-CURVE.md` §3. **Use `gsc-pages`/`gsc-page-history` (both free) for any URL-selection question.**
+>
+> ### ▶ THE STATUS LINE WAS SILENTLY BROKEN AND IS NOW FIXED
+> `~\.claude\statusline-command.ps1` read `context_window.remaining_percentage` — **the correct documented field** — but that value is null early in a session and after `/compact`, and the old else-branch just dropped the context readout with no indication why. It also **crashed outright on a null `current_dir`**. Rewritten with a fallback chain (`remaining_percentage` → `100 - used_percentage` → derived from `total_input_tokens + total_output_tokens` vs `context_window_size` → an explicit `context --`), a colour-coded bar and absolute tokens remaining. **Negative-controlled across all 7 branches**, including the two that matter: an unknown renders as `context --` and **never** as "100% left", and malformed/empty stdin degrades to `claude` instead of erroring.
+> ⚠️ **ENCODING TRAP BANKED (cost one full parse failure):** Windows PowerShell 5.1 reads a **BOM-less `.ps1` as ANSI**, so a literal `█` (U+2588) in the source corrupts the tokeniser and the *entire script* fails to parse — i.e. the status line goes blank with no visible cause. The file is now deliberately **pure ASCII** and builds its bar glyphs from code points at runtime. Do not "tidy" that away.
+> **Pushed to the canonical mirror** (`sync-claude-config.ps1 -Push`, backup `statusline-command.ps1.bak.20260804-144701`); all four config items re-verified IN-SYNC, so the laptop will pick it up.
+>
+> ### ▶ NEXT SESSION STARTS WITH
+> **(0)** `LEARNING-CURVE.md` §1 + skim §2/§3. **One prediction is DUE 2026-08-11 → 08-18** (the homepage funnel's 786 crawler-visible chars); the rest resolve 2026-10-06.
+> **(1) 🔶 OWNER, unchanged and still owed:** the copy review on the three live pages · **sign-off on the Holiday Board & Train section (`SEO.md` §7a-iii) — ship it on sign-off, do NOT schedule it around any measurement** · the Acuity + JotForm key rotation.
+> **(2) 🔶 NEW owner ask:** one email to thegooddogguide.com covering **all four** listings (45272 / 45273 / 45274 / 30416) — none of them carries a website field, verified twice. Claude can draft and send it on Gmail authorisation.
+> **(3) ⏳ DO NOT judge the 08-03 pillar batch yet.** Record-only checkpoint **2026-09-01**; the decision read **2026-09-29** against the frozen baseline (421 impr / 6 clicks / 29 queries) using the **byte-identical** filter string. Complete the partial w/c 07-27 bucket on **2026-08-06**.
+> **(4)** `/kent` stays OPEN but its gate is **not met** — evidence recorded in `SEO.md` §7 for the owner's review; re-check 2026-10-06.
+
+## ⏸️ PAUSE POINT 2026-08-03 — THE AHREFS AUDIT EXECUTED: the reveal gate never actually ran · a live PECR exposure · the PILLAR FREEZE LIFTED (copy held) · earlier
 
 > **Tree state at close: EVERYTHING IS COMMITTED, PUSHED AND LIVE.** Six commits `5c352f6` → `b91eed1`, working tree clean, `main` in sync with origin, final deploy green, `verify-urls --live` 50/50.
 > **Sequence worth knowing:** the three copy-heavy pages (`dog-boarding-school`, `dog-day-school`, `comprehensive-puppy-training`) were first **held on a branch** because SEO.md §7a asks for owner copy review before shipping. **The owner then chose to review on the live pages** (*"deploy all pages — i will look at live pages and review it there"*), so the branch was merged (`b91eed1`) and deleted. **🔶 The copy review itself is still owner-owed — it now happens on production.** ⚠️ They shipped together rather than pillar-alone as the plan called for; that is the owner's call and per-URL analysis still separates them.
