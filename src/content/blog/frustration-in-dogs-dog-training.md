@@ -1,5 +1,13 @@
 ---
 title: "Frustration in dogs - dog training"
+# <title>-tag override only — the visible H1 and the BlogPosting headline stay as
+# `title`. Retargeted 2026-08-04: search demand reaching this post is dominated by
+# "barrier frustration", a phrase that was in neither the title nor the slug, while
+# the body has covered it since 2022 (the definitional passages plus the dedicated
+# "Barrier frustration/perseverance" section). Frontmatter-only, in place, same
+# intent — slug unchanged. "Barrier Frustration in Dogs" keeps the wider
+# "frustration in dogs" tail as a substring, so nothing is given up.
+seoTitle: "Barrier Frustration in Dogs: Barking, Lunging and What Helps"
 description: "Frustration is a negative emotional state implicated in a range of canine behaviour problems — what causes it, how to spot it, and how training helps."
 pubDate: 2022-11-06T10:16:34
 updatedDate: 2023-07-20T10:34:55
