@@ -1,0 +1,44 @@
+name: Materialise CPD Training Academy experiment
+
+on:
+  push:
+    branches:
+      - codex-experiment/fairy-tails-training-academy
+    paths:
+      - .github/codex-experiment/cpd-release.tar.gz.b64
+      - .github/workflows/materialise-cpd-experiment.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialise:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out experiment branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex-experiment/fairy-tails-training-academy
+
+      - name: Extract the tested static release
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 --decode .github/codex-experiment/cpd-release.tar.gz.b64 > /tmp/cpd-release.tar.gz
+          tar -xzf /tmp/cpd-release.tar.gz -C .
+          test -s public/training-academy/index.html
+          test -s public/training-academy/application-pack.html
+          test -s docs/cpd-approval/README.md
+          rm -f .github/codex-experiment/cpd-release.tar.gz.b64
+          rm -f .github/codex-experiment/training-academy-index.astro.gz.b64
+          rm -f .github/workflows/materialise-cpd-experiment.yml
+
+      - name: Commit the materialised release
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Codex Experiment: materialise CPD Training Academy release"
+          git push origin HEAD:codex-experiment/fairy-tails-training-academy
